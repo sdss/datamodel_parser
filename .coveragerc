@@ -1,0 +1,8 @@
+[run]
+branch = true
+
+[report]
+omit =
+    python/datamodel_parser/etc/*
+    python/datamodel_parser/utils/*
+    python/datamodel_parser/tests/*
