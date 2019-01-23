@@ -24,7 +24,7 @@ INSERT INTO sdss.tree (edition,created) VALUES ('dr15',NOW());
 
 CREATE TABLE sdss.env (
     id SERIAL NOT NULL PRIMARY KEY,
-    tree_id INT4,
+    tree_id INT4 REFERENCES sdss.tree(id) NOT NULL,
     variable VARCHAR(16) NOT NULL UNIQUE,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -34,7 +34,7 @@ VALUES (1,'APOGEE_REDUX',NOW());
 
 CREATE TABLE sdss.location (
     id SERIAL NOT NULL PRIMARY KEY,
-    env_id INT4,
+    env_id INT4 REFERENCES sdss.env(id) NOT NULL,
     path VARCHAR(64) NOT NULL UNIQUE,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -44,7 +44,7 @@ VALUES (1,'APRED_VERS/red/MJD5',NOW());
 
 CREATE TABLE sdss.directory (
     id SERIAL NOT NULL PRIMARY KEY,
-    location_id INT4,
+    location_id INT4 REFERENCES sdss.location(id) NOT NULL,
     name VARCHAR(64) NOT NULL UNIQUE,
     depth INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
@@ -59,7 +59,7 @@ VALUES (1,'MJD5',2,NOW());
 
 CREATE TABLE sdss.file (
     id SERIAL NOT NULL PRIMARY KEY,
-    location_id INT4,
+    location_id INT4 REFERENCES sdss.location(id) NOT NULL,
     name VARCHAR(64) NOT NULL UNIQUE,
     extension_count INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
@@ -70,7 +70,7 @@ VALUES (1,'ap1D.html',6,NOW());
 
 CREATE TABLE sdss.description (
     id SERIAL NOT NULL PRIMARY KEY,
-    file_id INT4,
+    file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     sas_path VARCHAR(128) NOT NULL UNIQUE,
     general_description VARCHAR(256) NOT NULL UNIQUE,
     naming_convention VARCHAR(128) NOT NULL UNIQUE,
@@ -96,7 +96,7 @@ VALUES (1,
 
 CREATE TABLE sdss.extension (
     id SERIAL NOT NULL PRIMARY KEY,
-    file_id INT4,
+    file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     hdu_number INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -110,7 +110,7 @@ INSERT INTO sdss.extension (file_id,hdu_number,created) VALUES (1,5,NOW());
 
 CREATE TABLE sdss.header (
     id SERIAL NOT NULL PRIMARY KEY,
-    extension_id INT4,
+    extension_id INT4 REFERENCES sdss.extension(id) NOT NULL,
     title VARCHAR(32) NOT NULL UNIQUE,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -130,7 +130,7 @@ VALUES (6,'Wavelength coefficients',NOW());
 
 CREATE TABLE sdss.keyword (
     id SERIAL NOT NULL PRIMARY KEY,
-    header_id INT4,
+    header_id INT4 REFERENCES sdss.header(id) NOT NULL,
     keyword VARCHAR(32) NOT NULL,
     value VARCHAR(80) NOT NULL,
     comment VARCHAR(80) NOT NULL,
@@ -193,7 +193,7 @@ VALUES (6,'NAXIS1','300','',NOW());
 
 CREATE TABLE sdss.data (
     id SERIAL NOT NULL PRIMARY KEY,
-    extension_id INT4,
+    extension_id INT4 REFERENCES sdss.extension(id) NOT NULL,
     is_image BOOLEAN NOT NULL DEFAULT FALSE,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -213,7 +213,7 @@ VALUES (6,TRUE,NOW());
 
 CREATE TABLE sdss.column (
     id SERIAL NOT NULL PRIMARY KEY,
-    data_id INT4,
+    data_id INT4 REFERENCES sdss.data(id) NOT NULL,
     name VARCHAR(32) NOT NULL,
     value VARCHAR(64) NOT NULL,
     description VARCHAR(80) NOT NULL,
