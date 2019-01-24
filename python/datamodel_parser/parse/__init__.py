@@ -1,0 +1,2 @@
+from .Migrate import Migrate
+

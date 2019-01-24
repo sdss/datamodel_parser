@@ -216,15 +216,16 @@ CREATE TABLE sdss.column (
     data_id INT4 REFERENCES sdss.data(id) NOT NULL,
     name VARCHAR(32) NOT NULL,
     value VARCHAR(64) NOT NULL,
-    description VARCHAR(80) NOT NULL,
+    length int2 NOT NULL,
+    description VARCHAR(80),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-INSERT INTO sdss.column (data_id,name,value,description,created)
-VALUES (1,'SIMPLE','T','image conforms to FITS standard',NOW());
-INSERT INTO sdss.column (data_id,name,value,description,created)
-VALUES (1,'BITPIX','16','bits per data value',NOW());
-INSERT INTO sdss.column (data_id,name,value,description,created)
-VALUES (1,'NAXIS','0','number of axes',NOW());
-INSERT INTO sdss.column (data_id,name,value,description,created)
-VALUES (1,'EXTEND','T','file may contain extensions',NOW());
+INSERT INTO sdss.column (data_id,name,value,length,description,created)
+VALUES (1,'SIMPLE','T',1,'image conforms to FITS standard',NOW());
+INSERT INTO sdss.column (data_id,name,value,length,description,created)
+VALUES (1,'BITPIX','16',1,'bits per data value',NOW());
+INSERT INTO sdss.column (data_id,name,value,length,description,created)
+VALUES (1,'NAXIS','0',1,'number of axes',NOW());
+INSERT INTO sdss.column (data_id,name,value,length,description,created)
+VALUES (1,'EXTEND','T',1,'file may contain extensions',NOW());

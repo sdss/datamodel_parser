@@ -1,6 +1,5 @@
 #!/bin/sh
 NOW=$(date +"%m%d%Y")
 DB=datamodel
-PG_DUMP_TMP_FILE=${INTERNAL_DIR}/pg_dump/.${DB}_tmp.sql
-PG_DUMP_FILE=$INTERNAL_DIR/pg_dump/${DB}_$NOW.sql
-pg_dump -U sdss -d $DB -Fc > $PG_DUMP_TMP_FILE
+PG_DUMP_FILE=/software/svn.sdss.org/github/datamodel_parser/pg_dump/${DB}_$NOW.sql
+pg_dump -U sdss -d $DB -Fc > $PG_DUMP_FILE
