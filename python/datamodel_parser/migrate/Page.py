@@ -49,6 +49,7 @@ class Page:
             self.set_html_text()
             self.set_soup()
             self.parse_description()
+            self.parse_extensions()
 
     def set_html_text(self):
         '''Set the HTML text for the given URL.'''
@@ -79,30 +80,37 @@ class Page:
         '''Parse the discription of the page and dessimenate the information.'''
         self.set_description_columns()
         self.populate_description_table()
+#        print('self.description_columns:\n' + dumps(self.description_columns,indent=1))
+#        input('pause')
 
     def set_description_columns(self):
         '''Set the columns of the description table.'''
         if self.ready:
-            if self.soup and self.soup.body and self.soup.body.dl:
-                dl = self.soup.body.dl
-                self.initialize_description_columns()
-                columns = [c.replace('_',' ').title()
-                           for c in self.description_columns.keys()]
-                find_value = False
-                for string in dl.strings:
-                    if string in columns:
-                        key = string.lower().replace(' ','_')
-                        find_value = True
-                        continue
-                    if find_value:
-                        if string != '\n':
-                            self.description_columns[key] = string
-                            find_value = False
+            if self.soup:
+                intro = self.soup.find('div',id='intro') if self.soup else None
+                dl = intro.dl if intro else None
+                if dl:
+                    self.initialize_description_columns()
+                    columns = [c.replace('_',' ').title()
+                               for c in self.description_columns.keys()]
+                    find_value = False
+                    for string in dl.strings:
+                        if string in columns:
+                            key = string.lower().replace(' ','_')
+                            find_value = True
+                            continue
+                        if find_value:
+                            if string != '\n':
+                                self.description_columns[key] = string
+                                find_value = False
+                else:
+                    self.ready = None
+                    self.logger.error('Unable to set_description_columns. ' +
+                                        'dl: {0}'.format(dl))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_description_columns. ' +
                                     'self.soup: {0}'.format(self.soup))
-
 
     def initialize_description_columns(self):
         '''Initialize the columns of the description table.'''
@@ -124,4 +132,64 @@ class Page:
 #            if self.description: self.update_row()
 #            else:                self.create_row()
 
+    def parse_extensions(self):
+        '''Parse the extensions of the page and dessimenate the information.'''
+        self.set_extensions()
+
+    def set_extensions(self):
+        '''Set the columns of the extension table.'''
+        self.extensions = list()
+        if self.ready:
+            if self.soup:
+                another_hdu = True
+                self.hdu_number = -1
+                while another_hdu:
+                    if self.hdu_number > 5e4:
+                        self.ready = False
+                        self.logger.error(
+                            'Runaway while loop in parse_extensions')
+                        break
+                    self.hdu_number += 1
+                    hdu = 'hdu' + str(self.hdu_number)
+                    div = (self.soup.find('div',id=hdu)
+                            if self.soup and hdu else None)
+                    if div: self.set_title_and_keyword_columns(div=div)
+                    else:   another_hdu = False
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_extensions. self.soup: {0}'
+                                    .format(self.soup))
+                    
+    def set_title_and_keyword_columns(self,div=None):
+        self.header_title = None
+        self.keyword_columns = dict()
+        '''
+            Set the header title
+            as well as keyword/value pairs with description if present.
+        '''
+        if self.ready:
+            if div:
+                self.header_title = (div.h2.string.split(' ')[1]
+                                     if div and div.h2 and div.h2.string and
+                                        div.h2.string.split(' ') and
+                                        len(div.h2.string.split(' '))==2
+                                     else None)
+                pre = div.pre
+                if pre and pre.string:
+                    string = unicode(pre.string)
+                    print('string: %r' % string)
+                    print('type(pre.string): %r' % type(pre.string))
+                    input('pause')
+#
+#                    for string in pre.strings
+#                        print('string: %r' % string)
+                else:
+                    self.ready = False
+                    self.logger.error(
+                        'Unable to set_title_and_keyword_columns. ' +
+                        'pre: {0}'.format(pre))
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_title_and_keyword_columns. ' +
+                                    'div: {0}'.format(div))
 
