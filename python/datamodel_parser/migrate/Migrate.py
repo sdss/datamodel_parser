@@ -1,5 +1,5 @@
+from datamodel_parser.migrate import Page
 import logging
-import requests
 from json import dumps
 
 class Migrate:
@@ -70,13 +70,38 @@ class Migrate:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
 
-    def set_html_text(self,url=None):
-        self.html_text = None
+    def parse_page(self):
+        '''
+            Parse the HTML of the given URL
+            and disseminate it in various formats.
+        '''
         if self.ready:
-            if url:
-                url = requests.get(url)
-                self.html_text = url.text if url else None
+            self.set_page()
+            if self.page:
+                self.page.parse_page()
+                self.ready = self.page.ready
             else:
-                self.logger.error('Unable to set_html_text. url: {0}'
-                    .format(url))
+                self.ready = False
+                self.logger.error('Unable to parse_page. self.page: {0}'
+                                    .format(self.page))
+
+    def set_page(self):
+        ''' Set instance of Page class.'''
+        self.page = None
+        if self.ready:
+            self.page = (Page(logger=self.logger,options=self.options)
+                         if self.logger and self.options else None)
+            if not self.page:
+                self.ready = False
+                self.logger.error('Unable to set_page. self.page: {0}'
+                                    .format(self.page))
+
+    def exit(self):
+        '''Report the presense/lack of errors.'''
+        if self.ready:
+            if self.verbose: self.logger.info('Finished!')
+            exit(0)
+        else:
+            if self.verbose: self.logger.info('Fail!')
+            exit(1)
 
