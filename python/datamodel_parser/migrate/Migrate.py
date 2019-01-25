@@ -1,4 +1,4 @@
-from datamodel_parser.migrate import Page
+from datamodel_parser.migrate import File
 import logging
 from json import dumps
 
@@ -70,31 +70,31 @@ class Migrate:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
 
-    def parse_page(self):
+    def parse_file(self):
         '''
             Parse the HTML of the given URL
             and disseminate it in various formats.
         '''
         if self.ready:
-            self.set_page()
-            if self.page:
-                self.page.parse_page()
-                self.ready = self.page.ready
+            self.set_file()
+            if self.file:
+                self.file.parse_file()
+                self.ready = self.file.ready
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_page. self.page: {0}'
-                                    .format(self.page))
+                self.logger.error('Unable to parse_file. self.file: {0}'
+                                    .format(self.file))
 
-    def set_page(self):
-        ''' Set instance of Page class.'''
-        self.page = None
+    def set_file(self):
+        ''' Set instance of File class.'''
+        self.file = None
         if self.ready:
-            self.page = (Page(logger=self.logger,options=self.options)
+            self.file = (File(logger=self.logger,options=self.options)
                          if self.logger and self.options else None)
-            if not self.page:
+            if not self.file:
                 self.ready = False
-                self.logger.error('Unable to set_page. self.page: {0}'
-                                    .format(self.page))
+                self.logger.error('Unable to set_file. self.file: {0}'
+                                    .format(self.file))
 
     def exit(self):
         '''Report the presense/lack of errors.'''

@@ -11,6 +11,6 @@ ready = options and migrate and logger
 ready = ready and migrate.ready
 if not ready: print('Fail!')
 else:
-    migrate.parse_page()
+    migrate.parse_file()
     migrate.exit()
 

@@ -1,3 +1,3 @@
-from .Page import Page
+from .File import File
 from .Migrate import Migrate
 
