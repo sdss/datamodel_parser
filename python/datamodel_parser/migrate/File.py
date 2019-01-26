@@ -42,17 +42,20 @@ class File:
 
     def parse_file(self):
         '''
-            Parse the HTML of the given URL
+            Parse the HTML of the given file URL
             and disseminate it in various formats.
         '''
         if self.ready:
+            self.parse_url()
             self.set_html_text()
             self.set_soup()
-            self.parse_url()
-            self.parse_description()
-            self.parse_extensions()
             
+            if self.soup.find('div',id='intro'):
+                self.parse_description_div()
+                self.parse_extensions_div()
+            #
             # Information to be dissemenated into database.
+            #
 #            print('self.url: %r' % self.url)
 #            print('self.env_variable: %r' % self.env_variable)
 #            print('self.location_path: %r' % self.location_path)
@@ -64,6 +67,30 @@ class File:
 #                input('pause')
 #                print('extension:\n' + dumps(extension,indent=1))
 #            input('pause')
+
+    def parse_url(self):
+        self.env_variable = None
+        self.location_path = None
+        if self.ready:
+            if self.url:
+                path = self.url.replace(
+                    'https://data.sdss.org/datamodel/files/','')
+                split = path.split('/')
+                self.env_variable = split[0]               if split else None
+                self.name = split[-1]                      if split else None
+                self.location_path = '/'.join(split[1:-1]) if split else None
+                directory_names = list()
+                directory_depths = list()
+                for name in split[1:-1]:
+                    directory_names.append(name)
+                    directory_depths.append(directory_names.index(name))
+                self.location_directories = {'names'  : directory_names,
+                                             'depths' : directory_depths,
+                                             }
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_env_variable. ' +
+                                  'self.url: {0}'.format(self.url))
 
     def set_html_text(self):
         '''Set the HTML text for the given URL.'''
@@ -90,31 +117,7 @@ class File:
                 self.logger.error('Unable to set_soup. self.html_text: {0}'
                                     .format(self.html_text))
 
-    def parse_url(self):
-        self.env_variable = None
-        self.location_path = None
-        if self.ready:
-            if self.url:
-                path = self.url.replace(
-                    'https://data.sdss.org/datamodel/files/','')
-                split = path.split('/')
-                self.env_variable = split[0]               if split else None
-                self.name = split[-1]                      if split else None
-                self.location_path = '/'.join(split[1:-1]) if split else None
-                directory_names = list()
-                directory_depths = list()
-                for name in split[1:-1]:
-                    directory_names.append(name)
-                    directory_depths.append(directory_names.index(name))
-                self.location_directories = {'names'  : directory_names,
-                                             'depths' : directory_depths,
-                                             }
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_env_variable. ' +
-                                  'self.url: {0}'.format(self.url))
-
-    def parse_description(self):
+    def parse_description_div(self):
         '''Parse the discription of the file.'''
         self.description = None
         if self.ready:
@@ -141,7 +144,7 @@ class File:
                                         'dl: {0}'.format(dl))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_description. ' +
+                self.logger.error('Unable to parse_description_div. ' +
                                     'self.soup: {0}'.format(self.soup))
 
     def initialize_description(self):
@@ -154,7 +157,7 @@ class File:
                 'file_type'           : '',
                 }
 
-    def parse_extensions(self):
+    def parse_extensions_div(self):
         self.extensions = list()
         if self.ready:
             if self.soup:
@@ -164,15 +167,15 @@ class File:
                     if hdu_number > 5e4:
                         self.ready = False
                         self.logger.error(
-                            'Runaway while loop in parse_extensions')
+                            'Runaway while loop in parse_extensions_div')
                         break
                     hdu_number += 1
                     hdu = 'hdu' + str(hdu_number)
                     div = (self.soup.find('div',id=hdu)
                             if self.soup and hdu else None)
                     if div:
-                        self.set_header_title(div=div)
-                        self.set_keywords_values_comments(div=div)
+                        self.set_header_title_div(div=div)
+                        self.set_keywords_values_comments_div(div=div)
                         extension = {
                             'hdu_number'               :
                                 hdu_number,
@@ -186,10 +189,10 @@ class File:
                 self.extension_count = len(self.extensions)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_extensions. self.soup: {0}'
+                self.logger.error('Unable to parse_extensions_div. self.soup: {0}'
                                     .format(self.soup))
 
-    def set_header_title(self,div=None):
+    def set_header_title_div(self,div=None):
         '''Set the header title.'''
         self.header_title = None
         if self.ready:
@@ -201,11 +204,11 @@ class File:
                                      else None)
             else:
                 self.ready = False
-                self.logger.error('Unable to set_header_title. ' +
+                self.logger.error('Unable to set_header_title_div. ' +
                                     'div: {0}'.format(div))
 
 
-    def set_keywords_values_comments(self,div=None):
+    def set_keywords_values_comments_div(self,div=None):
         self.keywords_values_comments = list()
         '''Set keyword/value pairs with description if present.'''
         if self.ready:
