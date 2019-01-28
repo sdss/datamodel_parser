@@ -6,6 +6,7 @@ import os
 
 import yaml
 
+
 # Inits the logging system. Only shell logging, and exception and warning catching.
 # File logging can be started by calling log.start_file_logger(name).
 from .utils import log
@@ -37,3 +38,23 @@ if os.path.exists(custom_config_fn):
 
 
 __version__ = '0.1.0dev'
+
+########
+
+import logging
+logger = logging.getLogger('datamodel_parser')
+logger.setLevel(logging.WARNING)
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+try: configname = os.environ['DATAMODEL_PARSER_CONFIG']
+except: configname = "development"
+
+app = Flask(__name__)
+app.config.from_object('{0}_config.{1}'.format(__name__,configname))
+
+db = SQLAlchemy(app)
+
+#####
+

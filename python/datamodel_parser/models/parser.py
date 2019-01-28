@@ -52,6 +52,32 @@ class Env(db.Model):
                          default=datetime.now,
                          onupdate=datetime.now)
 
+    @staticmethod
+    def load(variable = None):
+        if variable:
+            try: env = Env.query.filter(Env.variable==variable).one()
+            except: env = None
+        else:
+            env = None
+        return env
+    
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
+
 class Location(db.Model):
     __tablename__ = 'location'
     __table_args__ = {'schema':'sdss'}
@@ -64,6 +90,32 @@ class Location(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+
+    @staticmethod
+    def load(path = None):
+        if path:
+            try: env = Location.query.filter(Location.path==path).one()
+            except: env = None
+        else:
+            env = None
+        return env
+    
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
 
 class Directory(db.Model):
     __tablename__ = 'directory'
@@ -78,6 +130,28 @@ class Directory(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+    @staticmethod
+    def load_directories():
+        try: directories = Directory.query.order_by(Directory.id).all()
+        except: directories = None
+        return directories
+
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
 
 class File(db.Model):
     __tablename__ = 'file'
@@ -93,6 +167,32 @@ class File(db.Model):
                          default=datetime.now,
                          onupdate=datetime.now)
 
+    @staticmethod
+    def load(name = None):
+        if name:
+            try: file = File.query.filter(File.name==name).one()
+            except: file = None
+        else:
+            file = None
+        return file
+    
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
+
 class Description(db.Model):
     __tablename__ = 'description'
     __table_args__ = {'schema':'sdss'}
@@ -100,7 +200,6 @@ class Description(db.Model):
     file_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
-    sas_path = db.Column(db.String(128), nullable = False, unique = True)
     general_description = db.Column(db.String(256), nullable = False,
                                     unique = True)
     naming_convention = db.Column(db.String(128), nullable = False, unique = True)
@@ -110,6 +209,23 @@ class Description(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
 
 class Extension(db.Model):
     __tablename__ = 'extension'
@@ -123,6 +239,12 @@ class Extension(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+    @staticmethod
+    def load_extensions():
+        try: extensions = Extension.query.order_by(Extension.id).all()
+        except: extensions = None
+        return extensions
+
 
 class Header(db.Model):
     __tablename__ = 'header'
@@ -136,6 +258,31 @@ class Header(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+    @staticmethod
+    def load(extension_id = None):
+        if extension_id:
+            try: header = Header.query.filter(Header.extension_id==extension_id).one()
+            except: header = None
+        else:
+            header = None
+        return header
+    
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
 
 class Keyword(db.Model):
     __tablename__ = 'keyword'
@@ -152,6 +299,32 @@ class Keyword(db.Model):
                          default=datetime.now,
                          onupdate=datetime.now)
 
+    @staticmethod
+    def load_all(header_id = None):
+        if header_id:
+            try: keywords = Keyword.query.filter(Keyword.header_id==header_id).all()
+            except: keywords = None
+        else:
+            keywords = None
+        return keywords
+
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
+
 class Data(db.Model):
     __tablename__ = 'data'
     __table_args__ = {'schema':'sdss'}
@@ -164,6 +337,22 @@ class Data(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
 
 class Column(db.Model):
     __tablename__ = 'column'
@@ -180,4 +369,20 @@ class Column(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
 
