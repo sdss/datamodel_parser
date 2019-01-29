@@ -40,34 +40,6 @@ class File:
             self.verbose = self.options.verbose if self.options else None
             self.url     = self.options.url     if self.options else None
 
-    def parse_file(self):
-        '''
-            Parse the HTML of the given file URL
-            and disseminate it in various formats.
-        '''
-        if self.ready:
-            self.parse_url()
-            self.set_html_text()
-            self.set_soup()
-            
-            if self.soup.find('div',id='intro'):
-                self.parse_description_div()
-                self.parse_extensions_div()
-            #
-            # Information to be dissemenated into database.
-            #
-#            print('self.url: %r' % self.url)
-#            print('self.env_variable: %r' % self.env_variable)
-#            print('self.location_path: %r' % self.location_path)
-#            print('self.location_directories:\n' + dumps(self.location_directories,indent=1))
-#            print('self.name: %r' % self.name)
-#            print('self.description:\n' + dumps(self.description,indent=1))
-#            print('self.extension_count: %r' % self.extension_count)
-#            for extension in self.extensions:
-#                input('pause')
-#                print('extension:\n' + dumps(extension,indent=1))
-#            input('pause')
-
     def parse_url(self):
         self.env_variable = None
         self.location_path = None
@@ -79,18 +51,45 @@ class File:
                 self.env_variable = split[0]               if split else None
                 self.name = split[-1]                      if split else None
                 self.location_path = '/'.join(split[1:-1]) if split else None
-                directory_names = list()
-                directory_depths = list()
+                self.directory_names = list()
+                self.directory_depths = list()
                 for name in split[1:-1]:
-                    directory_names.append(name)
-                    directory_depths.append(directory_names.index(name))
-                self.location_directories = {'names'  : directory_names,
-                                             'depths' : directory_depths,
+                    self.directory_names.append(name)
+                    self.directory_depths.append(self.directory_names.index(name))
+                self.location_directories = {'names'  : self.directory_names,
+                                             'depths' : self.directory_depths,
                                              }
+#                print('self.url: %r' % self.url)
+#                print('self.env_variable: %r' % self.env_variable)
+#                print('self.location_path: %r' % self.location_path)
+#                print('self.location_directories:\n' + dumps(self.location_directories,indent=1))
+#                print('self.name: %r' % self.name)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_env_variable. ' +
                                   'self.url: {0}'.format(self.url))
+
+    def parse_file(self):
+        '''
+            Parse the HTML of the given file URL
+            and disseminate it in various formats.
+        '''
+        if self.ready:
+            self.set_html_text()
+            self.set_soup()
+            
+            if self.soup.find('div',id='intro'):
+                self.parse_description_div()
+                self.parse_extensions_div()
+            #
+            # Information to be dissemenated into database.
+            #
+#            print('self.description:\n' + dumps(self.description,indent=1))
+#            print('self.extension_count: %r' % self.extension_count)
+#            for extension in self.extensions:
+#                input('pause')
+#                print('extension:\n' + dumps(extension,indent=1))
+#            input('pause')
 
     def set_html_text(self):
         '''Set the HTML text for the given URL.'''

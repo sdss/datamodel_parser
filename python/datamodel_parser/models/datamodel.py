@@ -22,6 +22,15 @@ class Tree(db.Model):
             tree = None
         return tree
     
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
     def add(self):
         try: db.session.add(self)
         except Exception as e:
@@ -61,6 +70,15 @@ class Env(db.Model):
             env = None
         return env
     
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
     def add(self):
         try: db.session.add(self)
         except Exception as e:
@@ -100,6 +118,15 @@ class Location(db.Model):
             env = None
         return env
     
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
     def add(self):
         try: db.session.add(self)
         except Exception as e:
@@ -131,10 +158,30 @@ class Directory(db.Model):
                          default=datetime.now,
                          onupdate=datetime.now)
     @staticmethod
+    def load(location_id=None,path=None,depth=None):
+        if location_id and path and depth:
+            try: env = (Location.query.filter(Location.location_id==location_id)
+                                      .filter(Location.path==path)
+                                      .filter(Location.depth==depth).one())
+            except: env = None
+        else:
+            env = None
+        return env
+
+    @staticmethod
     def load_directories():
         try: directories = Directory.query.order_by(Directory.id).all()
         except: directories = None
         return directories
+
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
 
     def add(self):
         try: db.session.add(self)
@@ -176,6 +223,15 @@ class File(db.Model):
             file = None
         return file
     
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
     def add(self):
         try: db.session.add(self)
         except Exception as e:
@@ -209,6 +265,15 @@ class Description(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
 
     def add(self):
         try: db.session.add(self)
@@ -267,6 +332,15 @@ class Header(db.Model):
             header = None
         return header
     
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
     def add(self):
         try: db.session.add(self)
         except Exception as e:
@@ -308,6 +382,15 @@ class Keyword(db.Model):
             keywords = None
         return keywords
 
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
     def add(self):
         try: db.session.add(self)
         except Exception as e:
@@ -337,6 +420,15 @@ class Data(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
     def add(self):
         try: db.session.add(self)
         except Exception as e:
@@ -369,6 +461,24 @@ class Column(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
     def add(self):
         try: db.session.add(self)
         except Exception as e:

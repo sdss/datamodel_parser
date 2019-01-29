@@ -20,7 +20,6 @@ CREATE TABLE sdss.tree (
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-INSERT INTO sdss.tree (edition,created) VALUES ('dr15',NOW());
 
 CREATE TABLE sdss.env (
     id SERIAL NOT NULL PRIMARY KEY,
