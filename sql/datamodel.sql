@@ -24,7 +24,7 @@ CREATE TABLE sdss.tree (
 CREATE TABLE sdss.env (
     id SERIAL NOT NULL PRIMARY KEY,
     tree_id INT4 REFERENCES sdss.tree(id) NOT NULL,
-    variable VARCHAR(16) NOT NULL UNIQUE,
+    variable VARCHAR(32) NOT NULL UNIQUE,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -40,8 +40,8 @@ CREATE TABLE sdss.location (
 CREATE TABLE sdss.directory (
     id SERIAL NOT NULL PRIMARY KEY,
     location_id INT4 REFERENCES sdss.location(id) NOT NULL,
-    name VARCHAR(64) NOT NULL UNIQUE,
-    depth INT2,
+    name VARCHAR(64) NOT NULL,
+    depth INT2 NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -88,7 +88,8 @@ CREATE TABLE sdss.keyword (
     header_id INT4 REFERENCES sdss.header(id) NOT NULL,
     keyword VARCHAR(32) NOT NULL,
     value VARCHAR(80) NOT NULL,
-    comment VARCHAR(80) NOT NULL,
+    type VARCHAR(80) NOT NULL,
+    comment VARCHAR(256) NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -105,9 +106,9 @@ CREATE TABLE sdss.column (
     id SERIAL NOT NULL PRIMARY KEY,
     data_id INT4 REFERENCES sdss.data(id) NOT NULL,
     name VARCHAR(32) NOT NULL,
-    value VARCHAR(64) NOT NULL,
-    length int2 NOT NULL,
-    description VARCHAR(80),
+    datatype VARCHAR(64) NOT NULL,
+    size VARCHAR(32) NOT NULL,
+    description VARCHAR(128),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

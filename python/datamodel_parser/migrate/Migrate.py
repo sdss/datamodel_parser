@@ -1,5 +1,6 @@
 from datamodel_parser.migrate import File
 from datamodel_parser.migrate import Database
+from os import environ
 import logging
 from json import dumps
 
@@ -70,7 +71,32 @@ class Migrate:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.edition = self.options.edition if self.options else None
+            self.set_datamodel_dir()
+            self.set_edition()
+
+    def set_datamodel_dir(self):
+        '''Set the DATAMODEL_DIR file path on cypher.'''
+        self.datamodel_dir = None
+        if self.ready:
+            try: self.datamodel_dir = environ['DATAMODEL_DIR']
+            except:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_tree_table from the ' +
+                    'environmental variable DATAMODEL_DIR. ' +
+                    'Try loading a datamodel module file.')
+
+    def set_edition(self):
+        '''Set the datamodel edition.'''
+        if self.ready:
+            if self.datamodel_dir:
+                self.edition = (self.datamodel_dir[-4:]
+                                if self.datamodel_dir else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_edition. ' +
+                                  'self.datamodel_dir: {0}'
+                                  .format(self.datamodel_dir))
 
     def populate_database(self):
         '''Populate the database with file information.'''
@@ -79,10 +105,10 @@ class Migrate:
             self.set_file()
             if self.ready:
                 self.populate_tree_table()
-                self.file.parse_url()
+                self.file.parse_path()
                 self.populate_env_table()
+                self.populate_location_table()
                 self.populate_directory_table()
-#                input('pause')
 
     def set_database(self):
         '''Set class Database instance.'''
@@ -141,10 +167,10 @@ class Migrate:
         if self.ready:
             if (self.file and
                 self.file.location_path and
-                self.file.location_variable):
+                self.file.env_variable):
                 self.database.set_location_columns(
                                         path=self.file.location_path,
-                                        variable=self.file.location_variable)
+                                        variable=self.file.env_variable)
                 self.database.populate_location_table()
             else:
                 self.ready = False
@@ -161,7 +187,7 @@ class Migrate:
                 path = self.file.location_path
                 names = self.file.directory_names
                 depths = self.file.directory_depths
-                for (name,depth) in (names,depths):
+                for (name,depth) in list(zip(names,depths)):
                     self.database.set_directory_columns(path=path,
                                                         name=name,
                                                         depth=depth)

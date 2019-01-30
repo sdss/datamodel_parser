@@ -38,15 +38,14 @@ class File:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.url     = self.options.url     if self.options else None
+            self.path     = self.options.path     if self.options else None
 
-    def parse_url(self):
+    def parse_path(self):
         self.env_variable = None
         self.location_path = None
         if self.ready:
-            if self.url:
-                path = self.url.replace(
-                    'https://data.sdss.org/datamodel/files/','')
+            if self.path:
+                path = self.path.replace('/datamodel/files/','')
                 split = path.split('/')
                 self.env_variable = split[0]               if split else None
                 self.name = split[-1]                      if split else None
@@ -56,18 +55,15 @@ class File:
                 for name in split[1:-1]:
                     self.directory_names.append(name)
                     self.directory_depths.append(self.directory_names.index(name))
-                self.location_directories = {'names'  : self.directory_names,
-                                             'depths' : self.directory_depths,
-                                             }
-#                print('self.url: %r' % self.url)
+#                print('self.path: %r' % self.path)
 #                print('self.env_variable: %r' % self.env_variable)
 #                print('self.location_path: %r' % self.location_path)
-#                print('self.location_directories:\n' + dumps(self.location_directories,indent=1))
 #                print('self.name: %r' % self.name)
+#                input('pause')
             else:
                 self.ready = False
-                self.logger.error('Unable to set_env_variable. ' +
-                                  'self.url: {0}'.format(self.url))
+                self.logger.error('Unable to parse_path. ' +
+                                  'self.path: {0}'.format(self.path))
 
     def parse_file(self):
         '''
@@ -95,12 +91,12 @@ class File:
         '''Set the HTML text for the given URL.'''
         self.html_text = None
         if self.ready:
-            if self.url:
-                request_url = requests_get(self.url) if self.url else None
-                self.html_text = request_url.text if request_url else None
+            if self.path:
+                request_path = requests_get(self.path) if self.path else None
+                self.html_text = request_path.text if request_path else None
             else:
-                self.logger.error('Unable to set_html_text. self.url: {0}'
-                    .format(self.url))
+                self.logger.error('Unable to set_html_text. self.path: {0}'
+                    .format(self.path))
 
     def set_soup(self):
         '''

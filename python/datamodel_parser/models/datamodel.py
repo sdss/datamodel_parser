@@ -55,7 +55,7 @@ class Env(db.Model):
     tree_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.tree.id'),
                         nullable = False)
-    variable = db.Column(db.String(16), nullable = False, unique = True)
+    variable = db.Column(db.String(32), nullable = False, unique = True)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -151,22 +151,23 @@ class Directory(db.Model):
     location_id = db.Column(db.Integer,
                             db.ForeignKey('sdss.location.id'),
                             nullable = False)
-    name = db.Column(db.String(64), nullable = False, unique = True)
+    name = db.Column(db.String(64), nullable = False)
     depth = db.Column(db.Integer, nullable = False)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
     @staticmethod
-    def load(location_id=None,path=None,depth=None):
-        if location_id and path and depth:
-            try: env = (Location.query.filter(Location.location_id==location_id)
-                                      .filter(Location.path==path)
-                                      .filter(Location.depth==depth).one())
-            except: env = None
+    def load(location_id=None,name=None,depth=None):
+        if location_id and name and depth!=None:
+            try: directory = (Directory.query
+                              .filter(Directory.location_id==location_id)
+                              .filter(Directory.name==name)
+                              .filter(Directory.depth==depth).one())
+            except: directory = None
         else:
-            env = None
-        return env
+            directory = None
+        return directory
 
     @staticmethod
     def load_directories():
@@ -367,7 +368,8 @@ class Keyword(db.Model):
                           nullable = False)
     keyword = db.Column(db.String(32), nullable = False)
     value = db.Column(db.String(80), nullable = False)
-    comment = db.Column(db.String(80), nullable = False)
+    type = db.Column(db.String(80), nullable = False)
+    comment = db.Column(db.String(256), nullable = False)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -454,9 +456,9 @@ class Column(db.Model):
                         db.ForeignKey('sdss.data.id'),
                         nullable = False)
     name = db.Column(db.String(32), nullable = False)
-    value = db.Column(db.String(64), nullable = False)
-    length = db.Column(db.Integer, nullable = False)
-    description = db.Column(db.String(80))
+    datatype = db.Column(db.String(64), nullable = False)
+    size = db.Column(db.String(32), nullable = False)
+    description = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
