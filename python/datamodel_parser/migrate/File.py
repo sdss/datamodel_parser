@@ -1,6 +1,4 @@
-from bs4 import BeautifulSoup
 from json import dumps
-from requests import get as requests_get
 
 
 class File:
@@ -8,9 +6,10 @@ class File:
         
     '''
 
-    def __init__(self, logger=None, options=None):
+    def __init__(self,logger=None,options=None,divs=None):
         self.set_logger(logger=logger)
         self.set_options(options=options)
+        self.set_divs(divs=divs)
         self.set_ready()
         self.set_attributes()
 
@@ -27,43 +26,28 @@ class File:
             self.options = options if options else None
             if not self.options:
                 self.ready = False
-                self.logger.error('Unable to set_options')
+                self.logger.error('Unable to set_options.')
+
+    def set_divs(self, divs=None):
+        '''Set the divs class attribute.'''
+        self.divs = None
+        if self.ready:
+            self.divs = divs if divs else None
+            if not self.divs:
+                self.ready = False
+                self.logger.error('Unable to set_divs.')
 
     def set_ready(self):
         '''Set error indicator.'''
-        self.ready = bool(self.logger and
-                          self.options)
+        self.ready = bool(self.logger  and
+                          self.options and
+                          self.divs)
 
     def set_attributes(self):
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.path     = self.options.path     if self.options else None
-
-    def parse_path(self):
-        self.env_variable = None
-        self.location_path = None
-        if self.ready:
-            if self.path:
-                path = self.path.replace('/datamodel/files/','')
-                split = path.split('/')
-                self.env_variable = split[0]               if split else None
-                self.name = split[-1]                      if split else None
-                self.location_path = '/'.join(split[1:-1]) if split else None
-                self.directory_names = list()
-                self.directory_depths = list()
-                for name in split[1:-1]:
-                    self.directory_names.append(name)
-                    self.directory_depths.append(self.directory_names.index(name))
-#                print('self.path: %r' % self.path)
-#                print('self.env_variable: %r' % self.env_variable)
-#                print('self.location_path: %r' % self.location_path)
-#                print('self.name: %r' % self.name)
-#                input('pause')
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_path. ' +
-                                  'self.path: {0}'.format(self.path))
+            self.path    = self.options.path    if self.options else None
 
     def parse_file(self):
         '''
@@ -71,88 +55,71 @@ class File:
             and disseminate it in various formats.
         '''
         if self.ready:
-            self.set_html_text()
-            self.set_soup()
-            
-            if self.soup.find('div',id='intro'):
-                self.parse_description_div()
-                self.parse_extensions_div()
-            #
-            # Information to be dissemenated into database.
-            #
-#            print('self.description:\n' + dumps(self.description,indent=1))
-#            print('self.extension_count: %r' % self.extension_count)
-#            for extension in self.extensions:
+            if self.divs:
+                self.parse_description()
+#                self.parse_extensions()
+                #
+                # Information to be dissemenated into database.
+                #
+#                print('self.description:\n' + dumps(self.description,indent=1))
+#                print('self.extension_count: %r' % self.extension_count)
+#                for extension in self.extensions:
+#                    input('pause')
+#                    print('extension:\n' + dumps(extension,indent=1))
 #                input('pause')
-#                print('extension:\n' + dumps(extension,indent=1))
-#            input('pause')
 
-    def set_html_text(self):
-        '''Set the HTML text for the given URL.'''
-        self.html_text = None
-        if self.ready:
-            if self.path:
-                request_path = requests_get(self.path) if self.path else None
-                self.html_text = request_path.text if request_path else None
             else:
-                self.logger.error('Unable to set_html_text. self.path: {0}'
-                    .format(self.path))
+                self.ready = False
+                self.logger.error('Unable to parse_file.')
 
-    def set_soup(self):
-        '''
-            Set a class BeautifulSoup instance
-            from the HTML text of the given URL.
-        '''
-        self.soup = None
-        if self.ready:
-            self.soup = (BeautifulSoup(self.html_text, 'html.parser')
-                         if self.html_text else None)
-            if not self.soup:
-                self.ready = None
-                self.logger.error('Unable to set_soup. self.html_text: {0}'
-                                    .format(self.html_text))
-
-    def parse_description_div(self):
+    def parse_description(self):
         '''Parse the discription of the file.'''
         self.description = None
         if self.ready:
-            if self.soup:
+            if self.divs:
+                for div in self.divs:
+                    print('div: {0}'.format(div))
+                    print('id: {0}'.format(div.id))
+
+                    input('pause')
+
                 intro = self.soup.find('div',id='intro') if self.soup else None
-                dl = intro.dl if intro else None
-                if dl:
-                    self.initialize_description()
-                    columns = [c.replace('_',' ').title()
-                               for c in self.description.keys()]
-                    find_value = False
-                    for string in dl.strings:
-                        if string in columns:
-                            key = string.lower().replace(' ','_')
-                            find_value = True
-                            continue
-                        if find_value:
-                            if string != '\n':
-                                self.description[key] = string
-                                find_value = False
-                else:
-                    self.ready = None
-                    self.logger.error('Unable to set_description. ' +
-                                        'dl: {0}'.format(dl))
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_description_div. ' +
-                                    'self.soup: {0}'.format(self.soup))
+                if intro:
+                    self.set_header_levels(intro=intro)
+#                print('intro: {0}'.format(intro))
+#                print('intro.h: {0}'.format(intro.h4))
+#                input('pause')
+#
+#                dl = intro.dl if intro else None
+#                if dl:
+#                    print('dl.strings: {0}'.format(dl.strings))
+#                    input('pause')
+#                    self.initialize_description()
+#                    columns = [c.replace('_',' ').title()
+#                               for c in self.description.keys()]
+#                    find_value = False
+#                    for string in dl.strings:
+#                        if string in columns:
+#                            key = string.lower().replace(' ','_')
+#                            find_value = True
+#                            continue
+#                        if find_value:
+#                            if string != '\n':
+#                                self.description[key] = string
+#                                find_value = False
+#                else:
+#                    self.ready = None
+#                    self.logger.error('Unable to set_description. ' +
+#                                        'dl: {0}'.format(dl))
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to parse_description. ' +
+#                                    'self.soup: {0}'.format(self.soup))
 
-    def initialize_description(self):
-        '''Initialize the columns of the description table.'''
-        if self.ready:
-            self.description = {
-                'general_description' : '',
-                'naming_convention'   : '',
-                'approximate_size'    : '',
-                'file_type'           : '',
-                }
+    def set_header_levels(self):
+        pass
 
-    def parse_extensions_div(self):
+    def parse_extensions(self):
         self.extensions = list()
         if self.ready:
             if self.soup:
@@ -162,7 +129,7 @@ class File:
                     if hdu_number > 5e4:
                         self.ready = False
                         self.logger.error(
-                            'Runaway while loop in parse_extensions_div')
+                            'Runaway while loop in parse_extensions')
                         break
                     hdu_number += 1
                     hdu = 'hdu' + str(hdu_number)
@@ -184,7 +151,7 @@ class File:
                 self.extension_count = len(self.extensions)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_extensions_div. self.soup: {0}'
+                self.logger.error('Unable to parse_extensions. self.soup: {0}'
                                     .format(self.soup))
 
     def set_header_title_div(self,div=None):
