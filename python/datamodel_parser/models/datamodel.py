@@ -110,7 +110,7 @@ class Location(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(path = None):
+    def load(path=None):
         if path:
             try: env = Location.query.filter(Location.path==path).one()
             except: env = None
@@ -250,18 +250,16 @@ class File(db.Model):
                                         for column in self.__table__.columns])
 
 
-class Description(db.Model):
+class Intro(db.Model):
     __tablename__ = 'description'
     __table_args__ = {'schema':'sdss'}
     id = db.Column(db.Integer, primary_key = True)
     file_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
-    general_description = db.Column(db.String(256), nullable = False,
-                                    unique = True)
-    naming_convention = db.Column(db.String(128), nullable = False, unique = True)
-    approximate_size = db.Column(db.String(32), nullable = False, unique = True)
-    file_type = db.Column(db.String(32), nullable = False, unique = True)
+    heading_level = db.Column(db.Integer, nullable = False)
+    heading_name = db.Column(db.String(64), nullable = False, unique = True)
+    description = db.Column(db.String(256), nullable = False)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,

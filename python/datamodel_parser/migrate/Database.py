@@ -2,6 +2,7 @@ from datamodel_parser.models.datamodel import Tree
 from datamodel_parser.models.datamodel import Env
 from datamodel_parser.models.datamodel import Location
 from datamodel_parser.models.datamodel import Directory
+from datamodel_parser.models.datamodel import File
 from json import dumps
 
 class Database:
@@ -374,5 +375,96 @@ class Database:
                                       'directory = \n{0}'.format(directory))
             else:
                 self.logger.error('Unable to create_directory_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def set_file_columns(self,path=None,name=None,extension_count=None):
+        '''Set columns of the file table.'''
+        self.file_columns = dict()
+        if self.ready:
+            if path and name and extension_count:
+                self.set_location(path=path)
+                location_id = self.location.id if self.location else None
+                self.file_columns = {
+                    'location_id'     :
+                        location_id     if location_id     else None,
+                    'name'            :
+                        name            if name            else None,
+                    'extension_count' :
+                        extension_count if extension_count else None,
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_file_columns.' +
+                    'location_id: {0}, name: {1}, extension_count: {2}'
+                        .format(location_id,name,extension_count))
+
+    def populate_file_table(self):
+        '''Update/Create file table row.'''
+        if self.ready:
+            self.set_file()
+            if self.file: self.update_file_row()
+            else:         self.create_file_row()
+
+    def set_file(self,name=None):
+        '''Load row from file table.'''
+        if self.ready:
+            name = (name if name
+                    else self.file_columns['name']
+                    if self.file_columns and 'name' in self.file_columns
+                    else None)
+            if name:
+                self.file = File.load(name=name) if name else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_file. ' +
+                                  'name: {0}'.format(name))
+
+    def update_file_row(self):
+        '''Update row in file table.'''
+        if self.ready:
+            columns = self.file_columns if self.file_columns else None
+            if columns:
+                self.logger.debug('Updating row in file table.')
+                if self.verbose:
+                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                skip_keys = []
+                self.file.update_if_needed(columns=columns,skip_keys=skip_keys)
+                if self.file.updated:
+                    self.logger.info('Updated File[id={0}], name: {1}.'
+                        .format(self.file.id, self.file.name))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_file_row. columns: {0}'
+                                    .format(columns))
+
+    def create_file_row(self):
+        '''Create row in file table.'''
+        if self.ready:
+            columns = self.file_columns if self.file_columns else None
+            if columns:
+                self.logger.debug('Adding new row to file table.')
+                if self.verbose:
+                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                file = File(
+                    location_id = columns['location_id']
+                        if columns and 'location_id' in columns else None,
+                    name = columns['name']
+                        if columns and 'name' in columns else None,
+                    extension_count = columns['extension_count']
+                        if columns and 'extension_count' in columns else None,
+                                  )
+                if file:
+                    file.add()
+                    file.commit()
+                    self.logger.info('Added File[id={0}], name = {1}.'
+                        .format(file.id, file.name))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_file_row. ' +
+                                      'file = \n{0}'.format(file))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_file_row. ' +
                                   'columns: {0}'.format(columns))
 

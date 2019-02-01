@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS sdss.data;
 DROP TABLE IF EXISTS sdss.keyword;
 DROP TABLE IF EXISTS sdss.header;
 DROP TABLE IF EXISTS sdss.extension;
-DROP TABLE IF EXISTS sdss.description;
+DROP TABLE IF EXISTS sdss.intro;
 DROP TABLE IF EXISTS sdss.file;
 DROP TABLE IF EXISTS sdss.directory;
 DROP TABLE IF EXISTS sdss.location;
@@ -55,14 +55,12 @@ CREATE TABLE sdss.file (
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TABLE sdss.description (
+CREATE TABLE sdss.intro (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
-    sas_path VARCHAR(128) NOT NULL UNIQUE,
-    general_description VARCHAR(256) NOT NULL UNIQUE,
-    naming_convention VARCHAR(128) NOT NULL UNIQUE,
-    approximate_size VARCHAR(32) NOT NULL UNIQUE,
-    file_type VARCHAR(32) NOT NULL UNIQUE,
+    heading_level INT2,
+    heading_name VARCHAR(64) NOT NULL UNIQUE,
+    description VARCHAR(256) NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

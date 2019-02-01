@@ -50,71 +50,121 @@ class File:
             self.path    = self.options.path    if self.options else None
 
     def parse_file(self):
-        '''
-            Parse the HTML of the given file URL
-            and disseminate it in various formats.
-        '''
+        '''Parse the HTML of the given division tags.'''
         if self.ready:
             if self.divs:
-                self.parse_description()
-#                self.parse_extensions()
-                #
-                # Information to be dissemenated into database.
-                #
-#                print('self.description:\n' + dumps(self.description,indent=1))
-#                print('self.extension_count: %r' % self.extension_count)
-#                for extension in self.extensions:
-#                    input('pause')
-#                    print('extension:\n' + dumps(extension,indent=1))
-#                input('pause')
-
+                self.set_extension_count()
+                for div in self.divs:
+                    div_id = div['id']
+                    if div_id == 'intro':      self.parse_file_intro(div=div)
+                    elif div_id == 'sections': self.parse_file_sections(div=div)
+                    elif 'hdu' in div_id:      self.parse_file_extension(div=div)
+                    else:
+                        self.ready = False
+                        self.logger.error('Unknown div_id: {0}'.format(div_id))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file.')
+                self.logger.error('Unable to parse_file. self.div_ids: {0}'
+                                    .format(self.divs))
 
-    def parse_description(self):
-        '''Parse the discription of the file.'''
-        self.description = None
+    def set_extension_count(self):
+        '''Set the file extension count.'''
+        self.extension_count = 0
         if self.ready:
             if self.divs:
                 for div in self.divs:
-                    print('div: {0}'.format(div))
-                    print('id: {0}'.format(div.id))
+                    div_id = div['id']
+                    if div_id and 'hdu' in div_id: self.extension_count += 1
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_extension_count. ' +
+                                  'self.div_ids: {0}'.format(self.divs))
 
-                    input('pause')
+    def set_div_ids(self):
+        '''Set a list of division tag id's.'''
+        self.div_ids = list()
+        if self.ready:
+            if self.divs:
+                for div in self.divs:
+                    div_id = div['id']
+                    if div_id: self.div_ids.append(div['id'])
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_div_ids. self.divs: {0}'
+                                    .format(self.divs))
 
-                intro = self.soup.find('div',id='intro') if self.soup else None
-                if intro:
-                    self.set_header_levels(intro=intro)
-#                print('intro: {0}'.format(intro))
-#                print('intro.h: {0}'.format(intro.h4))
-#                input('pause')
-#
-#                dl = intro.dl if intro else None
-#                if dl:
-#                    print('dl.strings: {0}'.format(dl.strings))
-#                    input('pause')
-#                    self.initialize_description()
-#                    columns = [c.replace('_',' ').title()
-#                               for c in self.description.keys()]
-#                    find_value = False
-#                    for string in dl.strings:
-#                        if string in columns:
-#                            key = string.lower().replace(' ','_')
-#                            find_value = True
-#                            continue
-#                        if find_value:
-#                            if string != '\n':
-#                                self.description[key] = string
-#                                find_value = False
-#                else:
-#                    self.ready = None
-#                    self.logger.error('Unable to set_description. ' +
-#                                        'dl: {0}'.format(dl))
-#            else:
-#                self.ready = False
-#                self.logger.error('Unable to parse_description. ' +
-#                                    'self.soup: {0}'.format(self.soup))
+    def parse_file_intro(self,div=None):
+        '''Parse file description content from given division tag.'''
+        self.tag_names = list()
+        self.tag_contents = list()
+        if self.ready:
+            if div and div.children:
+                children = div.children
+                heading_tags = ['h1','h2','h3','h4','h5','h6']
+                paragraph_tag = ['p']
+                for child in children:
+                    if child.name:
+                        name = child.name
+                        string = child.string
+                        print('name: {}'.format(name))
+                        print('string: {}'.format(string))
+                        print('type(name): {}'.format(type(name)))
+                        print('type(string): {}'.format(type(string)))
+                        input('pause')
+                        self.tag_names.append(child.name)
+                        self.tag_contents.append(string)
+#                            if child.name in heading_tags:
+#                                heading_level = int(
+#                                                child.name.replace('h','').strip())
+#                                header = child.contents[0]
+#                                self.heading_level.append(heading_level)
+#                                if children[next(child)] == paragraph_tag:
+#                                    self.paragraphs.append(children[next(child)])
+#                                else:
+#                                    self.paragraphs.append('')
+
+
+                print('self.tag_names: ' + dumps(self.tag_names,indent=1))
+                print('self.tag_contents: %r' % self.tag_contents)
+                input('pause')
+
+        
+        
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_intro. ' +
+                                  'div: {0}'.format(div))
+
+    def set_parent_names(self,div=None):
+        '''Set a list of parent for the given division tag.'''
+        self.parent_names = list()
+        if self.ready:
+            if div:
+                for parent in div.parents:
+                    if parent.name: self.parent_names.append(parent.name)
+            else:
+                self.ready = None
+                self.logger.error('Unable to set_parent_names. ' +
+                                  'div: {0}'.format(div))
+
+    def set_child_names(self,div=None):
+        '''Set a list of child for the given division tag.'''
+        self.child_names = list()
+        if self.ready:
+            if div:
+                for child in div.children:
+                    if child.name:
+                        self.child_names.append(child.name)
+            else:
+                self.ready = None
+                self.logger.error('Unable to set_child_names. ' +
+                                  'div: {0}'.format(div))
+
+    def parse_file_sections(self):
+        pass
+
+    def parse_file_extension(self):
+        pass
 
     def set_header_levels(self):
         pass
@@ -204,4 +254,30 @@ class File:
                 self.ready = False
                 self.logger.error('Unable to set_title_and_keyword_columns. ' +
                                     'div: {0}'.format(div))
+
+#########
+# Use for list style file intros
+#########
+def set_intro_list_strings(self,intro=None):
+        dl = intro.dl if intro else None
+        if dl:
+            print('dl.strings: {0}'.format(dl.strings))
+            input('pause')
+            self.initialize_description()
+            columns = [c.replace('_',' ').title()
+                       for c in self.description.keys()]
+            find_value = False
+            for string in dl.strings:
+                if string in columns:
+                    key = string.lower().replace(' ','_')
+                    find_value = True
+                    continue
+                if find_value:
+                    if string != '\n':
+                        self.description[key] = string
+                        find_value = False
+        else:
+            self.ready = None
+            self.logger.error('Unable to set_description. ' +
+                                'dl: {0}'.format(dl))
 

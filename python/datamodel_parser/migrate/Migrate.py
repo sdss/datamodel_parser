@@ -76,7 +76,7 @@ class Migrate:
             self.verbose = self.options.verbose if self.options else None
             self.path    = self.options.path    if self.options else None
             self.set_datamodel_dir()
-            self.set_edition()
+            self.set_tree_edition()
             self.set_html_text()
 
     def set_datamodel_dir(self):
@@ -91,15 +91,15 @@ class Migrate:
                     'environmental variable DATAMODEL_DIR. ' +
                     'Try loading a datamodel module file.')
 
-    def set_edition(self):
+    def set_tree_edition(self):
         '''Set the datamodel edition.'''
         if self.ready:
             if self.datamodel_dir:
-                self.edition = (self.datamodel_dir[-4:]
+                self.tree_edition = (self.datamodel_dir[-4:]
                                 if self.datamodel_dir else None)
             else:
                 self.ready = False
-                self.logger.error('Unable to set_edition. ' +
+                self.logger.error('Unable to set_tree_edition. ' +
                                   'self.datamodel_dir: {0}'
                                   .format(self.datamodel_dir))
 
@@ -174,8 +174,7 @@ class Migrate:
             self.set_file()
             self.file.parse_file()
             if self.ready and self.file.ready:
-                pass
-#                self.populate_file_table()
+                self.populate_file_table()
 #                self.populate_description_table()
 #                self.populate_extension_table()
 #                self.populate_header_table()
@@ -190,14 +189,15 @@ class Migrate:
             if self.path:
                 path = self.path.replace('/datamodel/files/','')
                 split = path.split('/')
-                self.env_variable     = split[0]              if split else None
-                self.name             = split[-1]             if split else None
-                self.location_path    = '/'.join(split[1:-1]) if split else None
+                self.env_variable  = split[0]              if split else None
+                self.file_name     = split[-1]             if split else None
+                self.location_path = '/'.join(split[1:-1]) if split else None
                 self.directory_names  = list()
                 self.directory_depths = list()
                 for name in split[1:-1]:
                     self.directory_names.append(name)
-                    self.directory_depths.append(self.directory_names.index(name))
+                    self.directory_depths.append(
+                        self.directory_names.index(name))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_path. ' +
@@ -222,20 +222,37 @@ class Migrate:
         if self.ready:
             if self.soup:
                 body = self.soup.body if self.soup else None
-                divs = body.find_all('div')
-                if divs: self.set_file_div(divs=divs)
+                self.set_all_divs(body=body)
+                if self.ready and self.all_divs: self.set_file_div(body=body)
+                else:
+                    self.ready = False
+                    self.logger.error('Not working on this File class yet.')
             else:
                 self.ready = False
                 self.logger.error('Unable to set_file. ' +
                                   'self.soup: {0}'.format(self.soup))
 
-    def set_file_div(self,divs=None):
+    def set_all_divs(self,body=None):
+        '''Check if the HTML body is comprised of only division tags.'''
+        self.all_divs = True
+        if self.ready:
+            if body:
+                all_div = True
+                for child in body.children:
+                    if child.name and child.name != 'div': self.all_div = False
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_all_divs. ' +
+                                  'body: '.format(body))
+
+    def set_file_div(self,body=None):
         '''Set instance of File derived class comprised of HTML div's.'''
         if self.ready:
-            if divs:
+            if body:
+                divs = body.find_all('div')
                 self.file = (
                     File(logger=self.logger,options=self.options,divs=divs)
-                    if self.logger and self.options and divs else None)
+                    if self.logger and self.options and self.soup else None)
                 self.ready = bool(self.file and self.file.ready)
                 if not self.ready:
                     self.logger.error(
@@ -250,27 +267,27 @@ class Migrate:
     def populate_tree_table(self):
         '''Populate the tree table.'''
         if self.ready:
-            if self.edition:
-                self.database.set_tree_columns(edition=self.edition)
+            if self.tree_edition:
+                self.database.set_tree_columns(edition=self.tree_edition)
                 self.database.populate_tree_table()
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_tree_table. ' +
-                    'self.edition: {0}'.format(self.edition))
+                    'self.tree_edition: {0}'.format(self.tree_edition))
 
     def populate_env_table(self):
         '''Populate the env table.'''
         if self.ready:
-            if self.edition and self.env_variable:
+            if self.tree_edition and self.env_variable:
                 self.database.set_env_columns(variable=self.env_variable,
-                                              edition=self.edition)
+                                              edition=self.tree_edition)
                 self.database.populate_env_table()
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_env_table. ' +
-                    'self.edition: {0}'.format(self.edition))
+                    'self.tree_edition: {0}'.format(self.tree_edition))
 
     def populate_location_table(self):
         '''Populate the location table.'''
@@ -291,11 +308,11 @@ class Migrate:
     def populate_directory_table(self):
         '''Populate the directory table.'''
         if self.ready:
-            if (self.location_path and
+            if (self.location_path   and
                 self.directory_names and
                 self.directory_depths):
-                path = self.location_path
-                names = self.directory_names
+                path   = self.location_path
+                names  = self.directory_names
                 depths = self.directory_depths
                 for (name,depth) in list(zip(names,depths)):
                     self.database.set_directory_columns(path=path,
@@ -317,4 +334,25 @@ class Migrate:
         else:
             if self.verbose: self.logger.info('Fail!')
             exit(1)
+
+    def populate_file_table(self):
+        '''Populate the file table.'''
+        if self.ready:
+            if (self.location_path        and
+                self.file_name            and
+                self.file                 and
+                self.file.extension_count
+                ):
+                self.database.set_file_columns(
+                                path = self.location_path,
+                                name=self.file_name,
+                                extension_count=self.file.extension_count)
+                self.database.populate_file_table()
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_file_table. ' +
+                    'self.file_file_path: {0}'.format(self.file_file_path) +
+                    'self.env_variable: {0}'.format(self.env_variable))
+
 
