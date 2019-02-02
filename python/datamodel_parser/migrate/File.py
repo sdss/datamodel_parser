@@ -1,4 +1,5 @@
 from json import dumps
+from bs4 import Tag, NavigableString, unicode
 
 
 class File:
@@ -95,45 +96,197 @@ class File:
 
     def parse_file_intro(self,div=None):
         '''Parse file description content from given division tag.'''
-        self.tag_names = list()
-        self.tag_contents = list()
         if self.ready:
-            if div and div.children:
-                children = div.children
-                heading_tags = ['h1','h2','h3','h4','h5','h6']
-                paragraph_tag = ['p']
-                for child in children:
-                    if child.name:
-                        name = child.name
-                        string = child.string
-                        print('name: {}'.format(name))
-                        print('string: {}'.format(string))
-                        print('type(name): {}'.format(type(name)))
-                        print('type(string): {}'.format(type(string)))
-                        input('pause')
-                        self.tag_names.append(child.name)
-                        self.tag_contents.append(string)
-#                            if child.name in heading_tags:
-#                                heading_level = int(
-#                                                child.name.replace('h','').strip())
-#                                header = child.contents[0]
-#                                self.heading_level.append(heading_level)
-#                                if children[next(child)] == paragraph_tag:
-#                                    self.paragraphs.append(children[next(child)])
-#                                else:
-#                                    self.paragraphs.append('')
-
-
-                print('self.tag_names: ' + dumps(self.tag_names,indent=1))
-                print('self.tag_contents: %r' % self.tag_contents)
+            if div:
+                self.set_div_children_names_and_contents(div=div)
+                self.set_intro_table_information()
+                print('self.intro_heading_order' + dumps(self.intro_heading_order,indent=1))
+                print('self.intro_heading_levels' + dumps(self.intro_heading_levels,indent=1))
+                print('self.intro_heading_titles' + dumps(self.intro_heading_titles,indent=1))
+                print('self.intro_descriptions' + dumps(self.intro_descriptions,indent=1))
                 input('pause')
 
-        
-        
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_intro. ' +
                                   'div: {0}'.format(div))
+
+    def set_div_children_names_and_contents(self,div=None):
+        '''
+            Set the tag names and contents for the children
+            of the given division tag.
+        '''
+        self.div_children_names = list()
+        self.div_children_contents = list()
+        if self.ready:
+            if div and self.get_number_of_descendants(item=div):
+                for child in div.children:
+                    # child.string can be '\n' with child.name = None
+                    if not child.name: continue
+                    name = child.name
+                    self.div_children_names.append(name)
+                    self.set_children_contents(child=child)
+
+                # Remove closing division tag </div>
+                if self.div_children_names[-1] == 'div':
+                    if not self.div_children_contents[-1]:
+                        del self.div_children_names[-1]
+                        del self.div_children_contents[-1]
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                            'Closing div tag has contents. ' +
+                            'name: {0}, contents: {1}'
+                            .format(self.div_children_names[-1],
+                                    self.div_children_contents[-1]))
+            else:
+                self.ready = False
+                self.logger.error(
+                            'Unable to set_div_children_names_and_contents. ' +
+                            'div: {0}'.format(div) +
+                            'div.children: {0}'.format(div.children)
+                                )
+
+    def get_number_of_descendants(self,item=None):
+        '''Return True if BeautifulSoup object has descendants.'''
+        number_of_descendants = None
+        if self.ready:
+            if item:
+                number_of_descendants = 0
+                if not isinstance(item, NavigableString):
+                    for descendant in item.descendants:
+                        if descendant: number_of_descendants += 1
+                    print('number_of_descendants: {}'
+                          .format(number_of_descendants))
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_number_of_descendants.' +
+                                  'item: {}'.format(item))
+        return number_of_descendants
+
+    def set_child_contents(self,child=None):
+        '''Set the contents of the given child.'''
+        if self.ready:
+            contents = child.contents if child else list()
+            print('contents: {}'.format( contents))
+            input('pause')
+            if len(contents) == 1:
+                if isinstance(contents[0], NavigableString):
+                    string = self.get_string(NavigableString=contents[0])
+    #                            print('string: {}'.format( string))
+            elif len(contents) > 1:
+                string = list()
+                for item in contents:
+                    ###### I'M HERE !!!!!!!!!!! ########
+                    ## Test if item has descendants
+                    ## If it doesn't, get a string from the NavigableString
+                    ## and append it to the string list
+                    ## If it does, find out if it's only one descendant.
+                    ## If so, extract the string.
+                    ## If not, throw an error and log.
+                    number_of_descendants = self.get_number_of_descendants(item=item)
+                    print('item: {}'.format(item))
+                    print('number_of_descendants: {}'.format(number_of_descendants))
+                   
+                    input('pause')
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_div_children_names_and_contents.' +
+                    'contents: {}'.format(contents))
+
+            self.div_children_contents.append(string)
+    #                        input('pause')
+
+    def get_string(self,NavigableString=None):
+        '''Get Python string from BeautifulSoup NavigableString.'''
+        string = None
+        if self.ready:
+            if NavigableString:
+                string = str(
+                    NavigableString[0].encode('utf-8').decode('utf-8').strip())
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_string.' +
+                                  'NavigableString: {}'.format(NavigableString))
+        return string
+
+    def set_intro_table_information(self):
+        '''Set the heading names and descriptions for the intro table.'''
+        self.intro_heading_order  = list()
+        self.intro_heading_levels = list()
+        self.intro_heading_titles = list()
+        self.intro_descriptions   = list()
+        if self.ready:
+            if self.div_children_names and self.div_children_contents:
+                names = self.div_children_names
+                contents = self.div_children_contents
+                print('names: ' + dumps(names,indent=1))
+                print('contents: ' + dumps(contents,indent=1))
+                self.check_valid_assumptions(names=names,contents=contents)
+                if self.ready:
+                    heading_tags = ['h1','h2','h3','h4','h5','h6']
+                    paragraph_tags = ['p']
+                    order = -1
+                    for (idx,name) in enumerate(names):
+                        if name in paragraph_tags: continue
+                        if name in heading_tags:
+                            order += 1
+                            self.intro_heading_order.append(order)
+                            level = int(name.replace('h',''))
+                            self.intro_heading_levels.append(level)
+                            self.intro_heading_titles.append(contents[idx])
+                            if names[idx+1] in paragraph_tags:
+                                self.intro_descriptions.append(contents[idx+1])
+                            else:
+                                self.intro_descriptions.append('')
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to parse_file_intro. ' +
+                    'self.div_children_names: {0}, self.div_children_contents: {1}'
+                    .format(self.div_children_names,self.div_children_contents)
+                                  )
+
+    def check_valid_assumptions(self,names=None,contents=None):
+        '''Verify that all of my assumptions are valid'''
+        if self.ready:
+            if names and contents:
+                heading_tags = ['h1','h2','h3','h4','h5','h6']
+                paragraph_tags = ['p']
+                # Check that the lists have the same length
+                if len(names) != len(contents):
+                    self.ready = False
+                    self.logger.error(
+                        'Invalid assumption: len(names) = len(contents). ' +
+                        'len(names): {0}, len(contents): {1}'
+                        .format(len(names),len(contents))
+                                      )
+                # Check that the first name is a heading tag
+                if names[0] not in heading_tags:
+                    self.ready = False
+                    self.logger.error(
+                        'Invalid assumption: File intro starts with a heading.')
+
+                # Check that the names are either heading or paragraph tags
+                for name in names:
+                    unexpected_tag_names = list()
+                    if name not in heading_tags and name not in paragraph_tags:
+                        unexpected_tag_names.append(name)
+                    if unexpected_tag_names:
+                        self.ready = False
+                        self.logger.error(
+                            'Invalid assumption: ' +
+                            'names are either heading or paragraph tags.' +
+                            'unexpected_tag_names: {0}.'
+                            .format(unexpected_tag_names))
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to check_valid_assumptions. ' +
+                    'names: {0}, contents: {1}'.format(names,contents)
+                                  )
+
 
     def set_parent_names(self,div=None):
         '''Set a list of parent for the given division tag.'''
@@ -160,14 +313,14 @@ class File:
                 self.logger.error('Unable to set_child_names. ' +
                                   'div: {0}'.format(div))
 
-    def parse_file_sections(self):
-        pass
+    def parse_file_sections(self,div=None):
+        print('HI parse_file_sections')
 
-    def parse_file_extension(self):
-        pass
+    def parse_file_extension(self,div=None):
+        print('HI parse_file_extension')
 
     def set_header_levels(self):
-        pass
+        print('HI parse_file_sections')
 
     def parse_extensions(self):
         self.extensions = list()

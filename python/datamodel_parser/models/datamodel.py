@@ -258,7 +258,7 @@ class Intro(db.Model):
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
     heading_level = db.Column(db.Integer, nullable = False)
-    heading_name = db.Column(db.String(64), nullable = False, unique = True)
+    heading_title = db.Column(db.String(64), nullable = False, unique = True)
     description = db.Column(db.String(256), nullable = False)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,

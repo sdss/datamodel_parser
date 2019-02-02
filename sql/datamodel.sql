@@ -59,7 +59,7 @@ CREATE TABLE sdss.intro (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     heading_level INT2,
-    heading_name VARCHAR(64) NOT NULL UNIQUE,
+    heading_title VARCHAR(64) NOT NULL UNIQUE,
     description VARCHAR(256) NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
