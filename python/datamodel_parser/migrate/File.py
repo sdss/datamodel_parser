@@ -1,5 +1,5 @@
 from json import dumps
-from bs4 import Tag, NavigableString, unicode
+from bs4 import Tag, NavigableString
 
 
 class File:
@@ -81,26 +81,18 @@ class File:
                 self.logger.error('Unable to set_extension_count. ' +
                                   'self.div_ids: {0}'.format(self.divs))
 
-    def set_div_ids(self):
-        '''Set a list of division tag id's.'''
-        self.div_ids = list()
-        if self.ready:
-            if self.divs:
-                for div in self.divs:
-                    div_id = div['id']
-                    if div_id: self.div_ids.append(div['id'])
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_div_ids. self.divs: {0}'
-                                    .format(self.divs))
-
     def parse_file_intro(self,div=None):
         '''Parse file description content from given division tag.'''
         if self.ready:
             if div:
-                self.set_div_children_names_and_contents(div=div)
+                self.set_intro_tag_names_and_contents(intro=div)
+                print('self.intro_tag_names' + dumps(self.intro_tag_names,indent=1))
+                print('self.intro_tag_contents' + dumps(self.intro_tag_contents,indent=1))
+                input('pause')
+                
                 self.set_intro_table_information()
-                print('self.intro_heading_order' + dumps(self.intro_heading_order,indent=1))
+                # This is the information to be dissemenated into db tables
+                print('self.intro_heading_orders' + dumps(self.intro_heading_orders,indent=1))
                 print('self.intro_heading_levels' + dumps(self.intro_heading_levels,indent=1))
                 print('self.intro_heading_titles' + dumps(self.intro_heading_titles,indent=1))
                 print('self.intro_descriptions' + dumps(self.intro_descriptions,indent=1))
@@ -111,116 +103,197 @@ class File:
                 self.logger.error('Unable to parse_file_intro. ' +
                                   'div: {0}'.format(div))
 
-    def set_div_children_names_and_contents(self,div=None):
+    def set_intro_tag_names_and_contents(self,intro=None):
         '''
-            Set the tag names and contents for the children
-            of the given division tag.
+            Set the tag names and contents for the children of the
+            given division tag.
         '''
-        self.div_children_names = list()
-        self.div_children_contents = list()
+        self.intro_tag_names = None
+        self.intro_tag_contents = None
         if self.ready:
-            if div and self.get_number_of_descendants(item=div):
-                for child in div.children:
-                    # child.string can be '\n' with child.name = None
-                    if not child.name: continue
-                    name = child.name
-                    self.div_children_names.append(name)
-                    self.set_children_contents(child=child)
+            number_descendants = self.get_number_descendants(node=intro)
+            if intro and number_descendants:
+                self.intro_tag_names = list()
+                self.intro_tag_contents = list()
+                for child in intro.children:
+                    if child: # ignore child = '\n'
+                        if isinstance(child, NavigableString):
+                            self.intro_tag_names.append('')
+                            self.intro_tag_contents.append(str(child.string))
+                        elif isinstance(child, Tag):
+                            (tag_name,tag_contents) = (
+                                self.get_tag_name_and_contents(tag=child))
+                            print('tag_name: {}'.format(tag_name))
+                            print('tag_contents: {}'.format(tag_contents))
+                            input('pause')
+                        else:
+                            self.ready = False
+                            self.logger.error(
+                                        'Unexpected BeautifulSoup type. ' +
+                                        'child: {0}, type(child): {1}'
+                                        .format(child,type(child)))
+                self.remove_closing_division_tag(
+                                    tag_names=self.intro_tag_names,
+                                    tag_contents=self.intro_tag_contents)
+            else:
+                self.ready = False
+                self.logger.error(
+                            'Unable to set_intro_tag_names_and_contents. ' +
+                            'intro: {0}'.format(intro) +
+                            'number_descendants: {0}'.format(number_descendants)
+                                )
 
-                # Remove closing division tag </div>
-                if self.div_children_names[-1] == 'div':
-                    if not self.div_children_contents[-1]:
-                        del self.div_children_names[-1]
-                        del self.div_children_contents[-1]
+    def get_number_descendants(self,node=None):
+        '''Return True if BeautifulSoup object has descendants.'''
+        number_descendants = None
+        if self.ready:
+            if node:
+                number_descendants = 0
+                if not isinstance(node, NavigableString):
+                    for descendant in node.descendants:
+                        if descendant: number_descendants += 1
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_number_descendants.' +
+                                  'node: {}'.format(node))
+        return number_descendants
+
+    def get_string(self,soup_string=None):
+        '''Get Python string from BeautifulSoup NavigableString.'''
+        string = None
+        if self.ready:
+            if soup_string and isinstance(soup_string, NavigableString):
+                string = str(soup_string.encode('utf-8').decode('utf-8'))
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to get_string. ' +
+                    'soup_string: {}, '.format(soup_string) +
+                    'isinstance(soup_string, NavigableString): {}'
+                    .format(isinstance(soup_string, NavigableString))
+                    )
+        return string
+
+    def remove_closing_division_tag(self,tag_names=None,tag_contents=None):
+        '''Remove the contentless, closing division tag from the given lists.'''
+        if self.ready:
+            if tag_names and tag_contents:
+                if tag_names[-1] == 'div':
+                    if not tag_contents[-1]:
+                        del tag_names[-1]
+                        del tag_contents[-1]
                     else:
                         self.ready = False
                         self.logger.error(
                             'Closing div tag has contents. ' +
                             'name: {0}, contents: {1}'
-                            .format(self.div_children_names[-1],
-                                    self.div_children_contents[-1]))
+                            .format(tag_names[-1],tag_contents[-1]))
             else:
                 self.ready = False
                 self.logger.error(
-                            'Unable to set_div_children_names_and_contents. ' +
-                            'div: {0}'.format(div) +
-                            'div.children: {0}'.format(div.children)
+                            'Unable to remove_closing_division_tag. ' +
+                            'tag_names: {0}'.format(tag_names) +
+                            'contents: {0}'.format(contents)
                                 )
 
-    def get_number_of_descendants(self,item=None):
-        '''Return True if BeautifulSoup object has descendants.'''
-        number_of_descendants = None
+    def get_tag_name_and_contents(self,tag=None):
+        '''Set the contents of the given node.'''
+        tag_name = None
+        tag_contents = None
         if self.ready:
-            if item:
-                number_of_descendants = 0
-                if not isinstance(item, NavigableString):
-                    for descendant in item.descendants:
-                        if descendant: number_of_descendants += 1
-                    print('number_of_descendants: {}'
-                          .format(number_of_descendants))
+            heading_tags = ['h1','h2','h3','h4','h5','h6']
+            paragraph_tags = ['p']
+            anchor_tags = ['a']
+            tag_name = tag.name if tag else None
+            if tag_name in heading_tags + paragraph_tags + anchor_tags:
+                tag_name = tag.name
+                print('tag_name: {}'.format(tag_name))
+                if tag_name in paragraph_tags + heading_tags:
+                    tag_contents = self.get_text_content_tag_contents(tag=tag)
+        
+                
+                
+            
+            
+            
+            
+            
+            
             else:
                 self.ready = False
-                self.logger.error('Unable to get_number_of_descendants.' +
-                                  'item: {}'.format(item))
-        return number_of_descendants
+                self.logger.error('Unable to get_tag_name_and_contents. ' +
+                                  'tag: {}, '.format(tag) +
+                                  'tag.name: {}, '.format(tag.name) +
+                                  'tag_names: {}, '.format(tag_names))
+        print('tag_name: {}'.format(tag_name))
+        print('tag_contents: {}'.format(tag_contents))
+#        input('pause')
+        return (tag_name,tag_contents)
 
-    def set_child_contents(self,child=None):
-        '''Set the contents of the given child.'''
-        if self.ready:
-            contents = child.contents if child else list()
-            print('contents: {}'.format( contents))
-            input('pause')
-            if len(contents) == 1:
-                if isinstance(contents[0], NavigableString):
-                    string = self.get_string(NavigableString=contents[0])
-    #                            print('string: {}'.format( string))
-            elif len(contents) > 1:
-                string = list()
-                for item in contents:
-                    ###### I'M HERE !!!!!!!!!!! ########
-                    ## Test if item has descendants
-                    ## If it doesn't, get a string from the NavigableString
-                    ## and append it to the string list
-                    ## If it does, find out if it's only one descendant.
-                    ## If so, extract the string.
-                    ## If not, throw an error and log.
-                    number_of_descendants = self.get_number_of_descendants(item=item)
-                    print('item: {}'.format(item))
-                    print('number_of_descendants: {}'.format(number_of_descendants))
-                   
-                    input('pause')
-            else:
-                self.ready = False
-                self.logger.error(
-                    'Unable to set_div_children_names_and_contents.' +
-                    'contents: {}'.format(contents))
+    def get_text_content_tag_contents(self,tag=None):
+        '''Get the tag contents from the given tag with text content.'''
+        print('HI get_text_content_tag_contents.')
+        ## This method assumes the tag has text contents only.
+        ## if sub-tags other than
+        contents = tag.contents if tag else list()
+        print('contents: {}'.format( contents))
+        print('len(contents): {}'.format( len(contents)))
+        if len(contents) == 1:
+            ## string contents
+            content = contents[0]
+            if isinstance(content, NavigableString):
+                tag_contents = str(content)
+            elif isinstance(tag, Tag):
+                print('type(tag): {}'.format(type(tag)))
+                print('tag.strings: {}'.format(tag.strings))
+                print('tag.string: {}'.format(tag.string))
+                input('pause')
+        elif len(contents) > 1:
+            ## string contents with formatting
+            tag_contents = ''
+#                input('pause')
+            for tag in contents:
+                number_descendants = (
+                                self.get_number_descendants(tag=tag))
+                print('\ntag: {}'.format(tag))
+                print('number_descendants: {}'.format(number_descendants))
+#                    input('pause')
+                if number_descendants == 0:
+                    tag_contents += self.get_string(soup_string=tag)
+                elif number_descendants == 1:
+                    if isinstance(tag, Tag):
+                        tag_name = tag.name if tag else None
+                        tag_string = tag.string if tag else None
+                        tag_string = (
+                                    self.get_string(soup_string=tag_string)
+                                    if tag_string else None)
+                        string = ('<' + tag_name + '>' +
+                                  tag_string +
+                                  '<'+'/'+tag_name+'>')
+                        tag_contents += string
+                    else:
+                        self.ready = False
+                        self.logger.error('Expected a Tag for tag.' +
+                                          'Received: {}'.format(tag))
+                else:
+                    self.ready = False
+                    self.logger.error(
+                        'Expected a NavigableString or Tag for tag. ' +
+                        'However, tag.number_descendants > 1.' +
+                        'number_descendants: '
+                        .format(number_descendants))
 
-            self.div_children_contents.append(string)
-    #                        input('pause')
-
-    def get_string(self,NavigableString=None):
-        '''Get Python string from BeautifulSoup NavigableString.'''
-        string = None
-        if self.ready:
-            if NavigableString:
-                string = str(
-                    NavigableString[0].encode('utf-8').decode('utf-8').strip())
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_string.' +
-                                  'NavigableString: {}'.format(NavigableString))
-        return string
 
     def set_intro_table_information(self):
         '''Set the heading names and descriptions for the intro table.'''
-        self.intro_heading_order  = list()
+        self.intro_heading_orders  = list()
         self.intro_heading_levels = list()
         self.intro_heading_titles = list()
         self.intro_descriptions   = list()
         if self.ready:
-            if self.div_children_names and self.div_children_contents:
-                names = self.div_children_names
-                contents = self.div_children_contents
+            if self.intro_tag_names and self.intro_tag_contents:
+                names = self.intro_tag_names
+                contents = self.intro_tag_contents
                 print('names: ' + dumps(names,indent=1))
                 print('contents: ' + dumps(contents,indent=1))
                 self.check_valid_assumptions(names=names,contents=contents)
@@ -243,9 +316,9 @@ class File:
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to parse_file_intro. ' +
-                    'self.div_children_names: {0}, self.div_children_contents: {1}'
-                    .format(self.div_children_names,self.div_children_contents)
+                    'Unable to set_intro_table_information. ' +
+                    'self.intro_tag_names: {0}, self.intro_tag_contents: {1}'
+                    .format(self.intro_tag_names,self.intro_tag_contents)
                                   )
 
     def check_valid_assumptions(self,names=None,contents=None):
