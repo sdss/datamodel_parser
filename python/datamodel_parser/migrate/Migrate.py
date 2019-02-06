@@ -175,7 +175,7 @@ class Migrate:
             self.file.parse_file()
             if self.ready and self.file.ready:
                 self.populate_file_table()
-#                self.populate_description_table()
+                self.populate_intro_table()
 #                self.populate_extension_table()
 #                self.populate_header_table()
 #                self.populate_keyword_table()
@@ -249,7 +249,7 @@ class Migrate:
         '''Set instance of File derived class comprised of HTML div's.'''
         if self.ready:
             if body:
-                divs = body.find_all('div')
+                divs = body.children
                 self.file = (
                     File(logger=self.logger,options=self.options,divs=divs)
                     if self.logger and self.options and self.soup else None)
@@ -270,6 +270,7 @@ class Migrate:
             if self.tree_edition:
                 self.database.set_tree_columns(edition=self.tree_edition)
                 self.database.populate_tree_table()
+                self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
@@ -283,6 +284,7 @@ class Migrate:
                 self.database.set_env_columns(variable=self.env_variable,
                                               edition=self.tree_edition)
                 self.database.populate_env_table()
+                self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
@@ -298,6 +300,7 @@ class Migrate:
                                         path=self.location_path,
                                         variable=self.env_variable)
                 self.database.populate_location_table()
+                self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
@@ -319,6 +322,7 @@ class Migrate:
                                                         name=name,
                                                         depth=depth)
                     self.database.populate_directory_table()
+                    self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
@@ -348,6 +352,7 @@ class Migrate:
                                 name=self.file_name,
                                 extension_count=self.file.extension_count)
                 self.database.populate_file_table()
+                self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
@@ -355,4 +360,42 @@ class Migrate:
                     'self.file_file_path: {0}'.format(self.file_file_path) +
                     'self.env_variable: {0}'.format(self.env_variable))
 
+    def populate_intro_table(self):
+        '''Populate the intro table.'''
+        if self.ready:
+            if (self.file_name                 and
+                self.file                      and
+                self.file.intro_heading_orders and
+                self.file.intro_heading_levels and
+                self.file.intro_heading_titles and
+                self.file.intro_descriptions
+                ):
+                file_name      = self.file_name
+                heading_orders = self.file.intro_heading_orders
+                heading_levels = self.file.intro_heading_levels
+                heading_titles = self.file.intro_heading_titles
+                descriptions   = self.file.intro_descriptions
+
+                for (heading_order,
+                     heading_level,
+                     heading_title,
+                     description) in list(zip(
+                     heading_orders,
+                     heading_levels,
+                     heading_titles,
+                     descriptions)):
+                    self.database.set_intro_columns(
+                                    file_name     = file_name,
+                                    heading_order = heading_order,
+                                    heading_level = heading_level,
+                                    heading_title = heading_title,
+                                    description   = description)
+                    self.database.populate_intro_table()
+                    self.ready = self.database.ready
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_intro_table. ' +
+                    'self.intro_intro_path: {0}'.format(self.intro_intro_path) +
+                    'self.env_variable: {0}'.format(self.env_variable))
 

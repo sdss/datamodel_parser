@@ -3,6 +3,7 @@ from datamodel_parser.models.datamodel import Env
 from datamodel_parser.models.datamodel import Location
 from datamodel_parser.models.datamodel import Directory
 from datamodel_parser.models.datamodel import File
+from datamodel_parser.models.datamodel import Intro
 from json import dumps
 
 class Database:
@@ -366,9 +367,9 @@ class Database:
                     directory.commit()
                     self.logger.info(
                         'Added Directory[id={0}], '.format(directory.id) +
-                        'location_id = {0}, '.format(columns['location_id']) +
-                        'name = {0}, '.format(columns['name']) +
-                        'depth = {0}.'.format(columns['depth']))
+                        'location_id = {0}, '.format(directory.location_id) +
+                        'name = {0}, '.format(directory.name) +
+                        'depth = {0}.'.format(directory.depth))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_directory_row. ' +
@@ -466,5 +467,124 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to create_file_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def set_intro_columns(self,
+                          file_name=None,
+                          heading_order=None,
+                          heading_level=None,
+                          heading_title=None,
+                          description=None,
+                          ):
+        '''Set columns of the intro table.'''
+        self.intro_columns = dict()
+        if self.ready:
+            if (file_name             and
+                heading_order != None and
+                heading_level         and
+                heading_title         and
+                description != None
+                ):
+                self.set_file(name=file_name)
+                file_id = self.file.id if self.file else None
+                self.intro_columns = {
+                    'file_id'       : file_id
+                                      if file_id       else None,
+                    'heading_order' : heading_order
+                                      if heading_order != None else None,
+                    'heading_level' : heading_level
+                                      if heading_level else None,
+                    'heading_title' : heading_title
+                                      if heading_title else None,
+                    'description'   : description
+                                      if description   else '',
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_intro_columns. ' +
+                    'heading_order: {0}, '.format(heading_order) +
+                    'heading_level: {0}, '.format(heading_level) +
+                    'heading_title: {0}, '.format(heading_title) +
+                    'description: {0}'  .format(description))
+
+    def populate_intro_table(self):
+        '''Update/Create intro table row.'''
+        if self.ready:
+            self.set_intro()
+            if self.intro: self.update_intro_row()
+            else:          self.create_intro_row()
+
+    def set_intro(self,file_id=None,heading_title=None):
+        '''Load row from intro table.'''
+        if self.ready:
+            file_id = (file_id if file_id
+                    else self.intro_columns['file_id']
+                    if self.intro_columns and 'file_id' in self.intro_columns
+                    else None)
+            heading_title = (heading_title if heading_title
+                    else self.intro_columns['heading_title']
+                    if self.intro_columns and 'heading_title' in self.intro_columns
+                    else None)
+            if file_id and heading_title:
+                self.intro = (Intro.load(file_id=file_id,
+                                        heading_title=heading_title)
+                              if file_id and heading_title else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_intro. ' +
+                                  'file_id: {0}, '.format(file_id) +
+                                  'heading_title: {0}'.format(heading_title))
+
+    def update_intro_row(self):
+        '''Update row in intro table.'''
+        if self.ready:
+            columns = self.intro_columns if self.intro_columns else None
+            if columns:
+                self.logger.debug('Updating row in intro table.')
+                if self.verbose:
+                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                skip_keys = []
+                self.intro.update_if_needed(columns=columns,skip_keys=skip_keys)
+                if self.intro.updated:
+                    self.logger.info('Updated Intro[id={0}], heading_title: {1}.'
+                                     .format(self.intro.id,heading_title))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_intro_row. columns: {0}'
+                                    .format(columns))
+
+    def create_intro_row(self):
+        '''Create row in intro table.'''
+        if self.ready:
+            columns = self.intro_columns if self.intro_columns else None
+            if columns:
+                self.logger.debug('Adding new row to intro table.')
+                if self.verbose:
+                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                intro = Intro(
+                    file_id = columns['file_id']
+                        if columns and 'file_id' in columns else None,
+                    heading_order = columns['heading_order']
+                        if columns and 'heading_order' in columns else None,
+                    heading_level = columns['heading_level']
+                        if columns and 'heading_level' in columns else None,
+                    heading_title = columns['heading_title']
+                        if columns and 'heading_title' in columns else None,
+                    description = columns['description']
+                        if columns and 'description' in columns else None,
+                                  )
+                if intro:
+                    intro.add()
+                    intro.commit()
+                    self.logger.info('Added Intro[id={0}], heading_title: {1}.'
+                                     .format(intro.id,intro.heading_title))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_intro_row. ' +
+                                      'intro = \n{0}'.format(intro))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_intro_row. ' +
                                   'columns: {0}'.format(columns))
 

@@ -33,7 +33,7 @@ class File:
         '''Set the divs class attribute.'''
         self.divs = None
         if self.ready:
-            self.divs = divs if divs else None
+            self.divs = [div for div in divs if div != '\n'] if divs else None
             if not self.divs:
                 self.ready = False
                 self.logger.error('Unable to set_divs.')
@@ -57,9 +57,8 @@ class File:
                 self.set_extension_count()
                 for div in self.divs:
                     div_id = div['id']
-                    if div_id == 'intro':      self.parse_file_intro(div=div)
-                    elif div_id == 'sections': self.parse_file_sections(div=div)
-                    elif 'hdu' in div_id:      self.parse_file_extension(div=div)
+                    if div_id == 'intro': self.parse_file_intro(div=div)
+                    elif 'hdu' in div_id: self.parse_file_extension(div=div)
                     else:
                         self.ready = False
                         self.logger.error('Unknown div_id: {0}'.format(div_id))
@@ -81,23 +80,57 @@ class File:
                 self.logger.error('Unable to set_extension_count. ' +
                                   'self.div_ids: {0}'.format(self.divs))
 
+    def parse_file_extension(self,div=None):
+        '''Parse file description content from given division tag.'''
+        if self.ready:
+            if div:
+                heading = div.find_next('h2').string
+                hdu_number = int(heading.split(':')[0].lower().replace('hdu',''))
+                header_title = heading.split(':')[1]
+                data_description = div.find_next('p').string
+                data = div.find_next('dl')
+                for string in [item for item in data.strings if item != '\n']:
+                    print('string: %r' % string)
+#                definitions = data.find_all('dt')
+#                descriptions = data.find_all('dd')
+#                for definition in definitions:
+#                    print('definition.string: %r' % definition.string)
+                input('pause')
+
+                
+                print('div: %r' % div)
+                print('heading: %r' % heading)
+                print('hdu_number: %r' % hdu_number)
+                print('header_title: %r' % header_title)
+                print('data_description: %r' % data_description)
+                print('data: %r' % data)
+                print('definitions: %r' % definitions)
+                print('descriptions: %r' % descriptions)
+                print('type(definitions): %r' % type(definitions))
+                print('type(descriptions): %r' % type(descriptions))
+#                print('type(data): %r' % type(data))
+#                print('data[0]: %r' % data[0])
+#                print('data_terms: %r' % data_terms)
+#                print('data_types: %r' % data_types)
+                input('pause')
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_extension. ' +
+                                  'div: {0}'.format(div))
+
     def parse_file_intro(self,div=None):
         '''Parse file description content from given division tag.'''
         if self.ready:
             if div:
                 self.set_intro_tag_names_and_contents(intro=div)
-                print('self.intro_tag_names' + dumps(self.intro_tag_names,indent=1))
-                print('self.intro_tag_contents' + dumps(self.intro_tag_contents,indent=1))
-                input('pause')
-                
                 self.set_intro_table_information()
                 # This is the information to be dissemenated into db tables
-                print('self.intro_heading_orders' + dumps(self.intro_heading_orders,indent=1))
-                print('self.intro_heading_levels' + dumps(self.intro_heading_levels,indent=1))
-                print('self.intro_heading_titles' + dumps(self.intro_heading_titles,indent=1))
-                print('self.intro_descriptions' + dumps(self.intro_descriptions,indent=1))
-                input('pause')
-
+#                print('self.data_column_names:\n' + dumps(self.data_column_names,indent=1))
+#                print('self.intro_heading_orders:\n' + dumps(self.intro_heading_orders,indent=1))
+#                print('self.intro_heading_levels:\n' + dumps(self.intro_heading_levels,indent=1))
+#                print('self.intro_heading_titles:\n' + dumps(self.intro_heading_titles,indent=1))
+#                print('self.intro_descriptions:\n' + dumps(self.intro_descriptions,indent=1))
+#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_intro. ' +
@@ -111,30 +144,33 @@ class File:
         self.intro_tag_names = None
         self.intro_tag_contents = None
         if self.ready:
+            # Make sure intro has children
             number_descendants = self.get_number_descendants(node=intro)
             if intro and number_descendants:
                 self.intro_tag_names = list()
                 self.intro_tag_contents = list()
-                for child in intro.children:
-                    if child: # ignore child = '\n'
-                        if isinstance(child, NavigableString):
-                            self.intro_tag_names.append('')
-                            self.intro_tag_contents.append(str(child.string))
-                        elif isinstance(child, Tag):
-                            (tag_name,tag_contents) = (
-                                self.get_tag_name_and_contents(tag=child))
-                            print('tag_name: {}'.format(tag_name))
-                            print('tag_contents: {}'.format(tag_contents))
-                            input('pause')
+                for child in [item for item in intro.children if item != '\n']:
+                    if isinstance(child, NavigableString):
+                        self.intro_tag_names.append('')
+                        self.intro_tag_contents.append(str(child.string))
+                    elif isinstance(child, Tag):
+                        tag_name = child.name
+                        if tag_name == 'div':
+                            # Parse intro Section HDU names
+                            self.set_data_column_names(div=child)
                         else:
-                            self.ready = False
-                            self.logger.error(
-                                        'Unexpected BeautifulSoup type. ' +
-                                        'child: {0}, type(child): {1}'
-                                        .format(child,type(child)))
+                            # Parse intro titles and contents
+                            tag_contents = self.get_tag_contents(tag=child)
+                            self.intro_tag_names.append(tag_name)
+                            self.intro_tag_contents.append(tag_contents)
+                    else:
+                        self.ready = False
+                        self.logger.error('Unexpected BeautifulSoup type. ' +
+                                          'child: {0}, type(child): {1}'
+                                          .format(child,type(child)))
                 self.remove_closing_division_tag(
-                                    tag_names=self.intro_tag_names,
-                                    tag_contents=self.intro_tag_contents)
+                                        tag_names=self.intro_tag_names,
+                                        tag_contents=self.intro_tag_contents)
             else:
                 self.ready = False
                 self.logger.error(
@@ -158,21 +194,48 @@ class File:
                                   'node: {}'.format(node))
         return number_descendants
 
-    def get_string(self,soup_string=None):
-        '''Get Python string from BeautifulSoup NavigableString.'''
-        string = None
+    def set_data_column_names(self,div=None):
+        '''
+            Get the data column names from the intro Section for the data table.
+        '''
+        self.data_column_names = dict()
         if self.ready:
-            if soup_string and isinstance(soup_string, NavigableString):
-                string = str(soup_string.encode('utf-8').decode('utf-8'))
+            if div:
+                for string in [item for item in div.strings if item != '\n']:
+                    if 'HDU' in string:
+                        split = string.split(':')
+                        extension = split[0].lower().strip() if split else None
+                        name      = split[1].lower().strip() if split else None
+                        if extension and name:
+                            self.data_column_names[extension] = name
+                        else:
+                            self.ready = False
+                            self.logger.error(
+                                            'Unable to set_data_column_names.' +
+                                            'extension: {}'.format(extension) +
+                                            'name: {}'.format(name))
             else:
                 self.ready = False
-                self.logger.error(
-                    'Unable to get_string. ' +
-                    'soup_string: {}, '.format(soup_string) +
-                    'isinstance(soup_string, NavigableString): {}'
-                    .format(isinstance(soup_string, NavigableString))
-                    )
-        return string
+                self.logger.error('Unable to set_data_column_names.' +
+                                  'div: {}'.format(div))
+
+    def get_tag_contents(self,tag=None):
+        '''Get the tag contents from the given tag with text content.'''
+        tag_contents = None
+        if self.ready:
+            if tag:
+                contents = tag.contents
+                if len(contents) == 1:
+                    tag_contents = str(contents[0])
+                elif len(contents) > 1:
+                    tag_contents = ''
+                    for item in contents:
+                        tag_contents += str(item)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_tag_contents.' +
+                                  'tag: {}'.format(tag))
+        return tag_contents
 
     def remove_closing_division_tag(self,tag_names=None,tag_contents=None):
         '''Remove the contentless, closing division tag from the given lists.'''
@@ -196,94 +259,6 @@ class File:
                             'contents: {0}'.format(contents)
                                 )
 
-    def get_tag_name_and_contents(self,tag=None):
-        '''Set the contents of the given node.'''
-        tag_name = None
-        tag_contents = None
-        if self.ready:
-            heading_tags = ['h1','h2','h3','h4','h5','h6']
-            paragraph_tags = ['p']
-            anchor_tags = ['a']
-            tag_name = tag.name if tag else None
-            if tag_name in heading_tags + paragraph_tags + anchor_tags:
-                tag_name = tag.name
-                print('tag_name: {}'.format(tag_name))
-                if tag_name in paragraph_tags + heading_tags:
-                    tag_contents = self.get_text_content_tag_contents(tag=tag)
-        
-                
-                
-            
-            
-            
-            
-            
-            
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_tag_name_and_contents. ' +
-                                  'tag: {}, '.format(tag) +
-                                  'tag.name: {}, '.format(tag.name) +
-                                  'tag_names: {}, '.format(tag_names))
-        print('tag_name: {}'.format(tag_name))
-        print('tag_contents: {}'.format(tag_contents))
-#        input('pause')
-        return (tag_name,tag_contents)
-
-    def get_text_content_tag_contents(self,tag=None):
-        '''Get the tag contents from the given tag with text content.'''
-        print('HI get_text_content_tag_contents.')
-        ## This method assumes the tag has text contents only.
-        ## if sub-tags other than
-        contents = tag.contents if tag else list()
-        print('contents: {}'.format( contents))
-        print('len(contents): {}'.format( len(contents)))
-        if len(contents) == 1:
-            ## string contents
-            content = contents[0]
-            if isinstance(content, NavigableString):
-                tag_contents = str(content)
-            elif isinstance(tag, Tag):
-                print('type(tag): {}'.format(type(tag)))
-                print('tag.strings: {}'.format(tag.strings))
-                print('tag.string: {}'.format(tag.string))
-                input('pause')
-        elif len(contents) > 1:
-            ## string contents with formatting
-            tag_contents = ''
-#                input('pause')
-            for tag in contents:
-                number_descendants = (
-                                self.get_number_descendants(tag=tag))
-                print('\ntag: {}'.format(tag))
-                print('number_descendants: {}'.format(number_descendants))
-#                    input('pause')
-                if number_descendants == 0:
-                    tag_contents += self.get_string(soup_string=tag)
-                elif number_descendants == 1:
-                    if isinstance(tag, Tag):
-                        tag_name = tag.name if tag else None
-                        tag_string = tag.string if tag else None
-                        tag_string = (
-                                    self.get_string(soup_string=tag_string)
-                                    if tag_string else None)
-                        string = ('<' + tag_name + '>' +
-                                  tag_string +
-                                  '<'+'/'+tag_name+'>')
-                        tag_contents += string
-                    else:
-                        self.ready = False
-                        self.logger.error('Expected a Tag for tag.' +
-                                          'Received: {}'.format(tag))
-                else:
-                    self.ready = False
-                    self.logger.error(
-                        'Expected a NavigableString or Tag for tag. ' +
-                        'However, tag.number_descendants > 1.' +
-                        'number_descendants: '
-                        .format(number_descendants))
-
-
     def set_intro_table_information(self):
         '''Set the heading names and descriptions for the intro table.'''
         self.intro_heading_orders  = list()
@@ -294,8 +269,6 @@ class File:
             if self.intro_tag_names and self.intro_tag_contents:
                 names = self.intro_tag_names
                 contents = self.intro_tag_contents
-                print('names: ' + dumps(names,indent=1))
-                print('contents: ' + dumps(contents,indent=1))
                 self.check_valid_assumptions(names=names,contents=contents)
                 if self.ready:
                     heading_tags = ['h1','h2','h3','h4','h5','h6']
@@ -305,7 +278,7 @@ class File:
                         if name in paragraph_tags: continue
                         if name in heading_tags:
                             order += 1
-                            self.intro_heading_order.append(order)
+                            self.intro_heading_orders.append(order)
                             level = int(name.replace('h',''))
                             self.intro_heading_levels.append(level)
                             self.intro_heading_titles.append(contents[idx])
@@ -385,15 +358,6 @@ class File:
                 self.ready = None
                 self.logger.error('Unable to set_child_names. ' +
                                   'div: {0}'.format(div))
-
-    def parse_file_sections(self,div=None):
-        print('HI parse_file_sections')
-
-    def parse_file_extension(self,div=None):
-        print('HI parse_file_extension')
-
-    def set_header_levels(self):
-        print('HI parse_file_sections')
 
     def parse_extensions(self):
         self.extensions = list()

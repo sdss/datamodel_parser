@@ -61,7 +61,7 @@ CREATE TABLE sdss.intro (
     heading_order INT2 NOT NULL,
     heading_level INT2 NOT NULL,
     heading_title VARCHAR(64) NOT NULL UNIQUE,
-    description VARCHAR(256) NOT NULL,
+    description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

@@ -251,7 +251,7 @@ class File(db.Model):
 
 
 class Intro(db.Model):
-    __tablename__ = 'description'
+    __tablename__ = 'intro'
     __table_args__ = {'schema':'sdss'}
     id = db.Column(db.Integer, primary_key = True)
     file_id = db.Column(db.Integer,
@@ -260,12 +260,23 @@ class Intro(db.Model):
     heading_order = db.Column(db.Integer, nullable = False)
     heading_level = db.Column(db.Integer, nullable = False)
     heading_title = db.Column(db.String(64), nullable = False, unique = True)
-    description = db.Column(db.String(256), nullable = False)
+    description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
 
+    @staticmethod
+    def load(file_id=None,heading_title=None):
+        if file_id and heading_title:
+            try: intro = (Intro.query.filter(Intro.file_id==file_id)
+                                     .filter(Intro.heading_title==heading_title)
+                                     .one())
+            except: intro = None
+        else:
+            intro = None
+        return intro
+    
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():
