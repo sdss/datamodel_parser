@@ -425,16 +425,14 @@ class Migrate:
                 self.file                         and
                 self.file.file_extension_data
                 ):
-                file_name   = self.file_name
-                file_extension_data = self.file.file_extension_data
-                print('file_name: %r' % file_name)
-                print('file_extension_data: \n' + dumps(file_extension_data,indent=1))
-                input('pause')
-                self.database.set_extension_columns(
-                                file_name  = file_name,
-                                hdu_number = int(hdu_number))
-                self.database.populate_extension_table()
-                self.ready = self.database.ready
+                for hdu_data in self.file.file_extension_data:
+                    file_name = self.file_name
+                    hdu_number = hdu_data['extension_hdu_number']
+                    self.database.set_extension_columns(
+                                    file_name  = file_name,
+                                    hdu_number = int(hdu_number))
+                    self.database.populate_extension_table()
+                    self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(

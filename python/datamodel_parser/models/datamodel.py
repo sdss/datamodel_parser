@@ -366,11 +366,43 @@ class Extension(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+
     @staticmethod
-    def load_extensions():
-        try: extensions = Extension.query.order_by(Extension.id).all()
-        except: extensions = None
-        return extensions
+    def load(file_id=None,hdu_number=None):
+        if file_id and hdu_number!=None:
+            try: section = (Extension.query
+                                     .filter(Extension.file_id==file_id)
+                                     .filter(Extension.hdu_number==hdu_number)
+                                     .one())
+            except: section = None
+        else:
+            section = None
+        return section
+    
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
 
 
 class Header(db.Model):

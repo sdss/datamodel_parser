@@ -5,6 +5,7 @@ from datamodel_parser.models.datamodel import Directory
 from datamodel_parser.models.datamodel import File
 from datamodel_parser.models.datamodel import Intro
 from datamodel_parser.models.datamodel import Section
+from datamodel_parser.models.datamodel import Extension
 from json import dumps
 
 class Database:
@@ -75,8 +76,8 @@ class Database:
             columns = self.tree_columns if self.tree_columns else None
             if columns:
                 self.logger.debug('Updating row in tree table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 skip_keys = []
                 self.tree.update_if_needed(columns=columns,skip_keys=skip_keys)
                 if self.tree.updated:
@@ -93,8 +94,8 @@ class Database:
             columns = self.tree_columns if self.tree_columns else None
             if columns:
                 self.logger.debug('Adding new row to tree table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
 
                 tree = Tree(edition = columns['edition']
                             if columns and 'edition' in columns else None)
@@ -157,8 +158,8 @@ class Database:
             columns = self.env_columns if self.env_columns else None
             if columns:
                 self.logger.debug('Updating row in env table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 skip_keys = []
                 self.env.update_if_needed(columns=columns,skip_keys=skip_keys)
                 if self.env.updated:
@@ -175,8 +176,8 @@ class Database:
             columns = self.env_columns if self.env_columns else None
             if columns:
                 self.logger.debug('Adding new row to env table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 env = Env(
                     tree_id = columns['tree_id']
                                 if columns and 'tree_id' in columns else None,
@@ -241,8 +242,8 @@ class Database:
             columns = self.location_columns if self.location_columns else None
             if columns:
                 self.logger.debug('Updating row in location table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 skip_keys = []
                 self.location.update_if_needed(columns=columns,skip_keys=skip_keys)
                 if self.location.updated:
@@ -259,8 +260,8 @@ class Database:
             columns = self.location_columns if self.location_columns else None
             if columns:
                 self.logger.debug('Adding new row to location table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 location = Location(
                             env_id = columns['env_id']
                                 if columns and 'env_id' in columns else None,
@@ -332,17 +333,17 @@ class Database:
                                       and 'depth' in columns)
             if self.ready:
                 self.logger.debug('Updating row in directory table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 skip_keys = []
                 self.directory.update_if_needed(columns=columns,
                                                 skip_keys=skip_keys)
                 if self.directory.updated:
                     self.logger.info(
-                            'Updated Directory[id={0}], '.format(directory.id) +
-                            'location_id = {0}, '.format(columns['location_id']) +
-                            'name = {0}, '.format(columns['name']) +
-                            'depth = {0}.'.format(columns['depth']))
+                        'Updated Directory[id={0}], '.format(self.directory.id) +
+                        'location_id = {0}, '.format(self.directory.location_id) +
+                        'name = {0}, '.format(self.directory.name) +
+                        'depth = {0}.'.format(self.directory.depth))
             else:
                 self.logger.error('Unable to update_directory_row. columns: {0}'
                                     .format(columns))
@@ -356,8 +357,8 @@ class Database:
                                       and 'depth' in columns)
             if self.ready:
                 self.logger.debug('Adding new row to directory table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 directory = Directory(
                             location_id = columns['location_id'],
                             name        = columns['name'],
@@ -428,8 +429,8 @@ class Database:
             columns = self.file_columns if self.file_columns else None
             if columns:
                 self.logger.debug('Updating row in file table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 skip_keys = []
                 self.file.update_if_needed(columns=columns,skip_keys=skip_keys)
                 if self.file.updated:
@@ -446,8 +447,8 @@ class Database:
             columns = self.file_columns if self.file_columns else None
             if columns:
                 self.logger.debug('Adding new row to file table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 file = File(
                     location_id = columns['location_id']
                         if columns and 'location_id' in columns else None,
@@ -543,13 +544,14 @@ class Database:
             columns = self.intro_columns if self.intro_columns else None
             if columns:
                 self.logger.debug('Updating row in intro table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 skip_keys = []
                 self.intro.update_if_needed(columns=columns,skip_keys=skip_keys)
                 if self.intro.updated:
                     self.logger.info('Updated Intro[id={0}], heading_title: {1}.'
-                                     .format(self.intro.id,heading_title))
+                                     .format(self.intro.id,
+                                             self.intro.heading_title))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_intro_row. columns: {0}'
@@ -561,8 +563,8 @@ class Database:
             columns = self.intro_columns if self.intro_columns else None
             if columns:
                 self.logger.debug('Adding new row to intro table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 intro = Intro(
                     file_id = columns['file_id']
                         if columns and 'file_id' in columns else None,
@@ -649,14 +651,16 @@ class Database:
             columns = self.section_columns if self.section_columns else None
             if columns:
                 self.logger.debug('Updating row in section table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 skip_keys = []
                 self.section.update_if_needed(columns=columns,skip_keys=skip_keys)
                 if self.section.updated:
                     self.logger.info(
                         'Updated Section[id={0}], hdu_number: {1}, hdu_name: {2}'
-                        .format(self.section.id,hdu_number,hdu_name))
+                        .format(self.section.id,
+                                self.section.hdu_number,
+                                self.section.hdu_name))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_section_row. columns: {0}'
@@ -668,8 +672,8 @@ class Database:
             columns = self.section_columns if self.section_columns else None
             if columns:
                 self.logger.debug('Adding new row to section table.')
-                if self.verbose:
-                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
                 section = Section(
                     file_id = columns['file_id']
                         if columns and 'file_id' in columns else None,
@@ -691,5 +695,104 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to create_section_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def set_extension_columns(self,file_name=None,hdu_number=None):
+        '''Set columns of the extension table.'''
+        self.extension_columns = dict()
+        if self.ready:
+            if (file_name and hdu_number!=None):
+                self.set_file(name=file_name)
+                file_id = self.file.id if self.file else None
+                self.extension_columns = {
+                    'file_id'    : file_id    if file_id          else None,
+                    'hdu_number' : hdu_number if hdu_number!=None else None,
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_extension_columns. ' +
+                    'file_id: {0}, '.format(file_id) +
+                    'hdu_number: {0}, '.format(hdu_number))
+
+    def populate_extension_table(self):
+        '''Update/Create extension table row.'''
+        if self.ready:
+            self.set_extension()
+            if self.extension: self.update_extension_row()
+            else:              self.create_extension_row()
+
+    def set_extension(self,file_id=None,hdu_number=None):
+        '''Load row from extension table.'''
+        if self.ready:
+            file_id = (file_id if file_id
+                else self.extension_columns['file_id']
+                if self.extension_columns and 'file_id' in self.extension_columns
+                else None)
+            hdu_number = (hdu_number if hdu_number
+                else self.extension_columns['hdu_number']
+                if self.extension_columns and 'hdu_number' in self.extension_columns
+                else None)
+            if file_id and hdu_number!=None:
+                self.extension = (Extension.load(file_id=file_id,
+                                                 hdu_number=hdu_number)
+                                if file_id and hdu_number!=None else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_extension. ' +
+                                  'file_id: {0}, '.format(file_id) +
+                                  'hdu_number: {0}'.format(hdu_number))
+
+    def update_extension_row(self):
+        '''Update row in extension table.'''
+        if self.ready:
+            columns = self.extension_columns if self.extension_columns else None
+            if columns:
+                self.logger.debug('Updating row in extension table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                skip_keys = []
+                self.extension.update_if_needed(columns=columns,
+                                                skip_keys=skip_keys)
+                if self.extension.updated:
+                    self.logger.info(
+                        'Updated Extension[id={0}], file_id: {1}, hdu_number: {2}'
+                        .format(self.extension.id,
+                                self.extension.file_id,
+                                self.extension.hdu_number))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_extension_row. columns: {0}'
+                                    .format(columns))
+
+    def create_extension_row(self):
+        '''Create row in extension table.'''
+        if self.ready:
+            columns = self.extension_columns if self.extension_columns else None
+            if columns:
+                self.logger.debug('Adding new row to extension table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                extension = Extension(
+                    file_id = columns['file_id']
+                        if columns and 'file_id' in columns else None,
+                    hdu_number = columns['hdu_number']
+                        if columns and 'hdu_number' in columns else None,
+                                  )
+                if extension:
+                    extension.add()
+                    extension.commit()
+                    self.logger.info(
+                        'Added Extension[id={0}], file_id: {1}, hdu_number: {2}'
+                        .format(extension.id,
+                                extension.file_id,
+                                extension.hdu_number))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_extension_row. ' +
+                                      'extension = \n{0}'.format(extension))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_extension_row. ' +
                                   'columns: {0}'.format(columns))
 
