@@ -4,6 +4,7 @@ from datamodel_parser.models.datamodel import Location
 from datamodel_parser.models.datamodel import Directory
 from datamodel_parser.models.datamodel import File
 from datamodel_parser.models.datamodel import Intro
+from datamodel_parser.models.datamodel import Section
 from json import dumps
 
 class Database:
@@ -586,5 +587,109 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to create_intro_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def set_section_columns(self,file_name=None,hdu_number=None,hdu_name=None):
+        '''Set columns of the section table.'''
+        self.section_columns = dict()
+        if self.ready:
+            if (file_name and hdu_number!=None and hdu_name):
+                self.set_file(name=file_name)
+                file_id = self.file.id if self.file else None
+                self.section_columns = {
+                    'file_id'    : file_id    if file_id          else None,
+                    'hdu_number' : hdu_number if hdu_number!=None else None,
+                    'hdu_name'   : hdu_name   if hdu_name         else None,
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_section_columns. ' +
+                    'hdu_number: {0}, '.format(hdu_number) +
+                    'hdu_name: {0}, '  .format(hdu_name))
+
+    def populate_section_table(self):
+        '''Update/Create section table row.'''
+        if self.ready:
+            self.set_section()
+            if self.section: self.update_section_row()
+            else:            self.create_section_row()
+
+    def set_section(self,file_id=None,hdu_number=None,hdu_name=None):
+        '''Load row from section table.'''
+        if self.ready:
+            file_id = (file_id if file_id
+                else self.section_columns['file_id']
+                if self.section_columns and 'file_id' in self.section_columns
+                else None)
+            hdu_number = (hdu_number if hdu_number
+                else self.section_columns['hdu_number']
+                if self.section_columns and 'hdu_number' in self.section_columns
+                else None)
+            hdu_name = (hdu_name if hdu_name
+                else self.section_columns['hdu_name']
+                if self.section_columns and 'hdu_name' in self.section_columns
+                else None)
+            if file_id and hdu_number!=None and hdu_name:
+                self.section = (Section.load(file_id=file_id,
+                                           hdu_number=hdu_number,
+                                           hdu_name=hdu_name)
+                                if file_id and hdu_number!=None and hdu_name
+                                else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_section. ' +
+                                  'file_id: {0}, '.format(file_id) +
+                                  'hdu_number: {0}'.format(hdu_number) +
+                                  'hdu_name: {0}'.format(hdu_name))
+
+    def update_section_row(self):
+        '''Update row in section table.'''
+        if self.ready:
+            columns = self.section_columns if self.section_columns else None
+            if columns:
+                self.logger.debug('Updating row in section table.')
+                if self.verbose:
+                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                skip_keys = []
+                self.section.update_if_needed(columns=columns,skip_keys=skip_keys)
+                if self.section.updated:
+                    self.logger.info(
+                        'Updated Section[id={0}], hdu_number: {1}, hdu_name: {2}'
+                        .format(self.section.id,hdu_number,hdu_name))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_section_row. columns: {0}'
+                                    .format(columns))
+
+    def create_section_row(self):
+        '''Create row in section table.'''
+        if self.ready:
+            columns = self.section_columns if self.section_columns else None
+            if columns:
+                self.logger.debug('Adding new row to section table.')
+                if self.verbose:
+                    self.logger.debug('columns:\n' + dumps(columns,indent=1))
+                section = Section(
+                    file_id = columns['file_id']
+                        if columns and 'file_id' in columns else None,
+                    hdu_number = columns['hdu_number']
+                        if columns and 'hdu_number' in columns else None,
+                    hdu_name = columns['hdu_name']
+                        if columns and 'hdu_name' in columns else None,
+                                  )
+                if section:
+                    section.add()
+                    section.commit()
+                    self.logger.info(
+                        'Added Section[id={0}], hdu_number: {1}, hdu_name: {2}'
+                        .format(section.id,section.hdu_number,section.hdu_name))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_section_row. ' +
+                                      'section = \n{0}'.format(section))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_section_row. ' +
                                   'columns: {0}'.format(columns))
 

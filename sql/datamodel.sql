@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS sdss.data;
 DROP TABLE IF EXISTS sdss.keyword;
 DROP TABLE IF EXISTS sdss.header;
 DROP TABLE IF EXISTS sdss.extension;
+DROP TABLE IF EXISTS sdss.section;
 DROP TABLE IF EXISTS sdss.intro;
 DROP TABLE IF EXISTS sdss.file;
 DROP TABLE IF EXISTS sdss.directory;
@@ -66,6 +67,15 @@ CREATE TABLE sdss.intro (
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+CREATE TABLE sdss.section (
+    id SERIAL NOT NULL PRIMARY KEY,
+    file_id INT4 REFERENCES sdss.file(id) NOT NULL,
+    hdu_number INT2 NOT NULL,
+    hdu_name VARCHAR(32) NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+    modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 CREATE TABLE sdss.extension (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
@@ -104,7 +114,7 @@ CREATE TABLE sdss.data (
 CREATE TABLE sdss.column (
     id SERIAL NOT NULL PRIMARY KEY,
     data_id INT4 REFERENCES sdss.data(id) NOT NULL,
-    name VARCHAR(32) NOT NULL,
+    header_title VARCHAR(32) NOT NULL,
     datatype VARCHAR(64) NOT NULL,
     size VARCHAR(32) NOT NULL,
     description VARCHAR(128),

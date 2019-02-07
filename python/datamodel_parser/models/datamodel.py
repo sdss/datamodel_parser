@@ -302,6 +302,57 @@ class Intro(db.Model):
                                         getattr(self,column.key))
                                         for column in self.__table__.columns])
 
+class Section(db.Model):
+    __tablename__ = 'section'
+    __table_args__ = {'schema':'sdss'}
+    id = db.Column(db.Integer, primary_key = True)
+    file_id = db.Column(db.Integer,
+                        db.ForeignKey('sdss.file.id'),
+                        nullable = False)
+    hdu_number = db.Column(db.Integer, nullable = False)
+    hdu_name = db.Column(db.String(32), nullable = False)
+    created = db.Column(db.DateTime, default=datetime.now)
+    modified = db.Column(db.DateTime,
+                         default=datetime.now,
+                         onupdate=datetime.now)
+
+    @staticmethod
+    def load(file_id=None,hdu_number=None,hdu_name=None):
+        if file_id and hdu_number!=None and hdu_name:
+            try: section = (Section.query.filter(Section.file_id==file_id)
+                                         .filter(Section.hdu_number==hdu_number)
+                                         .filter(Section.hdu_name==hdu_name)
+                                         .one())
+            except: section = None
+        else:
+            section = None
+        return section
+    
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
 
 class Extension(db.Model):
     __tablename__ = 'extension'
@@ -465,7 +516,7 @@ class Column(db.Model):
     data_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.data.id'),
                         nullable = False)
-    name = db.Column(db.String(32), nullable = False)
+    header_title = db.Column(db.String(32), nullable = False)
     datatype = db.Column(db.String(64), nullable = False)
     size = db.Column(db.String(32), nullable = False)
     description = db.Column(db.String(128))

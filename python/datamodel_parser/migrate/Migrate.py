@@ -176,7 +176,8 @@ class Migrate:
             if self.ready and self.file.ready:
                 self.populate_file_table()
                 self.populate_intro_table()
-#                self.populate_extension_table()
+                self.populate_section_table()
+                self.populate_extension_table()
 #                self.populate_header_table()
 #                self.populate_keyword_table()
 #                self.populate_data_table()
@@ -305,8 +306,8 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_location_table. ' +
-                    'self.location_path: {0}'.format(self.location_path) +
-                    'self.env_variable: {0}'.format(self.env_variable))
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.env_variable: {0}.'  .format(self.env_variable))
 
     def populate_directory_table(self):
         '''Populate the directory table.'''
@@ -327,17 +328,9 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_directory_table. ' +
-                    'self.location_path: {0}'.format(self.location_path) +
-                    'self.directory_names: {0}'.format(self.directory_names))
-
-    def exit(self):
-        '''Report the presense/lack of errors.'''
-        if self.ready:
-            if self.verbose: self.logger.info('Finished!')
-            exit(0)
-        else:
-            if self.verbose: self.logger.info('Fail!')
-            exit(1)
+                    'self.location_path: {0}, '  .format(self.location_path)   +
+                    'self.directory_names: {0}, '.format(self.directory_names) +
+                    'self.directory_depths: {0}.'.format(self.directory_depths))
 
     def populate_file_table(self):
         '''Populate the file table.'''
@@ -357,8 +350,9 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_file_table. ' +
-                    'self.file_file_path: {0}'.format(self.file_file_path) +
-                    'self.env_variable: {0}'.format(self.env_variable))
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.file_name: {0}, '    .format(self.file_name) +
+                    'self.file: {0}.'          .format(self.file))
 
     def populate_intro_table(self):
         '''Populate the intro table.'''
@@ -396,6 +390,64 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_intro_table. ' +
-                    'self.intro_intro_path: {0}'.format(self.intro_intro_path) +
-                    'self.env_variable: {0}'.format(self.env_variable))
+                    'self.file_name: {0}, '.format(self.file_name) +
+                    'self.file: {0}.'      .format(self.file))
+
+    def populate_section_table(self):
+        '''Populate the section table.'''
+        if self.ready:
+            if (self.file_name                    and
+                self.file                         and
+                self.file.section_extension_names
+                ):
+                file_name   = self.file_name
+                hdu_numbers = self.file.section_extension_names.keys()
+                hdu_names   = self.file.section_extension_names.values()
+
+                for (hdu_number,hdu_name) in list(zip(hdu_numbers,hdu_names)):
+                    self.database.set_section_columns(
+                                    file_name  = file_name,
+                                    hdu_number = int(hdu_number),
+                                    hdu_name   = hdu_name)
+                    self.database.populate_section_table()
+                    self.ready = self.database.ready
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_section_table. ' +
+                    'self.file_name: {0}'.format(self.file_name) +
+                    'self.file: {0}'.format(self.file))
+
+    def populate_extension_table(self):
+        '''Populate the extension table.'''
+        if self.ready:
+            if (self.file_name                    and
+                self.file                         and
+                self.file.file_extension_data
+                ):
+                file_name   = self.file_name
+                file_extension_data = self.file.file_extension_data
+                print('file_name: %r' % file_name)
+                print('file_extension_data: \n' + dumps(file_extension_data,indent=1))
+                input('pause')
+                self.database.set_extension_columns(
+                                file_name  = file_name,
+                                hdu_number = int(hdu_number))
+                self.database.populate_extension_table()
+                self.ready = self.database.ready
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_extension_table. ' +
+                    'self.file_name: {0}'.format(self.file_name) +
+                    'self.file: {0}'.format(self.file))
+
+    def exit(self):
+        '''Report the presense/lack of errors.'''
+        if self.ready:
+            if self.verbose: self.logger.info('Finished!')
+            exit(0)
+        else:
+            if self.verbose: self.logger.info('Fail!')
+            exit(1)
 
