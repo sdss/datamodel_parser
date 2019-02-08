@@ -6,6 +6,7 @@ from datamodel_parser.models.datamodel import File
 from datamodel_parser.models.datamodel import Intro
 from datamodel_parser.models.datamodel import Section
 from datamodel_parser.models.datamodel import Extension
+from datamodel_parser.models.datamodel import Data
 from json import dumps
 
 class Database:
@@ -138,15 +139,20 @@ class Database:
             if self.env: self.update_env_row()
             else:        self.create_env_row()
 
-    def set_env(self,variable=None):
+    def set_env(self,tree_id=None,variable=None):
         '''Load row from env table.'''
         if self.ready:
+            tree_id = (tree_id if tree_id
+                       else self.env_columns['tree_id']
+                       if self.env_columns and 'tree_id' in self.env_columns
+                       else None)
             variable = (variable if variable
                        else self.env_columns['variable']
                        if self.env_columns and 'variable' in self.env_columns
                        else None)
-            if variable:
-                self.env = Env.load(variable=variable) if variable else None
+            if tree_id and variable:
+                self.env = (Env.load(tree_id=tree_id,variable=variable)
+                            if tree_id and variable else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_env. ' +
@@ -222,15 +228,20 @@ class Database:
             if self.location: self.update_location_row()
             else:             self.create_location_row()
 
-    def set_location(self,path=None):
+    def set_location(self,env_id=None,path=None):
         '''Load row from location table.'''
         if self.ready:
+            env_id = (env_id if env_id
+                    else self.location_columns['env_id']
+                    if self.location_columns and 'env_id' in self.location_columns
+                    else None)
             path = (path if path
                     else self.location_columns['path']
                     if self.location_columns and 'path' in self.location_columns
                     else None)
-            if path:
-                self.location = Location.load(path=path) if path else None
+            if env_id and path:
+                self.location = (Location.load(env_id=env_id,path=path)
+                                 if env_id and path else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_location. ' +
@@ -282,12 +293,12 @@ class Database:
                 self.logger.error('Unable to create_location_row. ' +
                                   'columns: {0}'.format(columns))
 
-    def set_directory_columns(self,path=None,name=None,depth=None):
+    def set_directory_columns(self,location_path=None,name=None,depth=None):
         '''Set columns of the directory table.'''
         self.directory_columns = dict()
         if self.ready:
-            if path and name and depth!=None:
-                self.set_location(path=path)
+            if location_path and name and depth!=None:
+                self.set_location(path=location_path)
                 location_id = self.location.id if self.location else None
                 self.directory_columns = {
                     'location_id' : location_id  if location_id  else None,
@@ -297,8 +308,8 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_directory_columns.' +
-                                  'path: {0}, name: {1}, depth: {2}'
-                                  .format(path,name,depth))
+                                  'location_path: {0}, name: {1}, depth: {2}'
+                                  .format(location_path,name,depth))
 
     def populate_directory_table(self):
         '''Update/Create directory table row.'''
@@ -624,7 +635,7 @@ class Database:
                 else self.section_columns['file_id']
                 if self.section_columns and 'file_id' in self.section_columns
                 else None)
-            hdu_number = (hdu_number if hdu_number
+            hdu_number = (hdu_number if hdu_number!=None
                 else self.section_columns['hdu_number']
                 if self.section_columns and 'hdu_number' in self.section_columns
                 else None)
@@ -729,7 +740,7 @@ class Database:
                 else self.extension_columns['file_id']
                 if self.extension_columns and 'file_id' in self.extension_columns
                 else None)
-            hdu_number = (hdu_number if hdu_number
+            hdu_number = (hdu_number if hdu_number!=None
                 else self.extension_columns['hdu_number']
                 if self.extension_columns and 'hdu_number' in self.extension_columns
                 else None)
@@ -794,5 +805,103 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to create_extension_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def set_data_columns(self,file_name=None,hdu_number=None,is_image=None):
+        '''Set columns of the data table.'''
+        self.data_columns = dict()
+        if self.ready:
+            if (file_name and hdu_number!=None and is_image!=None):
+                self.set_file(name=file_name)
+                file_id = self.file.id if self.file else None
+                self.set_extension(file_id=file_id,hdu_number=hdu_number)
+                extension_id = self.extension.id if self.extension else None
+                self.data_columns = {
+                    'extension_id' : extension_id if extension_id   else None,
+                    'is_image'     : is_image     if is_image!=None else None,
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_data_columns. ' +
+                    'extension_id: {0}, '.format(extension_id) +
+                    'is_image: {0}, '.format(is_image))
+
+    def populate_data_table(self):
+        '''Update/Create data table row.'''
+        if self.ready:
+            self.set_data()
+            if self.data: self.update_data_row()
+            else:         self.create_data_row()
+
+    def set_data(self,extension_id=None,is_image=None):
+        '''Load row from data table.'''
+        if self.ready:
+            extension_id = (extension_id if extension_id
+                else self.data_columns['extension_id']
+                if self.data_columns and 'extension_id' in self.data_columns
+                else None)
+            is_image = (is_image if is_image
+                else self.data_columns['is_image']
+                if self.data_columns and 'is_image' in self.data_columns
+                else None)
+            if extension_id and is_image!=None:
+                self.data = (Data.load(extension_id=extension_id)
+                             if extension_id else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_data. ' +
+                                  'extension_id: {0}, '.format(extension_id) +
+                                  'is_image: {0}'.format(is_image))
+
+    def update_data_row(self):
+        '''Update row in data table.'''
+        if self.ready:
+            columns = self.data_columns if self.data_columns else None
+            if columns:
+                self.logger.debug('Updating row in data table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                skip_keys = []
+                self.data.update_if_needed(columns=columns,
+                                                skip_keys=skip_keys)
+                if self.data.updated:
+                    self.logger.info(
+                        'Updated Data[id={0}], '.format(self.data.id) +
+                        'extension_id: {0}, '.format(self.data.extension_id) +
+                        'is_image: {0}.'.format(self.data.is_image))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_data_row. columns: {0}'
+                                    .format(columns))
+
+    def create_data_row(self):
+        '''Create row in data table.'''
+        if self.ready:
+            columns = self.data_columns if self.data_columns else None
+            if columns:
+                self.logger.debug('Adding new row to data table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                data = Data(
+                    extension_id = columns['extension_id']
+                        if columns and 'extension_id' in columns else None,
+                    is_image = columns['is_image']
+                        if columns and 'is_image' in columns else None,
+                                  )
+                if data:
+                    data.add()
+                    data.commit()
+                    self.logger.info(
+                        'Added Data[id={0}], '.format(data.id) +
+                        'extension_id: {0}, '.format(data.extension_id) +
+                        'is_image: {0}.'.format(data.is_image))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_data_row. ' +
+                                      'data = \n{0}'.format(data))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_data_row. ' +
                                   'columns: {0}'.format(columns))
 

@@ -62,9 +62,12 @@ class Env(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(variable = None):
-        if variable:
-            try: env = Env.query.filter(Env.variable==variable).one()
+    def load(tree_id=None,variable = None):
+        if tree_id and variable:
+            try: env = (Env.query
+                           .filter(Env.tree_id==tree_id)
+                           .filter(Env.variable==variable)
+                           .one())
             except: env = None
         else:
             env = None
@@ -103,20 +106,23 @@ class Location(db.Model):
     env_id = db.Column(db.Integer,
                        db.ForeignKey('sdss.env.id'),
                        nullable = False)
-    path = db.Column(db.String(64), nullable = False, unique = True)
+    path = db.Column(db.String(64), nullable = False)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(path=None):
-        if path:
-            try: env = Location.query.filter(Location.path==path).one()
-            except: env = None
+    def load(env_id=None,path=None):
+        if env_id and path:
+            try: location = (Location.query
+                                    .filter(Location.env_id==env_id)
+                                    .filter(Location.path==path)
+                                    .one())
+            except: location = None
         else:
-            env = None
-        return env
+            location = None
+        return location
     
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
@@ -370,14 +376,14 @@ class Extension(db.Model):
     @staticmethod
     def load(file_id=None,hdu_number=None):
         if file_id and hdu_number!=None:
-            try: section = (Extension.query
+            try: extension = (Extension.query
                                      .filter(Extension.file_id==file_id)
                                      .filter(Extension.hdu_number==hdu_number)
                                      .one())
-            except: section = None
+            except: extension = None
         else:
-            section = None
-        return section
+            extension = None
+        return extension
     
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
@@ -515,6 +521,16 @@ class Data(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
+                         
+    @staticmethod
+    def load(extension_id=None):
+        if extension_id:
+            try: data = Data.query.filter(Data.extension_id==extension_id).one()
+            except: data = None
+        else:
+            data = None
+        return data
+    
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():
@@ -556,15 +572,16 @@ class Column(db.Model):
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
-    def update_if_needed(self, columns = None, skip_keys = []):
-        self.updated = False
-        for key,column in columns.items():
-            if key not in skip_keys:
-                if getattr(self,key) != column:
-                    setattr(self,key,column)
-                    if not self.updated: self.updated = True
-        if self.updated: self.commit()
 
+    @staticmethod
+    def load(data_id=None):
+        if data_id:
+            try: column = Column.query.filter(Column.data_id==data_id).one()
+            except: column = None
+        else:
+            column = None
+        return column
+    
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():
@@ -589,5 +606,4 @@ class Column(db.Model):
                                         column.key,
                                         getattr(self,column.key))
                                         for column in self.__table__.columns])
-
 

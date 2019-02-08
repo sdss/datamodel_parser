@@ -143,7 +143,7 @@ class Migrate:
         if self.ready:
             self.set_database()
             self.populate_file_path_tables()
-            self.populate_html_text_tables()
+#            self.populate_html_text_tables()
 
     def set_database(self):
         '''Set class Database instance.'''
@@ -178,17 +178,17 @@ class Migrate:
                 self.populate_intro_table()
                 self.populate_section_table()
                 self.populate_extension_table()
+                self.populate_data_table()
+                self.populate_column_table()
 #                self.populate_header_table()
 #                self.populate_keyword_table()
-#                self.populate_data_table()
-#                self.populate_column_table()
 
     def parse_path(self):
         self.env_variable = None
         self.location_path = None
         if self.ready:
             if self.path:
-                path = self.path.replace('/datamodel/files/','')
+                path = self.path.replace('datamodel/files/','')
                 split = path.split('/')
                 self.env_variable  = split[0]              if split else None
                 self.file_name     = split[-1]             if split else None
@@ -282,8 +282,12 @@ class Migrate:
         '''Populate the env table.'''
         if self.ready:
             if self.tree_edition and self.env_variable:
-                self.database.set_env_columns(variable=self.env_variable,
-                                              edition=self.tree_edition)
+                # Need tree_id for Env.load
+                # Need tree_edition for Tree.load
+                tree_edition = self.tree_edition
+                variable = self.env_variable
+                self.database.set_env_columns(tree_edition=tree_edition,
+                                              variable=variable)
                 self.database.populate_env_table()
                 self.ready = self.database.ready
             else:
@@ -297,6 +301,8 @@ class Migrate:
         if self.ready:
             if (self.location_path and
                 self.env_variable):
+                # Need env_id for Location.load
+                # Need env_variable for Env.load
                 self.database.set_location_columns(
                                         path=self.location_path,
                                         variable=self.env_variable)
@@ -315,13 +321,16 @@ class Migrate:
             if (self.location_path   and
                 self.directory_names and
                 self.directory_depths):
-                path   = self.location_path
-                names  = self.directory_names
-                depths = self.directory_depths
+                # Need location_id for Directory.load
+                # Need location_path for Location.load
+                location_path   = self.location_path
+                names           = self.directory_names
+                depths          = self.directory_depths
                 for (name,depth) in list(zip(names,depths)):
-                    self.database.set_directory_columns(path=path,
-                                                        name=name,
-                                                        depth=depth)
+                    self.database.set_directory_columns(
+                                                    location_path=location_path,
+                                                    name=name,
+                                                    depth=depth)
                     self.database.populate_directory_table()
                     self.ready = self.database.ready
             else:
@@ -364,6 +373,8 @@ class Migrate:
                 self.file.intro_heading_titles and
                 self.file.intro_descriptions
                 ):
+                # Need file_id for Section.load
+                # Need file_name for File.load.
                 file_name      = self.file_name
                 heading_orders = self.file.intro_heading_orders
                 heading_levels = self.file.intro_heading_levels
@@ -400,6 +411,8 @@ class Migrate:
                 self.file                         and
                 self.file.section_extension_names
                 ):
+                # Need file_id for Section.load
+                # Need file_name for File.load.
                 file_name   = self.file_name
                 hdu_numbers = self.file.section_extension_names.keys()
                 hdu_names   = self.file.section_extension_names.values()
@@ -425,6 +438,8 @@ class Migrate:
                 self.file                         and
                 self.file.file_extension_data
                 ):
+                # Need file_id for Extension.load.
+                # Need file_name for File.load.
                 for hdu_data in self.file.file_extension_data:
                     file_name = self.file_name
                     hdu_number = hdu_data['extension_hdu_number']
@@ -437,6 +452,66 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_extension_table. ' +
+                    'self.file_name: {0}'.format(self.file_name) +
+                    'self.file: {0}'.format(self.file))
+
+    def populate_data_table(self):
+        '''Populate the data table.'''
+        if self.ready:
+            if (self.file_name                    and
+                self.file                         and
+                self.file.file_extension_data
+                ):
+                for hdu_data in self.file.file_extension_data:
+                    # Need extension_id for Data.load.
+                    # Need file_id and hdu_number for Extension.load
+                    file_name = self.file_name # For obtaining file_id
+                    hdu_number = hdu_data['extension_hdu_number']
+                    is_image = hdu_data['data_is_image']
+                    self.database.set_data_columns(
+                                    file_name  = file_name,
+                                    hdu_number = int(hdu_number),
+                                    is_image   = is_image)
+                    self.database.populate_data_table()
+                    self.ready = self.database.ready
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_data_table. ' +
+                    'self.file_name: {0}'.format(self.file_name) +
+                    'self.file: {0}'.format(self.file))
+
+    def populate_column_table(self):
+        '''Populate the column table.'''
+        if self.ready:
+            if (self.file_name                    and
+                self.file                         and
+                self.file.file_extension_column
+                ):
+                for hdu_data in self.file.file_extension_column:
+                    # Need data_id for Column.load
+                    # Need extension_id for Data.load.
+                    # Need file_id and hdu_number for Extension.load
+                    file_name    = self.file_name # For obtaining file_id
+                    hdu_number   = hdu_data['extension_hdu_number']
+                    header_title = hdu_data['header_title']
+                    datatype     = hdu_data['column_datatype']
+                    size         = hdu_data['column_size']
+                    description  = hdu_data['column_description']
+                    self.columnbase.set_column_columns(
+                                    file_name    = file_name,
+                                    hdu_number   = int(hdu_number),
+                                    header_title = header_title,
+                                    datatype     = datatype,
+                                    size         = size,
+                                    description  = description,
+                                    )
+                    self.columnbase.populate_column_table()
+                    self.ready = self.columnbase.ready
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_column_table. ' +
                     'self.file_name: {0}'.format(self.file_name) +
                     'self.file: {0}'.format(self.file))
 

@@ -67,64 +67,6 @@ class File:
                 self.logger.error('Unable to parse_file. self.div_ids: {0}'
                                     .format(self.divs))
 
-    def parse_file_extension(self,div=None):
-        '''Parse file extension content from given division tag.'''
-        if self.ready:
-            self.parse_file_extension_data(div=div)
-
-    def parse_file_extension_data(self,div=None):
-        '''Parse file description content from given division tag.'''
-        if self.ready:
-            if div:
-                # extension.hdu_number and header.title
-                heading = div.find_next('h2').string
-                split = heading.split(':')
-                if split:
-                    extension_hdu_number = int(
-                                            split[0].lower().replace('hdu',''))
-                    header_title =   split[1].lower()
-                else: self.logger.error("Expected ':' in heading")
-                
-                # column.description
-                column_description = div.find_next('p').string
-
-                # data.is_image, column.datatype, column.size
-                data = div.find_next('dl')
-                dt = data.find_all('dt')
-                dd = data.find_all('dd')
-                definitions  = list()
-                descriptions = list()
-                for definition in dt:
-                    definitions.append(definition.string.lower())
-                for description in dd:
-                    descriptions.append(description.string.lower())
-                for (definition,description) in list(zip(definitions,descriptions)):
-                    if 'type' in definition: column_datatype = description
-                    if 'size' in definition: column_size     = description
-                data_is_image = bool('image' in descriptions)
-                
-                hdu_data = dict()
-                hdu_data['extension_hdu_number'] = extension_hdu_number
-                hdu_data['header_title']         = header_title
-                hdu_data['data_is_image']        = data_is_image
-                hdu_data['column_datatype']      = column_datatype
-                hdu_data['column_size']          = column_size
-                hdu_data['column_description']   = column_description
-                self.file_extension_data.append(hdu_data)
-                
-#                print('div: %r' % div)
-#                print('extension_hdu_number: %r' % extension_hdu_number)
-#                print('header_title: %r' % header_title)
-#                print('data_is_image: %r' % data_is_image)
-#                print('column_datatype: %r' % column_datatype)
-#                print('column_size: %r' % column_size)
-#                print('column_description: %r' % column_description)
-#                input('pause')
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_extension_data. ' +
-                                  'div: {0}'.format(div))
-
     def parse_file_intro(self,div=None):
         '''Parse file description content from given division tag.'''
         if self.ready:
@@ -364,6 +306,71 @@ class File:
                 self.logger.error('Unable to set_child_names. ' +
                                   'div: {0}'.format(div))
 
+    def parse_file_extension(self,div=None):
+        '''Parse file extension content from given division tag.'''
+        if self.ready:
+            self.parse_file_extension_data(div=div)
+
+    def parse_file_extension_data(self,div=None):
+        '''Parse file description content from given division tag.'''
+        if self.ready:
+            if div:
+                # extension.hdu_number and header.title
+                heading = div.find_next('h2').string
+                split = heading.split(':')
+                if split:
+                    extension_hdu_number = int(
+                                            split[0].lower().replace('hdu',''))
+                    header_title =   split[1].lower()
+                else: self.logger.error("Expected ':' in heading")
+                
+                # column.description
+                column_description = div.find_next('p').string
+
+                # data.is_image, column.datatype, column.size
+                data = div.find_next('dl')
+                dt = data.find_all('dt')
+                dd = data.find_all('dd')
+                definitions  = list()
+                descriptions = list()
+                for definition in dt:
+                    definitions.append(definition.string.lower())
+                for description in dd:
+                    descriptions.append(description.string.lower())
+                for (definition,description) in list(zip(definitions,descriptions)):
+                    if 'type' in definition: column_datatype = description
+                    if 'size' in definition: column_size     = description
+                data_is_image = bool('image' in descriptions)
+                
+                hdu_data = dict()
+                hdu_data['extension_hdu_number'] = extension_hdu_number
+                hdu_data['header_title']         = header_title
+                hdu_data['data_is_image']        = data_is_image
+                hdu_data['column_datatype']      = column_datatype
+                hdu_data['column_size']          = column_size
+                hdu_data['column_description']   = column_description
+                self.file_extension_data.append(hdu_data)
+            
+#                print('div: %r' % div)
+#                print('extension_hdu_number: %r' % extension_hdu_number)
+#                print('header_title: %r' % header_title)
+#                print('data_is_image: %r' % data_is_image)
+#                print('column_datatype: %r' % column_datatype)
+#                print('column_size: %r' % column_size)
+#                print('column_description: %r' % column_description)
+#                input('pause')
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_extension_data. ' +
+                                  'div: {0}'.format(div))
+
+
+
+
+###########################################################################
+################       Use for list style file intros
+#####################################################################
+
     def parse_extensions(self):
         self.extensions = list()
         if self.ready:
@@ -450,9 +457,6 @@ class File:
                 self.logger.error('Unable to set_title_and_keyword_columns. ' +
                                     'div: {0}'.format(div))
 
-#########
-# Use for list style file intros
-#########
 def set_intro_list_strings(self,intro=None):
         dl = intro.dl if intro else None
         if dl:
