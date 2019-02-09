@@ -78,6 +78,7 @@ class Migrate:
             self.set_datamodel_dir()
             self.set_tree_edition()
             self.set_html_text()
+            self.set_database()
 
     def set_datamodel_dir(self):
         '''Set the DATAMODEL_DIR file path on cypher.'''
@@ -138,13 +139,6 @@ class Migrate:
                 self.logger.error('Unable to validate_path.' +
                                   'path: {0}'.format(path))
 
-    def populate_database(self):
-        '''Populate the database with file information.'''
-        if self.ready:
-            self.set_database()
-            self.populate_file_path_tables()
-#            self.populate_html_text_tables()
-
     def set_database(self):
         '''Set class Database instance.'''
         self.database = None
@@ -157,6 +151,12 @@ class Migrate:
                     'Unable to set_database. ' +
                     'self.database: {0}'.format(self.database) +
                     'self.database.ready: {0}'.format(self.database.ready))
+
+    def populate_database(self):
+        '''Populate the database with file information.'''
+        if self.ready:
+            self.populate_file_path_tables()
+            self.populate_html_text_tables()
 
     def populate_file_path_tables(self):
         '''Populate tables comprised of file path information.'''
@@ -179,7 +179,9 @@ class Migrate:
                 self.populate_section_table()
                 self.populate_extension_table()
                 self.populate_data_table()
-                self.populate_column_table()
+#                self.populate_column_table()
+
+
 #                self.populate_header_table()
 #                self.populate_keyword_table()
 
@@ -216,6 +218,10 @@ class Migrate:
                 self.ready = None
                 self.logger.error('Unable to set_soup. self.html_text: {0}'
                                     .format(self.html_text))
+
+################################################################################
+# This code will need to be put into another class
+# which determines which file class to instantiate
 
     def set_file(self):
         ''' Set instance of File class.'''
@@ -257,7 +263,7 @@ class Migrate:
                 self.ready = bool(self.file and self.file.ready)
                 if not self.ready:
                     self.logger.error(
-                        'Unable to set_file. ' +
+                        'Unable to set_file. '             +
                         'self.file: {0}'.format(self.file) +
                         'self.file.ready: {0}'.format(self.file.ready))
             else:
@@ -265,10 +271,12 @@ class Migrate:
                 self.logger.error('Unable to set_file_div. ' +
                                   'divs: {0}'.format(divs))
 
+########################################################################
+
     def populate_tree_table(self):
         '''Populate the tree table.'''
         if self.ready:
-            if self.tree_edition:
+            if self.database and self.tree_edition:
                 self.database.set_tree_columns(edition=self.tree_edition)
                 self.database.populate_tree_table()
                 self.ready = self.database.ready
@@ -276,67 +284,71 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_tree_table. ' +
-                    'self.tree_edition: {0}'.format(self.tree_edition))
+                    'self.database: {0}.'.format(self.database) +
+                    'self.tree_edition: {0}.'.format(self.tree_edition))
 
     def populate_env_table(self):
         '''Populate the env table.'''
         if self.ready:
-            if self.tree_edition and self.env_variable:
-                # Need tree_id for Env.load
-                # Need tree_edition for Tree.load
-                tree_edition = self.tree_edition
-                variable = self.env_variable
-                self.database.set_env_columns(tree_edition=tree_edition,
-                                              variable=variable)
+            if self.database and self.tree_edition and self.env_variable:
+                self.database.set_tree_id(tree_edition=self.tree_edition)
+                self.database.set_env_columns(variable=self.env_variable)
                 self.database.populate_env_table()
                 self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_env_table. ' +
-                    'self.tree_edition: {0}'.format(self.tree_edition))
+                    'self.database: {0}, '.format(self.database) +
+                    'self.env_variable: {0}.' .format(self.env_variable))
 
     def populate_location_table(self):
         '''Populate the location table.'''
         if self.ready:
-            if (self.location_path and
-                self.env_variable):
-                # Need env_id for Location.load
-                # Need env_variable for Env.load
-                self.database.set_location_columns(
-                                        path=self.location_path,
-                                        variable=self.env_variable)
+            if (self.database     and
+                self.tree_edition and
+                self.env_variable and
+                self.location_path
+                ):
+                self.database.set_env_id(tree_edition = self.tree_edition,
+                                         env_variable = self.env_variable)
+                self.database.set_location_columns(path = self.location_path)
                 self.database.populate_location_table()
                 self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_location_table. ' +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.env_variable: {0}.'  .format(self.env_variable))
+                    'Unable to populate_location_table. '                +
+                    'self.tree_edition: {0}, '.format(self.tree_edition) +
+                    'self.env_variable: {0}, '.format(self.env_variable) +
+                    'self.location_path: {0}.'.format(self.location_path)
+                    )
 
     def populate_directory_table(self):
         '''Populate the directory table.'''
         if self.ready:
-            if (self.location_path   and
-                self.directory_names and
-                self.directory_depths):
-                # Need location_id for Directory.load
-                # Need location_path for Location.load
-                location_path   = self.location_path
-                names           = self.directory_names
-                depths          = self.directory_depths
+            if (self.tree_edition     and
+                self.env_variable     and
+                self.location_path    and
+                self.directory_names  and
+                self.directory_depths
+                ):
+                self.database.set_location_id(
+                                            tree_edition = self.tree_edition,
+                                            env_variable = self.env_variable,
+                                            location_path = self.location_path)
+                names         = self.directory_names
+                depths        = self.directory_depths
                 for (name,depth) in list(zip(names,depths)):
-                    self.database.set_directory_columns(
-                                                    location_path=location_path,
-                                                    name=name,
-                                                    depth=depth)
+                    self.database.set_directory_columns(name=name,depth=depth)
                     self.database.populate_directory_table()
                     self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_directory_table. ' +
+                    'Unable to populate_directory_table. '                     +
+                    'self.tree_edition: {0}, '   .format(self.tree_edition)    +
+                    'self.env_variable: {0}, '   .format(self.env_variable)    +
                     'self.location_path: {0}, '  .format(self.location_path)   +
                     'self.directory_names: {0}, '.format(self.directory_names) +
                     'self.directory_depths: {0}.'.format(self.directory_depths))
@@ -344,38 +356,53 @@ class Migrate:
     def populate_file_table(self):
         '''Populate the file table.'''
         if self.ready:
-            if (self.location_path        and
+            if (self.tree_edition         and
+                self.env_variable         and
+                self.location_path        and
                 self.file_name            and
                 self.file                 and
                 self.file.extension_count
                 ):
+                self.database.set_location_id(
+                                            tree_edition = self.tree_edition,
+                                            env_variable = self.env_variable,
+                                            location_path = self.location_path)
+                name=self.file_name
+                extension_count=self.file.extension_count
                 self.database.set_file_columns(
-                                path = self.location_path,
-                                name=self.file_name,
-                                extension_count=self.file.extension_count)
+                                            name            = name,
+                                            extension_count = extension_count)
                 self.database.populate_file_table()
                 self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_file_table. ' +
+                    'Unable to populate_file_table. '                      +
+                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {0}, ' .format(self.env_variable)  +
                     'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name) +
-                    'self.file: {0}.'          .format(self.file))
+                    'self.file_name: {0}, '    .format(self.file_name)     +
+                    'self.file: {0}, '         .format(self.file)          +
+                    'self.file.extension_count: {0}.'
+                    .format(self.file.extension_count))
 
     def populate_intro_table(self):
         '''Populate the intro table.'''
         if self.ready:
-            if (self.file_name                 and
+            if (self.tree_edition              and
+                self.env_variable              and
+                self.location_path             and
+                self.file_name                 and
                 self.file                      and
                 self.file.intro_heading_orders and
                 self.file.intro_heading_levels and
                 self.file.intro_heading_titles and
                 self.file.intro_descriptions
                 ):
-                # Need file_id for Section.load
-                # Need file_name for File.load.
-                file_name      = self.file_name
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
                 heading_orders = self.file.intro_heading_orders
                 heading_levels = self.file.intro_heading_levels
                 heading_titles = self.file.intro_heading_titles
@@ -390,88 +417,118 @@ class Migrate:
                      heading_titles,
                      descriptions)):
                     self.database.set_intro_columns(
-                                    file_name     = file_name,
-                                    heading_order = heading_order,
-                                    heading_level = heading_level,
-                                    heading_title = heading_title,
-                                    description   = description)
+                                                heading_order = heading_order,
+                                                heading_level = heading_level,
+                                                heading_title = heading_title,
+                                                description   = description)
                     self.database.populate_intro_table()
                     self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_intro_table. ' +
-                    'self.file_name: {0}, '.format(self.file_name) +
-                    'self.file: {0}.'      .format(self.file))
+                    'Unable to populate_intro_table. '                     +
+                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {0}, ' .format(self.env_variable)  +
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.file_name: {0}, '    .format(self.file_name)     +
+                    'self.file.intro_heading_orders: {0}, '
+                    .format(self.file.intro_heading_orders)                +
+                    'self.file.intro_heading_levels: {0}, '
+                    .format(self.file.intro_heading_levels)                +
+                    'self.file.intro_heading_titles: {0}, '
+                    .format(self.file.intro_heading_titles)                +
+                    'self.file.intro_descriptions: {0}.'
+                    .format(self.file.intro_descriptions)
+                    )
 
     def populate_section_table(self):
         '''Populate the section table.'''
         if self.ready:
-            if (self.file_name                    and
+            if (self.tree_edition                 and
+                self.env_variable                 and
+                self.location_path                and
+                self.file_name                    and
                 self.file                         and
                 self.file.section_extension_names
                 ):
-                # Need file_id for Section.load
-                # Need file_name for File.load.
-                file_name   = self.file_name
-                hdu_numbers = self.file.section_extension_names.keys()
-                hdu_names   = self.file.section_extension_names.values()
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
+                hdu_numbers    = self.file.section_extension_names.keys()
+                hdu_names      = self.file.section_extension_names.values()
 
                 for (hdu_number,hdu_name) in list(zip(hdu_numbers,hdu_names)):
                     self.database.set_section_columns(
-                                    file_name  = file_name,
-                                    hdu_number = int(hdu_number),
-                                    hdu_name   = hdu_name)
+                                                hdu_number = int(hdu_number),
+                                                hdu_name   = hdu_name)
                     self.database.populate_section_table()
                     self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_section_table. ' +
-                    'self.file_name: {0}'.format(self.file_name) +
-                    'self.file: {0}'.format(self.file))
+                    'Unable to populate_section_table. '                   +
+                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {0}, ' .format(self.env_variable)  +
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.file_name: {0}, '    .format(self.file_name)     +
+                    'self.file: {0},'          .format(self.file)          +
+                    'self.file.section_extension_names: {0}.'
+                    .format(self.file.section_extension_names))
 
     def populate_extension_table(self):
         '''Populate the extension table.'''
         if self.ready:
-            if (self.file_name                    and
-                self.file                         and
+            if (self.tree_edition               and
+                self.env_variable               and
+                self.location_path              and
+                self.file_name                  and
+                self.file                       and
                 self.file.file_extension_data
                 ):
-                # Need file_id for Extension.load.
-                # Need file_name for File.load.
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
                 for hdu_data in self.file.file_extension_data:
-                    file_name = self.file_name
                     hdu_number = hdu_data['extension_hdu_number']
                     self.database.set_extension_columns(
-                                    file_name  = file_name,
-                                    hdu_number = int(hdu_number))
+                                                    hdu_number=int(hdu_number))
                     self.database.populate_extension_table()
                     self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_extension_table. ' +
-                    'self.file_name: {0}'.format(self.file_name) +
-                    'self.file: {0}'.format(self.file))
+                    'Unable to populate_extension_table. '                 +
+                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {0}, ' .format(self.env_variable)  +
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.file_name: {0}, '    .format(self.file_name)     +
+                    'self.file: {0}'           .format(self.file)          +
+                    'self.file.file_extension_data: {0}'
+                    .format(self.file.file_extension_data)
+                    )
 
     def populate_data_table(self):
         '''Populate the data table.'''
         if self.ready:
-            if (self.file_name                    and
-                self.file                         and
+            if (self.tree_edition               and
+                self.env_variable               and
+                self.location_path              and
+                self.file_name                  and
+                self.file                       and
                 self.file.file_extension_data
                 ):
                 for hdu_data in self.file.file_extension_data:
-                    # Need extension_id for Data.load.
-                    # Need file_id and hdu_number for Extension.load
-                    file_name = self.file_name # For obtaining file_id
+                    is_image   = hdu_data['data_is_image']
                     hdu_number = hdu_data['extension_hdu_number']
-                    is_image = hdu_data['data_is_image']
-                    self.database.set_data_columns(
-                                    file_name  = file_name,
-                                    hdu_number = int(hdu_number),
-                                    is_image   = is_image)
+                    self.database.set_extension_id(
+                                            tree_edition  = self.tree_edition,
+                                            env_variable  = self.env_variable,
+                                            location_path = self.location_path,
+                                            file_name     = self.file_name,
+                                            hdu_number    = hdu_number)
+                    self.database.set_data_columns(is_image=is_image)
                     self.database.populate_data_table()
                     self.ready = self.database.ready
             else:

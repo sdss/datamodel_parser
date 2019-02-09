@@ -222,14 +222,14 @@ class File(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(name = None):
+    def load(location_id=None,name=None):
         if name:
             try: file = File.query.filter(File.name==name).one()
             except: file = None
         else:
             file = None
         return file
-    
+
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():
@@ -377,9 +377,9 @@ class Extension(db.Model):
     def load(file_id=None,hdu_number=None):
         if file_id and hdu_number!=None:
             try: extension = (Extension.query
-                                     .filter(Extension.file_id==file_id)
-                                     .filter(Extension.hdu_number==hdu_number)
-                                     .one())
+                                       .filter(Extension.file_id==file_id)
+                                       .filter(Extension.hdu_number==hdu_number)
+                                       .one())
             except: extension = None
         else:
             extension = None
