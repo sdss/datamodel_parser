@@ -14,7 +14,7 @@ class Tree(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(edition = None):
+    def load(edition=None):
         if edition:
             try: tree = Tree.query.filter(Tree.edition==edition).one()
             except: tree = None
@@ -62,7 +62,7 @@ class Env(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(tree_id=None,variable = None):
+    def load(tree_id=None,variable=None):
         if tree_id and variable:
             try: env = (Env.query
                            .filter(Env.tree_id==tree_id)
@@ -419,14 +419,18 @@ class Header(db.Model):
                              db.ForeignKey('sdss.extension.id'),
                              nullable = False)
     title = db.Column(db.String(32), nullable = False, unique = True)
+    table_caption = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
     @staticmethod
-    def load(extension_id = None):
-        if extension_id:
-            try: header = Header.query.filter(Header.extension_id==extension_id).one()
+    def load(extension_id=None,title=None):
+        if extension_id and title:
+            try: header = (Header.query
+                                .filter(Header.extension_id==extension_id)
+                                .filter(Header.title==title)
+                                .one())
             except: header = None
         else:
             header = None
@@ -475,7 +479,7 @@ class Keyword(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load_all(header_id = None):
+    def load_all(header_id=None):
         if header_id:
             try: keywords = Keyword.query.filter(Keyword.header_id==header_id).all()
             except: keywords = None
@@ -567,7 +571,7 @@ class Column(db.Model):
     header_title = db.Column(db.String(32), nullable = False)
     datatype = db.Column(db.String(64), nullable = False)
     size = db.Column(db.String(32), nullable = False)
-    description = db.Column(db.String(128))
+    description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,

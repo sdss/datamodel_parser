@@ -88,6 +88,7 @@ CREATE TABLE sdss.header (
     id SERIAL NOT NULL PRIMARY KEY,
     extension_id INT4 REFERENCES sdss.extension(id) NOT NULL,
     title VARCHAR(32) NOT NULL UNIQUE,
+    table_caption VARCHAR(128),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -117,7 +118,7 @@ CREATE TABLE sdss.column (
     header_title VARCHAR(32) NOT NULL,
     datatype VARCHAR(64) NOT NULL,
     size VARCHAR(32) NOT NULL,
-    description VARCHAR(128),
+    description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

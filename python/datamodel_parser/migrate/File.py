@@ -49,10 +49,11 @@ class File:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
             self.path    = self.options.path    if self.options else None
-            self.file_extension_data = list()
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
+        self.file_extension_data   = list()
+        self.file_extension_headers = list()
         if self.ready:
             if self.divs:
                 for div in self.divs:
@@ -280,7 +281,6 @@ class File:
                     'names: {0}, contents: {1}'.format(names,contents)
                                   )
 
-
     def set_parent_names(self,div=None):
         '''Set a list of parent for the given division tag.'''
         self.parent_names = list()
@@ -310,6 +310,7 @@ class File:
         '''Parse file extension content from given division tag.'''
         if self.ready:
             self.parse_file_extension_data(div=div)
+            self.parse_file_extension_header(div=div)
 
     def parse_file_extension_data(self,div=None):
         '''Parse file description content from given division tag.'''
@@ -350,20 +351,41 @@ class File:
                 hdu_data['column_size']          = column_size
                 hdu_data['column_description']   = column_description
                 self.file_extension_data.append(hdu_data)
-            
-#                print('div: %r' % div)
-#                print('extension_hdu_number: %r' % extension_hdu_number)
-#                print('header_title: %r' % header_title)
-#                print('data_is_image: %r' % data_is_image)
-#                print('column_datatype: %r' % column_datatype)
-#                print('column_size: %r' % column_size)
-#                print('column_description: %r' % column_description)
-#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
                                   'div: {0}'.format(div))
 
+    def parse_file_extension_header(self,div=None):
+        '''Parse file description content from given division tag.'''
+        hdu_header = dict()
+        if self.ready:
+            if div:
+                table = div.find_next('table')
+                # table caption
+                table_caption = table.find_next('caption').string
+                # table column headers
+                table_keywords = list()
+                for string in table.find_next('thead').stripped_strings:
+                    table_keywords.append(string)
+                # table values
+                body = table.find_next('tbody')
+                rows = body.find_all('tr')
+                table_values = dict()
+                for (row_order,row) in enumerate(rows):
+                    row_data = list()
+                    for data in row.find_all('td'):
+                        data_string = str(data.string) if data.string else ''
+                        row_data.append(data_string)
+                    table_values[row_order]  = row_data
+                hdu_header['table_caption']  = table_caption
+                hdu_header['table_keywords'] = table_keywords
+                hdu_header['table_values']   = table_values
+                self.file_extension_headers.append(hdu_header)
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_extension_header. ' +
+                                  'div: {0}'.format(div))
 
 
 

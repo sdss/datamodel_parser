@@ -7,6 +7,8 @@ from datamodel_parser.models.datamodel import Intro
 from datamodel_parser.models.datamodel import Section
 from datamodel_parser.models.datamodel import Extension
 from datamodel_parser.models.datamodel import Data
+from datamodel_parser.models.datamodel import Column
+from datamodel_parser.models.datamodel import Header
 from json import dumps
 
 class Database:
@@ -61,6 +63,7 @@ class Database:
 
     def set_env_id(self,tree_edition=None,env_variable=None):
         '''Get env_id.'''
+        self.env_id = None
         if self.ready:
             if tree_edition and env_variable:
                 self.set_tree_id(tree_edition=tree_edition)
@@ -83,6 +86,7 @@ class Database:
                         location_path=None
                         ):
         '''Get location_id.'''
+        self.location_id = None
         if self.ready:
             if tree_edition and env_variable and location_path:
                 self.set_env_id(tree_edition=tree_edition,
@@ -109,6 +113,7 @@ class Database:
                     file_name     = None
                     ):
         '''Get file_id.'''
+        self.file_id = None
         if self.ready:
             if tree_edition and env_variable and location_path and file_name:
                 self.set_location_id(tree_edition  = tree_edition,
@@ -131,13 +136,14 @@ class Database:
                                   )
 
     def set_extension_id(self,
-                    tree_edition  = None,
-                    env_variable  = None,
-                    location_path = None,
-                    file_name     = None,
-                    hdu_number    = None
-                    ):
+                         tree_edition  = None,
+                         env_variable  = None,
+                         location_path = None,
+                         file_name     = None,
+                         hdu_number    = None
+                         ):
         '''Get extension_id.'''
+        self.extension_id = None
         if self.ready:
             if (tree_edition and
                 env_variable and
@@ -149,7 +155,8 @@ class Database:
                                  location_path = location_path,
                                  file_name     = file_name)
                 self.set_extension(file_id=self.file_id,hdu_number=hdu_number)
-                extension_id = self.extension.id if self.extension else None
+                self.extension_id = (self.extension.id
+                                     if self.extension else None)
                 if not self.extension_id:
                     self.ready = False
                     self.logger.error(
@@ -165,8 +172,46 @@ class Database:
                                   'hdu_number: {0}'.format(hdu_number)
                                   )
 
+    def set_data_id(self,
+                    tree_edition  = None,
+                    env_variable  = None,
+                    location_path = None,
+                    file_name     = None,
+                    hdu_number    = None
+                    ):
+        self.data_id = None
+        '''Get data_id.'''
+        if self.ready:
+            if (tree_edition and
+                env_variable and
+                location_path and
+                file_name and
+                hdu_number!=None):
+                self.set_extension_id(tree_edition  = tree_edition,
+                                      env_variable  = env_variable,
+                                      location_path = location_path,
+                                      file_name     = file_name,
+                                      hdu_number    = hdu_number)
+                self.set_data(extension_id=self.extension_id)
+                self.data_id = self.data.id if self.data else None
+                if not self.data_id:
+                    self.ready = False
+                    self.logger.error(
+                            'Unable to set_data_id. ' +
+                            'self.data_id: {0}'.format(self.data_id))
+            else:
+                self.logger = False
+                self.logger.error('Unable to set_data_id. '
+                                  'tree_edition: {0}'.format(tree_edition) +
+                                  'env_variable: {0}'.format(env_variable) +
+                                  'location_path: {0}'.format(location_path) +
+                                  'file_name: {0}'.format(file_name)         +
+                                  'hdu_number: {0}'.format(hdu_number)
+                                  )
+
     def set_tree_columns(self,edition=None):
         '''Set columns of the tree table.'''
+        self.tree_columns = None
         if self.ready:
             if edition:
                 self.tree_columns = {'edition': edition if edition else None}
@@ -184,6 +229,7 @@ class Database:
 
     def set_tree(self,edition=None):
         '''Load row from tree table.'''
+        self.tree = None
         if self.ready:
             edition = (edition if edition
                        else self.tree_columns['edition']
@@ -264,6 +310,7 @@ class Database:
 
     def set_env(self,tree_id=None,variable=None):
         '''Load row from env table.'''
+        self.env = None
         if self.ready:
             tree_id = (tree_id if tree_id
                        else self.env_columns['tree_id']
@@ -353,6 +400,7 @@ class Database:
 
     def set_location(self,env_id=None,path=None):
         '''Load row from location table.'''
+        self.location = None
         if self.ready:
             env_id = (env_id if env_id
                     else self.location_columns['env_id']
@@ -444,6 +492,7 @@ class Database:
 
     def set_directory(self):
         '''Load row from directory table.'''
+        self.directory = None
         if self.ready:
             columns = self.directory_columns if self.directory_columns else None
             self.ready = bool(columns and 'location_id' in columns
@@ -546,6 +595,7 @@ class Database:
 
     def set_file(self,location_id=None,name=None):
         '''Load row from file table.'''
+        self.file = None
         if self.ready:
             location_id = (location_id if location_id
                     else self.file_columns['location_id']
@@ -659,6 +709,7 @@ class Database:
 
     def set_intro(self,file_id=None,heading_title=None):
         '''Load row from intro table.'''
+        self.intro = None
         if self.ready:
             file_id = (file_id if file_id
                     else self.intro_columns['file_id']
@@ -758,6 +809,7 @@ class Database:
 
     def set_section(self,file_id=None,hdu_number=None,hdu_name=None):
         '''Load row from section table.'''
+        self.section = None
         if self.ready:
             file_id = (file_id if file_id
                 else self.section_columns['file_id']
@@ -862,6 +914,7 @@ class Database:
 
     def set_extension(self,file_id=None,hdu_number=None):
         '''Load row from extension table.'''
+        self.extension = None
         if self.ready:
             file_id = (file_id if file_id
                 else self.extension_columns['file_id']
@@ -960,25 +1013,21 @@ class Database:
             if self.data: self.update_data_row()
             else:         self.create_data_row()
 
-    def set_data(self,extension_id=None,is_image=None):
+    def set_data(self,extension_id=None):
         '''Load row from data table.'''
+        self.data = None
         if self.ready:
             extension_id = (extension_id if extension_id
                 else self.data_columns['extension_id']
                 if self.data_columns and 'extension_id' in self.data_columns
                 else None)
-            is_image = (is_image if is_image
-                else self.data_columns['is_image']
-                if self.data_columns and 'is_image' in self.data_columns
-                else None)
-            if extension_id and is_image!=None:
+            if extension_id:
                 self.data = (Data.load(extension_id=extension_id)
                              if extension_id else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_data. ' +
-                                  'extension_id: {0}, '.format(extension_id) +
-                                  'is_image: {0}'.format(is_image))
+                                  'extension_id: {0}, '.format(extension_id))
 
     def update_data_row(self):
         '''Update row in data table.'''
@@ -1029,5 +1078,214 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to create_data_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def set_column_columns(self,
+                           header_title=None,
+                           datatype=None,
+                           size=None,
+                           description=None):
+        '''Set columns of the column table.'''
+        self.column_columns = dict()
+        if self.ready:
+            data_id = self.data_id if self.data_id else None
+            if data_id and header_title and datatype and size and description:
+                self.column_columns = {
+                    'data_id'      : data_id      if data_id      else None,
+                    'header_title' : header_title if header_title else None,
+                    'datatype'     : datatype     if datatype     else None,
+                    'size'         : size         if size         else None,
+                    'description'  : description  if description  else None,
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_column_columns. ' +
+                    'data_id: {0}, '.format(data_id) +
+                    'header_title: {0}, '.format(header_title) +
+                    'datatype: {0}, '.format(datatype) +
+                    'size: {0}, '.format(size) +
+                    'description: {0}, '.format(description))
+
+    def populate_column_table(self):
+        '''Update/Create column table row.'''
+        if self.ready:
+            self.set_column()
+            if self.column: self.update_column_row()
+            else:           self.create_column_row()
+
+    def set_column(self,data_id=None):
+        '''Load row from column table.'''
+        self.column = None
+        if self.ready:
+            data_id = (data_id if data_id
+                else self.column_columns['data_id']
+                if self.column_columns and 'data_id' in self.column_columns
+                else None)
+            if data_id:
+                self.column = Column.load(data_id=data_id) if data_id else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_column. ' +
+                                  'data_id: {0}, '.format(data_id))
+
+    def update_column_row(self):
+        '''Update row in column table.'''
+        if self.ready:
+            columns = self.column_columns if self.column_columns else None
+            if columns:
+                self.logger.debug('Updating row in column table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                skip_keys = []
+                self.column.update_if_needed(columns=columns,
+                                             skip_keys=skip_keys)
+                if self.column.updated:
+                    self.logger.info(
+                        'Updated Column[id={0}], '.format(self.column.id) +
+                        'header_title: {0}, '.format(self.column.header_title))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_column_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def create_column_row(self):
+        '''Create row in column table.'''
+        if self.ready:
+            columns = self.column_columns if self.column_columns else None
+            if columns:
+                self.logger.debug('Adding new row to column table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                column = Column(
+                    data_id = columns['data_id']
+                        if columns and 'data_id' in columns else None,
+                    header_title = columns['header_title']
+                        if columns and 'header_title' in columns else None,
+                    datatype = columns['datatype']
+                        if columns and 'datatype' in columns else None,
+                    size = columns['size']
+                        if columns and 'size' in columns else None,
+                    description = columns['description']
+                        if columns and 'description' in columns else None,
+                                  )
+                if column:
+                    column.add()
+                    column.commit()
+                    self.logger.info(
+                        'Added Column[id={0}], '.format(column.id) +
+                        'header_title: {0}.'.format(column.header_title))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_column_row. ' +
+                                      'column = \n{0}'.format(column))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_column_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def set_header_columns(self,title=None,table_caption=None):
+        '''Set columns of the header table.'''
+        self.header_columns = dict()
+        if self.ready:
+            extension_id = self.extension_id if self.extension_id else None
+            if extension_id and title and table_caption:
+                self.header_columns = {
+                    'extension_id'  : extension_id  if extension_id  else None,
+                    'title'         : title         if title         else None,
+                    'table_caption' : table_caption if table_caption else None,
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_header_columns. ' +
+                    'extension_id: {0}, '.format(extension_id) +
+                    'title: {0}, '.format(title) +
+                    'table_caption: {0}, '.format(table_caption))
+
+    def populate_header_table(self):
+        '''Update/Create header table row.'''
+        if self.ready:
+            self.set_header()
+            if self.header: self.update_header_row()
+            else:           self.create_header_row()
+
+    def set_header(self,extension_id=None,title=None,table_caption=None):
+        '''Load row from header table.'''
+        self.header = None
+        if self.ready:
+            extension_id = (extension_id if extension_id
+                else self.header_columns['extension_id']
+                if self.header_columns and 'extension_id' in self.header_columns
+                else None)
+            title = (title if title
+                else self.header_columns['title']
+                if self.header_columns and 'title' in self.header_columns
+                else None)
+            table_caption = (table_caption if table_caption
+                else self.header_columns['table_caption']
+                if self.header_columns and 'table_caption' in self.header_columns
+                else None)
+            if extension_id and title and table_caption:
+                self.header = (Header.load(extension_id  = extension_id,
+                                           title         = title)
+                               if extension_id else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_header. ' +
+                                  'extension_id: {0}, '.format(extension_id))
+
+    def update_header_row(self):
+        '''Update row in header table.'''
+        if self.ready:
+            columns = self.header_columns if self.header_columns else None
+            if columns:
+                self.logger.debug('Updating row in header table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                skip_keys = []
+                self.header.update_if_needed(columns=columns,
+                                             skip_keys=skip_keys)
+                if self.header.updated:
+                    self.logger.info(
+                        'Updated Header[id={0}], '.format(self.header.id) +
+                        'extension_id: {0}, '.format(self.header.extension_id) +
+                        'title: {0}.'.format(self.header.title) +
+                        'table_caption: {0}.'.format(self.header.table_caption))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_header_row. columns: {0}'
+                                    .format(columns))
+
+    def create_header_row(self):
+        '''Create row in header table.'''
+        if self.ready:
+            columns = self.header_columns if self.header_columns else None
+            if columns:
+                self.logger.debug('Adding new row to header table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                header = Header(
+                    extension_id = columns['extension_id']
+                        if columns and 'extension_id' in columns else None,
+                    title = columns['title']
+                        if columns and 'title' in columns else None,
+                    table_caption = columns['table_caption']
+                        if columns and 'table_caption' in columns else None,
+                                  )
+                if header:
+                    header.add()
+                    header.commit()
+                    self.logger.info(
+                        'Added Header[id={0}], '.format(header.id) +
+                        'extension_id: {0}, '.format(header.extension_id) +
+                        'title: {0}.'.format(header.title))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_header_row. ' +
+                                      'header = \n{0}'.format(header))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_header_row. ' +
                                   'columns: {0}'.format(columns))
 

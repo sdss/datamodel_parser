@@ -179,10 +179,8 @@ class Migrate:
                 self.populate_section_table()
                 self.populate_extension_table()
                 self.populate_data_table()
-#                self.populate_column_table()
-
-
-#                self.populate_header_table()
+                self.populate_column_table()
+                self.populate_header_table()
 #                self.populate_keyword_table()
 
     def parse_path(self):
@@ -534,43 +532,161 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_data_table. ' +
-                    'self.file_name: {0}'.format(self.file_name) +
-                    'self.file: {0}'.format(self.file))
+                    'Unable to populate_extension_table. '                 +
+                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {0}, ' .format(self.env_variable)  +
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.file_name: {0}, '    .format(self.file_name)     +
+                    'self.file: {0}'           .format(self.file)          +
+                    'self.file.file_extension_data: {0}'
+                    .format(self.file.file_extension_data)
+                    )
 
     def populate_column_table(self):
         '''Populate the column table.'''
         if self.ready:
-            if (self.file_name                    and
-                self.file                         and
-                self.file.file_extension_column
+            if (self.tree_edition               and
+                self.env_variable               and
+                self.location_path              and
+                self.file_name                  and
+                self.file                       and
+                self.file.file_extension_data
                 ):
-                for hdu_data in self.file.file_extension_column:
-                    # Need data_id for Column.load
-                    # Need extension_id for Data.load.
-                    # Need file_id and hdu_number for Extension.load
-                    file_name    = self.file_name # For obtaining file_id
+                for hdu_data in self.file.file_extension_data:
                     hdu_number   = hdu_data['extension_hdu_number']
                     header_title = hdu_data['header_title']
                     datatype     = hdu_data['column_datatype']
                     size         = hdu_data['column_size']
                     description  = hdu_data['column_description']
-                    self.columnbase.set_column_columns(
-                                    file_name    = file_name,
-                                    hdu_number   = int(hdu_number),
-                                    header_title = header_title,
-                                    datatype     = datatype,
-                                    size         = size,
-                                    description  = description,
-                                    )
-                    self.columnbase.populate_column_table()
-                    self.ready = self.columnbase.ready
+                    self.database.set_data_id(
+                                            tree_edition  = self.tree_edition,
+                                            env_variable  = self.env_variable,
+                                            location_path = self.location_path,
+                                            file_name     = self.file_name,
+                                            hdu_number    = hdu_number)
+                    self.database.set_column_columns(
+                                                header_title = header_title,
+                                                datatype     = datatype,
+                                                size         = size,
+                                                description  = description)
+                    self.database.populate_column_table()
+                    self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_column_table. ' +
-                    'self.file_name: {0}'.format(self.file_name) +
-                    'self.file: {0}'.format(self.file))
+                    'Unable to populate_extension_table. '                 +
+                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {0}, ' .format(self.env_variable)  +
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.file_name: {0}, '    .format(self.file_name)     +
+                    'self.file: {0}'           .format(self.file)          +
+                    'self.file.file_extension_data: {0}'
+                    .format(self.file.file_extension_data)
+                    )
+
+    def populate_header_table(self):
+        '''Populate the header table.'''
+        if self.ready:
+            if (self.tree_edition                   and
+                self.env_variable                   and
+                self.location_path                  and
+                self.file_name                      and
+                self.file                           and
+                self.file.file_extension_data       and
+                self.file.file_extension_headers
+                ):
+                data    = self.file.file_extension_data
+                headers = self.file.file_extension_headers
+                if len(data) == len(headers):
+                    for (hdu_data,hdu_header) in list(zip(data,headers)):
+                        hdu_number    = hdu_data['extension_hdu_number']
+                        header_title  = hdu_data['header_title']
+                        table_caption = hdu_header['table_caption']
+                        self.database.set_extension_id(
+                                            tree_edition  = self.tree_edition,
+                                            env_variable  = self.env_variable,
+                                            location_path = self.location_path,
+                                            file_name     = self.file_name,
+                                            hdu_number    = hdu_number)
+                        self.database.set_header_columns(
+                                                title         = header_title,
+                                                table_caption = table_caption)
+                        self.database.populate_header_table()
+                        self.ready = self.database.ready
+                else:
+                    self.ready = None
+                    self.logger.error(
+                            'Unable to populate_header_table. ' +
+                            'Data and header lists have unequal length. ' +
+                            'len(data): {0}, '.format(len(data)) +
+                            'len(headers): {0}, '.format(len(headers)))
+                            
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_extension_table. '                 +
+                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {0}, ' .format(self.env_variable)  +
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.file_name: {0}, '    .format(self.file_name)     +
+                    'self.file: {0}'           .format(self.file)          +
+                    'self.file.file_extension_data: {0}'
+                    .format(self.file.file_extension_data)                 +
+                    'self.file.file_extension_headers: {0}'
+                    .format(self.file.file_extension_headers)
+                    )
+
+    def populate_keyword_table(self):
+        '''Populate the keyword table.'''
+        if self.ready:
+            if (self.tree_edition                   and
+                self.env_variable                   and
+                self.location_path                  and
+                self.file_name                      and
+                self.file                           and
+                self.file.file_extension_data       and
+                self.file.file_extension_headers
+                ):
+                data    = self.file.file_extension_data
+                headers = self.file.file_extension_headers
+                if len(data) == len(headers):
+                    for (hdu_data,hdu_header) in list(zip(data,headers)):
+                        hdu_number    = hdu_data['extension_hdu_number']
+                        header_title  = hdu_data['header_title']
+                        table_caption = hdu_header['table_caption']
+                        self.database.set_extension_id(
+                                            tree_edition  = self.tree_edition,
+                                            env_variable  = self.env_variable,
+                                            location_path = self.location_path,
+                                            file_name     = self.file_name,
+                                            hdu_number    = hdu_number)
+                        self.database.set_keyword_columns(
+                                                header_title  = header_title,
+                                                table_caption = table_caption)
+                        self.database.populate_keyword_table()
+                        self.ready = self.database.ready
+                else:
+                    self.ready = None
+                    self.logger.error(
+                            'Unable to populate_keyword_table. ' +
+                            'Data and header lists have unequal length. ' +
+                            'len(data): {0}, '.format(len(data)) +
+                            'len(headers): {0}, '.format(len(headers)))
+                
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_extension_table. '                 +
+                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {0}, ' .format(self.env_variable)  +
+                    'self.location_path: {0}, '.format(self.location_path) +
+                    'self.file_name: {0}, '    .format(self.file_name)     +
+                    'self.file: {0}'           .format(self.file)          +
+                    'self.file.file_extension_data: {0}'
+                    .format(self.file.file_extension_data)                 +
+                    'self.file.file_extension_headers: {0}'
+                    .format(self.file.file_extension_headers)
+                    )
 
     def exit(self):
         '''Report the presense/lack of errors.'''
