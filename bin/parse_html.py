@@ -16,5 +16,9 @@ else:
 
 '''
 Examples:
+Template 1) https://data.sdss.org/datamodel/template.html
+
 parse_html.py --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html -l debug -v
+
+Template 2)
 '''

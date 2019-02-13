@@ -60,6 +60,9 @@ class File:
                     div_id = div['id']
                     if div_id == 'intro': self.parse_file_intro(div=div)
                     elif 'hdu' in div_id: self.parse_file_extension(div=div)
+                    elif 'example' in div_id:
+                        self.ready = False
+                        self.logger.error('Unknown div_id: {0}'.format(div_id))
                     else:
                         self.ready = False
                         self.logger.error('Unknown div_id: {0}'.format(div_id))
@@ -102,7 +105,7 @@ class File:
                             # Parse intro section hdu names
                             self.set_section_extension_names(div=child)
                             self.extension_count = len(
-                                                self.section_extension_names.keys())
+                                            self.section_extension_names.keys())
                         else:
                             # Parse intro titles and contents
                             tag_contents = self.get_tag_contents(tag=child)
