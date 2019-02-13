@@ -96,10 +96,11 @@ CREATE TABLE sdss.header (
 CREATE TABLE sdss.keyword (
     id SERIAL NOT NULL PRIMARY KEY,
     header_id INT4 REFERENCES sdss.header(id) NOT NULL,
+    keyword_order INT2 NOT NULL,
     keyword VARCHAR(32) NOT NULL,
-    value VARCHAR(80) NOT NULL,
-    type VARCHAR(80) NOT NULL,
-    comment VARCHAR(256) NOT NULL,
+    value VARCHAR(256) NOT NULL,
+    type VARCHAR(80),
+    comment VARCHAR(256),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

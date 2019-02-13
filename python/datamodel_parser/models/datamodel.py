@@ -469,24 +469,29 @@ class Keyword(db.Model):
     header_id = db.Column(db.Integer,
                           db.ForeignKey('sdss.header.id'),
                           nullable = False)
+    keyword_order = db.Column(db.Integer, nullable = False)
     keyword = db.Column(db.String(32), nullable = False)
-    value = db.Column(db.String(80), nullable = False)
-    type = db.Column(db.String(80), nullable = False)
-    comment = db.Column(db.String(256), nullable = False)
+    value = db.Column(db.String(256), nullable = False)
+    type = db.Column(db.String(80))
+    comment = db.Column(db.String(256))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
 
     @staticmethod
-    def load_all(header_id=None):
-        if header_id:
-            try: keywords = Keyword.query.filter(Keyword.header_id==header_id).all()
-            except: keywords = None
+    def load(header_id=None,keyword_order=None,keyword=None):
+        if header_id and keyword_order!=None and keyword:
+            try: header = (Keyword.query
+                                .filter(Keyword.header_id==header_id)
+                                .filter(Keyword.keyword_order==keyword_order)
+                                .filter(Keyword.keyword==keyword)
+                                .one())
+            except: header = None
         else:
-            keywords = None
-        return keywords
-
+            header = None
+        return header
+    
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():

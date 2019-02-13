@@ -9,6 +9,7 @@ from datamodel_parser.models.datamodel import Extension
 from datamodel_parser.models.datamodel import Data
 from datamodel_parser.models.datamodel import Column
 from datamodel_parser.models.datamodel import Header
+from datamodel_parser.models.datamodel import Keyword
 from json import dumps
 
 class Database:
@@ -165,6 +166,47 @@ class Database:
             else:
                 self.logger = False
                 self.logger.error('Unable to set_extension_id. '
+                                  'tree_edition: {0}'.format(tree_edition) +
+                                  'env_variable: {0}'.format(env_variable) +
+                                  'location_path: {0}'.format(location_path) +
+                                  'file_name: {0}'.format(file_name)         +
+                                  'hdu_number: {0}'.format(hdu_number)
+                                  )
+
+    def set_header_id(self,
+                         tree_edition  = None,
+                         env_variable  = None,
+                         location_path = None,
+                         file_name     = None,
+                         hdu_number    = None,
+                         header_title  = None
+                         ):
+        '''Get header_id.'''
+        self.header_id = None
+        if self.ready:
+            if (tree_edition     and
+                env_variable     and
+                location_path    and
+                file_name        and
+                hdu_number!=None and
+                header_title
+                ):
+                self.set_extension_id(tree_edition  = tree_edition,
+                                      env_variable  = env_variable,
+                                      location_path = location_path,
+                                      file_name     = file_name,
+                                      hdu_number    = hdu_number)
+                self.set_header(extension_id=self.extension_id,
+                                title=header_title)
+                self.header_id = self.header.id if self.header else None
+                if not self.header_id:
+                    self.ready = False
+                    self.logger.error(
+                            'Unable to set_header_id. ' +
+                            'self.header_id: {0}'.format(self.header_id))
+            else:
+                self.logger = False
+                self.logger.error('Unable to set_header_id. '
                                   'tree_edition: {0}'.format(tree_edition) +
                                   'env_variable: {0}'.format(env_variable) +
                                   'location_path: {0}'.format(location_path) +
@@ -1210,7 +1252,7 @@ class Database:
             if self.header: self.update_header_row()
             else:           self.create_header_row()
 
-    def set_header(self,extension_id=None,title=None,table_caption=None):
+    def set_header(self,extension_id=None,title=None):
         '''Load row from header table.'''
         self.header = None
         if self.ready:
@@ -1222,14 +1264,10 @@ class Database:
                 else self.header_columns['title']
                 if self.header_columns and 'title' in self.header_columns
                 else None)
-            table_caption = (table_caption if table_caption
-                else self.header_columns['table_caption']
-                if self.header_columns and 'table_caption' in self.header_columns
-                else None)
-            if extension_id and title and table_caption:
+            if extension_id and title:
                 self.header = (Header.load(extension_id  = extension_id,
                                            title         = title)
-                               if extension_id else None)
+                               if extension_id and title else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_header. ' +
@@ -1287,5 +1325,124 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to create_header_row. ' +
+                                  'columns: {0}'.format(columns))
+
+    def set_keyword_columns(self,keyword_order=None,table_row=None):
+        '''Set columns of the keyword table.'''
+        self.keyword_columns = dict()
+        if self.ready:
+            header_id = self.header_id if self.header_id else None
+            if header_id and keyword_order!=None and table_row:
+                keyword = table_row[0] if table_row else None
+                value   = table_row[1] if table_row else None
+                type    = table_row[2] if table_row else None
+                comment = table_row[3] if table_row else None
+                self.keyword_columns = {
+                    'header_id'     : header_id     if header_id           else None,
+                    'keyword_order' : keyword_order if keyword_order!=None else None,
+                    'keyword'       : keyword       if keyword             else None,
+                    'value'         : value         if value!=None         else None,
+                    'type'          : type          if type                else '',
+                    'comment'       : comment       if comment             else '',
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_keyword_columns. ' +
+                    'header_id: {0}, '.format(header_id) +
+                    'keyword_order: {0}, '.format(keyword_order) +
+                    'table_row: {0}, '.format(table_row))
+
+    def populate_keyword_table(self):
+        '''Update/Create keyword table row.'''
+        if self.ready:
+            self.set_keyword()
+            if self.keyword: self.update_keyword_row()
+            else:            self.create_keyword_row()
+
+    def set_keyword(self,header_id=None,keyword_order=None,keyword=None):
+        '''Load row from keyword table.'''
+        self.keyword = None
+        if self.ready:
+            header_id = (header_id if header_id
+                else self.keyword_columns['header_id']
+                if self.keyword_columns and 'header_id' in self.keyword_columns
+                else None)
+            keyword_order = (keyword_order if keyword_order!=None
+                else self.keyword_columns['keyword_order']
+                if self.keyword_columns and 'keyword_order' in self.keyword_columns
+                else None)
+            keyword = (keyword if keyword
+                else self.keyword_columns['keyword']
+                if self.keyword_columns and 'keyword' in self.keyword_columns
+                else None)
+            if header_id and keyword_order!=None and keyword:
+                self.keyword = (Keyword.load(header_id = header_id,
+                                             keyword_order     = keyword_order,
+                                             keyword   = keyword)
+                                if header_id and keyword_order!=None and keyword
+                                else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_keyword. ' +
+                                  'header_id: {0}, '.format(header_id))
+
+    def update_keyword_row(self):
+        '''Update row in keyword table.'''
+        if self.ready:
+            columns = self.keyword_columns if self.keyword_columns else None
+            if columns:
+                self.logger.debug('Updating row in keyword table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                skip_keys = []
+                self.keyword.update_if_needed(columns=columns,
+                                             skip_keys=skip_keys)
+                if self.keyword.updated:
+                    self.logger.info(
+                        'Updated Keyword[id={0}], '.format(self.keyword.id) +
+                        'header_id: {0}, '.format(self.keyword.header_id) +
+                        'keyword: {0}.'.format(self.keyword.keyword))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_keyword_row. columns: {0}'
+                                    .format(columns))
+
+    def create_keyword_row(self):
+        '''Create row in keyword table.'''
+        if self.ready:
+            columns = self.keyword_columns if self.keyword_columns else None
+            if columns:
+                self.logger.debug('Adding new row to keyword table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                keyword = Keyword(
+                    header_id = columns['header_id']
+                        if columns and 'header_id' in columns else None,
+                    keyword_order = columns['keyword_order']
+                        if columns and 'keyword_order' in columns else None,
+                    keyword = columns['keyword']
+                        if columns and 'keyword' in columns else None,
+                    value = columns['value']
+                        if columns and 'value' in columns else None,
+                    type = columns['type']
+                        if columns and 'type' in columns else None,
+                    comment = columns['comment']
+                        if columns and 'comment' in columns else None,
+                                  )
+                if keyword:
+                    keyword.add()
+                    keyword.commit()
+                    self.logger.info(
+                        'Added Keyword[id={0}], '.format(keyword.id) +
+                        'header_id: {0}, '.format(keyword.header_id) +
+                        'keyword: {0}.'.format(keyword.keyword))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_keyword_row. ' +
+                                      'keyword = \n{0}'.format(keyword))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_keyword_row. ' +
                                   'columns: {0}'.format(columns))
 

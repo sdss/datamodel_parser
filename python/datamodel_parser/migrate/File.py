@@ -367,20 +367,23 @@ class File:
                 # table column headers
                 table_keywords = list()
                 for string in table.find_next('thead').stripped_strings:
-                    table_keywords.append(string)
+                    table_keywords.append(string.lower())
                 # table values
                 body = table.find_next('tbody')
                 rows = body.find_all('tr')
-                table_values = dict()
+                table_rows = dict()
                 for (row_order,row) in enumerate(rows):
                     row_data = list()
                     for data in row.find_all('td'):
-                        data_string = str(data.string) if data.string else ''
+                        number_descendants = self.get_number_descendants(node=data)
+                        if data.string:          data_string = str(data.string)
+                        elif number_descendants: data_string = str(data)
+                        else:                    data_string = ''
                         row_data.append(data_string)
-                    table_values[row_order]  = row_data
+                    table_rows[row_order]  = row_data
                 hdu_header['table_caption']  = table_caption
                 hdu_header['table_keywords'] = table_keywords
-                hdu_header['table_values']   = table_values
+                hdu_header['table_rows']   = table_rows
                 self.file_extension_headers.append(hdu_header)
             else:
                 self.ready = False

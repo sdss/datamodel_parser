@@ -181,7 +181,7 @@ class Migrate:
                 self.populate_data_table()
                 self.populate_column_table()
                 self.populate_header_table()
-#                self.populate_keyword_table()
+                self.populate_keyword_table()
 
     def parse_path(self):
         self.env_variable = None
@@ -651,20 +651,23 @@ class Migrate:
                 headers = self.file.file_extension_headers
                 if len(data) == len(headers):
                     for (hdu_data,hdu_header) in list(zip(data,headers)):
-                        hdu_number    = hdu_data['extension_hdu_number']
-                        header_title  = hdu_data['header_title']
-                        table_caption = hdu_header['table_caption']
-                        self.database.set_extension_id(
+                        hdu_number     = hdu_data['extension_hdu_number']
+                        header_title   = hdu_data['header_title']
+                        self.database.set_header_id(
                                             tree_edition  = self.tree_edition,
                                             env_variable  = self.env_variable,
                                             location_path = self.location_path,
                                             file_name     = self.file_name,
-                                            hdu_number    = hdu_number)
-                        self.database.set_keyword_columns(
-                                                header_title  = header_title,
-                                                table_caption = table_caption)
-                        self.database.populate_keyword_table()
-                        self.ready = self.database.ready
+                                            hdu_number    = hdu_number,
+                                            header_title  = header_title)
+                        table_keywords = hdu_header['table_keywords']
+                        table_rows   = hdu_header['table_rows']
+                        for keyword_order in table_rows.keys():
+                            self.database.set_keyword_columns(
+                                    keyword_order = keyword_order,
+                                    table_row     = table_rows[keyword_order])
+                            self.database.populate_keyword_table()
+                            self.ready = self.database.ready
                 else:
                     self.ready = None
                     self.logger.error(
