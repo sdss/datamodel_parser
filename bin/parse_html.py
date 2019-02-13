@@ -14,3 +14,7 @@ else:
     migrate.populate_database()
     migrate.exit()
 
+'''
+Examples:
+parse_html.py --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html -l debug -v
+'''
