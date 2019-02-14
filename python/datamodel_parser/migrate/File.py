@@ -51,18 +51,6 @@ class File:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
 
-    def parse_file(self):
-        '''Parse the given file using the determined File instance.'''
-        self.file.parse_file()
-        self.extension_count         = self.file.extension_count
-        self.intro_heading_orders    = self.file.intro_heading_orders
-        self.intro_heading_levels    = self.file.intro_heading_levels
-        self.intro_heading_titles    = self.file.intro_heading_titles
-        self.intro_descriptions      = self.file.intro_descriptions
-        self.section_extension_names = self.file.section_extension_names
-        self.file_extension_data     = self.file.file_extension_data
-        self.file_extension_headers  = self.file.file_extension_headers
-
     def set_file(self):
         ''' Set class File instance.'''
         self.file = None
@@ -176,4 +164,16 @@ class File:
                 self.ready = False
                 self.logger.error('Unable to set_file2. ' +
                                   'divs: {0}'.format(divs))
+
+    def parse_file(self):
+        '''Parse the given file using the determined File instance.'''
+        self.file.parse_file()
+        self.extension_count         = self.file.extension_count
+        self.intro_heading_orders    = self.file.intro_heading_orders
+        self.intro_heading_levels    = self.file.intro_heading_levels
+        self.intro_heading_titles    = self.file.intro_heading_titles
+        self.intro_descriptions      = self.file.intro_descriptions
+        self.section_extension_names = self.file.section_extension_names
+        self.file_extension_data     = self.file.file_extension_data
+        self.file_extension_headers  = self.file.file_extension_headers
 
