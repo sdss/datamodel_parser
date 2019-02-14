@@ -184,6 +184,7 @@ class Migrate:
                 self.populate_keyword_table()
 
     def parse_path(self):
+        '''Extract information from the given file path.'''
         self.env_variable = None
         self.location_path = None
         if self.ready:
@@ -217,59 +218,17 @@ class Migrate:
                 self.logger.error('Unable to set_soup. self.html_text: {0}'
                                     .format(self.html_text))
 
-################################################################################
-# This code will need to be put into another class
-# which determines which file class to instantiate
-
     def set_file(self):
-        ''' Set instance of File class.'''
+        ''' Set class File instance.'''
         self.file = None
         if self.ready:
             if self.soup:
                 body = self.soup.body if self.soup else None
-                self.set_all_divs(body=body)
-                if self.ready and self.all_divs: self.set_file_div(body=body)
-                else:
-                    self.ready = False
-                    self.logger.error('Not working on this File class yet.')
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_file. ' +
-                                  'self.soup: {0}'.format(self.soup))
-
-    def set_all_divs(self,body=None):
-        '''Check if the HTML body is comprised of only division tags.'''
-        self.all_divs = True
-        if self.ready:
-            if body:
-                all_div = True
-                for child in body.children:
-                    if child.name and child.name != 'div': self.all_div = False
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_all_divs. ' +
-                                  'body: '.format(body))
-
-    def set_file_div(self,body=None):
-        '''Set instance of File derived class comprised of HTML div's.'''
-        if self.ready:
-            if body:
-                divs = body.children
-                self.file = (
-                    File(logger=self.logger,options=self.options,divs=divs)
-                    if self.logger and self.options and self.soup else None)
-                self.ready = bool(self.file and self.file.ready)
-                if not self.ready:
-                    self.logger.error(
-                        'Unable to set_file. '             +
-                        'self.file: {0}'.format(self.file) +
-                        'self.file.ready: {0}'.format(self.file.ready))
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_file_div. ' +
-                                  'divs: {0}'.format(divs))
-
-########################################################################
+                self.file = (File(logger=self.logger,
+                                  options=self.options,
+                                  body=body)
+                             if self.logger and self.options and body else None)
+                self.ready = self.file.ready
 
     def populate_tree_table(self):
         '''Populate the tree table.'''
