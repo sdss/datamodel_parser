@@ -98,9 +98,9 @@ class File1:
                         tag_name = child.name
                         if tag_name == 'div':
                             # Parse intro section hdu names
-                            self.set_section_extension_names(div=child)
+                            self.set_section_hdu_names(div=child)
                             self.extension_count = len(
-                                            self.section_extension_names.keys())
+                                                self.section_hdu_names.keys())
                         else:
                             # Parse intro titles and contents
                             tag_contents = self.get_tag_contents(tag=child)
@@ -137,30 +137,30 @@ class File1:
                                   'node: {}'.format(node))
         return number_descendants
 
-    def set_section_extension_names(self,div=None):
+    def set_section_hdu_names(self,div=None):
         '''Get the extension names from the intro Section.'''
-        self.section_extension_names = dict()
+        self.section_hdu_names = dict()
         if self.ready:
             if div:
                 for string in [item for item in div.strings if item != '\n']:
                     if 'HDU' in string:
                         split = string.split(':')
                         extension = split[0].lower().strip() if split else None
-                        extension_hdu_number = (extension.replace('hdu','')
+                        hdu_number = (extension.replace('hdu','')
                                                 if extension else None)
-                        name      = split[1].lower().strip() if split else None
-                        if extension_hdu_number and name:
-                            self.section_extension_names[extension_hdu_number] = name
+                        hdu_name   = split[1].lower().strip() if split else None
+                        if hdu_number and hdu_name:
+                            self.section_hdu_names[hdu_number] = hdu_name
                         else:
                             self.ready = False
                             self.logger.error(
-                                    'Unable to set_section_extension_names.' +
-                                    'extension_hdu_number: {}'
-                                        .format(extension_hdu_number) +
-                                    'name: {}'.format(name))
+                                    'Unable to set_section_hdu_names.' +
+                                    'hdu_number: {}'
+                                        .format(hdu_number) +
+                                    'hdu_name: {}'.format(hdu_name))
             else:
                 self.ready = False
-                self.logger.error('Unable to set_section_extension_names.' +
+                self.logger.error('Unable to set_section_hdu_names.' +
                                   'div: {}'.format(div))
 
     def get_tag_contents(self,tag=None):
@@ -274,8 +274,7 @@ class File1:
                 self.ready = False
                 self.logger.error(
                     'Unable to check_valid_assumptions. ' +
-                    'names: {0}, contents: {1}'.format(names,contents)
-                                  )
+                    'names: {0}, contents: {1}'.format(names,contents))
 
     def set_parent_names(self,div=None):
         '''Set a list of parent for the given division tag.'''
@@ -306,7 +305,9 @@ class File1:
                     extension_hdu_number = int(
                                             split[0].lower().replace('hdu',''))
                     header_title =   split[1].lower()
-                else: self.logger.error("Expected ':' in heading")
+                else:
+                    self.ready = False
+                    self.logger.error("Expected ':' in heading")
                 
                 # column.description
                 column_description = div.find_next('p').string

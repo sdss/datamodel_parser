@@ -406,14 +406,14 @@ class Migrate:
                 self.location_path                and
                 self.file_name                    and
                 self.file                         and
-                self.file.section_extension_names
+                self.file.section_hdu_names
                 ):
                 self.database.set_file_id(tree_edition  = self.tree_edition,
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
-                hdu_numbers    = self.file.section_extension_names.keys()
-                hdu_names      = self.file.section_extension_names.values()
+                hdu_numbers    = self.file.section_hdu_names.keys()
+                hdu_names      = self.file.section_hdu_names.values()
 
                 for (hdu_number,hdu_name) in list(zip(hdu_numbers,hdu_names)):
                     self.database.set_section_columns(
@@ -430,8 +430,8 @@ class Migrate:
                     'self.location_path: {0}, '.format(self.location_path) +
                     'self.file_name: {0}, '    .format(self.file_name)     +
                     'self.file: {0},'          .format(self.file)          +
-                    'self.file.section_extension_names: {0}.'
-                    .format(self.file.section_extension_names))
+                    'self.file.section_hdu_names: {0}.'
+                    .format(self.file.section_hdu_names))
 
     def populate_extension_table(self):
         '''Populate the extension table.'''

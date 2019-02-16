@@ -173,7 +173,7 @@ class File:
         self.intro_heading_levels    = self.file.intro_heading_levels
         self.intro_heading_titles    = self.file.intro_heading_titles
         self.intro_descriptions      = self.file.intro_descriptions
-        self.section_extension_names = self.file.section_extension_names
+        self.section_hdu_names       = self.file.section_hdu_names
         self.file_extension_data     = self.file.file_extension_data
         self.file_extension_headers  = self.file.file_extension_headers
 
