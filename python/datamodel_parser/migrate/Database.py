@@ -716,7 +716,7 @@ class Database:
             file_id = self.file_id if self.file_id else None
             if (file_id               and
                 heading_order != None and
-                heading_level         and
+#                heading_level != None and
                 heading_title         and
                 description != None
                 ):
@@ -726,7 +726,7 @@ class Database:
                     'heading_order' : heading_order
                                       if heading_order != None else None,
                     'heading_level' : heading_level
-                                      if heading_level else None,
+                                      if heading_level != None else None,
                     'heading_title' : heading_title
                                       if heading_title else None,
                     'description'   : description
@@ -1131,13 +1131,18 @@ class Database:
         self.column_columns = dict()
         if self.ready:
             data_id = self.data_id if self.data_id else None
-            if data_id and header_title and datatype and size and description:
+            if (data_id           and
+                header_title      
+#                datatype!=None    and
+#                size!=None        and
+#                description!=None
+                ):
                 self.column_columns = {
-                    'data_id'      : data_id      if data_id      else None,
-                    'header_title' : header_title if header_title else None,
-                    'datatype'     : datatype     if datatype     else None,
-                    'size'         : size         if size         else None,
-                    'description'  : description  if description  else None,
+                    'data_id'      : data_id      if data_id           else None,
+                    'header_title' : header_title if header_title      else None,
+                    'datatype'     : datatype     if datatype!=None    else None,
+                    'size'         : size         if size!=None        else None,
+                    'description'  : description  if description!=None else None,
                     }
             else:
                 self.ready = False
@@ -1231,11 +1236,14 @@ class Database:
         self.header_columns = dict()
         if self.ready:
             extension_id = self.extension_id if self.extension_id else None
-            if extension_id and title and table_caption:
+            if extension_id and title: #and table_caption!=None:
                 self.header_columns = {
-                    'extension_id'  : extension_id  if extension_id  else None,
-                    'title'         : title         if title         else None,
-                    'table_caption' : table_caption if table_caption else None,
+                    'extension_id'  : extension_id  if extension_id
+                                                    else None,
+                    'title'         : title         if title
+                                                    else None,
+                    'table_caption' : table_caption if table_caption!=None
+                                                    else None,
                     }
             else:
                 self.ready = False
@@ -1342,8 +1350,8 @@ class Database:
                     'keyword_order' : keyword_order if keyword_order!=None else None,
                     'keyword'       : keyword       if keyword             else None,
                     'value'         : value         if value!=None         else None,
-                    'type'          : type          if type                else '',
-                    'comment'       : comment       if comment             else '',
+                    'type'          : type          if type                else None,
+                    'comment'       : comment       if comment             else None,
                     }
             else:
                 self.ready = False

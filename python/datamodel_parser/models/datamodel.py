@@ -265,7 +265,7 @@ class Intro(db.Model):
                         nullable = False)
     heading_order = db.Column(db.Integer, nullable = False)
     heading_level = db.Column(db.Integer)
-    heading_title = db.Column(db.String(64), nullable = False, unique = True)
+    heading_title = db.Column(db.String(64), nullable = False)
     description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
@@ -418,7 +418,7 @@ class Header(db.Model):
     extension_id = db.Column(db.Integer,
                              db.ForeignKey('sdss.extension.id'),
                              nullable = False)
-    title = db.Column(db.String(32), nullable = False, unique = True)
+    title = db.Column(db.String(32), nullable = False)
     table_caption = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
@@ -470,8 +470,8 @@ class Keyword(db.Model):
                           db.ForeignKey('sdss.header.id'),
                           nullable = False)
     keyword_order = db.Column(db.Integer, nullable = False)
-    keyword = db.Column(db.String(32), nullable = False)
-    value = db.Column(db.String(256), nullable = False)
+    keyword = db.Column(db.String(64), nullable = False)
+    value = db.Column(db.String(256))
     type = db.Column(db.String(80))
     comment = db.Column(db.String(256))
     created = db.Column(db.DateTime, default=datetime.now)
@@ -574,8 +574,8 @@ class Column(db.Model):
                         db.ForeignKey('sdss.data.id'),
                         nullable = False)
     header_title = db.Column(db.String(32), nullable = False)
-    datatype = db.Column(db.String(64), nullable = False)
-    size = db.Column(db.String(32), nullable = False)
+    datatype = db.Column(db.String(64))
+    size = db.Column(db.String(32))
     description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,

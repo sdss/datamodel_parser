@@ -362,7 +362,7 @@ class File1:
                         number_descendants = self.get_number_descendants(node=data)
                         if data.string:          data_string = str(data.string)
                         elif number_descendants: data_string = str(data)
-                        else:                    data_string = ''
+                        else:                    data_string = None
                         row_data.append(data_string)
                     table_rows[row_order]  = row_data
                 hdu_header['table_caption']  = table_caption

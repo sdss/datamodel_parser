@@ -61,7 +61,7 @@ CREATE TABLE sdss.intro (
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     heading_order INT2 NOT NULL,
     heading_level INT2,
-    heading_title VARCHAR(64) NOT NULL UNIQUE,
+    heading_title VARCHAR(64) NOT NULL,
     description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -79,7 +79,7 @@ CREATE TABLE sdss.section (
 CREATE TABLE sdss.extension (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
-    hdu_number INT2,
+    hdu_number INT2 NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -87,7 +87,7 @@ CREATE TABLE sdss.extension (
 CREATE TABLE sdss.header (
     id SERIAL NOT NULL PRIMARY KEY,
     extension_id INT4 REFERENCES sdss.extension(id) NOT NULL,
-    title VARCHAR(32) NOT NULL UNIQUE,
+    title VARCHAR(32) NOT NULL,
     table_caption VARCHAR(128),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -97,8 +97,8 @@ CREATE TABLE sdss.keyword (
     id SERIAL NOT NULL PRIMARY KEY,
     header_id INT4 REFERENCES sdss.header(id) NOT NULL,
     keyword_order INT2 NOT NULL,
-    keyword VARCHAR(32) NOT NULL,
-    value VARCHAR(256) NOT NULL,
+    keyword VARCHAR(64) NOT NULL,
+    value VARCHAR(256),
     type VARCHAR(80),
     comment VARCHAR(256),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
@@ -117,8 +117,8 @@ CREATE TABLE sdss.column (
     id SERIAL NOT NULL PRIMARY KEY,
     data_id INT4 REFERENCES sdss.data(id) NOT NULL,
     header_title VARCHAR(32) NOT NULL,
-    datatype VARCHAR(64) NOT NULL,
-    size VARCHAR(32) NOT NULL,
+    datatype VARCHAR(64),
+    size VARCHAR(32),
     description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()

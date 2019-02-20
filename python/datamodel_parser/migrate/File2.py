@@ -55,7 +55,7 @@ class File2:
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
-        self.file_extension_data   = list()
+        self.file_extension_data    = list()
         self.file_extension_headers = list()
         if self.ready:
             if self.divs:
@@ -101,13 +101,9 @@ class File2:
                     self.set_intro_table_information(
                                                     headings     = dt_list[:-1],
                                                     descriptions = dd_list[:-1])
-                    self.section_hdu_names(section_title = dt_list[-1],
-                                           sections      = dd_list[-1])
-                    print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
-                    print('self.intro_heading_levels: %r' % self.intro_heading_levels)
-                    print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
-                    print('self.intro_descriptions: {}'.format(self.intro_descriptions))
-                    print('self.section_extension_names: {}'.format(self.section_extension_names))
+                    self.set_section_hdu_names(section_title = dt_list[-1],
+                                                     sections      = dd_list[-1])
+                    self.extension_count = len(self.section_hdu_names.keys())
                 else:
                     self.ready = False
                     self.logger.error(
@@ -137,7 +133,7 @@ class File2:
                          self.append_intro_description(description=description)
                     number_headings = len(headings)
                     self.intro_heading_orders = list(range(number_headings))
-                    self.intro_heading_levels = [''] * number_headings
+                    self.intro_heading_levels = [None] * number_headings
                 else:
                     self.ready = False
                     self.logger.error(
@@ -182,9 +178,9 @@ class File2:
                 self.logger.error('Unable to append_intro_description. ' +
                                   'description: {0}'.format(description))
 
-    def section_hdu_names(self,section_title=None,sections=None):
+    def set_section_hdu_names(self,section_title=None,sections=None):
         '''Get the extension names from the intro Section.'''
-        self.section_extension_names = dict()
+        self.section_hdu_names = dict()
         if self.ready:
             if section_title and sections:
                 extension_hdu_numbers = list()
@@ -197,40 +193,41 @@ class File2:
                             extension_hdu_number = (
                                         string.lower().replace('hdu','').strip()
                                         if string else None)
+                            extension_hdu_number = int(extension_hdu_number)
                             extension_hdu_numbers.append(extension_hdu_number)
                         elif string.strip()[0] == ':':
                             name = string.split(':')[1].strip()
                             extension_hdu_names.append(name)
                     if (extension_hdu_numbers and extension_hdu_names and
                         len(extension_hdu_numbers)==len(extension_hdu_names)):
-                        self.section_extension_names = dict(zip(
+                        self.section_hdu_names = dict(zip(
                                                         extension_hdu_numbers,
                                                         extension_hdu_names))
                     else:
                         self.ready = False
                         self.logger.error(
-                                'Unable to section_hdu_names.' +
+                                'Unable to set_section_hdu_names.' +
                                 'extension_hdu_numbers: {}'
                                     .format(extension_hdu_numbers)       +
-                                'section_extension_names: {}'
-                                    .format(section_extension_names)     +
+                                'section_hdu_names: {}'
+                                    .format(section_hdu_names)     +
                                 'len(extension_hdu_numbers): {}'
                                     .format(len(extension_hdu_numbers))       +
-                                'len(section_extension_names): {}'
-                                    .format(len(section_extension_names)))
+                                'len(section_hdu_names): {}'
+                                    .format(len(section_hdu_names)))
             else:
                 self.ready = False
-                self.logger.error('Unable to section_hdu_names.' +
+                self.logger.error('Unable to set_section_hdu_names.' +
                                   'section_title: {}, '.format(section_title) +
                                   'sections: {}.'.format(sections))
 
     def parse_file_extension(self,div=None):
         '''Parse file extension content from given division tag.'''
         if self.ready:
-#            self.parse_file_extension_data(div=div)
+            self.parse_file_extension_data(div=div)
             self.parse_file_extension_header(div=div)
 
-    def parse_file_extension_header(self,div=None):
+    def parse_file_extension_data(self,div=None):
         '''Parse file description content from given division tag.'''
         if self.ready:
             if div:
@@ -238,23 +235,69 @@ class File2:
                 if self.ready:
                     # extension.hdu_number and header.title
                     heading = div.find_next('h2').string
-                    split = heading.split(':')
+                    split = heading.split(':') if heading else None
                     if split:
                         extension_hdu_number = int(
                                             split[0].lower().replace('hdu',''))
                         header_title =   split[1].lower()
                     else:
                         self.ready = False
-                        self.logger.error("Expected ':' in heading")
-
-                    print('extension_hdu_number: %r' % extension_hdu_number)
-                    print('header_title: %r' % header_title)
+                        self.logger.error("Expected ':' in heading." +
+                                          'heading: {}'.format(heading))
+                    # data.is_image
                     header = div.find_next('pre').string
-                    self.parse_header(header=header)
+                    rows = header.split('\n') if header else list()
+                    rows = [row for row in rows
+                            if row and 'XTENSION' in row and 'IMAGE' in row]
+                    data_is_image = bool(rows)
+                    hdu_data = dict()
+                    hdu_data['extension_hdu_number'] = extension_hdu_number
+                    hdu_data['header_title']         = header_title
+                    hdu_data['data_is_image']        = data_is_image
+                    hdu_data['column_datatype']      = None
+                    hdu_data['column_size']          = None
+                    hdu_data['column_description']   = None
+                    self.file_extension_data.append(hdu_data)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
                                   'div: {0}'.format(div))
+
+
+    def parse_file_extension_header(self,div=None):
+        '''Parse file description content from given division tag.'''
+        hdu_header = dict()
+        if self.ready:
+            if div:
+                self.check_valid_assumptions(div=div)
+                if self.ready:
+                    # table caption
+                    table_caption = None
+                    # table column headers
+                    table_keywords = ['key','value','type','comment']
+                    # table values
+                    table_rows = dict()
+                    header = div.find_next('pre').string
+                    rows = header.split('\n') if header else list()
+                    rows = [row for row in rows if row]
+                    if rows:
+                        for (row_order,row) in enumerate(rows):
+                            self.set_row_data(row=row)
+                            table_rows[row_order] = (self.row_data
+                                                     if self.row_data else None)
+                        hdu_header['table_caption']  = table_caption
+                        hdu_header['table_keywords'] = table_keywords
+                        hdu_header['table_rows']     = table_rows
+                        self.file_extension_headers.append(hdu_header)
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                                    'Unable to parse_file_extension_header. ' +
+                                    'rows: {0}'.format(rows))
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_extension_header. ' +
+                                  'header: {0}'.format(header))
 
     def check_valid_assumptions(self,div=None):
         '''Verify that all of my assumptions are valid'''
@@ -283,19 +326,47 @@ class File2:
                 self.logger.error('Unable to set_child_names. ' +
                                   'node: {0}'.format(node))
 
-    def parse_header(self,header=None):
-        '''Parse file description content from given header string.'''
-        hdu_header = dict()
+    def set_row_data(self,row=None):
+        '''Set the header keyword-value pairs for the given row.'''
+        self.row_data = list()
         if self.ready:
-            if header:
-                    print('header: %r' % header)
-                    input('pause')
-
+            if row:
+                keyword = None
+                value = None
+                type = None
+                comment = None
+                value_comment = None
+                if 'HISTORY' in row:
+                    keyword = 'HISTORY'
+                    value_comment = row.replace('HISTORY','')
+                elif '=' in row:
+                    split = row.split('=')
+                    keyword       = split[0].strip() if split else None
+                    value_comment = split[1]         if split else None
+                elif 'END' in row:
+                    keyword = 'END'
+                    value_comment = row.replace('END','')
+                else:
+                    self.ready = False
+                    self.logger.error(
+                            'Unable to set_row_data. ' +
+                            "The strings 'HISTORY', 'END' and '=' " +
+                            'not found in row. ' +
+                            'row: {0}'.format(row))
+                if value_comment and '/' in value_comment:
+                    split = value_comment.split('/')
+                    value   = split[0]         if split else None
+                    comment = split[1].strip() if split else None
+                else:
+                    value = value_comment
+                    comment = None
+                self.row_data = ([keyword,value,type,comment]
+                                if keyword or value or type or comment
+                                else list())
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_extension_header. ' +
-                                  'header: {0}'.format(header))
-
+                self.logger.error('Unable to set_row_data. ' +
+                                  'row: {0}'.format(row))
 
 ###########################################################################
 ################       Use for list style file intros
