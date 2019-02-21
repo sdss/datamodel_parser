@@ -177,13 +177,13 @@ class File:
         self.file_extension_data     = self.file.file_extension_data
         self.file_extension_headers  = self.file.file_extension_headers
 
-#        print('self.extension_count: {}'.format(self.extension_count))
+        print('self.extension_count: {}'.format(self.extension_count))
 #        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
 #        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
 #        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 #        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
 #        print('self.section_hdu_names: {}'.format(self.section_hdu_names))
-#        print('self.file_extension_data: {}'.format(self.file_extension_data))
+#        print('self.file_extension_data: \n' + dumps(self.file_extension_data,indent=1))
 #        print('self.file_extension_headers: {}'.format(self.file_extension_headers))
 #        input('pause')
 

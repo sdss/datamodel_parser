@@ -55,7 +55,7 @@ class Env(db.Model):
     tree_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.tree.id'),
                         nullable = False)
-    variable = db.Column(db.String(32), nullable = False, unique = True)
+    variable = db.Column(db.String(32), nullable = False)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -315,8 +315,8 @@ class Section(db.Model):
     file_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
-    hdu_number = db.Column(db.Integer, nullable = False)
-    hdu_name = db.Column(db.String(32), nullable = False)
+    hdu_number = db.Column(db.Integer)
+    hdu_name = db.Column(db.String(32))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -324,11 +324,14 @@ class Section(db.Model):
 
     @staticmethod
     def load(file_id=None,hdu_number=None,hdu_name=None):
-        if file_id and hdu_number!=None and hdu_name:
+        if file_id and hdu_number is not None and hdu_name:
             try: section = (Section.query.filter(Section.file_id==file_id)
                                          .filter(Section.hdu_number==hdu_number)
                                          .filter(Section.hdu_name==hdu_name)
                                          .one())
+            except: section = None
+        elif file_id and hdu_number is None and hdu_name is None:
+            try: section = Section.query.filter(Section.file_id==file_id).one()
             except: section = None
         else:
             section = None
@@ -375,7 +378,7 @@ class Extension(db.Model):
 
     @staticmethod
     def load(file_id=None,hdu_number=None):
-        if file_id and hdu_number!=None:
+        if file_id and hdu_number is not None:
             try: extension = (Extension.query
                                        .filter(Extension.file_id==file_id)
                                        .filter(Extension.hdu_number==hdu_number)
@@ -481,7 +484,7 @@ class Keyword(db.Model):
 
     @staticmethod
     def load(header_id=None,keyword_order=None,keyword=None):
-        if header_id and keyword_order!=None and keyword:
+        if header_id and keyword_order is not None and keyword:
             try: header = (Keyword.query
                                 .filter(Keyword.header_id==header_id)
                                 .filter(Keyword.keyword_order==keyword_order)

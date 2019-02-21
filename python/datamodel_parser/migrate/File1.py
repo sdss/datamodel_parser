@@ -99,8 +99,6 @@ class File1:
                         if tag_name == 'div':
                             # Parse intro section hdu names
                             self.set_section_hdu_names(div=child)
-                            self.extension_count = len(
-                                                self.section_hdu_names.keys())
                         else:
                             # Parse intro titles and contents
                             tag_contents = self.get_tag_contents(tag=child)
@@ -335,6 +333,7 @@ class File1:
                 hdu_data['column_size']          = column_size
                 hdu_data['column_description']   = column_description
                 self.file_extension_data.append(hdu_data)
+                self.extension_count = len(self.file_extension_data)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
