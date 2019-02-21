@@ -36,6 +36,9 @@ class File:
         self.body = None
         if self.ready:
             self.body = body if body else None
+            print('self.body: %r' % self.body)
+            input('pause')
+
             if not self.body:
                 self.ready = False
                 self.logger.error('Unable to set_body.')
@@ -66,9 +69,16 @@ class File:
     def set_template_type(self):
         '''Determine the datamodel template type.'''
         self.template_type = None
-        self.set_all_divs()
-        if self.all_divs: self.set_div_template_type()
-        else: pass
+        if self.ready:
+            self.set_all_divs()
+            print('self.all_divs: %r' % self.all_divs)
+            input('pause')
+
+            if self.all_divs: self.set_div_template_type()
+            else:
+                print('HI. self.all_divs: %r' % self.all_divs)
+                input('pause')
+
             
     def set_all_divs(self):
         '''Check if the HTML body is comprised of only division tags.'''
@@ -85,25 +95,41 @@ class File:
 
     def set_div_template_type(self):
         '''Determine the datamodel template type from the first division tag.'''
+        self.template_type = None
         if self.ready:
             if self.body:
                 div = self.body.find_next('div')
-                div_id = div['id']
+                div_id = div['id'] if div else None
                 if div_id == 'intro':
                     self.set_child_names(node=div)
-                    if 'dl' not in self.child_names:
-                        self.template_type = 1
+                    if self.child_names:
+                        type_1_children = ['h1','h4','p','div']
+                        type_2_children = ['h1','dl']
+                        if  set(type_1_children).issubset(self.child_names):
+                            self.template_type = 1
+                        elif set(type_2_children).issubset(self.child_names):
+                            self.template_type = 2
+                        else:
+                            self.ready = False
+                            self.logger.error(
+                                'Unable to set_div_template_type. ' +
+                                'Unexpected child names. ' +
+                                'self.child_names: {}, '.format(self.child_names) +
+                                'type_1_children: {}, '.format(type_1_children) +
+                                'type_2_children: {}.'.format(type_2_children))
                     else:
-                        self.template_type = 2
-                        
+                        self.ready = False
+                        self.logger.error('Unable to set_div_template_type. ' +
+                                          'self.child_names: {0}'
+                                          .format(self.child_names))
                 else:
                     self.ready = False
-                    self.logger.error('Unable to set_all_divs. ' +
+                    self.logger.error('Unable to set_div_template_type. ' +
                                       "Expedted div_id='intro'." +
                                       'div_id: {0}'.format(div_id))
             else:
                 self.ready = False
-                self.logger.error('Unable to set_all_divs. ' +
+                self.logger.error('Unable to set_div_template_type. ' +
                                   'self.body: '.format(self.body))
 
     def set_child_names(self,node=None):
