@@ -68,8 +68,8 @@ class File2:
                         self.logger.error('Unknown div_id: {0}'.format(div_id))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file. self.div_ids: {0}'
-                                    .format(self.divs))
+                self.logger.error('Unable to parse_file. ' +
+                                  'self.div_ids: {0}'.format(self.divs))
 
     def get_number_descendants(self,node=None):
         '''Return True if BeautifulSoup object has descendants.'''
