@@ -57,29 +57,67 @@ class File3:
         self.file_extension_headers = list()
         if self.ready:
             if self.body:
-                self.set_child_names(node=self.body)
-                self.set_child_strings(node=self.body)
-                print('self.child_names: \n' + dumps( self.child_names,indent=1))
-                print('self.child_strings: \n' + dumps( self.child_strings,indent=1))
+#                self.parse_file_intro(body=self.body)
+                self.parse_file_extensions(body=self.body)
+
+                
+                
+#                self.set_child_names(node=self.body)
+#                self.set_child_strings(node=self.body)
+#                print('self.child_names: \n' + dumps( self.child_names,indent=1))
+#                print('self.child_strings: \n' + dumps( self.child_strings,indent=1))
                 input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. self.body: {0}'
                                     .format(self.divs))
 
-
-    def set_child_names(self,node=None):
-        '''Set a list of child for the given BeautifulSoup node.'''
-        self.child_names = list()
+    def parse_file_intro(self):
+        '''Parse file extension content from given body tag.'''
         if self.ready:
-            if node:
-                for child in node.children:
-                    if child.name:
-                        self.child_names.append(str(child.name))
+            pres = self.body.find_all('pre')
+            if pres:
+                for pre in pres: pass
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_intro. ' +
+                                  'self.body: {0}'.format(self.body) +
+                                  'pres: {0}'.format(pres))
+
+    def parse_file_extensions(self,body=None):
+        '''Parse file extension content from given body tag.'''
+        if self.ready:
+            if body:
+                heading_tags = ['h1','h2','h3','h4','h5','h6']
+                for child in body.children:
+                    child_name = child.name
+                    if child_name and child_name in heading_tags:
+                        string = str(child.string)
+                        if 'HDU' in string:
+                            extensions = child.next_siblings
+                            for extension in extensions:
+#                                self.parse_file_extension_data(body=body)
+#                                self.parse_file_extension_header(body=body)
+                                name = extension.name
+                                if name:
+                                    # process all pre until next heading tag then
+                                    # process all pre until next heading tag then
+                                    # process all pre until next heading tag then
+                                    # ...
+                                    string = extension.string
+                                    print('name: %r' % name)
+                                    print('string: %r' % string)
+                                    input('pause')
+            
             else:
                 self.ready = None
-                self.logger.error('Unable to set_child_names. ' +
-                                  'node: {0}'.format(node))
+                self.logger.error('Unable to set_child_strings. ' +
+                                  'body: {0}'.format(body))
+
+
+
+
+
 
     def set_child_strings(self,node=None):
         '''Set a list of child for the given BeautifulSoup node.'''
@@ -135,6 +173,19 @@ class File3:
             else:
                 self.ready = None
                 self.logger.error('Unable to set_child_strings. ' +
+                                  'node: {0}'.format(node))
+
+    def set_child_names(self,node=None):
+        '''Set a list of child for the given BeautifulSoup node.'''
+        self.child_names = list()
+        if self.ready:
+            if node:
+                for child in node.children:
+                    if child.name:
+                        self.child_names.append(str(child.name))
+            else:
+                self.ready = None
+                self.logger.error('Unable to set_child_names. ' +
                                   'node: {0}'.format(node))
 
     def set_heading_tag_names(self,child_names=None):

@@ -61,7 +61,7 @@ class File2:
             if self.divs:
                 for div in self.divs:
                     div_id = str(div['id'])
-                    if div_id == 'intro': self.parse_file_intro(intro=div)
+                    if div_id == 'intro':   self.parse_file_intro(intro=div)
                     elif ('hdu' in div_id): self.parse_file_extension(div=div)
                     else:
                         self.ready = False
@@ -232,6 +232,7 @@ class File2:
                                     .format(len(extension_hdu_numbers)) +
                                 'len(section_hdu_names): {}'
                                     .format(len(section_hdu_names)))
+
     def parse_file_extension(self,div=None):
         '''Parse file extension content from given division tag.'''
         if self.ready:

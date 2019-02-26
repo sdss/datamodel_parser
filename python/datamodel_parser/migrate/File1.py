@@ -70,7 +70,7 @@ class File1:
                                     .format(self.divs))
 
     def parse_file_intro(self,intro=None):
-        '''Parse file description content from given tag.'''
+        '''Parse file intro table content from given tag.'''
         if self.ready:
             if intro:
                 self.set_intro_tag_names_and_contents(intro=intro)
