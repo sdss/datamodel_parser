@@ -4,5 +4,3 @@ This is a trivial example of a template to list all Trees
 * {{ tree.edition }}
 {% endfor %}
 
- * dr15
- * dr14
