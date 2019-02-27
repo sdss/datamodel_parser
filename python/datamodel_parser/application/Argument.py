@@ -17,4 +17,13 @@ def parse_html():
     parser.add_argument("-v", "--verbose", help="set verbose logging", action="store_true")
     return parser.parse_args()
 
+def datamodel_template():
+    parser = ArgumentParser()
+    parser.add_argument("-p", "--path", help="file path", metavar="PATH")
+    parser.add_argument("-e", "--edition", help="data release edition", metavar="EDITION", default='')
+    parser.add_argument("-l", "--level", help="set logging level", metavar="LEVEL", choices=['debug','info','warning','error','critical'], default='info')
+    parser.add_argument("-n", "--nolog", help="set nolog variable", action="store_true")
+    parser.add_argument("-v", "--verbose", help="set verbose logging", action="store_true")
+    return parser.parse_args()
+
 

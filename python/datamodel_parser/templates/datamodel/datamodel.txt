@@ -1,0 +1,17 @@
+This is a trivial example of a template to list all Trees
+
+{% for tree in trees %}
+* tree.edition: {{ tree.edition }}
+{% endfor %}
+
+{% for env in envs %}
+* env.tree_id: {{ env.tree_id }}
+{% endfor %}
+
+{% for location in locations %}
+* location.env_id: {{ location.env_id }}
+{% endfor %}
+
+{% for directory in directories %}
+* directory.location_id: {{ directory.location_id }}
+{% endfor %}

@@ -169,11 +169,24 @@ class Directory(db.Model):
             try: directory = (Directory.query
                               .filter(Directory.location_id==location_id)
                               .filter(Directory.name==name)
-                              .filter(Directory.depth==depth).one())
+                              .filter(Directory.depth==depth)
+                              .one())
             except: directory = None
         else:
             directory = None
         return directory
+
+    @staticmethod
+    def load_all(location_id=None):
+        if location_id:
+            try: directories = (Directory.query
+                              .filter(Directory.location_id==location_id)
+                              .order_by(Directory.depth)
+                              .all())
+            except: directories = None
+        else:
+            directories = None
+        return directories
 
     @staticmethod
     def load_directories():
@@ -282,6 +295,17 @@ class Intro(db.Model):
         else:
             intro = None
         return intro
+    
+    @staticmethod
+    def load_all(file_id=None):
+        if file_id:
+            try: intros = (Intro.query.filter(Intro.file_id==file_id)
+                                .order_by(Intro.heading_order)
+                                .all())
+            except: intros = None
+        else:
+            intros = None
+        return intros
     
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False

@@ -192,8 +192,11 @@ class Migrate:
 
     def parse_path(self):
         '''Extract information from the given file path.'''
-        self.env_variable = None
-        self.location_path = None
+        self.env_variable     = None
+        self.file_name        = None
+        self.location_path    = None
+        self.directory_names  = None
+        self.directory_depths = None
         if self.ready:
             if self.path:
                 path = self.path.replace('datamodel/files/','')
