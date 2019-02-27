@@ -172,16 +172,23 @@ class Migrate:
         if self.ready:
             self.set_soup()
             self.set_file()
-            self.file.parse_file()
-            if self.ready and self.file.ready:
-                self.populate_file_table()
-                self.populate_intro_table()
-                self.populate_section_table()
-                self.populate_extension_table()
-                self.populate_data_table()
-                self.populate_column_table()
-                self.populate_header_table()
-                self.populate_keyword_table()
+            if self.file and self.file.ready:
+                self.file.parse_file()
+                if self.ready and self.file.ready:
+                    self.populate_file_table()
+                    self.populate_intro_table()
+                    self.populate_section_table()
+                    self.populate_extension_table()
+                    self.populate_data_table()
+                    self.populate_column_table()
+                    self.populate_header_table()
+                    self.populate_keyword_table()
+            else:
+                self.ready = False
+                self.logger.error('Unable to populate_html_text_tables. ' +
+                                  'self.file: {0}, '.format(self.file) +
+                                  'self.file.ready: {0}.'.format(self.file.ready))
+
 
     def parse_path(self):
         '''Extract information from the given file path.'''
@@ -409,22 +416,27 @@ class Migrate:
                 self.location_path                and
                 self.file_name                    and
                 self.file                         and
-                self.file.section_hdu_names
+                self.file.section_hdu_names is not None
                 ):
                 self.database.set_file_id(tree_edition  = self.tree_edition,
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
-                hdu_numbers    = self.file.section_hdu_names.keys()
-                hdu_names      = self.file.section_hdu_names.values()
-
-                for (hdu_number,hdu_name) in list(zip(hdu_numbers,hdu_names)):
-                    if self.ready:
-                        self.database.set_section_columns(
+                section_hdu_names = self.file.section_hdu_names
+                if section_hdu_names:
+                    for (hdu_number,hdu_name) in section_hdu_names.items():
+                        if self.ready:
+                            self.database.set_section_columns(
                                                 hdu_number = int(hdu_number),
                                                 hdu_name   = hdu_name)
-                        self.database.populate_section_table()
-                        self.ready = self.database.ready
+                            self.database.populate_section_table()
+                            self.ready = self.database.ready
+                else: # the file does not have a section list
+                    self.database.set_section_columns(hdu_number = None,
+                                                      hdu_name   = None)
+                    self.database.populate_section_table()
+                    self.ready = self.database.ready
+
             else:
                 self.ready = False
                 self.logger.error(

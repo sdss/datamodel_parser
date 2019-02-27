@@ -1,5 +1,6 @@
 from datamodel_parser.migrate import File1
 from datamodel_parser.migrate import File2
+from datamodel_parser.migrate import File3
 from json import dumps
 
 
@@ -56,54 +57,74 @@ class File:
         self.file = None
         if self.ready:
             self.set_template_type()
-            if   self.template_type == 1: self.set_file1()
-            elif self.template_type == 2: self.set_file2()
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_file. ' +
-                                  'Unable to determine datamodel template_type')
+            if self.ready:
+                if   self.template_type == 1: self.set_file1()
+                elif self.template_type == 2: self.set_file2()
+                elif self.template_type == 3: self.set_file3()
+                else:
+                    self.ready = False
+                    self.logger.error(
+                                'Unable to set_file. ' +
+                                'Unable to determine datamodel template_type')
 
     def set_template_type(self):
         '''Determine the datamodel template type.'''
         self.template_type = None
-        self.set_all_divs()
-        if self.all_divs: self.set_div_template_type()
-        else: pass
-            
+        if self.ready:
+            self.set_all_divs()
+            if self.all_divs: self.set_template_type_div()
+            else:             self.set_template_type_nondiv()
+
     def set_all_divs(self):
         '''Check if the HTML body is comprised of only division tags.'''
-        self.all_divs = True
+        self.all_divs = None
         if self.ready:
             if self.body:
-                all_div = True
+                self.all_divs = True
                 for child in self.body.children:
-                    if child.name and child.name != 'div': self.all_div = False
+                    if child.name and child.name != 'div': self.all_divs = False
             else:
                 self.ready = False
                 self.logger.error('Unable to set_all_divs. ' +
                                   'self.body: '.format(self.body))
 
-    def set_div_template_type(self):
+    def set_template_type_div(self):
         '''Determine the datamodel template type from the first division tag.'''
+        self.template_type = None
         if self.ready:
             if self.body:
                 div = self.body.find_next('div')
-                div_id = div['id']
+                div_id = div['id'] if div else None
                 if div_id == 'intro':
                     self.set_child_names(node=div)
-                    if 'dl' not in self.child_names:
-                        self.template_type = 1
+                    if self.child_names:
+                        type_1_children = ['h1','h4','p','div']
+                        type_2_children = ['h1','dl']
+                        if  set(type_1_children).issubset(self.child_names):
+                            self.template_type = 1
+                        elif set(type_2_children).issubset(self.child_names):
+                            self.template_type = 2
+                        else:
+                            self.ready = False
+                            self.logger.error(
+                                'Unable to set_template_type_div. ' +
+                                'Unexpected child names. ' +
+                                'self.child_names: {}, '.format(self.child_names) +
+                                'type_1_children: {}, '.format(type_1_children) +
+                                'type_2_children: {}.'.format(type_2_children))
                     else:
-                        self.template_type = 2
-                        
+                        self.ready = False
+                        self.logger.error('Unable to set_template_type_div. ' +
+                                          'self.child_names: {0}'
+                                          .format(self.child_names))
                 else:
                     self.ready = False
-                    self.logger.error('Unable to set_all_divs. ' +
+                    self.logger.error('Unable to set_template_type_div. ' +
                                       "Expedted div_id='intro'." +
                                       'div_id: {0}'.format(div_id))
             else:
                 self.ready = False
-                self.logger.error('Unable to set_all_divs. ' +
+                self.logger.error('Unable to set_template_type_div. ' +
                                   'self.body: '.format(self.body))
 
     def set_child_names(self,node=None):
@@ -118,6 +139,33 @@ class File:
                 self.ready = None
                 self.logger.error('Unable to set_child_names. ' +
                                   'node: {0}'.format(node))
+
+    def set_template_type_nondiv(self):
+        '''Determine the datamodel template type from the body tag.'''
+        self.template_type = None
+        if self.ready:
+            if self.body:
+                self.set_child_names(node=self.body)
+                if self.child_names:
+                    type_3_children = ['h1','h3','p','ul','pre']
+                    if  set(type_3_children).issubset(self.child_names):
+                        self.template_type = 3
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                            'Unable to set_template_type_nondiv. ' +
+                            'Unexpected child names. ' +
+                            'self.child_names: {}, '.format(self.child_names) +
+                            'type_3_children: {}.'.format(type_3_children))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to set_template_type_nondiv. ' +
+                                      'self.child_names: {0}'
+                                      .format(self.child_names))
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_template_type_nondiv. ' +
+                                  'self.body: '.format(self.body))
 
     def set_file1(self):
         '''
@@ -165,6 +213,28 @@ class File:
                 self.logger.error('Unable to set_file2. ' +
                                   'divs: {0}'.format(divs))
 
+    def set_file3(self):
+        '''
+            Set instance of File derived class comprised of HTML div's,
+            where 'dl' is not a child tag.
+        '''
+        if self.ready:
+            if self.body:
+                self.file = (File3(logger=self.logger,
+                                   options=self.options,
+                                   body=self.body)
+                             if self.logger and self.options and self.body
+                             else None)
+                self.ready = bool(self.file and self.file.ready)
+                if not self.ready:
+                    self.logger.error(
+                        'Unable to set_file3. '             +
+                        'self.file: {0}'.format(self.file) +
+                        'self.file.ready: {0}'.format(self.file.ready))
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_file3. ' +
+                                  'divs: {0}'.format(divs))
     def parse_file(self):
         '''Parse the given file using the determined File instance.'''
         self.file.parse_file()
@@ -183,7 +253,8 @@ class File:
 #        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 #        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
 #        print('self.section_hdu_names: {}'.format(self.section_hdu_names))
-#        print('self.file_extension_data: {}'.format(self.file_extension_data))
+
+#        print('self.file_extension_data: \n' + dumps(self.file_extension_data,indent=1))
 #        print('self.file_extension_headers: {}'.format(self.file_extension_headers))
 #        input('pause')
 

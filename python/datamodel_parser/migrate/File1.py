@@ -53,8 +53,6 @@ class File1:
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
-        self.file_extension_data   = list()
-        self.file_extension_headers = list()
         if self.ready:
             if self.divs:
                 for div in self.divs:
@@ -66,11 +64,11 @@ class File1:
                         self.logger.error('Unknown div_id: {0}'.format(div_id))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file. self.div_ids: {0}'
-                                    .format(self.divs))
+                self.logger.error('Unable to parse_file. ' +
+                                  'self.div_ids: {0}'.format(self.divs))
 
     def parse_file_intro(self,intro=None):
-        '''Parse file description content from given tag.'''
+        '''Parse file intro table content from given tag.'''
         if self.ready:
             if intro:
                 self.set_intro_tag_names_and_contents(intro=intro)
@@ -99,8 +97,6 @@ class File1:
                         if tag_name == 'div':
                             # Parse intro section hdu names
                             self.set_section_hdu_names(div=child)
-                            self.extension_count = len(
-                                                self.section_hdu_names.keys())
                         else:
                             # Parse intro titles and contents
                             tag_contents = self.get_tag_contents(tag=child)
@@ -296,6 +292,7 @@ class File1:
 
     def parse_file_extension_data(self,div=None):
         '''Parse file description content from given division tag.'''
+        self.file_extension_data = list()
         if self.ready:
             if div:
                 # extension.hdu_number and header.title
@@ -335,6 +332,7 @@ class File1:
                 hdu_data['column_size']          = column_size
                 hdu_data['column_description']   = column_description
                 self.file_extension_data.append(hdu_data)
+                self.extension_count = len(self.file_extension_data)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
@@ -342,6 +340,7 @@ class File1:
 
     def parse_file_extension_header(self,div=None):
         '''Parse file description content from given division tag.'''
+        self.file_extension_headers = list()
         hdu_header = dict()
         if self.ready:
             if div:
@@ -359,11 +358,8 @@ class File1:
                 for (row_order,row) in enumerate(rows):
                     row_data = list()
                     for data in row.find_all('td'):
-                        number_descendants = self.get_number_descendants(node=data)
-                        if data.string:          data_string = str(data.string)
-                        elif number_descendants: data_string = str(data)
-                        else:                    data_string = None
-                        row_data.append(data_string)
+                        string = self.get_string(node=data)
+                        row_data.append(string)
                     table_rows[row_order]  = row_data
                 hdu_header['table_caption']  = table_caption
                 hdu_header['table_keywords'] = table_keywords
@@ -374,5 +370,18 @@ class File1:
                 self.logger.error('Unable to parse_file_extension_header. ' +
                                   'div: {0}'.format(div))
 
+    def get_string(self,node=None):
+        string = None
+        if self.ready:
+            if node:
+                n = self.get_number_descendants(node=node)
+                if n > 1:                    string = str(node)
+                elif n == 1 and node.string: string = str(node.string)
+                else:                        string = None
+            else:
+                self.ready = None
+                self.logger.error('Unable to get_string. ' +
+                                  'node: {0}'.format(node))
+        return string
 
 

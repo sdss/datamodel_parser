@@ -146,11 +146,11 @@ class Database:
         '''Get extension_id.'''
         self.extension_id = None
         if self.ready:
-            if (tree_edition and
-                env_variable and
+            if (tree_edition  and
+                env_variable  and
                 location_path and
-                file_name and
-                hdu_number!=None):
+                file_name     and
+                hdu_number is not None):
                 self.set_file_id(tree_edition  = tree_edition,
                                  env_variable  = env_variable,
                                  location_path = location_path,
@@ -184,11 +184,11 @@ class Database:
         '''Get header_id.'''
         self.header_id = None
         if self.ready:
-            if (tree_edition     and
-                env_variable     and
-                location_path    and
-                file_name        and
-                hdu_number!=None and
+            if (tree_edition           and
+                env_variable           and
+                location_path          and
+                file_name              and
+                hdu_number is not None and
                 header_title
                 ):
                 self.set_extension_id(tree_edition  = tree_edition,
@@ -224,11 +224,11 @@ class Database:
         self.data_id = None
         '''Get data_id.'''
         if self.ready:
-            if (tree_edition and
-                env_variable and
+            if (tree_edition  and
+                env_variable  and
                 location_path and
-                file_name and
-                hdu_number!=None):
+                file_name     and
+                hdu_number is not None):
                 self.set_extension_id(tree_edition  = tree_edition,
                                       env_variable  = env_variable,
                                       location_path = location_path,
@@ -512,11 +512,11 @@ class Database:
         self.directory_columns = dict()
         if self.ready:
             location_id = self.location_id if self.location_id else None
-            if location_id and name and depth!=None:
+            if location_id and name and depth is not None:
                 self.directory_columns = {
-                    'location_id' : location_id  if location_id  else None,
-                    'name'        : name         if name         else None,
-                    'depth'       : depth        if depth!=None  else None,
+                    'location_id' : location_id  if location_id        else None,
+                    'name'        : name         if name               else None,
+                    'depth'       : depth        if depth is not None  else None,
                     }
             else:
                 self.ready = False
@@ -714,23 +714,23 @@ class Database:
         self.intro_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            if (file_id               and
-                heading_order != None and
-#                heading_level != None and
+            if (file_id                   and
+                heading_order is not None and
+#                heading_level is not None and
                 heading_title         and
-                description != None
+                description is not None
                 ):
                 self.intro_columns = {
                     'file_id'       : file_id
-                                      if file_id       else None,
+                                      if file_id                   else None,
                     'heading_order' : heading_order
-                                      if heading_order != None else None,
+                                      if heading_order is not None else None,
                     'heading_level' : heading_level
-                                      if heading_level != None else None,
+                                      if heading_level is not None else None,
                     'heading_title' : heading_title
-                                      if heading_title else None,
+                                      if heading_title             else None,
                     'description'   : description
-                                      if description   else '',
+                                      if description               else None,
                     }
             else:
                 self.ready = False
@@ -829,11 +829,11 @@ class Database:
         self.section_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            if file_id and hdu_number!=None and hdu_name:
+            if file_id:# and hdu_number is not None and hdu_name:
                 self.section_columns = {
-                    'file_id'    : file_id    if file_id          else None,
-                    'hdu_number' : hdu_number if hdu_number!=None else None,
-                    'hdu_name'   : hdu_name   if hdu_name         else None,
+                    'file_id'    : file_id    if file_id                else None,
+                    'hdu_number' : hdu_number if hdu_number is not None else None,
+                    'hdu_name'   : hdu_name   if hdu_name               else None,
                     }
             else:
                 self.ready = False
@@ -857,7 +857,7 @@ class Database:
                 else self.section_columns['file_id']
                 if self.section_columns and 'file_id' in self.section_columns
                 else None)
-            hdu_number = (hdu_number if hdu_number!=None
+            hdu_number = (hdu_number if hdu_number is not None
                 else self.section_columns['hdu_number']
                 if self.section_columns and 'hdu_number' in self.section_columns
                 else None)
@@ -865,18 +865,16 @@ class Database:
                 else self.section_columns['hdu_name']
                 if self.section_columns and 'hdu_name' in self.section_columns
                 else None)
-            if file_id and hdu_number!=None and hdu_name:
+            if file_id:# and hdu_number is not None and hdu_name:
                 self.section = (Section.load(file_id=file_id,
                                            hdu_number=hdu_number,
                                            hdu_name=hdu_name)
-                                if file_id and hdu_number!=None and hdu_name
+                                if file_id and hdu_number is not None and hdu_name
                                 else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_section. ' +
-                                  'file_id: {0}, '.format(file_id) +
-                                  'hdu_number: {0}'.format(hdu_number) +
-                                  'hdu_name: {0}'.format(hdu_name))
+                                  'file_id: {0}, '.format(file_id))
 
     def update_section_row(self):
         '''Update row in section table.'''
@@ -935,10 +933,10 @@ class Database:
         self.extension_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            if file_id and hdu_number!=None:
+            if file_id and hdu_number is not None:
                 self.extension_columns = {
-                    'file_id'    : file_id    if file_id          else None,
-                    'hdu_number' : hdu_number if hdu_number!=None else None,
+                    'file_id'    : file_id    if file_id                else None,
+                    'hdu_number' : hdu_number if hdu_number is not None else None,
                     }
             else:
                 self.ready = False
@@ -963,15 +961,15 @@ class Database:
                 if self.extension_columns
                 and 'file_id' in self.extension_columns
                 else None)
-            hdu_number = (hdu_number if hdu_number!=None
+            hdu_number = (hdu_number if hdu_number is not None
                 else self.extension_columns['hdu_number']
                 if self.extension_columns
                 and 'hdu_number' in self.extension_columns
                 else None)
-            if file_id and hdu_number!=None:
+            if file_id and hdu_number is not None:
                 self.extension = (Extension.load(file_id=file_id,
                                                  hdu_number=hdu_number)
-                                if file_id and hdu_number!=None else None)
+                                if file_id and hdu_number is not None else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_extension. ' +
@@ -1036,10 +1034,12 @@ class Database:
         self.data_columns = dict()
         if self.ready:
             extension_id = self.extension_id if self.extension_id else None
-            if extension_id and is_image!=None:
+            if extension_id and is_image is not None:
                 self.data_columns = {
-                    'extension_id' : extension_id if extension_id   else None,
-                    'is_image'     : is_image     if is_image!=None else None,
+                    'extension_id' : extension_id
+                                        if extension_id         else None,
+                    'is_image'     : is_image
+                                        if is_image is not None else None,
                     }
             else:
                 self.ready = False
@@ -1131,18 +1131,23 @@ class Database:
         self.column_columns = dict()
         if self.ready:
             data_id = self.data_id if self.data_id else None
-            if (data_id           and
-                header_title      
-#                datatype!=None    and
-#                size!=None        and
-#                description!=None
+            if (data_id              and
+                header_title
+#                datatype is not None and
+#                size     is not None and
+#                description is not None
                 ):
                 self.column_columns = {
-                    'data_id'      : data_id      if data_id           else None,
-                    'header_title' : header_title if header_title      else None,
-                    'datatype'     : datatype     if datatype!=None    else None,
-                    'size'         : size         if size!=None        else None,
-                    'description'  : description  if description!=None else None,
+                    'data_id'      : data_id
+                                        if data_id                 else None,
+                    'header_title' : header_title
+                                        if header_title            else None,
+                    'datatype'     : datatype
+                                        if datatype    is not None else None,
+                    'size'         : size
+                                        if size        is not None else None,
+                    'description'  : description
+                                        if description is not None else None,
                     }
             else:
                 self.ready = False
@@ -1236,13 +1241,13 @@ class Database:
         self.header_columns = dict()
         if self.ready:
             extension_id = self.extension_id if self.extension_id else None
-            if extension_id and title: #and table_caption!=None:
+            if extension_id and title: #and table_caption is not None:
                 self.header_columns = {
                     'extension_id'  : extension_id  if extension_id
                                                     else None,
                     'title'         : title         if title
                                                     else None,
-                    'table_caption' : table_caption if table_caption!=None
+                    'table_caption' : table_caption if table_caption is not None
                                                     else None,
                     }
             else:
@@ -1340,18 +1345,24 @@ class Database:
         self.keyword_columns = dict()
         if self.ready:
             header_id = self.header_id if self.header_id else None
-            if header_id and keyword_order!=None and table_row:
+            if header_id and keyword_order is not None and table_row:
                 keyword = table_row[0] if table_row else None
                 value   = table_row[1] if table_row else None
                 type    = table_row[2] if table_row else None
                 comment = table_row[3] if table_row else None
                 self.keyword_columns = {
-                    'header_id'     : header_id     if header_id           else None,
-                    'keyword_order' : keyword_order if keyword_order!=None else None,
-                    'keyword'       : keyword       if keyword             else None,
-                    'value'         : value         if value!=None         else None,
-                    'type'          : type          if type                else None,
-                    'comment'       : comment       if comment             else None,
+                    'header_id'     : header_id     if header_id
+                                                    else None,
+                    'keyword_order' : keyword_order if keyword_order is not None
+                                                    else None,
+                    'keyword'       : keyword       if keyword
+                                                    else None,
+                    'value'         : value         if value is not None
+                                                    else None,
+                    'type'          : type          if type
+                                                    else None,
+                    'comment'       : comment       if comment
+                                                    else None,
                     }
             else:
                 self.ready = False
@@ -1376,7 +1387,7 @@ class Database:
                 else self.keyword_columns['header_id']
                 if self.keyword_columns and 'header_id' in self.keyword_columns
                 else None)
-            keyword_order = (keyword_order if keyword_order!=None
+            keyword_order = (keyword_order if keyword_order is not None
                 else self.keyword_columns['keyword_order']
                 if self.keyword_columns and 'keyword_order' in self.keyword_columns
                 else None)
@@ -1384,11 +1395,13 @@ class Database:
                 else self.keyword_columns['keyword']
                 if self.keyword_columns and 'keyword' in self.keyword_columns
                 else None)
-            if header_id and keyword_order!=None and keyword:
+            if header_id and keyword_order is not None and keyword:
                 self.keyword = (Keyword.load(header_id = header_id,
                                              keyword_order     = keyword_order,
                                              keyword   = keyword)
-                                if header_id and keyword_order!=None and keyword
+                                if header_id
+                                and keyword_order is not None
+                                and keyword
                                 else None)
             else:
                 self.ready = False

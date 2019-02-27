@@ -25,7 +25,7 @@ CREATE TABLE sdss.tree (
 CREATE TABLE sdss.env (
     id SERIAL NOT NULL PRIMARY KEY,
     tree_id INT4 REFERENCES sdss.tree(id) NOT NULL,
-    variable VARCHAR(32) NOT NULL UNIQUE,
+    variable VARCHAR(32) NOT NULL,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -70,8 +70,8 @@ CREATE TABLE sdss.intro (
 CREATE TABLE sdss.section (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
-    hdu_number INT2 NOT NULL,
-    hdu_name VARCHAR(32) NOT NULL,
+    hdu_number INT2,
+    hdu_name VARCHAR(32),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
