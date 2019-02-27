@@ -1,0 +1,8 @@
+This is a trivial example of a template to list all Trees
+
+{% for tree in trees %}
+* {{ tree.edition }}
+{% endfor %}
+
+ * dr15
+ * dr14

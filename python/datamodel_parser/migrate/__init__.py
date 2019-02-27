@@ -3,4 +3,5 @@ from .File1 import File1
 from .File import File
 from .Database import Database
 from .Migrate import Migrate
+from .Test import Test
 
