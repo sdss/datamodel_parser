@@ -253,6 +253,7 @@ class File:
 #        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 #        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
 #        print('self.section_hdu_names: {}'.format(self.section_hdu_names))
+
 #        print('self.file_extension_data: \n' + dumps(self.file_extension_data,indent=1))
 #        print('self.file_extension_headers: {}'.format(self.file_extension_headers))
 #        input('pause')
