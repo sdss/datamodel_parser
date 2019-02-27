@@ -55,8 +55,6 @@ class File2:
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
-        self.file_extension_data    = list()
-        self.file_extension_headers = list()
         if self.ready:
             if self.divs:
                 for div in self.divs:
@@ -170,10 +168,10 @@ class File2:
         '''Append heading title to self.intro_heading_titles.'''
         if self.ready:
             if heading:
-                number_descendants = self.get_number_descendants(node=heading)
-                if heading.string:       string = str(heading.string)
-                elif number_descendants: string = str(heading)
-                else:                    string = ''
+                n = self.get_number_descendants(node=heading)
+                if n > 1:                       string = str(heading)
+                elif n == 1 and heading.string: string = str(heading.string)
+                else:                           string = ''
                 self.intro_heading_titles.append(string)
             else:
                 self.ready = False
@@ -241,6 +239,7 @@ class File2:
 
     def parse_file_extension_data(self,div=None):
         '''Parse file description content from given division tag.'''
+        self.file_extension_data = list()
         if self.ready:
             if div:
                 self.check_valid_assumptions(div=div)
@@ -277,9 +276,9 @@ class File2:
                 self.logger.error('Unable to parse_file_extension_data. ' +
                                   'div: {0}'.format(div))
 
-
     def parse_file_extension_header(self,div=None):
         '''Parse file description content from given division tag.'''
+        self.file_extension_headers = list()
         hdu_header = dict()
         if self.ready:
             if div:

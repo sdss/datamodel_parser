@@ -72,14 +72,15 @@ class File:
         self.template_type = None
         if self.ready:
             self.set_all_divs()
-            if self.all_divs: self.set_div_template_type()
-            else:             self.set_template_type()
+            if self.all_divs: self.set_template_type_div()
+            else:             self.set_template_type_nondiv()
 
     def set_all_divs(self):
         '''Check if the HTML body is comprised of only division tags.'''
         self.all_divs = None
         if self.ready:
             if self.body:
+                self.all_divs = True
                 for child in self.body.children:
                     if child.name and child.name != 'div': self.all_divs = False
             else:
@@ -87,7 +88,7 @@ class File:
                 self.logger.error('Unable to set_all_divs. ' +
                                   'self.body: '.format(self.body))
 
-    def set_div_template_type(self):
+    def set_template_type_div(self):
         '''Determine the datamodel template type from the first division tag.'''
         self.template_type = None
         if self.ready:
@@ -106,24 +107,24 @@ class File:
                         else:
                             self.ready = False
                             self.logger.error(
-                                'Unable to set_div_template_type. ' +
+                                'Unable to set_template_type_div. ' +
                                 'Unexpected child names. ' +
                                 'self.child_names: {}, '.format(self.child_names) +
                                 'type_1_children: {}, '.format(type_1_children) +
                                 'type_2_children: {}.'.format(type_2_children))
                     else:
                         self.ready = False
-                        self.logger.error('Unable to set_div_template_type. ' +
+                        self.logger.error('Unable to set_template_type_div. ' +
                                           'self.child_names: {0}'
                                           .format(self.child_names))
                 else:
                     self.ready = False
-                    self.logger.error('Unable to set_div_template_type. ' +
+                    self.logger.error('Unable to set_template_type_div. ' +
                                       "Expedted div_id='intro'." +
                                       'div_id: {0}'.format(div_id))
             else:
                 self.ready = False
-                self.logger.error('Unable to set_div_template_type. ' +
+                self.logger.error('Unable to set_template_type_div. ' +
                                   'self.body: '.format(self.body))
 
     def set_child_names(self,node=None):
@@ -139,7 +140,7 @@ class File:
                 self.logger.error('Unable to set_child_names. ' +
                                   'node: {0}'.format(node))
 
-    def set_template_type(self):
+    def set_template_type_nondiv(self):
         '''Determine the datamodel template type from the body tag.'''
         self.template_type = None
         if self.ready:
@@ -152,18 +153,18 @@ class File:
                     else:
                         self.ready = False
                         self.logger.error(
-                            'Unable to set_div_template_type. ' +
+                            'Unable to set_template_type_nondiv. ' +
                             'Unexpected child names. ' +
                             'self.child_names: {}, '.format(self.child_names) +
                             'type_3_children: {}.'.format(type_3_children))
                 else:
                     self.ready = False
-                    self.logger.error('Unable to set_div_template_type. ' +
+                    self.logger.error('Unable to set_template_type_nondiv. ' +
                                       'self.child_names: {0}'
                                       .format(self.child_names))
             else:
                 self.ready = False
-                self.logger.error('Unable to set_div_template_type. ' +
+                self.logger.error('Unable to set_template_type_nondiv. ' +
                                   'self.body: '.format(self.body))
 
     def set_file1(self):
@@ -246,7 +247,7 @@ class File:
         self.file_extension_data     = self.file.file_extension_data
         self.file_extension_headers  = self.file.file_extension_headers
 
-        print('self.extension_count: {}'.format(self.extension_count))
+#        print('self.extension_count: {}'.format(self.extension_count))
 #        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
 #        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
 #        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))

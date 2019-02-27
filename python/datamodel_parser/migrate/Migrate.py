@@ -172,16 +172,23 @@ class Migrate:
         if self.ready:
             self.set_soup()
             self.set_file()
-            self.file.parse_file()
-            if self.ready and self.file.ready:
-                self.populate_file_table()
-                self.populate_intro_table()
-                self.populate_section_table()
-                self.populate_extension_table()
-                self.populate_data_table()
-                self.populate_column_table()
-                self.populate_header_table()
-                self.populate_keyword_table()
+            if self.file and self.file.ready:
+                self.file.parse_file()
+                if self.ready and self.file.ready:
+                    self.populate_file_table()
+                    self.populate_intro_table()
+                    self.populate_section_table()
+                    self.populate_extension_table()
+                    self.populate_data_table()
+                    self.populate_column_table()
+                    self.populate_header_table()
+                    self.populate_keyword_table()
+            else:
+                self.ready = False
+                self.logger.error('Unable to populate_html_text_tables. ' +
+                                  'self.file: {0}, '.format(self.file) +
+                                  'self.file.ready: {0}.'.format(self.file.ready))
+
 
     def parse_path(self):
         '''Extract information from the given file path.'''
