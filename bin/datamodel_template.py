@@ -31,50 +31,47 @@ if not ready:
     print('Fail! ready: {}'.format(ready))
 else:
 
-    migrate.parse_path()
-    migrate.set_datamodel_dir()
+    migrate.parse_path() # get env_variable, location_path, and file_name
     migrate.set_tree_edition()
     database.set_file_id(tree_edition  = migrate.tree_edition,
                          env_variable  = migrate.env_variable,
                          location_path = migrate.location_path,
                          file_name     = migrate.file_name)
-    intros = (Intro.load_all(file_id=database.file_id)
-                                  if database.file_id else None)
-    sections = (Section.load_all(file_id=database.file_id)
-                                      if database.file_id else None)
-    extensions = (Extension.load_all(file_id=database.file_id)
-                                          if database.file_id
-                                          else None)
-    headers = Header.load_all(extensions=extensions) if extensions else None
-    datas = Data.load_all(extensions=extensions) if extensions else None
-    keywords = dict()
-    columns = list()
-    for (data,header) in list(zip(datas,headers)):
-        if data and data.id: columns.append(Column.load(data_id=data.id))
-        keywords[header.id] = (Keyword.load_all(header_id=header.id)
-                        if header and header.id else None)
+    if database.file_id:
+        intros = Intro.load_all(file_id=database.file_id)
+        sections = Section.load_all(file_id=database.file_id)
+        extensions = Extension.load_all(file_id=database.file_id)
+        headers = Header.load_all(extensions=extensions) if extensions else None
+        datas = Data.load_all(extensions=extensions) if extensions else None
+        keywords = dict()
+        columns = list()
+        for (data,header) in list(zip(datas,headers)):
+            if data and data.id:
+                columns.append(Column.load(data_id=data.id))
+            keywords[header.id] = (Keyword.load_all(header_id=header.id)
+                                   if header and header.id else None)
 
-#    print('\nintros: \n%r' % intros)
-#    input('pause')
-#    print('\nsections: \n%r' % sections)
-#    input('pause')
-#    print('\nheaders: \n%r' % headers)
-#    input('pause')
-#    print('\nkeywords: \n%r' % keywords)
-#    input('pause')
-#    print('\ncolumns: \n%r' % columns)
-#    input('pause')
+#        print('\nintros: \n%r' % intros)
+#        input('pause')
+#        print('\nsections: \n%r' % sections)
+#        input('pause')
+#        print('\nheaders: \n%r' % headers)
+#        input('pause')
+#        print('\nkeywords: \n%r' % keywords)
+#        input('pause')
+#        print('\ncolumns: \n%r' % columns)
+#        input('pause')
 
-    template = "datamodel/datamodel.txt"
-    with app.app_context():
-        result1 = render_template(template,
-                                  intros   = intros,
-                                  sections = sections,
-                                  headers  = headers,
-                                  keywords = keywords,
-                                  columns  = columns,
-                                  )
-        print('result1 %r' % result1)
+        template = "datamodel/datamodel.txt"
+        with app.app_context():
+            result1 = render_template(template,
+                                      intros   = intros,
+                                      sections = sections,
+                                      headers  = headers,
+                                      keywords = keywords,
+                                      columns  = columns,
+                                      )
+            print('result1 %r' % result1)
 
 '''
 Examples:

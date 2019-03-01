@@ -75,10 +75,22 @@ class Migrate:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
             self.path    = self.options.path    if self.options else None
-            self.set_datamodel_dir()
             self.set_tree_edition()
             self.set_html_text()
             self.set_database()
+
+    def set_tree_edition(self):
+        '''Set the datamodel edition.'''
+        if self.ready:
+            self.set_datamodel_dir()
+            if self.datamodel_dir:
+                self.tree_edition = (self.datamodel_dir[-4:]
+                                if self.datamodel_dir else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_tree_edition. ' +
+                                  'self.datamodel_dir: {0}'
+                                  .format(self.datamodel_dir))
 
     def set_datamodel_dir(self):
         '''Set the DATAMODEL_DIR file path on cypher.'''
@@ -91,18 +103,6 @@ class Migrate:
                     'Unable to populate_tree_table from the ' +
                     'environmental variable DATAMODEL_DIR. ' +
                     'Try loading a datamodel module file.')
-
-    def set_tree_edition(self):
-        '''Set the datamodel edition.'''
-        if self.ready:
-            if self.datamodel_dir:
-                self.tree_edition = (self.datamodel_dir[-4:]
-                                if self.datamodel_dir else None)
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_tree_edition. ' +
-                                  'self.datamodel_dir: {0}'
-                                  .format(self.datamodel_dir))
 
     def set_html_text(self):
         '''Set the HTML text for the given URL.'''
@@ -188,7 +188,6 @@ class Migrate:
                 self.logger.error('Unable to populate_html_text_tables. ' +
                                   'self.file: {0}, '.format(self.file) +
                                   'self.file.ready: {0}.'.format(self.file.ready))
-
 
     def parse_path(self):
         '''Extract information from the given file path.'''
