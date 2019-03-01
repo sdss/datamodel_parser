@@ -361,6 +361,18 @@ class Section(db.Model):
             section = None
         return section
     
+    @staticmethod
+    def load_all(file_id=None):
+        if file_id:
+            try: sections = (Section.query
+                                  .filter(Section.file_id==file_id)
+                                  .order_by(Section.hdu_number)
+                                  .all())
+            except: sections = None
+        else:
+            sections = None
+        return sections
+    
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():
@@ -412,6 +424,17 @@ class Extension(db.Model):
             extension = None
         return extension
     
+    @staticmethod
+    def load_all(file_id=None):
+        if file_id:
+            try: extensions = (Extension.query.filter(Extension.file_id==file_id)
+                                .order_by(Extension.hdu_number)
+                                .all())
+            except: extensions = None
+        else:
+            extensions = None
+        return extensions
+    
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():
@@ -445,6 +468,7 @@ class Header(db.Model):
     extension_id = db.Column(db.Integer,
                              db.ForeignKey('sdss.extension.id'),
                              nullable = False)
+    hdu_number = db.Column(db.Integer, nullable = False)
     title = db.Column(db.String(32), nullable = False)
     table_caption = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.now)
@@ -452,16 +476,31 @@ class Header(db.Model):
                          default=datetime.now,
                          onupdate=datetime.now)
     @staticmethod
-    def load(extension_id=None,title=None):
-        if extension_id and title:
+    def load(extension_id=None):
+        if extension_id:
             try: header = (Header.query
                                 .filter(Header.extension_id==extension_id)
-                                .filter(Header.title==title)
                                 .one())
             except: header = None
         else:
             header = None
         return header
+    
+    @staticmethod
+    def load_all(extensions=None):
+        if extensions:
+            try:
+                headers = list()
+                for extension in extensions:
+                    
+                    header = (Header.query
+                                    .filter(Header.extension_id==extension.id)
+                                    .one())
+                    headers.append(header)
+            except: headers = None
+        else:
+            headers = None
+        return headers
     
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
@@ -519,6 +558,18 @@ class Keyword(db.Model):
             header = None
         return header
     
+    @staticmethod
+    def load_all(header_id=None):
+        if header_id:
+            try: keywords = (Keyword.query
+                                  .filter(Keyword.header_id==header_id)
+                                  .order_by(Keyword.keyword_order)
+                                  .all())
+            except: keywords = None
+        else:
+            keywords = None
+        return keywords
+    
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():
@@ -566,6 +617,21 @@ class Data(db.Model):
         else:
             data = None
         return data
+    
+    @staticmethod
+    def load_all(extensions=None):
+        if extensions:
+            try:
+                datas = list()
+                for extension in extensions:
+                    data = (Data.query
+                                    .filter(Data.extension_id==extension.id)
+                                    .one())
+                    datas.append(data)
+            except: datas = None
+        else:
+            datas = None
+        return datas
     
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False

@@ -467,11 +467,10 @@ class Migrate:
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
                 for hdu_data in self.file.file_extension_data:
-                    if self.ready:
-                        hdu_number = hdu_data['extension_hdu_number']
-                        self.database.set_extension_columns(hdu_number=hdu_number)
-                        self.database.populate_extension_table()
-                        self.ready = self.database.ready
+                    hdu_number = hdu_data['hdu_number']
+                    self.database.set_extension_columns(hdu_number=hdu_number)
+                    self.database.populate_extension_table()
+                    self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
@@ -497,8 +496,8 @@ class Migrate:
                 ):
                 for hdu_data in self.file.file_extension_data:
                     if self.ready:
+                        hdu_number = hdu_data['hdu_number']
                         is_image   = hdu_data['data_is_image']
-                        hdu_number = hdu_data['extension_hdu_number']
                         self.database.set_extension_id(
                                             tree_edition  = self.tree_edition,
                                             env_variable  = self.env_variable,
@@ -511,7 +510,7 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_extension_table. '                 +
+                    'Unable to populate_data_table. '                 +
                     'self.tree_edition: {0}, ' .format(self.tree_edition)  +
                     'self.env_variable: {0}, ' .format(self.env_variable)  +
                     'self.location_path: {0}, '.format(self.location_path) +
@@ -533,7 +532,7 @@ class Migrate:
                 ):
                 for hdu_data in self.file.file_extension_data:
                     if self.ready:
-                        hdu_number   = hdu_data['extension_hdu_number']
+                        hdu_number   = hdu_data['hdu_number']
                         header_title = hdu_data['header_title']
                         datatype     = hdu_data['column_datatype']
                         size         = hdu_data['column_size']
@@ -554,7 +553,7 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_extension_table. '                 +
+                    'Unable to populate_column_table. '                 +
                     'self.tree_edition: {0}, ' .format(self.tree_edition)  +
                     'self.env_variable: {0}, ' .format(self.env_variable)  +
                     'self.location_path: {0}, '.format(self.location_path) +
@@ -577,10 +576,11 @@ class Migrate:
                 ):
                 data    = self.file.file_extension_data
                 headers = self.file.file_extension_headers
+
                 if len(data) == len(headers):
                     for (hdu_data,hdu_header) in list(zip(data,headers)):
                         if self.ready:
-                            hdu_number    = hdu_data['extension_hdu_number']
+                            hdu_number    = hdu_data['hdu_number']
                             header_title  = hdu_data['header_title']
                             table_caption = hdu_header['table_caption']
                             self.database.set_extension_id(
@@ -590,6 +590,7 @@ class Migrate:
                                             file_name     = self.file_name,
                                             hdu_number    = hdu_number)
                             self.database.set_header_columns(
+                                                hdu_number    = hdu_number,
                                                 title         = header_title,
                                                 table_caption = table_caption)
                             self.database.populate_header_table()
@@ -605,7 +606,7 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_extension_table. '                 +
+                    'Unable to populate_header_table. '                 +
                     'self.tree_edition: {0}, ' .format(self.tree_edition)  +
                     'self.env_variable: {0}, ' .format(self.env_variable)  +
                     'self.location_path: {0}, '.format(self.location_path) +
@@ -633,15 +634,13 @@ class Migrate:
                 if len(data) == len(headers):
                     for (hdu_data,hdu_header) in list(zip(data,headers)):
                         if self.ready:
-                            hdu_number     = hdu_data['extension_hdu_number']
-                            header_title   = hdu_data['header_title']
+                            hdu_number     = hdu_data['hdu_number']
                             self.database.set_header_id(
                                             tree_edition  = self.tree_edition,
                                             env_variable  = self.env_variable,
                                             location_path = self.location_path,
                                             file_name     = self.file_name,
-                                            hdu_number    = hdu_number,
-                                            header_title  = header_title)
+                                            hdu_number    = hdu_number)
                             table_keywords = hdu_header['table_keywords']
                             table_rows   = hdu_header['table_rows']
                             for keyword_order in table_rows.keys():
@@ -662,7 +661,7 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to populate_extension_table. '                 +
+                    'Unable to populate_keyword_table. '                 +
                     'self.tree_edition: {0}, ' .format(self.tree_edition)  +
                     'self.env_variable: {0}, ' .format(self.env_variable)  +
                     'self.location_path: {0}, '.format(self.location_path) +

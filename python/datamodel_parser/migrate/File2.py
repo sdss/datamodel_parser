@@ -57,6 +57,9 @@ class File2:
         '''Parse the HTML of the given division tags.'''
         if self.ready:
             if self.divs:
+                # define these lists here so they're not overwritten in for loop
+                self.file_extension_data    = list()
+                self.file_extension_headers = list()
                 for div in self.divs:
                     div_id = str(div['id'])
                     if div_id == 'intro':   self.parse_file_intro(intro=div)
@@ -110,11 +113,6 @@ class File2:
                                      if number_descendants > 1 else None)
                     sections      = (sections
                                      if number_descendants > 1 else None)
-#                    print('dt_list: %r' % dt_list)
-#                    print('dd_list: %r' % dd_list)
-#                    print('number_descendants: %r' % number_descendants)
-#                    input('pause')
-
                     self.set_intro_table_information(headings     = headings,
                                                      descriptions = descriptions)
                     self.set_section_hdu_names(section_title = section_title,
@@ -198,36 +196,35 @@ class File2:
         self.section_hdu_names = dict() # if no section this stays empty
         if self.ready:
             if section_title and sections:
-                extension_hdu_numbers = list()
+                hdu_numbers = list()
                 extension_hdu_names = list()
                 section_title = str(section_title.string)
                 sections = sections.find_next('ul').find_all('li')
                 for section in sections:
                     for string in section.strings:
                         if 'hdu' in string.lower():
-                            extension_hdu_number = (
+                            hdu_number = (
                                         string.lower().replace('hdu','').strip()
                                         if string else None)
-                            extension_hdu_number = int(extension_hdu_number)
-                            extension_hdu_numbers.append(extension_hdu_number)
+                            hdu_number = int(hdu_number)
+                            hdu_numbers.append(hdu_number)
                         elif string.strip()[0] == ':':
                             name = string.split(':')[1].strip()
                             extension_hdu_names.append(name)
-                    if (extension_hdu_numbers and extension_hdu_names and
-                        len(extension_hdu_numbers)==len(extension_hdu_names)):
-                        self.section_hdu_names = dict(zip(
-                                                        extension_hdu_numbers,
-                                                        extension_hdu_names))
+                    if (hdu_numbers and extension_hdu_names and
+                        len(hdu_numbers)==len(extension_hdu_names)):
+                        self.section_hdu_names = dict(zip(hdu_numbers,
+                                                          extension_hdu_names))
                     else:
                         self.ready = False
                         self.logger.error(
                                 'Unable to set_section_hdu_names.'      +
-                                'extension_hdu_numbers: {}'
-                                    .format(extension_hdu_numbers)      +
+                                'hdu_numbers: {}'
+                                    .format(hdu_numbers)      +
                                 'section_hdu_names: {}'
                                     .format(section_hdu_names)          +
-                                'len(extension_hdu_numbers): {}'
-                                    .format(len(extension_hdu_numbers)) +
+                                'len(hdu_numbers): {}'
+                                    .format(len(hdu_numbers)) +
                                 'len(section_hdu_names): {}'
                                     .format(len(section_hdu_names)))
             else: # Do nothing, it is possible to not have a section list
@@ -241,7 +238,6 @@ class File2:
 
     def parse_file_extension_data(self,div=None):
         '''Parse file description content from given division tag.'''
-        self.file_extension_data = list()
         if self.ready:
             if div:
                 self.check_valid_assumptions(div=div)
@@ -250,9 +246,8 @@ class File2:
                     heading = div.find_next('h2').string
                     split = heading.split(':') if heading else None
                     if split:
-                        extension_hdu_number = int(
-                                            split[0].lower().replace('hdu',''))
-                        header_title =   split[1].lower()
+                        hdu_number   = int(split[0].lower().replace('hdu',''))
+                        header_title = split[1].lower().strip()
                     else:
                         self.ready = False
                         self.logger.error("Expected ':' in heading." +
@@ -264,7 +259,7 @@ class File2:
                             if row and 'XTENSION' in row and 'IMAGE' in row]
                     data_is_image = bool(rows)
                     hdu_data = dict()
-                    hdu_data['extension_hdu_number'] = extension_hdu_number
+                    hdu_data['hdu_number'] = hdu_number
                     hdu_data['header_title']         = header_title
                     hdu_data['data_is_image']        = data_is_image
                     hdu_data['column_datatype']      = None
@@ -280,7 +275,6 @@ class File2:
 
     def parse_file_extension_header(self,div=None):
         '''Parse file description content from given division tag.'''
-        self.file_extension_headers = list()
         hdu_header = dict()
         if self.ready:
             if div:

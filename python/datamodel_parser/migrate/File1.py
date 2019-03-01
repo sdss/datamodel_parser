@@ -55,6 +55,9 @@ class File1:
         '''Parse the HTML of the given division tags.'''
         if self.ready:
             if self.divs:
+                # define these lists here so they're not overwritten in for loop
+                self.file_extension_data    = list()
+                self.file_extension_headers = list()
                 for div in self.divs:
                     div_id = div['id']
                     if div_id == 'intro': self.parse_file_intro(intro=div)
@@ -142,17 +145,16 @@ class File1:
                     if 'HDU' in string:
                         split = string.split(':')
                         extension = split[0].lower().strip() if split else None
-                        hdu_number = (extension.replace('hdu','')
-                                                if extension else None)
+                        hdu_number = (int(extension.replace('hdu',''))
+                                      if extension else None)
                         hdu_name   = split[1].lower().strip() if split else None
-                        if hdu_number and hdu_name:
+                        if hdu_number is not None and hdu_name:
                             self.section_hdu_names[hdu_number] = hdu_name
                         else:
                             self.ready = False
                             self.logger.error(
                                     'Unable to set_section_hdu_names.' +
-                                    'hdu_number: {}'
-                                        .format(hdu_number) +
+                                    'hdu_number: {}'.format(hdu_number) +
                                     'hdu_name: {}'.format(hdu_name))
             else:
                 self.ready = False
@@ -213,12 +215,12 @@ class File1:
                 if self.ready:
                     heading_tags = ['h1','h2','h3','h4','h5','h6']
                     paragraph_tags = ['p']
-                    order = -1
+                    heading_order = -1
                     for (idx,name) in enumerate(names):
                         if name in paragraph_tags: continue
                         if name in heading_tags:
-                            order += 1
-                            self.intro_heading_orders.append(order)
+                            heading_order += 1
+                            self.intro_heading_orders.append(heading_order)
                             level = int(name.replace('h',''))
                             self.intro_heading_levels.append(level)
                             self.intro_heading_titles.append(contents[idx])
@@ -292,16 +294,14 @@ class File1:
 
     def parse_file_extension_data(self,div=None):
         '''Parse file description content from given division tag.'''
-        self.file_extension_data = list()
         if self.ready:
             if div:
                 # extension.hdu_number and header.title
                 heading = div.find_next('h2').string
                 split = heading.split(':')
                 if split:
-                    extension_hdu_number = int(
-                                            split[0].lower().replace('hdu',''))
-                    header_title =   split[1].lower()
+                    hdu_number   = int(split[0].lower().replace('hdu',''))
+                    header_title = split[1].lower().strip()
                 else:
                     self.ready = False
                     self.logger.error("Expected ':' in heading")
@@ -325,12 +325,12 @@ class File1:
                 data_is_image = bool('image' in descriptions)
                 
                 hdu_data = dict()
-                hdu_data['extension_hdu_number'] = extension_hdu_number
-                hdu_data['header_title']         = header_title
-                hdu_data['data_is_image']        = data_is_image
-                hdu_data['column_datatype']      = column_datatype
-                hdu_data['column_size']          = column_size
-                hdu_data['column_description']   = column_description
+                hdu_data['hdu_number']         = hdu_number
+                hdu_data['header_title']       = header_title
+                hdu_data['data_is_image']      = data_is_image
+                hdu_data['column_datatype']    = column_datatype
+                hdu_data['column_size']        = column_size
+                hdu_data['column_description'] = column_description
                 self.file_extension_data.append(hdu_data)
                 self.extension_count = len(self.file_extension_data)
             else:
@@ -340,7 +340,6 @@ class File1:
 
     def parse_file_extension_header(self,div=None):
         '''Parse file description content from given division tag.'''
-        self.file_extension_headers = list()
         hdu_header = dict()
         if self.ready:
             if div:

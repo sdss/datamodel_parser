@@ -87,6 +87,7 @@ CREATE TABLE sdss.extension (
 CREATE TABLE sdss.header (
     id SERIAL NOT NULL PRIMARY KEY,
     extension_id INT4 REFERENCES sdss.extension(id) NOT NULL,
+    hdu_number INT2 NOT NULL,
     title VARCHAR(32) NOT NULL,
     table_caption VARCHAR(128),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,

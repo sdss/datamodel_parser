@@ -184,7 +184,7 @@ class File3:
             if header_title and header:
                 if self.ready:
                     # extension.hdu_number and header.title
-                    extension_hdu_number = (
+                    hdu_number = (
                         [int(s) for s in list(header_title) if s.isdigit()][0])
                     # data.is_image
                     rows = header.split('\n') if header else list()
@@ -192,12 +192,12 @@ class File3:
                             if row and 'XTENSION' in row and 'IMAGE' in row]
                     data_is_image = bool(rows)
                     hdu_data = dict()
-                    hdu_data['extension_hdu_number'] = extension_hdu_number
-                    hdu_data['header_title']         = header_title
-                    hdu_data['data_is_image']        = data_is_image
-                    hdu_data['column_datatype']      = None
-                    hdu_data['column_size']          = None
-                    hdu_data['column_description']   = None
+                    hdu_data['hdu_number']         = hdu_number
+                    hdu_data['header_title']       = header_title
+                    hdu_data['data_is_image']      = data_is_image
+                    hdu_data['column_datatype']    = None
+                    hdu_data['column_size']        = None
+                    hdu_data['column_description'] = None
                     self.file_extension_data.append(hdu_data)
                     self.extension_count = len(self.file_extension_data)
 
