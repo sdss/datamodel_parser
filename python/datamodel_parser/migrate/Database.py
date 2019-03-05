@@ -1035,7 +1035,7 @@ class Database:
         self.data_columns = dict()
         if self.ready:
             extension_id = self.extension_id if self.extension_id else None
-            if extension_id and is_image is not None:
+            if extension_id: # is_image can be None:
                 self.data_columns = {
                     'extension_id' : extension_id
                                         if extension_id         else None,

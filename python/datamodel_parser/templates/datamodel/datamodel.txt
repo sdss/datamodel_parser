@@ -1,17 +1,34 @@
-This is a trivial example of a template to list all Trees
 
-{% for tree in trees %}
-* tree.edition: {{ tree.edition }}
+{% for intro in intros %}
+{{ intro.heading_title }}
+{{ intro.description }}
 {% endfor %}
 
-{% for env in envs %}
-* env.tree_id: {{ env.tree_id }}
+{% if sections %}
+Sections
+{% for section in sections %}
+HDU{{ section.hdu_number }}: {{ section.hdu_name }}
 {% endfor %}
+{% endif %}
 
-{% for location in locations %}
-* location.env_id: {{ location.env_id }}
+{% for hdu_number in hdus.keys() %}
+HDU{{ hdu_number }}: {{hdus[hdu_number]['extension']['header'].title.upper()}}
+
+{% if hdus[hdu_number]['column'] %}
+{{hdus[hdu_number]['column'].description}}
+HDU Type
+{% if hdus[hdu_number]['column'].datatype %}
+{{ hdus[hdu_number]['column'].datatype.upper() }}
+{% else %}
+{{ hdus[hdu_number]['column'].datatype }}
+{% endif %}
+
+HDU Size
+{{hdus[hdu_number]['column'].size}}
+            {{hdus[hdu_number]['extension']['header'].table_caption}}
+{% endif %}
+Key             Value               Type                Comment
+{% for keyword in hdus[hdu_number]['extension']['keywords'] %}
+{{keyword.keyword}} {{keyword.value}}           {{keyword.type}}            {{keyword.comment}}
 {% endfor %}
-
-{% for directory in directories %}
-* directory.location_id: {{ directory.location_id }}
 {% endfor %}

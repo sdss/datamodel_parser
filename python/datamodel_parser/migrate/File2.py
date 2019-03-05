@@ -257,14 +257,14 @@ class File2:
                     rows = header.split('\n') if header else list()
                     rows = [row for row in rows
                             if row and 'XTENSION' in row and 'IMAGE' in row]
-                    data_is_image = bool(rows)
+                    data_is_image = bool(rows) 
                     hdu_data = dict()
-                    hdu_data['hdu_number'] = hdu_number
-                    hdu_data['header_title']         = header_title
-                    hdu_data['data_is_image']        = data_is_image
-                    hdu_data['column_datatype']      = None
-                    hdu_data['column_size']          = None
-                    hdu_data['column_description']   = None
+                    hdu_data['hdu_number']         = hdu_number
+                    hdu_data['header_title']       = header_title
+                    hdu_data['data_is_image']      = data_is_image
+                    hdu_data['column_datatype']    = None
+                    hdu_data['column_size']        = None
+                    hdu_data['column_description'] = None
                     self.file_extension_data.append(hdu_data)
                     self.extension_count = len(self.file_extension_data)
 

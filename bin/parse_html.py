@@ -27,6 +27,7 @@ File Type 2)
     datamodel/dr14:
         parse_html.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html -l debug -v
         parse_html.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html -l debug -v
+        
 File Type 3)
     datamodel/dr14 and datamodel/dr15
     Fail!
