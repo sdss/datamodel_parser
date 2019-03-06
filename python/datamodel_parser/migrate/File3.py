@@ -312,10 +312,13 @@ class File3:
         string = None
         if self.ready:
             if node:
-                n = self.get_number_descendants(node=node)
-                if n > 1:                    string = str(node)
-                elif n == 1 and node.string: string = str(node.string)
-                else:                        string = None
+                if isinstance(node,str):
+                    string = node
+                else:
+                    n = self.get_number_descendants(node=node)
+                    if n > 1:                    string = str(node)
+                    elif n == 1 and node.string: string = str(node.string)
+                    else:                        string = None
             else:
                 self.ready = None
                 self.logger.error('Unable to get_string. ' +
@@ -328,7 +331,7 @@ class File3:
         if self.ready:
             if node:
                 number_descendants = 0
-                if not isinstance(node, NavigableString):
+                if not (isinstance(node, NavigableString) or isinstance(node, str)):
                     for descendant in node.descendants:
                         if descendant: number_descendants += 1
             else:

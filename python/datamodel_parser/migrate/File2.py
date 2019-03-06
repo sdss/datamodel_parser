@@ -78,7 +78,7 @@ class File2:
         if self.ready:
             if node:
                 number_descendants = 0
-                if not isinstance(node, NavigableString):
+                if not (isinstance(node, NavigableString) or isinstance(node, str)):
                     for descendant in node.descendants:
                         if descendant: number_descendants += 1
             else:
@@ -95,26 +95,40 @@ class File2:
             # Make sure intro has children
             number_descendants = self.get_number_descendants(node=intro)
             if intro and number_descendants:
+                headings = list()
+                descriptions = list()
+                
+                # page title
+                heading = intro.find_next('h1').string
+                headings.append(heading)
+                descriptions.append('')
+                
+                # page intro
                 dl = intro.find_next('dl')
                 dt_list = dl.find_all('dt')
                 dd_list = dl.find_all('dd')
                 if len(dt_list)==len(dd_list):
                     section_title = dt_list[-1]
                     sections      = dd_list[-1]
-                    # if the sections number_descendants > 1
-                    # then there's a section list
+                    # if number_descendants > 1: then there's a section list
                     # else there's no section list
                     number_descendants = self.get_number_descendants(node=sections)
-                    headings      = (dt_list[:-1]
+                    dt_headings      = (dt_list[:-1]
                                      if number_descendants > 1 else dt_list)
-                    descriptions  = (dd_list[:-1]
+                    dd_descriptions  = (dd_list[:-1]
                                      if number_descendants > 1 else dd_list)
-                    section_title = (section_title
-                                     if number_descendants > 1 else None)
-                    sections      = (sections
-                                     if number_descendants > 1 else None)
+                                     
+                    # Intro table
+                    headings.extend(dt_headings)
+                    descriptions.extend(dd_descriptions)
                     self.set_intro_table_information(headings     = headings,
                                                      descriptions = descriptions)
+
+                    # Section table
+                    section_title = (section_title
+                                     if number_descendants > 1 else '')
+                    sections      = (sections
+                                     if number_descendants > 1 else list())
                     self.set_section_hdu_names(section_title = section_title,
                                                sections      = sections)
                 else:
@@ -142,8 +156,12 @@ class File2:
             if headings and descriptions:
                 if len(headings)==len(descriptions):
                     for (heading,description) in list(zip(headings,descriptions)):
-                         self.append_intro_heading_title(heading=heading)
-                         self.append_intro_description(description=description)
+                        heading_title = (self.get_string(node=heading)
+                                         if heading else '')
+                        intro_description = (self.get_string(node=description)
+                                             if description else '')
+                        self.intro_heading_titles.append(heading_title)
+                        self.intro_descriptions.append(intro_description)
                     number_headings = len(headings)
                     self.intro_heading_orders = list(range(number_headings))
                     self.intro_heading_levels = [None] * number_headings
@@ -162,40 +180,30 @@ class File2:
                             'headings: {0}'.format(headings) +
                             'descriptions: {0}'.format(descriptions))
 
-    def append_intro_heading_title(self,heading=None):
-        '''Append heading title to self.intro_heading_titles.'''
+    def get_string(self,node=None):
+        string = None
         if self.ready:
-            if heading:
-                n = self.get_number_descendants(node=heading)
-                if n > 1:                       string = str(heading)
-                elif n == 1 and heading.string: string = str(heading.string)
-                else:                           string = ''
-                self.intro_heading_titles.append(string)
+            if node:
+                if isinstance(node,str):
+                    string = node
+                else:
+                    n = self.get_number_descendants(node=node)
+                    if n > 1:                    string = str(node)
+                    elif n == 1 and node.string: string = str(node.string)
+                    else:                        string = None
             else:
-                self.ready = False
-                self.logger.error('Unable to set_intro_table_information. ' +
-                                  'heading: {0}'.format(heading))
-
-    def append_intro_description(self,description=None):
-        '''Append description title to self.intro_descriptions.'''
-        if self.ready:
-            if description:
-                number_descendants = (
-                    self.get_number_descendants(node=description))
-                if description.string:   string = str(description.string)
-                elif number_descendants: string = str(description)
-                else:                    string = ''
-                self.intro_descriptions.append(string)
-            else:
-                self.ready = False
-                self.logger.error('Unable to append_intro_description. ' +
-                                  'description: {0}'.format(description))
+                self.ready = None
+                self.logger.error('Unable to get_string. ' +
+                                  'node: {0}'.format(node))
+        return string
 
     def set_section_hdu_names(self,section_title=None,sections=None):
         '''Get the extension names from the intro Section.'''
         self.section_hdu_names = dict() # if no section this stays empty
         if self.ready:
-            if section_title and sections:
+            if not (section_title and sections):
+                self.section_hdu_names[' '] = ' '
+            else:
                 hdu_numbers = list()
                 extension_hdu_names = list()
                 section_title = str(section_title.string)
@@ -227,8 +235,6 @@ class File2:
                                     .format(len(hdu_numbers)) +
                                 'len(section_hdu_names): {}'
                                     .format(len(section_hdu_names)))
-            else: # Do nothing, it is possible to not have a section list
-                pass
 
     def parse_file_extension(self,div=None):
         '''Parse file extension content from given division tag.'''
