@@ -13,7 +13,8 @@ ready = ready and migrate.ready
 if not ready:
     print('Fail! ready: {}'.format(ready))
 else:
-    template = "datamodel/datamodel.txt"
+#    template = "datamodel/datamodel_txt.txt"
+    template = "datamodel/datamodel_md.txt"
     migrate.render_template(template=template)
     migrate.exit()
 

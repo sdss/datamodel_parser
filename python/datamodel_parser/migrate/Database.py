@@ -936,13 +936,10 @@ class Database:
                 else self.section_columns['hdu_name']
                 if self.section_columns and 'hdu_name' in self.section_columns
                 else None)
-            # if there's no file section hdu_number and hdu_name are None
-            if file_id:
-                self.section = (Section.load(file_id  = file_id,
+            if file_id: # if there's no file section hdu_number=hdu_name=None
+                self.section = Section.load(file_id  = file_id,
                                            hdu_number = hdu_number,
                                            hdu_name   = hdu_name)
-                                if file_id and hdu_number is not None and hdu_name
-                                else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_section. ' +

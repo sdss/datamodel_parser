@@ -201,9 +201,7 @@ class File2:
         '''Get the extension names from the intro Section.'''
         self.section_hdu_names = dict() # if no section this stays empty
         if self.ready:
-            if not (section_title and sections):
-                self.section_hdu_names[' '] = ' '
-            else:
+            if section_title and sections:
                 hdu_numbers = list()
                 extension_hdu_names = list()
                 section_title = str(section_title.string)
@@ -235,6 +233,8 @@ class File2:
                                     .format(len(hdu_numbers)) +
                                 'len(section_hdu_names): {}'
                                     .format(len(section_hdu_names)))
+            else: pass # Do nothing, it is possible to not have a section list
+
 
     def parse_file_extension(self,div=None):
         '''Parse file extension content from given division tag.'''

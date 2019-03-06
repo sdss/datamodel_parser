@@ -176,7 +176,8 @@ class Migrate:
                                                  sections = sections,
                                                  hdus     = hdus,
                                                  )
-                    self.process_rendered_template(result=result)
+                    self.process_rendered_template(result   = result,
+                                                   template = template)
                 else:
                     print('Fail! \nTry running parse_html for the file: %r'
                             % self.options.path)
@@ -185,14 +186,15 @@ class Migrate:
                 self.logger.error('Unable to render_template.' +
                                   'template: {0}'.format(template))
 
-    def process_rendered_template(self,result=None):
+    def process_rendered_template(self,result=None,template=None):
         '''Process the result of the rendered Jinja2 template.'''
         if self.ready:
-            if result:
+            if result and template:
                 self.set_datamodel_parser_rendered_dir()
+                file_extension = template.split('.')[0].split('_')[1]
                 dir_name = (self.datamodel_parser_rendered_dir
                             if self.datamodel_parser_rendered_dir else None)
-                file_name = self.file_name
+                file_name = self.file_name.split('.')[0] + '.' + file_extension
                 file = join(dir_name,file_name)
                 self.logger.info('writing rendered template to file: %r' % file)
                 with open(file, 'w+') as text_file:
@@ -200,21 +202,21 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error('Unable to process_rendered_template. ' +
-                                  'result: {0}, '.format(result))
+                                  'result: {0}, '.format(result) +
+                                  'template: {0}, '.format(template))
 
     def set_datamodel_parser_rendered_dir(self):
         '''Set the DATAMODEL_DIR file path on cypher.'''
         self.datamodel_parser_rendered_dir = None
         if self.ready:
-            try: self.datamodel_parser_rendered_dir = environ['DATAMODEL_PARSER_RENDERED_DIR']
+            try: self.datamodel_parser_rendered_dir = (
+                    environ['DATAMODEL_PARSER_RENDERED_TEMPLATES_DIR'])
             except:
                 self.ready = False
                 self.logger.error(
                     'Unable to set_datamodel_parser_rendered_dir from the ' +
-                    'environmental variable DATAMODEL_PARSER_RENDERED_DIR. ' +
+                    'environmental variable DATAMODEL_PARSER_RENDERED_TEMPLATES_DIR. ' +
                     'Try loading a datamodel_parser module file.')
-
-
 
     def populate_database(self):
         '''Populate the database with file information.'''
