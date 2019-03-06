@@ -4,8 +4,10 @@ from bs4 import BeautifulSoup
 from os import environ
 from os.path import join, exists
 import logging
-from json import dumps
+from flask import render_template
+from datamodel_parser import app, logger
 
+from json import dumps
 
 class Migrate:
 
@@ -151,6 +153,68 @@ class Migrate:
                     'Unable to set_database. ' +
                     'self.database: {0}'.format(self.database) +
                     'self.database.ready: {0}'.format(self.database.ready))
+
+    def render_template(self,template=None):
+        '''Use database information to render the given template.'''
+        if self.ready:
+            if template:
+                self.parse_path() # set env_variable, location_path, and file_name
+                self.set_tree_edition()
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
+                (intros,sections,hdus) = (self.database.get_intros_sections_hdus()
+                                          if self.ready and self.database.ready
+                                          else None)
+                self.ready = self.ready and self.database.ready
+                if self.ready:
+                    result = None
+                    with app.app_context():
+                        result = render_template(template,
+                                                 intros   = intros,
+                                                 sections = sections,
+                                                 hdus     = hdus,
+                                                 )
+                    self.process_rendered_template(result=result)
+                else:
+                    print('Fail! \nTry running parse_html for the file: %r'
+                            % self.options.path)
+            else:
+                self.ready = False
+                self.logger.error('Unable to render_template.' +
+                                  'template: {0}'.format(template))
+
+    def process_rendered_template(self,result=None):
+        '''Process the result of the rendered Jinja2 template.'''
+        if self.ready:
+            if result:
+                self.set_datamodel_parser_rendered_dir()
+                dir_name = (self.datamodel_parser_rendered_dir
+                            if self.datamodel_parser_rendered_dir else None)
+                file_name = self.file_name
+                file = join(dir_name,file_name)
+                self.logger.info('writing rendered template to file: %r' % file)
+                with open(file, 'w+') as text_file:
+                    text_file.write(result)
+            else:
+                self.ready = False
+                self.logger.error('Unable to process_rendered_template. ' +
+                                  'result: {0}, '.format(result))
+
+    def set_datamodel_parser_rendered_dir(self):
+        '''Set the DATAMODEL_DIR file path on cypher.'''
+        self.datamodel_parser_rendered_dir = None
+        if self.ready:
+            try: self.datamodel_parser_rendered_dir = environ['DATAMODEL_PARSER_RENDERED_DIR']
+            except:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_datamodel_parser_rendered_dir from the ' +
+                    'environmental variable DATAMODEL_PARSER_RENDERED_DIR. ' +
+                    'Try loading a datamodel_parser module file.')
+
+
 
     def populate_database(self):
         '''Populate the database with file information.'''

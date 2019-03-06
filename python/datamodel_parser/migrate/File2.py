@@ -257,7 +257,7 @@ class File2:
                     rows = header.split('\n') if header else list()
                     rows = [row for row in rows
                             if row and 'XTENSION' in row and 'IMAGE' in row]
-                    data_is_image = bool(rows) 
+                    data_is_image = bool(rows)
                     hdu_data = dict()
                     hdu_data['hdu_number']         = hdu_number
                     hdu_data['header_title']       = header_title
@@ -376,4 +376,3 @@ class File2:
                 self.ready = False
                 self.logger.error('Unable to set_row_data. ' +
                                   'row: {0}'.format(row))
-

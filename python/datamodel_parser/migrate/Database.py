@@ -45,7 +45,78 @@ class Database:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
             self.tree_columns = None
-            
+
+    def get_intros_sections_hdus(self):
+        '''
+            Get the rows from the intro and section table, as well as a data
+            structure with columns from the data, header, and keyword tables.
+        '''
+        (intros,sections,hdus)=(None,None,None)
+        if self.ready:
+            if self.file_id:
+                intros     = Intro.load_all(file_id=self.file_id)
+                sections   = Section.load_all(file_id=self.file_id)
+                extensions = Extension.load_all(file_id=self.file_id)
+                headers    = (Header.load_all(extensions=extensions)
+                              if extensions else None)
+                datas      = (Data.load_all(extensions=extensions)
+                              if extensions else None)
+                # set sections = None if sections has empty hdu information
+                if (len(sections) == 1             and
+                    sections[0].hdu_number is None and
+                    sections[0].hdu_name   is None
+                    ):
+                    sections = None
+                hdus = self.get_hdus(intros=intros,headers=headers,datas=datas)
+                if not (intros and headers and hdus):
+                    self.ready = False
+                    self.logger.error('Unable to get_intros_sections_hdus.' +
+                                      'intros: {0}'.format(intros) +
+                                      'headers: {0}'.format(headers))
+
+#                    for hdu_number in hdus.keys():
+#                        print("hdus[hdu_number]['column']: %r" % hdus[hdu_number]['column'])
+#                        print("hdus[hdu_number]['extension']['header']: %r" % hdus[hdu_number]['extension']['header'])
+#                        print("hdus[hdu_number]['extension']['keywords']: %r" % hdus[hdu_number]['extension']['keywords'])
+#                        input('pause')
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intros_sections_hdus.' +
+                                  'self.file_id: {0}'.format(self.file_id))
+        return (intros,sections,hdus)
+
+    def get_hdus(self,intros=None,headers=None,datas=None):
+        '''
+            Get a data structure with columns from the data, header,
+            and keyword tables.
+        '''
+        hdus = None
+        if self.ready:
+            if intros and headers and datas:
+                hdus = dict()
+                for (data,header) in list(zip(datas,headers)):
+                    hdu = dict()
+                    hdu['extension'] = dict()
+                    column = (Column.load(data_id=data.id)
+                                if data and data.id else None)
+                    hdu['column'] = (column if column
+                                    and not
+                                    (column.datatype is None and
+                                     column.datatype is None and
+                                     column.datatype is None)
+                                     else None)
+                    hdu['extension']['header'] = header
+                    hdu['extension']['keywords'] = (Keyword.load_all(header_id=header.id)
+                        if header and header.id else None)
+                    hdus[header.hdu_number] = hdu
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_hdus.' +
+                                  'intros: {0}'.format(intros) +
+                                  'headers: {0}'.format(headers) +
+                                  'datas: {0}'.format(datas))
+        return hdus
+
     def set_tree_id(self,tree_edition=None):
         '''Get tree_id.'''
         self.tree_id = None
