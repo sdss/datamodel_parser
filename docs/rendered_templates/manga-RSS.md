@@ -29,22 +29,22 @@ gzipped multi-extension FITS
 
 
 ## Sections
-#### HDU0: primary
-#### HDU1: flux
-#### HDU2: ivar
-#### HDU3: mask
-#### HDU4: disp
-#### HDU5: predisp
-#### HDU6: wave
-#### HDU7: specres
-#### HDU8: specresd
-#### HDU9: prespecres
-#### HDU10: prespecresd
-#### HDU11: obsinfo
-#### HDU12: xpos
-#### HDU13: ypos
+### [HDU0|:#HDU0]: primary
+### [HDU1|:#HDU1]: flux
+### [HDU2|:#HDU2]: ivar
+### [HDU3|:#HDU3]: mask
+### [HDU4|:#HDU4]: disp
+### [HDU5|:#HDU5]: predisp
+### [HDU6|:#HDU6]: wave
+### [HDU7|:#HDU7]: specres
+### [HDU8|:#HDU8]: specresd
+### [HDU9|:#HDU9]: prespecres
+### [HDU10|:#HDU10]: prespecresd
+### [HDU11|:#HDU11]: obsinfo
+### [HDU12|:#HDU12]: xpos
+### [HDU13|:#HDU13]: ypos
 
-## HDU0: PRIMARY
+## HDU0: PRIMARY[#HDU0]
 
 
 Empty except for global header
@@ -134,7 +134,7 @@ image
 | **DATASUM** | 0 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | YG5FZ949YE4EY949 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU1: FLUX
+## HDU1: FLUX[#HDU1]
 
 
 Row-stacked spectra in units of 10^{-17} erg/s/cm2/Angstrom/fiber
@@ -238,7 +238,7 @@ image
 | **DATASUM** | 404143304 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | MZISMYFQMYFQMYFQ | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU2: IVAR
+## HDU2: IVAR[#HDU2]
 
 
 Inverse variance of row-stacked spectra
@@ -273,7 +273,7 @@ image
 | **DATASUM** | 1140307641 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | 6K5C9K396K3C6K39 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU3: MASK
+## HDU3: MASK[#HDU3]
 
 
 Pixel mask (MANGA_DRP2PIXMASK)
@@ -308,7 +308,7 @@ image
 | **DATASUM** | 2359936278 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | cbdRdabOcabOcabO | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU4: DISP
+## HDU4: DISP[#HDU4]
 
 
 Spectral LSF  (1-sigma) in units of Angstroms
@@ -337,7 +337,7 @@ image
 | **DATASUM** | 2453379726 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | RAH2S3G2R9G2R9G2 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU5: PREDISP
+## HDU5: PREDISP[#HDU5]
 
 
 Broadened pre-pixel dispersion solution (1sigma LSF in Angstroms)
@@ -366,7 +366,7 @@ image
 | **DATASUM** | 1425839999 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | FAP7F3O4FAO4F3O4 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU6: WAVE
+## HDU6: WAVE[#HDU6]
 
 
 Wavelength vector in units of Angstroms (vacuum heliocentric)
@@ -394,7 +394,7 @@ image
 | **DATASUM** | 3938867060 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | cL7TfJ5TcJ5TcJ5T | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU7: SPECRES
+## HDU7: SPECRES[#HDU7]
 
 
 Median spectral resolution vs wavelength
@@ -422,7 +422,7 @@ image
 | **DATASUM** | 1547448224 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | OcOcRaOZOaObOaOZ | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU8: SPECRESD
+## HDU8: SPECRESD[#HDU8]
 
 
 Standard deviation (1-sigma) of spectral resolution vs wavelength
@@ -450,7 +450,7 @@ image
 | **DATASUM** | 706612906 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | K3YcN3WZK3WbK3WZ | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU9: PRESPECRES
+## HDU9: PRESPECRES[#HDU9]
 
 
 Median pre-pixel spectral resolution vs wavelength
@@ -478,7 +478,7 @@ image
 | **DATASUM** | 2694726452 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | bD8IeD8IbD8IbD8I | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU10: PRESPECRESD
+## HDU10: PRESPECRESD[#HDU10]
 
 
 Standard deviation of pre-pixel spectral resolution vs wavelength
@@ -506,7 +506,7 @@ image
 | **DATASUM** | 2908884265 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | eDDUe9BTeABTe9BT | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU11: OBSINFO
+## HDU11: OBSINFO[#HDU11]
 
 
 Table detailing exposures combined to create this file
@@ -543,7 +543,7 @@ binary table
 | **COMMENT** |  *** Column formats *** | 		 | 		 | 
 | **COMMENT** | 		 | 		 | 		 | 
 
-## HDU12: XPOS
+## HDU12: XPOS[#HDU12]
 
 
 Array of fiber X-positions (units of arcsec) relative to the IFU center.  Because of chromatic DAR, each wavelength for a given fiber has a slightly different position, and therefore the positional arrays have the same dimensionality as the corresponding flux array.
@@ -572,7 +572,7 @@ image
 | **DATASUM** | 3023661791 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | 64MB71K961KA61K9 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU13: YPOS
+## HDU13: YPOS[#HDU13]
 
 
 Array of fiber Y-positions (units of arcsec) relative to the IFU center.  Because of chromatic DAR, each wavelength for a given fiber has a slightly different position, and therefore the positional arrays have the same dimensionality as the corresponding flux array.
