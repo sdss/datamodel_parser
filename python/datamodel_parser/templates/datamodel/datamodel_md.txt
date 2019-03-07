@@ -1,38 +1,43 @@
-
 {% for intro in intros %}
-{{ intro.heading_title or ''}}
-{{ intro.description or ''}}
+{% if intro.heading_level %}
+{{'#'*intro.heading_level}}{{intro.heading_title or ''}}
+{{intro.description or ''}}
+{% else %}
+#{{intro.heading_title or ''}}
+{{intro.description or ''}}
+{% endif %}
 {% endfor %}
 
 {% if sections %}
-Sections
+#Sections
 {% for section in sections %}
-HDU{{ section.hdu_number }}: {{ section.hdu_name }}
+##HDU{{section.hdu_number}}: {{section.hdu_name}}
 {% endfor %}
 {% endif %}
 
 {% for hdu_number in hdus.keys() %}
-HDU{{ hdu_number }}: {{hdus[hdu_number]['extension']['header'].title.upper()}}
+#HDU{{hdu_number}}: {{hdus[hdu_number]['extension']['header'].title.upper()}}
 
 {% if hdus[hdu_number]['column'] %}
 {{hdus[hdu_number]['column'].description}}
 
 {% if hdus[hdu_number]['column'].datatype %}
-HDU Type
-{{ hdus[hdu_number]['column'].datatype.upper() }}
+##HDU Type
+{{hdus[hdu_number]['column'].datatype.upper()}}
 {% else %}
-HDU Type
-{{ hdus[hdu_number]['column'].datatype }}
+##HDU Type
+{{hdus[hdu_number]['column'].datatype}}
 {% endif %}
 
-HDU Size
+#HDU Size
 {{hdus[hdu_number]['column'].size}}
             {{hdus[hdu_number]['extension']['header'].table_caption}}
 {% endif %}
 
-Key         Value           Type            Comment
+| Key | Value | Type | Comment |
+| :--- | :----- | :---- | :------- |
 {% for keyword in hdus[hdu_number]['extension']['keywords'] %}
-{{keyword.keyword or '\t\t'}}       {{keyword.value or '\t\t'}}     {{keyword.type or '\t\t'}}      {{keyword.comment or '\t\t'}}
+| {{keyword.keyword or '\t\t'}} | {{keyword.value or '\t\t'}} | {{keyword.type or '\t\t'}} | {{keyword.comment or '\t\t'}} | 
 {% endfor %}
 {% endfor %}
 
