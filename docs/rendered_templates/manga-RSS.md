@@ -28,7 +28,8 @@ gzipped multi-extension FITS
 
 
 
-# Sections## HDU0: primary
+# Sections
+## HDU0: primary
 ## HDU1: flux
 ## HDU2: ivar
 ## HDU3: mask

@@ -10,7 +10,7 @@
 
 {% if sections %}
 # Sections
-{%- for section in sections -%}
+{% for section in sections -%}
 ## HDU{{section.hdu_number}}: {{section.hdu_name}}
 {% endfor %}
 {% endif %}
