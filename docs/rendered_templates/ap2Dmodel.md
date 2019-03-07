@@ -1,7 +1,5 @@
 
-
 # Data model: ap2Dmodel
-
 
 
 
@@ -11,15 +9,12 @@ a PSF model. These are the models that are the 2D representation of the
 extracted spectra. They are simple FITS files.
 
 
-
 # Naming Convention
 <dd id="filename"><code>ap2Dmodel-[abc]-[0-9]{8}\.fits</code></dd>
 
 
-
 # Approximate Size
 2048x2048x3 bytes
-
 
 
 # File Type

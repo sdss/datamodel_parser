@@ -1,7 +1,5 @@
 
-
 # Data model: ap2D
-
 
 
 
@@ -11,15 +9,12 @@ rays are flagged and CR repair is attempted. Saturated pixels are flagged.
 Dark current is subtracted, and the final 2D image is flat-fielded.
 
 
-
 # Naming Convention
 <dd id="filename"><code>ap2D-[abc]-[0-9]{8}\.fits</code></dd>
 
 
-
 # Approximate Size
 2048x2048x3x4 bytes
-
 
 
 # File Type

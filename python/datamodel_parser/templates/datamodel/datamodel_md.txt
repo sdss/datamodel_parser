@@ -1,4 +1,4 @@
-{% for intro in intros %}
+{%- for intro in intros -%}
 {% if intro.heading_level %}
 {{'#'*intro.heading_level}} {{intro.heading_title or ''}}
 {{intro.description or ''}}
@@ -10,12 +10,12 @@
 
 {% if sections %}
 # Sections
-{% for section in sections %}
+{%- for section in sections -%}
 ## HDU{{section.hdu_number}}: {{section.hdu_name}}
 {% endfor %}
 {% endif %}
 
-{% for hdu_number in hdus.keys() %}
+{%- for hdu_number in hdus.keys() -%}
 # HDU{{hdu_number}}: {{hdus[hdu_number]['extension']['header'].title.upper()}}
 
 {% if hdus[hdu_number]['column'] %}
@@ -36,7 +36,7 @@
 
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
-{% for keyword in hdus[hdu_number]['extension']['keywords'] %}
+{%- for keyword in hdus[hdu_number]['extension']['keywords'] -%}
 | {{keyword.keyword or '\t\t'}} | {{keyword.value or '\t\t'}} | {{keyword.type or '\t\t'}} | {{keyword.comment or '\t\t'}} | 
 {% endfor %}
 {% endfor %}
