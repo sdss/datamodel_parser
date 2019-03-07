@@ -24,12 +24,12 @@ FITS
 
 
 ## Sections
-### [HDU0|:#HDU0]: master header
-### [HDU1|:#HDU1]: image (ADU) [FLOAT]
-### [HDU2|:#HDU2]: error (ADU) [FLOAT]
-### [HDU3|:#HDU3]: flag mask [INT*2]
+HDU0: master header
+HDU1: image (ADU) [FLOAT]
+HDU2: error (ADU) [FLOAT]
+HDU3: flag mask [INT*2]
 
-## HDU0: MASTER[#HDU0]
+## HDU0: MASTER
 
 
 
@@ -183,7 +183,7 @@ FITS
 | **DATASUM** |  '         0'          | 		 | data unit checksum updated 2012-11-15T13:03:37 | 
 | **END** | 		 | 		 | 		 | 
 
-## HDU1: DATA[#HDU1]
+## HDU1: DATA
 
 
 
@@ -207,7 +207,7 @@ FITS
 | **DATASUM** |  '3618308333'          | 		 | data unit checksum updated 2012-11-15T21:35:29 | 
 | **END** | 		 | 		 | 		 | 
 
-## HDU2: ERROR[#HDU2]
+## HDU2: ERROR
 
 
 
@@ -231,7 +231,7 @@ FITS
 | **DATASUM** |  '908871677'           | 		 | data unit checksum updated 2012-11-15T21:35:57 | 
 | **END** | 		 | 		 | 		 | 
 
-## HDU3: MASK[#HDU3]
+## HDU3: MASK
 
 
 

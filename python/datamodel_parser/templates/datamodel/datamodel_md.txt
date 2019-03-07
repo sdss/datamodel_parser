@@ -11,12 +11,12 @@
 {% if sections %}
 ## Sections
 {% for section in sections -%}
-### [HDU{{section.hdu_number}}|:#HDU{{section.hdu_number}}]: {{section.hdu_name}}
+HDU{{section.hdu_number}}: {{section.hdu_name}}
 {% endfor %}
 {% endif %}
 
 {%- for hdu_number in hdus.keys() -%}
-## HDU{{hdu_number}}: {{hdus[hdu_number]['extension']['header'].title.upper()}}[#HDU{{hdu_number}}]
+## HDU{{hdu_number}}: {{hdus[hdu_number]['extension']['header'].title.upper()}}
 
 {% if hdus[hdu_number]['column'] %}
 {{hdus[hdu_number]['column'].description}}

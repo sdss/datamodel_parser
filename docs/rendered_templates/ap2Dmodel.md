@@ -22,7 +22,7 @@ FITS
 
 
 
-## HDU0: MASTER[#HDU0]
+## HDU0: MASTER
 
 
 
