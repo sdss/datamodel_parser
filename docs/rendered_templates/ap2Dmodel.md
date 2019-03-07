@@ -22,28 +22,19 @@ FITS
 
 
 
-
-
-
 # HDU0: MASTER
+
 
 
 
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
-
 | SIMPLE |                     T  | 		 | Primary Header created by MWRFITS v1.11 | 
-
 | BITPIX |                   -32  | 		 | 		 | 
-
 | NAXIS |                     2  | 		 | 		 | 
-
 | NAXIS1 |                  2048  | 		 | 		 | 
-
 | NAXIS2 |                  2048  | 		 | 		 | 
-
 | EXTEND |                     T  | 		 | Extensions may be present | 
-
 | END | 		 | 		 | 		 | 
 
 

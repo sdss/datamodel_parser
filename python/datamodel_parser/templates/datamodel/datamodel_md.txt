@@ -23,7 +23,7 @@
 
 {% if hdus[hdu_number]['column'].datatype %}
 ## HDU Type
-{{hdus[hdu_number]['column'].datatype.upper()}}
+{{hdus[hdu_number]['column'].datatype}}
 {% else %}
 ## HDU Type
 {{hdus[hdu_number]['column'].datatype}}
@@ -33,10 +33,10 @@
 {{hdus[hdu_number]['column'].size}}
             {{hdus[hdu_number]['extension']['header'].table_caption}}
 {% endif %}
-
+{{'\n'}}
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
-{%- for keyword in hdus[hdu_number]['extension']['keywords'] -%}
+{% for keyword in hdus[hdu_number]['extension']['keywords'] -%}
 | {{keyword.keyword or '\t\t'}} | {{keyword.value or '\t\t'}} | {{keyword.type or '\t\t'}} | {{keyword.comment or '\t\t'}} | 
 {% endfor %}
 {% endfor %}

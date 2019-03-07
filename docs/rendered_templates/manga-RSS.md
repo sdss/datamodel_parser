@@ -50,7 +50,7 @@ Empty except for global header
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -58,8 +58,10 @@ IMAGE
             Header Table Caption for HDU0
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || SIMPLE | True | 		 | 		 | 
+| :--- | :----- | :---- | :------- |
+| SIMPLE | True | 		 | 		 | 
 | BITPIX | 8 | 		 | 		 | 
 | NAXIS | 0 | 		 | 		 | 
 | EXTEND | True | 		 | 		 | 
@@ -138,7 +140,7 @@ Row-stacked spectra in units of 10^{-17} erg/s/cm2/Angstrom/fiber
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -146,8 +148,10 @@ IMAGE
             Header Table Caption for HDU1
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -32 | 		 | Number of bits per data pixel | 
 | NAXIS | 2 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -240,7 +244,7 @@ Inverse variance of row-stacked spectra
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -248,8 +252,10 @@ IMAGE
             Header Table Caption for HDU2
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -32 | 		 | Number of bits per data pixel | 
 | NAXIS | 2 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -273,7 +279,7 @@ Pixel mask (MANGA_DRP2PIXMASK)
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -281,8 +287,10 @@ IMAGE
             Header Table Caption for HDU3
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | 32 | 		 | Number of bits per data pixel | 
 | NAXIS | 2 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -306,7 +314,7 @@ Spectral LSF  (1-sigma) in units of Angstroms
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -314,8 +322,10 @@ IMAGE
             Header Table Caption for HDU4
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -32 | 		 | Number of bits per data pixel | 
 | NAXIS | 2 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -333,7 +343,7 @@ Broadened pre-pixel dispersion solution (1sigma LSF in Angstroms)
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -341,8 +351,10 @@ IMAGE
             Header Table Caption for HDU5
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -32 | 		 | Number of bits per data pixel | 
 | NAXIS | 2 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -360,7 +372,7 @@ Wavelength vector in units of Angstroms (vacuum heliocentric)
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -368,8 +380,10 @@ IMAGE
             Header Table Caption for HDU6
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -64 | 		 | Number of bits per data pixel | 
 | NAXIS | 1 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -386,7 +400,7 @@ Median spectral resolution vs wavelength
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -394,8 +408,10 @@ IMAGE
             Header Table Caption for HDU7
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -64 | 		 | Number of bits per data pixel | 
 | NAXIS | 1 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -412,7 +428,7 @@ Standard deviation (1-sigma) of spectral resolution vs wavelength
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -420,8 +436,10 @@ IMAGE
             Header Table Caption for HDU8
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -64 | 		 | Number of bits per data pixel | 
 | NAXIS | 1 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -438,7 +456,7 @@ Median pre-pixel spectral resolution vs wavelength
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -446,8 +464,10 @@ IMAGE
             Header Table Caption for HDU9
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -64 | 		 | Number of bits per data pixel | 
 | NAXIS | 1 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -464,7 +484,7 @@ Standard deviation of pre-pixel spectral resolution vs wavelength
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -472,8 +492,10 @@ IMAGE
             Header Table Caption for HDU10
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -64 | 		 | Number of bits per data pixel | 
 | NAXIS | 1 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -490,7 +512,7 @@ Table detailing exposures combined to create this file
 
 
 ## HDU Type
-BINARY TABLE
+binary table
 
 
 # HDU Size
@@ -498,8 +520,10 @@ BINARY TABLE
             Header Table Caption for HDU11
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | BINTABLE | 		 | Written by IDL:  Wed Mar 21 00:08:46 2018 | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | BINTABLE | 		 | Written by IDL:  Wed Mar 21 00:08:46 2018 | 
 | BITPIX | 8 | 		 | 		 | 
 | NAXIS | 2 | 		 | Binary table | 
 | NAXIS1 | 332 | 		 | Number of bytes per row | 
@@ -525,7 +549,7 @@ Array of fiber X-positions (units of arcsec) relative to the IFU center.  Becaus
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -533,8 +557,10 @@ IMAGE
             Header Table Caption for HDU12
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -32 | 		 | Number of bits per data pixel | 
 | NAXIS | 2 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
@@ -552,7 +578,7 @@ Array of fiber Y-positions (units of arcsec) relative to the IFU center.  Becaus
 
 
 ## HDU Type
-IMAGE
+image
 
 
 # HDU Size
@@ -560,8 +586,10 @@ IMAGE
             Header Table Caption for HDU13
 
 
+
 | **Key** | **Value** | **Type** | **Comment** |
-| :--- | :----- | :---- | :------- || XTENSION | IMAGE | 		 | IMAGE extension | 
+| :--- | :----- | :---- | :------- |
+| XTENSION | IMAGE | 		 | IMAGE extension | 
 | BITPIX | -32 | 		 | Number of bits per data pixel | 
 | NAXIS | 2 | 		 | Number of data axes | 
 | NAXIS1 | 4563 | 		 | 		 | 
