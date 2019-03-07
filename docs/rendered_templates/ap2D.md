@@ -1,51 +1,51 @@
 
 
-#Data model: ap2D
+# Data model: ap2D
 
 
 
 
-#General Description
+# General Description
 ap2D files contain 2D data derived from the up-the-ramp data cubes. Cosmic
 rays are flagged and CR repair is attempted. Saturated pixels are flagged.
 Dark current is subtracted, and the final 2D image is flat-fielded.
 
 
 
-#Naming Convention
+# Naming Convention
 <dd id="filename"><code>ap2D-[abc]-[0-9]{8}\.fits</code></dd>
 
 
 
-#Approximate Size
+# Approximate Size
 2048x2048x3x4 bytes
 
 
 
-#File Type
+# File Type
 FITS
 
 
 
 
-#Sections
+# Sections
 
-##HDU0: master header
+## HDU0: master header
 
-##HDU1: image (ADU) [FLOAT]
+## HDU1: image (ADU) [FLOAT]
 
-##HDU2: error (ADU) [FLOAT]
+## HDU2: error (ADU) [FLOAT]
 
-##HDU3: flag mask [INT*2]
-
-
-
-
-#HDU0: MASTER
+## HDU3: flag mask [INT*2]
 
 
 
-| Key | Value | Type | Comment |
+
+# HDU0: MASTER
+
+
+
+| **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
 
 | SIMPLE |                     T  | 		 | image conforms to FITS standard | 
@@ -341,11 +341,11 @@ FITS
 | END | 		 | 		 | 		 | 
 
 
-#HDU1: DATA
+# HDU1: DATA
 
 
 
-| Key | Value | Type | Comment |
+| **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
 
 | XTENSION |  'IMAGE   '            | 		 | IMAGE extension | 
@@ -381,11 +381,11 @@ FITS
 | END | 		 | 		 | 		 | 
 
 
-#HDU2: ERROR
+# HDU2: ERROR
 
 
 
-| Key | Value | Type | Comment |
+| **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
 
 | XTENSION |  'IMAGE   '            | 		 | IMAGE extension | 
@@ -421,11 +421,11 @@ FITS
 | END | 		 | 		 | 		 | 
 
 
-#HDU3: MASK
+# HDU3: MASK
 
 
 
-| Key | Value | Type | Comment |
+| **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
 
 | XTENSION |  'IMAGE   '            | 		 | IMAGE extension | 
