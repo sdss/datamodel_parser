@@ -29,20 +29,20 @@ gzipped multi-extension FITS
 
 
 ## Sections
-* [HDU0: primary](#0-primary)
-* [HDU1: flux](#1-flux)
-* [HDU2: ivar](#2-ivar)
-* [HDU3: mask](#3-mask)
-* [HDU4: disp](#4-disp)
-* [HDU5: predisp](#5-predisp)
-* [HDU6: wave](#6-wave)
-* [HDU7: specres](#7-specres)
-* [HDU8: specresd](#8-specresd)
-* [HDU9: prespecres](#9-prespecres)
-* [HDU10: prespecresd](#10-prespecresd)
-* [HDU11: obsinfo](#11-obsinfo)
-* [HDU12: xpos](#12-xpos)
-* [HDU13: ypos](#13-ypos)
+* [HDU0: primary](#hdu0-primary)
+* [HDU1: flux](#hdu1-flux)
+* [HDU2: ivar](#hdu2-ivar)
+* [HDU3: mask](#hdu3-mask)
+* [HDU4: disp](#hdu4-disp)
+* [HDU5: predisp](#hdu5-predisp)
+* [HDU6: wave](#hdu6-wave)
+* [HDU7: specres](#hdu7-specres)
+* [HDU8: specresd](#hdu8-specresd)
+* [HDU9: prespecres](#hdu9-prespecres)
+* [HDU10: prespecresd](#hdu10-prespecresd)
+* [HDU11: obsinfo](#hdu11-obsinfo)
+* [HDU12: xpos](#hdu12-xpos)
+* [HDU13: ypos](#hdu13-ypos)
 
 ## HDU0: PRIMARY
 
