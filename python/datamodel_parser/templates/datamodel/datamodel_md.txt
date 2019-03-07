@@ -11,7 +11,7 @@
 {% if sections %}
 ## Sections
 {% for section in sections -%}
-* HDU{{section.hdu_number}}: {{section.hdu_name}}
+* [HDU{{section.hdu_number}}: {{section.hdu_name}}](#{{section.hdu_number}}-{{section.hdu_name}})
 {% endfor %}
 {% endif %}
 
