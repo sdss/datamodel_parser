@@ -164,7 +164,8 @@ class File2:
                         self.intro_descriptions.append(intro_description)
                     number_headings = len(headings)
                     self.intro_heading_orders = list(range(number_headings))
-                    self.intro_heading_levels = [None] * number_headings
+                    self.intro_heading_levels = [1]
+                    self.intro_heading_levels.extend([4] * (number_headings - 1))
                 else:
                     self.ready = False
                     self.logger.error(
