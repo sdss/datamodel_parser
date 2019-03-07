@@ -24,10 +24,10 @@ FITS
 
 
 ## Sections
-HDU0: master header
-HDU1: image (ADU) [FLOAT]
-HDU2: error (ADU) [FLOAT]
-HDU3: flag mask [INT*2]
+* HDU0: master header
+* HDU1: image (ADU) [FLOAT]
+* HDU2: error (ADU) [FLOAT]
+* HDU3: flag mask [INT*2]
 
 ## HDU0: MASTER
 

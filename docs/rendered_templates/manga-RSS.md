@@ -29,20 +29,20 @@ gzipped multi-extension FITS
 
 
 ## Sections
-HDU0: primary
-HDU1: flux
-HDU2: ivar
-HDU3: mask
-HDU4: disp
-HDU5: predisp
-HDU6: wave
-HDU7: specres
-HDU8: specresd
-HDU9: prespecres
-HDU10: prespecresd
-HDU11: obsinfo
-HDU12: xpos
-HDU13: ypos
+* HDU0: primary
+* HDU1: flux
+* HDU2: ivar
+* HDU3: mask
+* HDU4: disp
+* HDU5: predisp
+* HDU6: wave
+* HDU7: specres
+* HDU8: specresd
+* HDU9: prespecres
+* HDU10: prespecresd
+* HDU11: obsinfo
+* HDU12: xpos
+* HDU13: ypos
 
 ## HDU0: PRIMARY
 
