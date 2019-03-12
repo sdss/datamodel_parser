@@ -7,20 +7,14 @@
 {{intro.description or ''}}
 {% endif %}
 {% endfor %}
-
-{% if sections %}
-## Sections
-{% for section in sections -%}
-* [HDU{{section.hdu_number}}: {{section.hdu_name.title()}}](#hdu{{section.hdu_number}}-{{section.hdu_name}})
+## Page Contents
+{% for hdu_number in hdus.keys() -%}
+* [HDU{{hdu_number}}: {{hdus[hdu_number]['extension']['header'].title.upper()}}](#hdu{{hdu_number}}-{{hdus[hdu_number]['extension']['header'].title.lower()}})
 {% endfor %}
-{% endif %}
-
-{%- for hdu_number in hdus.keys() -%}
+{% for hdu_number in hdus.keys() -%}
 ## HDU{{hdu_number}}: {{hdus[hdu_number]['extension']['header'].title.upper()}}
-
 {% if hdus[hdu_number]['column'] %}
 {{hdus[hdu_number]['column'].description}}
-
 {% if hdus[hdu_number]['column'].datatype %}
 ### HDU Type
 {{hdus[hdu_number]['column'].datatype}}
@@ -28,7 +22,6 @@
 ### HDU Type
 {{hdus[hdu_number]['column'].datatype}}
 {% endif %}
-
 ### HDU Size
 {{hdus[hdu_number]['column'].size}}
             {{hdus[hdu_number]['extension']['header'].table_caption}}

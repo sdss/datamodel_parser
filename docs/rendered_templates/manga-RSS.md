@@ -26,33 +26,28 @@ gzipped multi-extension FITS
 <a href="https://svn.sdss.org/public/repo/manga/mangadrp/tags/v2_4_3/pro/spec3d/mdrp_reduceoneifu.pro">mangadrp: mdrp_reduceoneifu.pro</a>
 
 
-
-
-## Sections
-* [HDU0: Primary](#hdu0-primary)
-* [HDU1: Flux](#hdu1-flux)
-* [HDU2: Ivar](#hdu2-ivar)
-* [HDU3: Mask](#hdu3-mask)
-* [HDU4: Disp](#hdu4-disp)
-* [HDU5: Predisp](#hdu5-predisp)
-* [HDU6: Wave](#hdu6-wave)
-* [HDU7: Specres](#hdu7-specres)
-* [HDU8: Specresd](#hdu8-specresd)
-* [HDU9: Prespecres](#hdu9-prespecres)
-* [HDU10: Prespecresd](#hdu10-prespecresd)
-* [HDU11: Obsinfo](#hdu11-obsinfo)
-* [HDU12: Xpos](#hdu12-xpos)
-* [HDU13: Ypos](#hdu13-ypos)
+## Page Contents
+* [HDU0: PRIMARY](#hdu0-primary)
+* [HDU1: FLUX](#hdu1-flux)
+* [HDU2: IVAR](#hdu2-ivar)
+* [HDU3: MASK](#hdu3-mask)
+* [HDU4: DISP](#hdu4-disp)
+* [HDU5: PREDISP](#hdu5-predisp)
+* [HDU6: WAVE](#hdu6-wave)
+* [HDU7: SPECRES](#hdu7-specres)
+* [HDU8: SPECRESD](#hdu8-specresd)
+* [HDU9: PRESPECRES](#hdu9-prespecres)
+* [HDU10: PRESPECRESD](#hdu10-prespecresd)
+* [HDU11: OBSINFO](#hdu11-obsinfo)
+* [HDU12: XPOS](#hdu12-xpos)
+* [HDU13: YPOS](#hdu13-ypos)
 
 ## HDU0: PRIMARY
 
-
 Empty except for global header
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 0 bytes
@@ -136,13 +131,10 @@ image
 
 ## HDU1: FLUX
 
-
 Row-stacked spectra in units of 10^{-17} erg/s/cm2/Angstrom/fiber
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 2 mb
@@ -240,13 +232,10 @@ image
 
 ## HDU2: IVAR
 
-
 Inverse variance of row-stacked spectra
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 2 mb
@@ -275,13 +264,10 @@ image
 
 ## HDU3: MASK
 
-
 Pixel mask (MANGA_DRP2PIXMASK)
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 2 mb
@@ -310,13 +296,10 @@ image
 
 ## HDU4: DISP
 
-
 Spectral LSF  (1-sigma) in units of Angstroms
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 2 mb
@@ -339,13 +322,10 @@ image
 
 ## HDU5: PREDISP
 
-
 Broadened pre-pixel dispersion solution (1sigma LSF in Angstroms)
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 2 mb
@@ -368,13 +348,10 @@ image
 
 ## HDU6: WAVE
 
-
 Wavelength vector in units of Angstroms (vacuum heliocentric)
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 35 kb
@@ -396,13 +373,10 @@ image
 
 ## HDU7: SPECRES
 
-
 Median spectral resolution vs wavelength
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 35 kb
@@ -424,13 +398,10 @@ image
 
 ## HDU8: SPECRESD
 
-
 Standard deviation (1-sigma) of spectral resolution vs wavelength
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 35 kb
@@ -452,13 +423,10 @@ image
 
 ## HDU9: PRESPECRES
 
-
 Median pre-pixel spectral resolution vs wavelength
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 35 kb
@@ -480,13 +448,10 @@ image
 
 ## HDU10: PRESPECRESD
 
-
 Standard deviation of pre-pixel spectral resolution vs wavelength
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 35 kb
@@ -508,13 +473,10 @@ image
 
 ## HDU11: OBSINFO
 
-
 Table detailing exposures combined to create this file
-
 
 ### HDU Type
 binary table
-
 
 ### HDU Size
 2 kb
@@ -545,13 +507,10 @@ binary table
 
 ## HDU12: XPOS
 
-
 Array of fiber X-positions (units of arcsec) relative to the IFU center.  Because of chromatic DAR, each wavelength for a given fiber has a slightly different position, and therefore the positional arrays have the same dimensionality as the corresponding flux array.
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 2 mb
@@ -574,13 +533,10 @@ image
 
 ## HDU13: YPOS
 
-
 Array of fiber Y-positions (units of arcsec) relative to the IFU center.  Because of chromatic DAR, each wavelength for a given fiber has a slightly different position, and therefore the positional arrays have the same dimensionality as the corresponding flux array.
-
 
 ### HDU Type
 image
-
 
 ### HDU Size
 2 mb

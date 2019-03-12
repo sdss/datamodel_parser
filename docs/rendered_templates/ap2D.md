@@ -21,16 +21,13 @@ Dark current is subtracted, and the final 2D image is flat-fielded.
 FITS
 
 
-
-
-## Sections
-* [HDU0: Master Header](#hdu0-master header)
-* [HDU1: Image (Adu) [Float]](#hdu1-image (ADU) [FLOAT])
-* [HDU2: Error (Adu) [Float]](#hdu2-error (ADU) [FLOAT])
-* [HDU3: Flag Mask [Int*2]](#hdu3-flag mask [INT*2])
+## Page Contents
+* [HDU0: MASTER](#hdu0-master)
+* [HDU1: DATA](#hdu1-data)
+* [HDU2: ERROR](#hdu2-error)
+* [HDU3: MASK](#hdu3-mask)
 
 ## HDU0: MASTER
-
 
 
 
@@ -187,7 +184,6 @@ FITS
 
 
 
-
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
 | **XTENSION** |  'IMAGE   '            | 		 | IMAGE extension | 
@@ -211,7 +207,6 @@ FITS
 
 
 
-
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
 | **XTENSION** |  'IMAGE   '            | 		 | IMAGE extension | 
@@ -232,7 +227,6 @@ FITS
 | **END** | 		 | 		 | 		 | 
 
 ## HDU3: MASK
-
 
 
 
