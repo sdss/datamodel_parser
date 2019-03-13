@@ -50,6 +50,8 @@ class File1:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
+            self.heading_tags = ['h1','h2','h3','h4','h5','h6']
+            self.paragraph_tags = ['p']
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
@@ -213,18 +215,16 @@ class File1:
                 contents = self.intro_tag_contents
                 self.check_valid_assumptions(names=names,contents=contents)
                 if self.ready:
-                    heading_tags = ['h1','h2','h3','h4','h5','h6']
-                    paragraph_tags = ['p']
                     heading_order = -1
                     for (idx,name) in enumerate(names):
-                        if name in paragraph_tags: continue
-                        if name in heading_tags:
+                        if name in self.paragraph_tags: continue
+                        if name in self.heading_tags:
                             heading_order += 1
                             self.intro_heading_orders.append(heading_order)
                             level = int(name.replace('h',''))
                             self.intro_heading_levels.append(level)
                             self.intro_heading_titles.append(contents[idx])
-                            if names[idx+1] in paragraph_tags:
+                            if names[idx+1] in self.paragraph_tags:
                                 self.intro_descriptions.append(contents[idx+1])
                             else:
                                 self.intro_descriptions.append('')
@@ -240,8 +240,6 @@ class File1:
         '''Verify that all of my assumptions are valid'''
         if self.ready:
             if names and contents:
-                heading_tags = ['h1','h2','h3','h4','h5','h6']
-                paragraph_tags = ['p']
                 # Check that the lists have the same length
                 if len(names) != len(contents):
                     self.ready = False
@@ -251,7 +249,7 @@ class File1:
                         .format(len(names),len(contents))
                                       )
                 # Check that the first name is a heading tag
-                if names[0] not in heading_tags:
+                if names[0] not in self.heading_tags:
                     self.ready = False
                     self.logger.error(
                         'Invalid assumption: File intro starts with a heading.')
@@ -259,7 +257,7 @@ class File1:
                 # Check that the names are either heading or paragraph tags
                 for name in names:
                     unexpected_tag_names = list()
-                    if name not in heading_tags and name not in paragraph_tags:
+                    if name not in self.heading_tags and name not in self.paragraph_tags:
                         unexpected_tag_names.append(name)
                     if unexpected_tag_names:
                         self.ready = False
@@ -377,9 +375,12 @@ class File1:
                     string = node
                 else:
                     n = self.get_number_descendants(node=node)
-                    if n > 1:                    string = str(node)
-                    elif n == 1 and node.string: string = str(node.string)
-                    else:                        string = None
+                    if n > 1:
+                        string = str(node).strip()
+                    elif (n == 1 and bool(node.string)):
+                        string = str(node.string).strip()
+                    else:
+                        string = None
             else:
                 self.ready = None
                 self.logger.error('Unable to get_string. ' +

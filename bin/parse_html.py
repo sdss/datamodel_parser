@@ -24,6 +24,7 @@ File Type 1)
 File Type 2)
     datamodel/dr15:
         parse_html.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap2D.html -l debug -v
+        parse_html.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap2Dmodel.html -l debug -v
     datamodel/dr14:
         parse_html.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html -l debug -v
         parse_html.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html -l debug -v

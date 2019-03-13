@@ -52,6 +52,7 @@ class File2:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
+            self.heading_tags = ['h1','h2','h3','h4','h5','h6']
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
@@ -189,9 +190,12 @@ class File2:
                     string = node
                 else:
                     n = self.get_number_descendants(node=node)
-                    if n > 1:                    string = str(node)
-                    elif n == 1 and node.string: string = str(node.string)
-                    else:                        string = None
+                    if n > 1:
+                        string = str(node).strip()
+                    elif (n == 1 and bool(node.string)):
+                        string = str(node.string).strip()
+                    else:
+                        string = None
             else:
                 self.ready = None
                 self.logger.error('Unable to get_string. ' +
