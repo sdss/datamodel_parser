@@ -164,7 +164,7 @@ class File3:
                     header = list()
                     for pre_tag in pre_tags:
                         header.append(self.get_string(node=pre_tag))
-                    header = '\n'.join(header)
+                    header = '\n' + '\n'.join(header)
                     self.parse_file_extension_header(header=header)
                     self.parse_file_extension_data(header_title = header_title,
                                                    header       = header)
