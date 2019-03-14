@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# $Id: parse_all 2019-03-14 n.benjamin.murphy $
+#
+
+parse_html --path datamodel/files/APOGEE_ASPCAP/APRED_VERS/ASPCAP_VERS/TELESCOPE/FIELD/aspcapField.html -l error -v
+#parse_html --path datamodel/files/APOGEE_ASPCAP/APRED_VERS/ASPCAP_VERS/TELESCOPE/FIELD/aspcapStar.html -l error -v
+
+# Finished!
+#parse_html --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html -l error -v
+
+
+
+
+

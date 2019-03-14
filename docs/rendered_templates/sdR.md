@@ -16,8 +16,7 @@ HDU 0 contains the raw counts as integers (4352x4224).
 
 sdR-[br][12]-[FRAME].fit, indicating which blue or red spectrograph (1 or 2), and the frame number.
 
-
-
+https://wiki.sdss.org/display/DATA/md+file+test+sdR#hdu0-example-header-hdu-0
 ### Approximate size
 
 36771840 bytes.

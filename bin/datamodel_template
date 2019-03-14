@@ -12,9 +12,9 @@ ready = options and migrate and logger
 ready = ready and migrate.ready
 if not ready:
     print('Fail! ready: {}'.format(ready))
+    exit(1)
 else:
-#    template = "datamodel/datamodel_txt.txt"
-    template = "datamodel/datamodel_md.txt"
+    template = 'datamodel/datamodel_md.txt'
     migrate.render_template(template=template)
     migrate.exit()
 
@@ -22,15 +22,15 @@ else:
 Examples:
 File Type 1)
     datamodel/dr15
-        datamodel_template.py --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html -l debug -v
+        datamodel_template --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html -l debug -v
         
 File Type 2)
     datamodel/dr15:
         Fail!
-        datamodel_template.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap2D.html -l debug -v
+        datamodel_template --path datamodel/files/APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap2D.html -l debug -v
     datamodel/dr14:
-        datamodel_template.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html -l debug -v
-        datamodel_template.py --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html -l debug -v
+        datamodel_template --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html -l debug -v
+        datamodel_template --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html -l debug -v
         
 File Type 3)
     datamodel/dr14 and datamodel/dr15

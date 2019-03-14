@@ -324,10 +324,14 @@ class File2:
         if self.ready:
             if div:
                 self.set_child_names(node=div)
+                print('self.child_names: %r' % self.child_names)
+                input('pause')
                 if not bool('h2' and 'pre' in self.child_names):
                     self.ready = None
                     self.logger.error("Invalid assumption: " +
-                                      "self.child_names = ['h2','pre']")
+                                      "self.child_names = ['h2','pre']" +
+                                      'However, self.child_names: {}'
+                                        .format(self.child_names))
             else:
                 self.ready = False
                 self.logger.error('Unable to check_valid_assumptions. ' +
