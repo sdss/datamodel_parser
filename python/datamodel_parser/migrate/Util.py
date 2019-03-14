@@ -34,6 +34,10 @@ class Util:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
+            self.heading_tags = ['h1','h2','h3','h4','h5','h6']
+            self.paragraph_tags = ['p']
+            self.bold_tags = ['b']
+            self.unordered_list_tags = ['ul']
 
     def get_string(self,node=None):
         string = None
@@ -69,5 +73,19 @@ class Util:
                 self.logger.error('Unable to get_number_descendants.' +
                                   'node: {}'.format(node))
         return number_descendants
+
+    def get_child_names(self,node=None):
+        '''Set a list of child for the given BeautifulSoup node.'''
+        child_names = None
+        if self.ready:
+            if node:
+                child_names = list()
+                for child in node.children:
+                    if child.name: child_names.append(str(child.name))
+            else:
+                self.ready = None
+                self.logger.error('Unable to set_child_names. ' +
+                                  'node: {0}'.format(node))
+        return child_names
 
 

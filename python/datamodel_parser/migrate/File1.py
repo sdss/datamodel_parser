@@ -18,7 +18,7 @@ class File1:
         self.util = Util(logger=logger,options=options)
         self.logger  = self.util.logger  if self.util.logger  else None
         self.options = self.util.options if self.util.options else None
-        self.ready   = self.util.ready   if self.util.ready   else None
+        self.ready   = self.util and self.util.ready if self.util else None
 
     def set_divs(self,body=None):
         '''Set the divs class attribute.'''
@@ -42,8 +42,10 @@ class File1:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.heading_tags = ['h1','h2','h3','h4','h5','h6']
-            self.paragraph_tags = ['p']
+            self.heading_tags        = self.util.heading_tags
+            self.paragraph_tags      = self.util.paragraph_tags
+            self.bold_tags           = self.util.bold_tags
+            self.unordered_list_tags = self.util.unordered_list_tags
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
@@ -82,7 +84,9 @@ class File1:
         if self.ready:
             # Make sure intro has children
             number_descendants = self.util.get_number_descendants(node=intro)
-            if intro and number_descendants:
+            self.ready = self.ready and self.util.ready
+            # Process intro
+            if self.ready and intro and number_descendants:
                 self.intro_tag_names = list()
                 self.intro_tag_contents = list()
                 for child in [item for item in intro.children if item != '\n']:
@@ -112,7 +116,7 @@ class File1:
                 self.logger.error(
                             'Unable to set_intro_tag_names_and_contents. ' +
                             'intro: {0}'.format(intro) +
-                            'number_descendants: {0}'.format(number_descendants)
+                            'number_descendants: {0}'.format(number_descendants) 
                                 )
 
     def set_section_hdu_names(self,div=None):
@@ -330,10 +334,13 @@ class File1:
                 rows = body.find_all('tr')
                 table_rows = dict()
                 for (row_order,row) in enumerate(rows):
+                    if not self.ready: break
                     row_data = list()
                     for data in row.find_all('td'):
                         string = self.util.get_string(node=data)
-                        row_data.append(string)
+                        self.ready = self.ready and self.util.ready
+                        if self.ready: row_data.append(string)
+                        else: break
                     table_rows[row_order]  = row_data
                 hdu_header['table_caption']  = table_caption
                 hdu_header['table_keywords'] = table_keywords

@@ -18,7 +18,7 @@ class File2:
         self.util = Util(logger=logger,options=options)
         self.logger  = self.util.logger  if self.util.logger  else None
         self.options = self.util.options if self.util.options else None
-        self.ready   = self.util.ready   if self.util.ready   else None
+        self.ready   = self.util and self.util.ready if self.util else None
 
     def set_divs(self,body=None):
         '''Set the divs class attribute.'''
@@ -42,7 +42,10 @@ class File2:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.heading_tags = ['h1','h2','h3','h4','h5','h6']
+            self.heading_tags        = self.util.heading_tags
+            self.paragraph_tags      = self.util.paragraph_tags
+            self.bold_tags           = self.util.bold_tags
+            self.unordered_list_tags = self.util.unordered_list_tags
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
@@ -68,7 +71,8 @@ class File2:
         if self.ready:
             # Make sure intro has children
             number_descendants = self.util.get_number_descendants(node=intro)
-            if intro and number_descendants:
+            self.ready = self.ready and self.util.ready
+            if self.ready and intro and number_descendants:
                 headings = list()
                 descriptions = list()
                 
@@ -87,23 +91,25 @@ class File2:
                     # if number_descendants > 1: then there's a section list
                     # else there's no section list
                     number_descendants = self.util.get_number_descendants(node=sections)
-                    dt_headings      = (dt_list[:-1]
-                                     if number_descendants > 1 else dt_list)
-                    dd_descriptions  = (dd_list[:-1]
-                                     if number_descendants > 1 else dd_list)
-                                     
-                    # Intro table
-                    headings.extend(dt_headings)
-                    descriptions.extend(dd_descriptions)
-                    self.set_intro_table_information(headings     = headings,
-                                                     descriptions = descriptions)
+                    self.ready = self.ready and self.util.ready
+                    if self.ready:
+                        dt_headings      = (dt_list[:-1]
+                                         if number_descendants > 1 else dt_list)
+                        dd_descriptions  = (dd_list[:-1]
+                                         if number_descendants > 1 else dd_list)
+                                         
+                        # Intro table
+                        headings.extend(dt_headings)
+                        descriptions.extend(dd_descriptions)
+                        self.set_intro_table_information(headings     = headings,
+                                                         descriptions = descriptions)
 
-                    # Section table
-                    section_title = (section_title
-                                     if number_descendants > 1 else '')
-                    sections      = (sections
-                                     if number_descendants > 1 else list())
-                    self.set_section_hdu_names(section_title = section_title,
+                        # Section table
+                        section_title = (section_title
+                                         if number_descendants > 1 else '')
+                        sections      = (sections
+                                         if number_descendants > 1 else list())
+                        self.set_section_hdu_names(section_title = section_title,
                                                sections      = sections)
                 else:
                     self.ready = False
@@ -132,14 +138,19 @@ class File2:
                     for (heading,description) in list(zip(headings,descriptions)):
                         heading_title = (self.util.get_string(node=heading)
                                          if heading else '')
+                        self.ready = self.ready and self.util.ready
                         intro_description = (self.util.get_string(node=description)
                                              if description else '')
-                        self.intro_heading_titles.append(heading_title)
-                        self.intro_descriptions.append(intro_description)
-                    number_headings = len(headings)
-                    self.intro_heading_orders = list(range(number_headings))
-                    self.intro_heading_levels = [1]
-                    self.intro_heading_levels.extend([4] * (number_headings - 1))
+                        self.ready = self.ready and self.util.ready
+                        if self.ready:
+                            self.intro_heading_titles.append(heading_title)
+                            self.intro_descriptions.append(intro_description)
+                        else: break
+                    if self.ready:
+                        number_headings = len(headings)
+                        self.intro_heading_orders = list(range(number_headings))
+                        self.intro_heading_levels = [1]
+                        self.intro_heading_levels.extend([4] * (number_headings - 1))
                 else:
                     self.ready = False
                     self.logger.error(
@@ -276,30 +287,18 @@ class File2:
         '''Verify that all of my assumptions are valid'''
         if self.ready:
             if div:
-                self.set_child_names(node=div)
-                if not bool('h2' and 'pre' in self.child_names):
+                child_names = self.util.get_child_names(node=div)
+                self.ready = self.ready and self.util.ready
+                if not (self.ready and bool('h2' and 'pre' in child_names)):
                     self.ready = None
-                    self.logger.error("Invalid assumption: " +
-                                      "self.child_names = ['h2','pre']" +
-                                      'However, self.child_names: {}'
-                                        .format(self.child_names))
+                    self.logger.error("Invalid assumption that " +
+                                      "child_names = ['h2','pre']" +
+                                      'However, child_names: {}'
+                                        .format(child_names))
             else:
                 self.ready = False
                 self.logger.error('Unable to check_valid_assumptions. ' +
                                   'div: {0}.'.format(div))
-
-    def set_child_names(self,node=None):
-        '''Set a list of child for the given BeautifulSoup node.'''
-        self.child_names = list()
-        if self.ready:
-            if node:
-                for child in node.children:
-                    if child.name:
-                        self.child_names.append(str(child.name))
-            else:
-                self.ready = None
-                self.logger.error('Unable to set_child_names. ' +
-                                  'node: {0}'.format(node))
 
     def set_row_data(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''

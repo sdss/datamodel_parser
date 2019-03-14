@@ -1,3 +1,4 @@
+from datamodel_parser.migrate import Util
 from datamodel_parser.migrate import File1
 from datamodel_parser.migrate import File2
 from datamodel_parser.migrate import File3
@@ -7,27 +8,17 @@ from json import dumps
 class File:
 
     def __init__(self,logger=None,options=None,body=None):
-        self.set_logger(logger=logger)
-        self.set_options(options=options)
+        self.initialize(logger=logger,options=options)
         self.set_body(body=body)
         self.set_ready()
         self.set_attributes()
         self.set_file()
 
-    def set_logger(self, logger=None):
-        '''Set class logger.'''
-        self.logger = logger if logger else None
-        self.ready = bool(self.logger)
-        if not self.ready: print('ERROR: Unable to set_logger.')
-
-    def set_options(self, options=None):
-        '''Set the options class attribute.'''
-        self.options = None
-        if self.ready:
-            self.options = options if options else None
-            if not self.options:
-                self.ready = False
-                self.logger.error('Unable to set_options.')
+    def initialize(self,logger=None,options=None):
+        self.util = Util(logger=logger,options=options)
+        self.logger  = self.util.logger  if self.util.logger  else None
+        self.options = self.util.options if self.util.options else None
+        self.ready   = self.util.ready   if self.util.ready   else None
 
     def set_body(self, body=None):
         '''
@@ -43,7 +34,8 @@ class File:
 
     def set_ready(self):
         '''Set error indicator.'''
-        self.ready = bool(self.logger  and
+        self.ready = bool(self.ready   and
+                          self.logger  and
                           self.options and
                           self.body)
 
@@ -96,27 +88,29 @@ class File:
                 div = self.body.find_next('div')
                 div_id = div['id'] if div else None
                 if div_id == 'intro':
-                    self.set_child_names(node=div)
-                    if self.child_names:
+                    child_names = self.util.get_child_names(node=div)
+                    self.ready = self.ready and self.util.ready
+                    if self.ready and child_names:
                         type_1_children = ['h1','h4','p','div']
                         type_2_children = ['h1','dl']
-                        if  set(type_1_children).issubset(self.child_names):
+                        if  set(type_1_children).issubset(child_names):
                             self.template_type = 1
-                        elif set(type_2_children).issubset(self.child_names):
+                        elif set(type_2_children).issubset(child_names):
                             self.template_type = 2
                         else:
                             self.ready = False
                             self.logger.error(
                                 'Unable to set_template_type_div. ' +
                                 'Unexpected child names. ' +
-                                'self.child_names: {}, '.format(self.child_names) +
+                                'child_names: {}, '.format(child_names) +
                                 'type_1_children: {}, '.format(type_1_children) +
                                 'type_2_children: {}.'.format(type_2_children))
                     else:
                         self.ready = False
                         self.logger.error('Unable to set_template_type_div. ' +
-                                          'self.child_names: {0}'
-                                          .format(self.child_names))
+                                          'child_names: {0}'.format(child_names)
+                                          )
+            
                 else:
                     self.ready = False
                     self.logger.error('Unable to set_template_type_div. ' +
@@ -127,41 +121,29 @@ class File:
                 self.logger.error('Unable to set_template_type_div. ' +
                                   'self.body: '.format(self.body))
 
-    def set_child_names(self,node=None):
-        '''Set a list of child for the given BeautifulSoup node.'''
-        self.child_names = list()
-        if self.ready:
-            if node:
-                for child in node.children:
-                    if child.name:
-                        self.child_names.append(child.name)
-            else:
-                self.ready = None
-                self.logger.error('Unable to set_child_names. ' +
-                                  'node: {0}'.format(node))
-
     def set_template_type_nondiv(self):
         '''Determine the datamodel template type from the body tag.'''
         self.template_type = None
         if self.ready:
             if self.body:
-                self.set_child_names(node=self.body)
-                if self.child_names:
+                child_names = self.util.get_child_names(node=self.body)
+                self.ready = self.ready and self.util.ready
+                if self.ready and child_names:
                     type_3_children = ['h1','h3','p','ul','pre']
-                    if  set(type_3_children).issubset(self.child_names):
+                    if  set(type_3_children).issubset(child_names):
                         self.template_type = 3
                     else:
                         self.ready = False
                         self.logger.error(
                             'Unable to set_template_type_nondiv. ' +
                             'Unexpected child names. ' +
-                            'self.child_names: {}, '.format(self.child_names) +
+                            'child_names: {}, '.format(child_names) +
                             'type_3_children: {}.'.format(type_3_children))
                 else:
                     self.ready = False
                     self.logger.error('Unable to set_template_type_nondiv. ' +
-                                      'self.child_names: {0}'
-                                      .format(self.child_names))
+                                      'child_names: {0}'.format(child_names)
+                                      )
             else:
                 self.ready = False
                 self.logger.error('Unable to set_template_type_nondiv. ' +

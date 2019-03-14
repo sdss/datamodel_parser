@@ -18,7 +18,7 @@ class File3:
         self.util = Util(logger=logger,options=options)
         self.logger  = self.util.logger  if self.util.logger  else None
         self.options = self.util.options if self.util.options else None
-        self.ready   = self.util.ready   if self.util.ready   else None
+        self.ready   = self.util and self.util.ready if self.util else None
 
     def set_body(self,body=None):
         '''Set the body class attribute.'''
@@ -31,7 +31,8 @@ class File3:
 
     def set_ready(self):
         '''Set error indicator.'''
-        self.ready = bool(self.logger  and
+        self.ready = bool(self.ready   and
+                          self.logger  and
                           self.options and
                           self.body)
 
@@ -39,10 +40,10 @@ class File3:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.heading_tags = ['h1','h2','h3','h4','h5','h6']
-            self.paragraph_tags = ['p']
-            self.bold_tags = ['b']
-            self.unordered_list_tags = ['ul']
+            self.heading_tags        = self.util.heading_tags
+            self.paragraph_tags      = self.util.paragraph_tags
+            self.bold_tags           = self.util.bold_tags
+            self.unordered_list_tags = self.util.unordered_list_tags
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
@@ -71,7 +72,8 @@ class File3:
                 for child in self.body.children:
                     child_name = child.name if child else None
                     string = self.util.get_string(node=child)
-                    if child_name: # skip child = '\n'
+                    self.ready = self.ready and self.util.ready
+                    if self.ready and child_name: # skip child = '\n'
                         # found extension tags
                         if (child_name in self.heading_tags and 'HDU' in string):
                             break
@@ -83,37 +85,44 @@ class File3:
                             level = int(child_name.replace('h',''))
                             self.intro_heading_levels.append(level)
                             title = self.util.get_string(node=child).replace(':','')
-                            self.intro_heading_titles.append(title)
-                            # page title
-                            if child_name == 'h1':
-                                self.intro_descriptions.append('')
-                            # multiple non-nested tags
-                            if title == 'Format notes':
-                                found_format_notes = True
+                            self.ready = self.ready and self.util.ready
+                            if self.ready:
+                                self.intro_heading_titles.append(title)
+                                # page title
+                                if child_name == 'h1':
+                                    self.intro_descriptions.append('')
+                                # multiple non-nested tags
+                                if title == 'Format notes':
+                                    found_format_notes = True
+                            else: break
                         # intro non-heading tags containing headings and descriptions
                         elif (child_name in self.paragraph_tags or
                               child_name in self.unordered_list_tags
                             ):
                             contents = child.contents
                             for content in contents:
-                                if not self.util.get_string(node=content).isspace():  # skip '\n'
+                                title = (self.util.get_string(node=content)
+                                            .replace(':',''))
+                                self.ready = self.ready and self.util.ready
+                                if self.ready and not title.isspace():  # skip '\n'
                                     # heading content
                                     if content.name in self.bold_tags:
                                         heading_order += 1
                                         self.intro_heading_orders.append(heading_order)
                                         self.intro_heading_levels.append(3)
-                                        title = (self.util.get_string(node=content)
-                                                     .replace(':',''))
                                         self.intro_heading_titles.append(title)
                                     # descriptions
                                     else:
                                         string = self.util.get_string(node=content)
-                                        if not append_discussions:
-                                            self.intro_descriptions.append(string)
-                                        else:
-                                            self.intro_descriptions[-1] += ' ' + string
-                                        if found_format_notes:
-                                            append_discussions = True
+                                        self.ready = self.ready and self.util.ready
+                                        if self.ready and string:
+                                            if not append_discussions:
+                                                self.intro_descriptions.append(string)
+                                            else:
+                                                self.intro_descriptions[-1] += ' ' + string
+                                            if found_format_notes:
+                                                append_discussions = True
+                                        else: break
                         else:
                             self.ready = False
                             self.logger.error('Unable to parse_file_intro. ' +
@@ -141,13 +150,19 @@ class File3:
                                                       self.extension_pres)):
                     header_title = (self.util.get_string(node=heading_tag)
                                         .replace(':',''))
-                    header = list()
-                    for pre_tag in pre_tags:
-                        header.append(self.util.get_string(node=pre_tag))
-                    header = '\n' + '\n'.join(header)
-                    self.parse_file_extension_header(header=header)
-                    self.parse_file_extension_data(header_title = header_title,
-                                                   header       = header)
+                    self.ready = self.ready and self.util.ready
+                    if self.ready:
+                        header = list()
+                        for pre_tag in pre_tags:
+                            string = self.util.get_string(node=pre_tag)
+                            self.ready = self.ready and self.util.ready
+                            if self.ready: header.append(string)
+                            else: break
+                        header = '\n' + '\n'.join(header)
+                        self.parse_file_extension_header(header=header)
+                        self.parse_file_extension_data(header_title = header_title,
+                                                       header       = header)
+                    else: break
             else:
                 self.ready = False
                 self.logger.error(
@@ -172,11 +187,14 @@ class File3:
                     child_name = child.name if child else None
                     if child_name and child_name in self.heading_tags:
                         string = self.util.get_string(node=child)
-                        if string and 'HDU' in string:
-                            found_extension_tags = True
-                            self.extension_tags = (previous_child.next_siblings
-                                                   if previous_child else None)
-                            break
+                        self.ready = self.ready and self.util.ready
+                        if self.ready:
+                            if string and 'HDU' in string:
+                                found_extension_tags = True
+                                self.extension_tags = (previous_child.next_siblings
+                                                       if previous_child else None)
+                                break
+                        else: break
                     if not found_extension_tags:
                         previous_child = child if child else None
             else:
@@ -196,19 +214,22 @@ class File3:
                 pres = list()
                 for tag in self.extension_tags:
                     name = tag.name
-                    if self.ready and name:
+                    if name:
                         string = self.util.get_string(node=tag)
-                        if name in self.heading_tags and 'HDU' in string:
-                            self.extension_headings.append(tag)
-                            if first_extension:
-                                first_extension = False
-                            else:
-                                self.extension_pres.append(pres)
-                                pres = list()
-                        elif name == 'pre':
-                            pres.append(tag)
-                        else: # Do nothing; only processing heading and pre tags
-                            pass
+                        self.ready = self.ready and self.util.ready
+                        if self.ready:
+                            if name in self.heading_tags and 'HDU' in string:
+                                self.extension_headings.append(tag)
+                                if first_extension:
+                                    first_extension = False
+                                else:
+                                    self.extension_pres.append(pres)
+                                    pres = list()
+                            elif name == 'pre':
+                                pres.append(tag)
+                            else: # Do nothing; only processing heading and pre tags
+                                pass
+                        else: break
                 self.extension_pres.append(pres)
             else:
                 self.ready = None
@@ -318,19 +339,6 @@ class File3:
                 self.logger.error('Unable to set_row_data. ' +
                                   'row: {0}'.format(row))
 
-    def set_child_names(self,node=None):
-        '''Set a list of child for the given BeautifulSoup node.'''
-        self.child_names = list()
-        if self.ready:
-            if node:
-                for child in node.children:
-                    if child.name:
-                        self.child_names.append(str(child.name))
-            else:
-                self.ready = None
-                self.logger.error('Unable to set_child_names. ' +
-                                  'node: {0}'.format(node))
-
     def set_heading_tag_names(self,child_names=None):
         '''Set a list of child for the given BeautifulSoup child_names.'''
         self.heading_tag_names = list()
@@ -341,5 +349,5 @@ class File3:
                         self.heading_tag_names.append(str(name))
             else:
                 self.ready = None
-                self.logger.error('Unable to set_child_names. ' +
+                self.logger.error('Unable to set_heading_tag_names. ' +
                                   'child_names: {0}'.format(child_names))
