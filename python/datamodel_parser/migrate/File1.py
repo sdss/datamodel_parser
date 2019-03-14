@@ -1,5 +1,6 @@
 from json import dumps
 from bs4 import Tag, NavigableString
+from datamodel_parser.migrate import Util
 
 
 class File1:
@@ -8,26 +9,16 @@ class File1:
     '''
 
     def __init__(self,logger=None,options=None,body=None):
-        self.set_logger(logger=logger)
-        self.set_options(options=options)
+        self.initialize(logger=logger,options=options)
         self.set_divs(body=body)
         self.set_ready()
         self.set_attributes()
 
-    def set_logger(self,logger=None):
-        '''Set class logger.'''
-        self.logger = logger if logger else None
-        self.ready = bool(self.logger)
-        if not self.ready: print('ERROR: Unable to set_logger.')
-
-    def set_options(self,options=None):
-        '''Set the options class attribute.'''
-        self.options = None
-        if self.ready:
-            self.options = options if options else None
-            if not self.options:
-                self.ready = False
-                self.logger.error('Unable to set_options.')
+    def initialize(self,logger=None,options=None):
+        self.util = Util(logger=logger,options=options)
+        self.logger  = self.util.logger  if self.util.logger  else None
+        self.options = self.util.options if self.util.options else None
+        self.ready   = self.util.ready   if self.util.ready   else None
 
     def set_divs(self,body=None):
         '''Set the divs class attribute.'''
@@ -42,7 +33,8 @@ class File1:
 
     def set_ready(self):
         '''Set error indicator.'''
-        self.ready = bool(self.logger  and
+        self.ready = bool(self.ready   and
+                          self.logger  and
                           self.options and
                           self.divs)
 
@@ -89,7 +81,7 @@ class File1:
         self.intro_tag_contents = None
         if self.ready:
             # Make sure intro has children
-            number_descendants = self.get_number_descendants(node=intro)
+            number_descendants = self.util.get_number_descendants(node=intro)
             if intro and number_descendants:
                 self.intro_tag_names = list()
                 self.intro_tag_contents = list()
@@ -122,21 +114,6 @@ class File1:
                             'intro: {0}'.format(intro) +
                             'number_descendants: {0}'.format(number_descendants)
                                 )
-
-    def get_number_descendants(self,node=None):
-        '''Return True if BeautifulSoup object has descendants.'''
-        number_descendants = None
-        if self.ready:
-            if node:
-                number_descendants = 0
-                if not (isinstance(node, NavigableString) or isinstance(node, str)):
-                    for descendant in node.descendants:
-                        if descendant: number_descendants += 1
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_number_descendants.' +
-                                  'node: {}'.format(node))
-        return number_descendants
 
     def set_section_hdu_names(self,div=None):
         '''Get the extension names from the intro Section.'''
@@ -355,7 +332,7 @@ class File1:
                 for (row_order,row) in enumerate(rows):
                     row_data = list()
                     for data in row.find_all('td'):
-                        string = self.get_string(node=data)
+                        string = self.util.get_string(node=data)
                         row_data.append(string)
                     table_rows[row_order]  = row_data
                 hdu_header['table_caption']  = table_caption
@@ -366,25 +343,3 @@ class File1:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_header. ' +
                                   'div: {0}'.format(div))
-
-    def get_string(self,node=None):
-        string = None
-        if self.ready:
-            if node:
-                if isinstance(node,str):
-                    string = node
-                else:
-                    n = self.get_number_descendants(node=node)
-                    if n > 1:
-                        string = str(node).strip()
-                    elif (n == 1 and bool(node.string)):
-                        string = str(node.string).strip()
-                    else:
-                        string = None
-            else:
-                self.ready = None
-                self.logger.error('Unable to get_string. ' +
-                                  'node: {0}'.format(node))
-        return string
-
-

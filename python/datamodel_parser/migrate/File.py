@@ -97,8 +97,6 @@ class File:
                 div_id = div['id'] if div else None
                 if div_id == 'intro':
                     self.set_child_names(node=div)
-                    print('self.child_names: %r' % self.child_names)
-                    input('pause')
                     if self.child_names:
                         type_1_children = ['h1','h4','p','div']
                         type_2_children = ['h1','dl']

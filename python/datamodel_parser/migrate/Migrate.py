@@ -741,9 +741,9 @@ class Migrate:
     def exit(self):
         '''Report the presense/lack of errors.'''
         if self.ready:
-            if self.verbose: print('Finished!')
+            if self.verbose: print('Finished!\n')
             exit(0)
         else:
-            if self.verbose: print('Fail!')
+            if self.verbose: print('Fail!\n')
             exit(1)
 

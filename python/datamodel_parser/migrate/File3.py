@@ -1,5 +1,7 @@
 from json import dumps
 from bs4 import Tag, NavigableString
+from datamodel_parser.migrate import Util
+
 
 class File3:
     '''
@@ -7,26 +9,16 @@ class File3:
     '''
 
     def __init__(self,logger=None,options=None,body=None):
-        self.set_logger(logger=logger)
-        self.set_options(options=options)
+        self.initialize(logger=logger,options=options)
         self.set_body(body=body)
         self.set_ready()
         self.set_attributes()
     
-    def set_logger(self,logger=None):
-        '''Set class logger.'''
-        self.logger = logger if logger else None
-        self.ready = bool(self.logger)
-        if not self.ready: print('ERROR: Unable to set_logger.')
-
-    def set_options(self,options=None):
-        '''Set the options class attribute.'''
-        self.options = None
-        if self.ready:
-            self.options = options if options else None
-            if not self.options:
-                self.ready = False
-                self.logger.error('Unable to set_options.')
+    def initialize(self,logger=None,options=None):
+        self.util = Util(logger=logger,options=options)
+        self.logger  = self.util.logger  if self.util.logger  else None
+        self.options = self.util.options if self.util.options else None
+        self.ready   = self.util.ready   if self.util.ready   else None
 
     def set_body(self,body=None):
         '''Set the body class attribute.'''
@@ -59,23 +51,11 @@ class File3:
         if self.ready:
             if self.body:
                 self.parse_file_intro()
-                # print associated results here
-#                print('\n\nself.intro_heading_orders: %r' % self.intro_heading_orders)
-#                print('self.intro_heading_levels: %r' % self.intro_heading_levels)
-#                print('self.intro_heading_titles: %r' % self.intro_heading_titles)
-#                print('self.intro_descriptions: %r' % self.intro_descriptions)
-#                print('len(self.intro_heading_titles): %r' % len(self.intro_heading_titles))
-#                print('len(self.intro_descriptions): %r' % len(self.intro_descriptions))
-
                 self.parse_file_extensions()
-#                print('self.file_extension_data: \n' + dumps(self.file_extension_data,indent=1))
-#                print('self.file_extension_headers: \n' + dumps(self.file_extension_headers,indent=1))
-#                input('pause')
-
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. self.body: {0}'
-                                    .format(self.divs))
+                                    .format(self.body))
 
     def parse_file_intro(self):
         '''Parse file intro content from given body tag.'''
@@ -90,7 +70,7 @@ class File3:
                 append_discussions = False
                 for child in self.body.children:
                     child_name = child.name if child else None
-                    string = self.get_string(node=child)
+                    string = self.util.get_string(node=child)
                     if child_name: # skip child = '\n'
                         # found extension tags
                         if (child_name in self.heading_tags and 'HDU' in string):
@@ -102,7 +82,7 @@ class File3:
                             self.intro_heading_orders.append(heading_order)
                             level = int(child_name.replace('h',''))
                             self.intro_heading_levels.append(level)
-                            title = self.get_string(node=child).replace(':','')
+                            title = self.util.get_string(node=child).replace(':','')
                             self.intro_heading_titles.append(title)
                             # page title
                             if child_name == 'h1':
@@ -116,18 +96,18 @@ class File3:
                             ):
                             contents = child.contents
                             for content in contents:
-                                if not self.get_string(node=content).isspace():  # skip '\n'
+                                if not self.util.get_string(node=content).isspace():  # skip '\n'
                                     # heading content
                                     if content.name in self.bold_tags:
                                         heading_order += 1
                                         self.intro_heading_orders.append(heading_order)
                                         self.intro_heading_levels.append(3)
-                                        title = (self.get_string(node=content)
+                                        title = (self.util.get_string(node=content)
                                                      .replace(':',''))
                                         self.intro_heading_titles.append(title)
                                     # descriptions
                                     else:
-                                        string = self.get_string(node=content)
+                                        string = self.util.get_string(node=content)
                                         if not append_discussions:
                                             self.intro_descriptions.append(string)
                                         else:
@@ -159,11 +139,11 @@ class File3:
                 intro_heading_order = -1
                 for (heading_tag,pre_tags) in list(zip(self.extension_headings,
                                                       self.extension_pres)):
-                    header_title = (self.get_string(node=heading_tag)
+                    header_title = (self.util.get_string(node=heading_tag)
                                         .replace(':',''))
                     header = list()
                     for pre_tag in pre_tags:
-                        header.append(self.get_string(node=pre_tag))
+                        header.append(self.util.get_string(node=pre_tag))
                     header = '\n' + '\n'.join(header)
                     self.parse_file_extension_header(header=header)
                     self.parse_file_extension_data(header_title = header_title,
@@ -191,7 +171,7 @@ class File3:
                 for child in self.body.children:
                     child_name = child.name if child else None
                     if child_name and child_name in self.heading_tags:
-                        string = self.get_string(node=child)
+                        string = self.util.get_string(node=child)
                         if string and 'HDU' in string:
                             found_extension_tags = True
                             self.extension_tags = (previous_child.next_siblings
@@ -217,7 +197,7 @@ class File3:
                 for tag in self.extension_tags:
                     name = tag.name
                     if self.ready and name:
-                        string = self.get_string(node=tag)
+                        string = self.util.get_string(node=tag)
                         if name in self.heading_tags and 'HDU' in string:
                             self.extension_headings.append(tag)
                             if first_extension:
@@ -363,39 +343,3 @@ class File3:
                 self.ready = None
                 self.logger.error('Unable to set_child_names. ' +
                                   'child_names: {0}'.format(child_names))
-
-    def get_string(self,node=None):
-        string = None
-        if self.ready:
-            if node:
-                if isinstance(node,str):
-                    string = node
-                else:
-                    n = self.get_number_descendants(node=node)
-                    if n > 1:
-                        string = str(node).strip()
-                    elif (n == 1) and bool(node.string):
-                        string = str(node.string).strip()
-                    else:
-                        string = None
-            else:
-                self.ready = None
-                self.logger.error('Unable to get_string. ' +
-                                  'node: {0}'.format(node))
-        return string
-
-    def get_number_descendants(self,node=None):
-        '''Return True if BeautifulSoup object has descendants.'''
-        number_descendants = None
-        if self.ready:
-            if node:
-                number_descendants = 0
-                if not (isinstance(node, NavigableString) or isinstance(node, str)):
-                    for descendant in node.descendants:
-                        if descendant: number_descendants += 1
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_number_descendants.' +
-                                  'node: {}'.format(node))
-        return number_descendants
-

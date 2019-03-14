@@ -1,5 +1,6 @@
 from json import dumps
 from bs4 import Tag, NavigableString
+from datamodel_parser.migrate import Util
 
 
 class File2:
@@ -8,28 +9,16 @@ class File2:
     '''
 
     def __init__(self,logger=None,options=None,body=None):
-        self.set_logger(logger=logger)
-        self.set_options(options=options)
+        self.initialize(logger=logger,options=options)
         self.set_divs(body=body)
         self.set_ready()
         self.set_attributes()
     
-######### Same as File1
-
-    def set_logger(self,logger=None):
-        '''Set class logger.'''
-        self.logger = logger if logger else None
-        self.ready = bool(self.logger)
-        if not self.ready: print('ERROR: Unable to set_logger.')
-
-    def set_options(self,options=None):
-        '''Set the options class attribute.'''
-        self.options = None
-        if self.ready:
-            self.options = options if options else None
-            if not self.options:
-                self.ready = False
-                self.logger.error('Unable to set_options.')
+    def initialize(self,logger=None,options=None):
+        self.util = Util(logger=logger,options=options)
+        self.logger  = self.util.logger  if self.util.logger  else None
+        self.options = self.util.options if self.util.options else None
+        self.ready   = self.util.ready   if self.util.ready   else None
 
     def set_divs(self,body=None):
         '''Set the divs class attribute.'''
@@ -44,7 +33,8 @@ class File2:
 
     def set_ready(self):
         '''Set error indicator.'''
-        self.ready = bool(self.logger  and
+        self.ready = bool(self.ready   and
+                          self.logger  and
                           self.options and
                           self.divs)
 
@@ -73,28 +63,11 @@ class File2:
                 self.logger.error('Unable to parse_file. ' +
                                   'self.div_ids: {0}'.format(self.divs))
 
-    def get_number_descendants(self,node=None):
-        '''Return True if BeautifulSoup object has descendants.'''
-        number_descendants = None
-        if self.ready:
-            if node:
-                number_descendants = 0
-                if not (isinstance(node, NavigableString) or isinstance(node, str)):
-                    for descendant in node.descendants:
-                        if descendant: number_descendants += 1
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_number_descendants.' +
-                                  'node: {}'.format(node))
-        return number_descendants
-
-############
-
     def parse_file_intro(self,intro=None):
         '''Set the tag names and contents for the children of the given tag.'''
         if self.ready:
             # Make sure intro has children
-            number_descendants = self.get_number_descendants(node=intro)
+            number_descendants = self.util.get_number_descendants(node=intro)
             if intro and number_descendants:
                 headings = list()
                 descriptions = list()
@@ -113,7 +86,7 @@ class File2:
                     sections      = dd_list[-1]
                     # if number_descendants > 1: then there's a section list
                     # else there's no section list
-                    number_descendants = self.get_number_descendants(node=sections)
+                    number_descendants = self.util.get_number_descendants(node=sections)
                     dt_headings      = (dt_list[:-1]
                                      if number_descendants > 1 else dt_list)
                     dd_descriptions  = (dd_list[:-1]
@@ -157,9 +130,9 @@ class File2:
             if headings and descriptions:
                 if len(headings)==len(descriptions):
                     for (heading,description) in list(zip(headings,descriptions)):
-                        heading_title = (self.get_string(node=heading)
+                        heading_title = (self.util.get_string(node=heading)
                                          if heading else '')
-                        intro_description = (self.get_string(node=description)
+                        intro_description = (self.util.get_string(node=description)
                                              if description else '')
                         self.intro_heading_titles.append(heading_title)
                         self.intro_descriptions.append(intro_description)
@@ -181,26 +154,6 @@ class File2:
                             'Unable to set_intro_table_information. ' +
                             'headings: {0}'.format(headings) +
                             'descriptions: {0}'.format(descriptions))
-
-    def get_string(self,node=None):
-        string = None
-        if self.ready:
-            if node:
-                if isinstance(node,str):
-                    string = node
-                else:
-                    n = self.get_number_descendants(node=node)
-                    if n > 1:
-                        string = str(node).strip()
-                    elif (n == 1 and bool(node.string)):
-                        string = str(node.string).strip()
-                    else:
-                        string = None
-            else:
-                self.ready = None
-                self.logger.error('Unable to get_string. ' +
-                                  'node: {0}'.format(node))
-        return string
 
     def set_section_hdu_names(self,section_title=None,sections=None):
         '''Get the extension names from the intro Section.'''
@@ -324,8 +277,6 @@ class File2:
         if self.ready:
             if div:
                 self.set_child_names(node=div)
-                print('self.child_names: %r' % self.child_names)
-                input('pause')
                 if not bool('h2' and 'pre' in self.child_names):
                     self.ready = None
                     self.logger.error("Invalid assumption: " +
