@@ -32,6 +32,7 @@ class File3:
     def set_ready(self):
         '''Set error indicator.'''
         self.ready = bool(self.ready   and
+                          self.util    and
                           self.logger  and
                           self.options and
                           self.body)
