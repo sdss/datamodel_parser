@@ -254,18 +254,6 @@ class File1:
                     'Unable to check_valid_assumptions. ' +
                     'names: {0}, contents: {1}'.format(names,contents))
 
-    def set_parent_names(self,div=None):
-        '''Set a list of parent for the given division tag.'''
-        self.parent_names = list()
-        if self.ready:
-            if div:
-                for parent in div.parents:
-                    if parent.name: self.parent_names.append(parent.name)
-            else:
-                self.ready = None
-                self.logger.error('Unable to set_parent_names. ' +
-                                  'div: {0}'.format(div))
-
     def parse_file_extension(self,div=None):
         '''Parse file extension content from given division tag.'''
         if self.ready:

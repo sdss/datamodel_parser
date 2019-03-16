@@ -84,8 +84,40 @@ class Util:
                     if child.name: child_names.append(str(child.name))
             else:
                 self.ready = None
-                self.logger.error('Unable to set_child_names. ' +
+                self.logger.error('Unable to get_child_names. ' +
                                   'node: {0}'.format(node))
         return child_names
+
+    def children_all_one_tag_type(self,node=None,tag_name=None):
+        '''Check all children of node are only one tag type with tag_name.'''
+        all_one_tag_type = None
+        if self.ready:
+            if node and tag_name:
+                all_one_tag_type = True
+                for child in node.children:
+                    if not self.get_string(node=child).isspace():
+                        if child.name and child.name != tag_name:
+                            all_one_tag_type = False
+            else:
+                self.ready = False
+                self.logger.error('Unable to children_all_one_tag_type. ' +
+                                  'node: {}'.format(node)   +
+                                  'tag_name: {}'.format(tag_name)
+                                  )
+        return all_one_tag_type
+
+    def get_parent_names(self,node=None):
+        '''Set a list of parents for the given BeautifulSoup node.'''
+        parent_names = None
+        if self.ready:
+            if node:
+                parent_names = list()
+                for parent in node.parents:
+                    if parent.name: parent_names.append(parent.name)
+            else:
+                self.ready = None
+                self.logger.error('Unable to set_parent_names. ' +
+                                  'node: {0}'.format(node))
+        return parent_names
 
 

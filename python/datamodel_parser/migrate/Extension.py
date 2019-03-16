@@ -9,9 +9,9 @@ class Extension:
         
     '''
 
-    def __init__(self,logger=None,options=None,body=None):
+    def __init__(self,logger=None,options=None,node=None):
         self.initialize(logger=logger,options=options)
-        self.set_body(body=body)
+        self.set_node(node=node)
         self.set_ready()
         self.set_attributes()
 
@@ -21,14 +21,14 @@ class Extension:
         self.options = self.util.options if self.util.options else None
         self.ready   = self.util and self.util.ready if self.util else None
 
-    def set_body(self, body=None):
-        '''Set the body class attribute.'''
-        self.body = None
+    def set_node(self, node=None):
+        '''Set the node class attribute.'''
+        self.node = None
         if self.ready:
-            self.body = body if body else None
-            if not self.body:
+            self.node = node if node else None
+            if not self.node:
                 self.ready = False
-                self.logger.error('Unable to set_body.')
+                self.logger.error('Unable to set_node.')
 
     def set_ready(self):
         '''Set error indicator.'''
@@ -36,7 +36,7 @@ class Extension:
                           self.util    and
                           self.logger  and
                           self.options and
-                          self.body)
+                          self.node)
 
     def set_attributes(self):
         '''Set class attributes.'''
@@ -47,4 +47,7 @@ class Extension:
             self.bold_tags           = self.util.bold_tags
             self.unordered_list_tags = self.util.unordered_list_tags
 
+    def parse_file(self):
+        '''Parse the HTML of the given BeautifulSoup object.'''
+        pass
 
