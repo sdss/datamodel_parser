@@ -49,6 +49,7 @@ class Extension:
 
     def parse_file(self):
         '''Parse the HTML of the given BeautifulSoup object.'''
+        self.extension_count = None
         self.file_extension_data    = list()
         self.file_extension_headers = list()
         if self.ready:
@@ -107,26 +108,34 @@ class Extension:
             if (div and
                 self.verify_assumptions_parse_file_p_h2_dl_table(div=div)):
                 # extension.hdu_number and header.title
-                heading = div.find_next('h2').string
+                h2 = div.find_next('h2')
+                heading = self.util.get_string(node=h2)
                 split = heading.split(':')
-                hdu_number   = int(split[0].lower().replace('hdu',''))
+                hdu_number = int(split[0].lower().replace('hdu',''))
                 header_title = split[1].lower().strip()
                 # column.description
-                column_description = div.find_next('p').string
+                p = div.find_next('p')
+                column_description = self.util.get_string(node=p)
 
                 # data.is_image, column.datatype, column.size
                 data = div.find_next('dl')
-                dt = data.find_all('dt')
-                dd = data.find_all('dd')
-                definitions  = list()
-                descriptions = list()
-                for definition in dt:
-                    definitions.append(definition.string.lower())
-                for description in dd:
-                    descriptions.append(description.string.lower())
+                (definitions,descriptions) = self.util.get_dt_dd_from_dl(dl=data)
+#                dt = data.find_all('dt')
+#                dd = data.find_all('dd')
+#                definitions  = list()
+#                descriptions = list()
+#                for definition in dt:
+#                    string = self.util.get_string(node=definition).lower()
+#                    definitions.append(string)
+#                for description in dd:
+#                    string = self.util.get_string(node=description).lower()
+#                    descriptions.append(string)
+                print('definitions: %r' % definitions)
+                print('descriptions: %r' % descriptions)
+                input('pause')
                 for (definition,description) in list(zip(definitions,descriptions)):
-                    if 'type' in definition: column_datatype = description
-                    if 'size' in definition: column_size     = description
+                    if 'hdu type' in definition: column_datatype = description
+                    if 'hdu size' in definition: column_size     = description
                 data_is_image = bool('image' in descriptions)
                 
                 hdu_data = dict()
@@ -151,23 +160,25 @@ class Extension:
                 self.verify_assumptions_parse_file_p_h2_dl_table(div=div)):
                 table = div.find_next('table')
                 # table caption
-                table_caption = table.find_next('caption').string
+                caption = table.find_next('caption')
+                table_caption = self.util.get_string(node=caption)
                 # table column headers
+                tr = table.find_next('thead').find_next('tr')
                 table_keywords = list()
-                for string in table.find_next('thead').stripped_strings:
-                    table_keywords.append(string.lower())
+                for th in [th for th in tr.children
+                           if not self.util.get_string(node=th).isspace()
+                           and self.util.ready]:
+                    string = self.util.get_string(node=th).lower()
+                    table_keywords.append(string)
                 # table values
                 body = table.find_next('tbody')
                 rows = body.find_all('tr')
                 table_rows = dict()
                 for (row_order,row) in enumerate(rows):
-                    if not self.ready: break
                     row_data = list()
                     for data in row.find_all('td'):
                         string = self.util.get_string(node=data)
-                        self.ready = self.ready and self.util.ready
-                        if self.ready: row_data.append(string)
-                        else: break
+                        row_data.append(string)
                     table_rows[row_order]  = row_data
                 hdu_header['table_caption']  = table_caption
                 hdu_header['table_keywords'] = table_keywords
@@ -201,12 +212,17 @@ class Extension:
                 assumptions = False
                 self.logger.error("Invalid assumption: child_names.count('table') == 1")
             # h2 tag assumptions
-            # Assume 'HDUn:' is in the h2 heading for some n = 0,1,2,...
+            # Assume 'HDU:n ExtensionTitle' is the h2 heading for some digit n
             h2 = div.find_next('h2')
-            string = self.util.get_string(node=h2)
-            if not ('HDU' in string and ':' in string):
+            string = self.util.get_string(node=h2).lower()
+            if not ('hdu' in string and
+                    ':' in string   and
+                    string.split(':')[0].lower().replace('hdu','').isdigit()):
                 assumptions = False
-                self.logger.error("Invalid assumption: HDU:' in h2 heading")
+                self.logger.error(
+                        "Invalid assumption: " +
+                        "div.find_next('h2') = 'HDU:n ExtensionTitle', " +
+                        "where n is a digit")
             # dl tag assumptions
             dl = div.find_next('dl')
             child_names = self.util.get_child_names(node=dl)
@@ -221,15 +237,17 @@ class Extension:
             # dt tags assumptions
             dts = dl.find_all('dt')
             dts_strings = list()
-            for dt in dts: dts_strings.append(self.util.get_string(node=dt))
+            for dt in dts:
+                string = self.util.get_string(node=dt).lower()
+                dts_strings.append(string)
             # Assume 'HDU Type' in dts_strings
-            if 'HDU Type' not in dts_strings:
+            if 'hdu type' not in dts_strings:
                 assumptions = False
-                self.logger.error("Invalid assumption: HDU Type' in dts_strings")
+                self.logger.error("Invalid assumption: 'HDU Type' in dts_strings")
             # Assume 'HDU Size' in dts_strings
-            if 'HDU Size' not in dts_strings:
+            if 'hdu size' not in dts_strings:
                 assumptions = False
-                self.logger.error("Invalid assumption: HDU Size' in dts_strings")
+                self.logger.error("Invalid assumption: 'HDU Size' in dts_strings")
             # table tag assumptions
             table = div.find_next('table')
             child_names = self.util.get_child_names(node=table)
@@ -267,11 +285,22 @@ class Extension:
                 self.logger.error(
                         "Invalid assumption: " +
                         "children_all_one_tag_type(node=tbody,tag_name='tr') == True")
+            # Asume all children of the <tbody> child <tr> tags are <td> tags
+            for tr in [tr for tr in tbody.children
+                       if not self.util.get_string(node=tr).isspace()
+                       and self.util.ready]:
+                if not self.util.children_all_one_tag_type(node=tr,tag_name='td'):
+                    assumptions = False
+                    self.logger.error(
+                            "Invalid assumption: " +
+                            "children_all_one_tag_type(node=tr,tag_name='td')")
         else:
             self.ready = False
             self.logger.error(
                 'Unable to verify_assumptions_parse_file_p_h2_dl_table. ' +
                 'div: {0}'.format(div))
+#        print(assumptions)
+#        input('pause')
         if not assumptions: self.ready = False
         return assumptions
 

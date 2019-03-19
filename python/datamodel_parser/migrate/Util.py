@@ -52,7 +52,7 @@ class Util:
                     elif (n == 1 and bool(node.string)):
                         string = str(node.string).strip()
                     else:
-                        string = None
+                        string = ''
             else:
                 self.ready = None
                 self.logger.error('Unable to get_string. ' +
@@ -120,4 +120,24 @@ class Util:
                                   'node: {0}'.format(node))
         return parent_names
 
-
+    def get_dt_dd_from_dl(self,dl=None):
+        '''From the given HTML description list <dl> Beautiful soup object,
+        get Python lists for the associated definition tags <dt> and
+        description tags <dd>.'''
+        definitions  = list()
+        descriptions = list()
+        if self.ready:
+            if dl:
+                dt = dl.find_all('dt')
+                dd = dl.find_all('dd')
+                for definition in dt:
+                    string = self.get_string(node=definition).lower()
+                    definitions.append(string)
+                for description in dd:
+                    string = self.get_string(node=description).lower()
+                    descriptions.append(string)
+            else:
+                self.ready = None
+                self.logger.error('Unable to get_dt_dd_from_dl. ' +
+                                  'dl: {0}'.format(dl))
+        return (definitions,descriptions)
