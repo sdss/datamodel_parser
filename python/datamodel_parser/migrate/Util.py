@@ -94,10 +94,10 @@ class Util:
         if self.ready:
             if node and tag_name:
                 all_one_tag_type = True
-                for child in node.children:
-                    if not self.get_string(node=child).isspace():
-                        if child.name and child.name != tag_name:
-                            all_one_tag_type = False
+                for child in [child for child in node.children
+                              if not self.get_string(node=child).isspace()]:
+                    if child.name and child.name != tag_name:
+                        all_one_tag_type = False
             else:
                 self.ready = False
                 self.logger.error('Unable to children_all_one_tag_type. ' +

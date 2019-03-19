@@ -73,12 +73,6 @@ class Database:
                     self.logger.error('Unable to get_intros_sections_hdus.' +
                                       'intros: {0}'.format(intros) +
                                       'headers: {0}'.format(headers))
-
-#                    for hdu_number in hdus.keys():
-#                        print("hdus[hdu_number]['column']: %r" % hdus[hdu_number]['column'])
-#                        print("hdus[hdu_number]['extension']['header']: %r" % hdus[hdu_number]['extension']['header'])
-#                        print("hdus[hdu_number]['extension']['keywords']: %r" % hdus[hdu_number]['extension']['keywords'])
-#                        input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intros_sections_hdus.' +

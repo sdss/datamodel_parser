@@ -54,39 +54,16 @@ class File:
         self.extension = None
         if self.ready:
             if self.body:
-                all_divs = self.util.children_all_one_tag_type(node = self.body,
-                                                               tag_name = 'div')
-                self.ready = self.ready and self.util.ready
-                if self.ready:
-                    if all_divs: self.set_intro_and_extension_all_divs()
+                self.intro = Intro(logger  = self.logger,
+                                   options = self.options,
+                                   body    = self.body)
+                self.extension = Extension(logger  = self.logger,
+                                           options = self.options,
+                                           body    = self.body)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_intro_and_extension. ' +
                                   'self.body: '.format(self.body))
-
-    def set_intro_and_extension_all_divs(self):
-        '''Set file intro tags and extension tags.'''
-        if self.ready:
-            if self.body:
-                div_intro = self.body.find_next('div')
-                if div_intro['id'] == 'intro':
-                    div_extensions = div_intro.find_all_next('div')
-                    self.intro = Intro(logger  = self.logger,
-                                       options = self.options,
-                                       node    = div_intro)
-                    self.extension = Extension(logger  = self.logger,
-                                               options = self.options,
-                                               node    = div_extensions)
-                else:
-                    self.ready = False
-                    self.logger.error("Expected div_intro['id'] == 'intro'. " +
-                                      "However, div_intro['id']: {}"
-                                      .format(div_intro['id']))
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_intro_and_extension_all_divs. ' +
-                                  'self.body: '.format(self.body))
-
 
     def set_file(self):
         ''' Set class File instance.'''
@@ -261,20 +238,20 @@ class File:
         self.intro_heading_levels    = self.intro.intro_heading_levels
         self.intro_heading_titles    = self.intro.intro_heading_titles
         self.intro_descriptions      = self.intro.intro_descriptions
-#        self.section_hdu_names       = self.intro.section_hdu_names
-#        self.extension_count         = self.extension.extension_count
-#        self.file_extension_data     = self.extension.file_extension_data
-#        self.file_extension_headers  = self.extension.file_extension_headers
+        self.section_hdu_names       = self.intro.section_hdu_names
+        self.extension_count         = self.extension.extension_count
+        self.file_extension_data     = self.extension.file_extension_data
+        self.file_extension_headers  = self.extension.file_extension_headers
 
-        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
-        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
-        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
-        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
+#        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
+#        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
+#        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
+#        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
 #        print('self.section_hdu_names: {}'.format(self.section_hdu_names))
 #        print('self.extension_count: {}'.format(self.extension_count))
 #        print('self.file_extension_data: \n' + dumps(self.file_extension_data,indent=1))
 #        print('self.file_extension_headers: {}'.format(self.file_extension_headers))
-        input('pause')
+#        input('pause')
 
 #    def parse_file(self):
 #        '''Parse the given file using the determined File instance.'''
