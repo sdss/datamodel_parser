@@ -29,7 +29,7 @@ class File2:
             if not self.divs:
                 self.ready = False
                 self.logger.error('Unable to set_divs. ' +
-                                  'body: {0}'.format(body))
+                                  'body: {}'.format(body))
 
     def set_ready(self):
         '''Set error indicator.'''
@@ -61,11 +61,11 @@ class File2:
                     elif ('hdu' in div_id): self.parse_file_extension(div=div)
                     else:
                         self.ready = False
-                        self.logger.error('Unknown div_id: {0}'.format(div_id))
+                        self.logger.error('Unknown div_id: {}'.format(div_id))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. ' +
-                                  'self.div_ids: {0}'.format(self.divs))
+                                  'self.div_ids: {}'.format(self.divs))
 
     def parse_file_intro(self,intro=None):
         '''Set the tag names and contents for the children of the given tag.'''
@@ -117,14 +117,14 @@ class File2:
                     self.logger.error(
                                 'Unable to parse_file_intro. ' +
                                 'len(dt_list)!=len(dd_list). ' +
-                                'len(dt_list): {0}, '.format(len(dt_list)) +
-                                'len(dd_list): {0}, '.format(len(dd_list)))
+                                'len(dt_list): {}, '.format(len(dt_list)) +
+                                'len(dd_list): {}, '.format(len(dd_list)))
             else:
                 self.ready = False
                 self.logger.error(
                             'Unable to parse_file_intro. ' +
-                            'intro: {0}'.format(intro) +
-                            'number_descendants: {0}'.format(number_descendants)
+                            'intro: {}'.format(intro) +
+                            'number_descendants: {}'.format(number_descendants)
                                 )
 
     def set_intro_table_information(self,headings=None,descriptions=None):
@@ -157,15 +157,15 @@ class File2:
                     self.logger.error(
                                 'Unable to set_intro_table_information. ' +
                                 'len(headings)!=len(descriptions). '      +
-                                'len(headings): {0}, '.format(len(headings))          +
-                                'len(descriptions): {0}.'.format(len(descriptions)))
+                                'len(headings): {}, '.format(len(headings))          +
+                                'len(descriptions): {}.'.format(len(descriptions)))
 
             else:
                 self.ready = False
                 self.logger.error(
                             'Unable to set_intro_table_information. ' +
-                            'headings: {0}'.format(headings) +
-                            'descriptions: {0}'.format(descriptions))
+                            'headings: {}'.format(headings) +
+                            'descriptions: {}'.format(descriptions))
 
     def set_section_hdu_names(self,section_title=None,sections=None):
         '''Get the extension names from the intro Section.'''
@@ -247,7 +247,7 @@ class File2:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
-                                  'div: {0}'.format(div))
+                                  'div: {}'.format(div))
 
     def parse_file_extension_header(self,div=None):
         '''Parse file description content from given division tag.'''
@@ -259,7 +259,7 @@ class File2:
                     # table caption
                     table_caption = None
                     # table column headers
-                    table_keywords = ['key','value','type','comment']
+                    table_keywords = ['Key','Value','Type','Comment']
                     # table values
                     table_rows = dict()
                     header = div.find_next('pre').string
@@ -278,11 +278,11 @@ class File2:
                         self.ready = False
                         self.logger.error(
                                     'Unable to parse_file_extension_header. ' +
-                                    'rows: {0}'.format(rows))
+                                    'rows: {}'.format(rows))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_header. ' +
-                                  'header: {0}'.format(header))
+                                  'header: {}'.format(header))
 
     def check_valid_assumptions(self,div=None):
         '''Verify that all of my assumptions are valid'''
@@ -299,7 +299,7 @@ class File2:
             else:
                 self.ready = False
                 self.logger.error('Unable to check_valid_assumptions. ' +
-                                  'div: {0}.'.format(div))
+                                  'div: {}.'.format(div))
 
     def set_row_data(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
@@ -327,9 +327,9 @@ class File2:
                             'Unable to set_row_data. ' +
                             "The strings 'HISTORY', 'END' and '=' " +
                             'not found in row. ' +
-                            'row: {0}'.format(row))
-                if value_comment and '/' in value_comment:
-                    split = value_comment.split('/')
+                            'row: {}'.format(row))
+                if value_comment and ' /' in value_comment:
+                    split = value_comment.split(' /')
                     value   = split[0]         if split else None
                     comment = split[1].strip() if split else None
                 else:
@@ -341,4 +341,4 @@ class File2:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_row_data. ' +
-                                  'row: {0}'.format(row))
+                                  'row: {}'.format(row))

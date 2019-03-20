@@ -67,7 +67,7 @@ class Extension:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. ' +
-                                  'self.body: {0}'.format(self.body))
+                                  'self.body: {}.'.format(self.body))
 
     def parse_file_div(self):
         '''Parse the HTML of the given BeautifulSoup div tag object.'''
@@ -75,14 +75,13 @@ class Extension:
             if self.body:
                 # Find extension div
                 for div in [div for div in self.body
-                            if not self.util.get_string(node=div).isspace()
-                            and self.util.ready]:
+                            if not self.util.get_string(node=div).isspace()]:
                     # Found intro div
                     if 'hdu' in div['id']: self.parse_file_extension_div(div=div)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_div. ' +
-                                  'self.body: {0}'.format(self.body))
+                                  'self.body: {}.'.format(self.body))
 
     def parse_file_extension_div(self,div=None):
         '''Parse file extension content from given division tag.'''
@@ -91,8 +90,11 @@ class Extension:
                 child_names = set(self.util.get_child_names(node=div))
                 # process different div extension types
                 if child_names == {'h2','p','dl','table'}:
-                    self.parse_file_data_p_h2_dl_table(div=div)
-                    self.parse_file_header_p_h2_dl_table(div=div)
+                    self.parse_file_data_h2_p_dl_table(div=div)
+                    self.parse_file_header_h2_p_dl_table(div=div)
+                elif child_names == {'h2','pre'}:
+                    self.parse_file_data_h2_pre(div=div)
+                    self.parse_file_header_h2_pre(div=div)
                 else:
                     self.ready = False
                     self.logger.error('Unexpected child_names encountered ' +
@@ -100,19 +102,17 @@ class Extension:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_div. ' +
-                                  'div: {0}'.format(div))
+                                  'div: {}.'.format(div))
 
-    def parse_file_data_p_h2_dl_table(self,div=None):
-        '''Parse file description content from given division tag.'''
+    def parse_file_data_h2_p_dl_table(self,div=None):
+        '''Parse file extension data content from given division tag.'''
         if self.ready:
-            if (div and
-                self.verify_assumptions_parse_file_p_h2_dl_table(div=div)):
+            assumptions = self.verify_assumptions_parse_file_h2_p_dl_table(div=div)
+            if div and assumptions:
                 # extension.hdu_number and header.title
-                h2 = div.find_next('h2')
-                heading = self.util.get_string(node=h2)
-                split = heading.split(':')
-                hdu_number = int(split[0].lower().replace('hdu',''))
-                header_title = split[1].strip()
+                (hdu_number,header_title) = (
+                            self.util.get_hdu_number_and_header_title(node=div))
+
                 # column.description
                 p = div.find_next('p')
                 column_description = self.util.get_string(node=p)
@@ -136,15 +136,18 @@ class Extension:
                 self.extension_count = len(self.file_extension_data)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_data_p_h2_dl_table. ' +
-                                  'bool(div): {0}'.format(bool(div)))
+                self.logger.error('Unable to parse_file_data_h2_p_dl_table. ' +
+                                  'div: {}, '.format(div) +
+                                  'assumptions: {}'.format(assumptions)
+                                  )
 
-    def parse_file_header_p_h2_dl_table(self,div=None):
-        '''Parse file description content from given division tag.'''
+    def parse_file_header_h2_p_dl_table(self,div=None):
+        '''Parse file extension keyword/value/type/comment content
+        from given division tag.'''
         hdu_header = dict()
         if self.ready:
-            if (div and
-                self.verify_assumptions_parse_file_p_h2_dl_table(div=div)):
+            assumptions = self.verify_assumptions_parse_file_h2_p_dl_table(div=div)
+            if div and assumptions:
                 table = div.find_next('table')
                 # table caption
                 caption = table.find_next('caption')
@@ -153,8 +156,7 @@ class Extension:
                 tr = table.find_next('thead').find_next('tr')
                 table_keywords = list()
                 for th in [th for th in tr.children
-                           if not self.util.get_string(node=th).isspace()
-                           and self.util.ready]:
+                           if not self.util.get_string(node=th).isspace()]:
                     string = self.util.get_string(node=th)
                     table_keywords.append(string)
                 # table values
@@ -167,17 +169,19 @@ class Extension:
                         string = self.util.get_string(node=data)
                         row_data.append(string)
                     table_rows[row_order]  = row_data
+                # Put it all together
                 hdu_header['table_caption']  = table_caption
                 hdu_header['table_keywords'] = table_keywords
                 hdu_header['table_rows']     = table_rows
                 self.file_extension_headers.append(hdu_header)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_header_p_h2_dl_table. ' +
-                                  'div: {0}'.format(div))
+                self.logger.error('Unable to parse_file_header_h2_p_dl_table. ' +
+                                  'div: {}, '.format(div) +
+                                  'assumptions: {}.'.format(assumptions))
 
-    def verify_assumptions_parse_file_p_h2_dl_table(self,div=None):
-        '''Verify assumptions made in parse_file_data_p_h2_dl_table.'''
+    def verify_assumptions_parse_file_h2_p_dl_table(self,div=None):
+        '''Verify assumptions made in parse_file_data_h2_p_dl_table.'''
         assumptions = None
         if div:
             assumptions = True
@@ -199,7 +203,7 @@ class Extension:
                 assumptions = False
                 self.logger.error("Invalid assumption: child_names.count('table') == 1")
             # h2 tag assumptions
-            # Assume 'HDU:n ExtensionTitle' is the h2 heading for some digit n
+            # Assume 'HDUn: ExtensionTitle' is the h2 heading for some digit n
             h2 = div.find_next('h2')
             string = self.util.get_string(node=h2).lower()
             if not ('hdu' in string and
@@ -208,7 +212,7 @@ class Extension:
                 assumptions = False
                 self.logger.error(
                         "Invalid assumption: " +
-                        "div.find_next('h2') = 'HDU:n ExtensionTitle', " +
+                        "div.find_next('h2') = 'HDUn: ExtensionTitle', " +
                         "where n is a digit")
             # dl tag assumptions
             dl = div.find_next('dl')
@@ -274,8 +278,7 @@ class Extension:
                         "children_all_one_tag_type(node=tbody,tag_name='tr') == True")
             # Asume all children of the <tbody> child <tr> tags are <td> tags
             for tr in [tr for tr in tbody.children
-                       if not self.util.get_string(node=tr).isspace()
-                       and self.util.ready]:
+                       if not self.util.get_string(node=tr).isspace()]:
                 if not self.util.children_all_one_tag_type(node=tr,tag_name='td'):
                     assumptions = False
                     self.logger.error(
@@ -284,8 +287,8 @@ class Extension:
         else:
             self.ready = False
             self.logger.error(
-                'Unable to verify_assumptions_parse_file_p_h2_dl_table. ' +
-                'div: {0}'.format(div))
+                'Unable to verify_assumptions_parse_file_h2_p_dl_table. ' +
+                'div: {}.'.format(div))
 #        print(assumptions)
 #        input('pause')
         if not assumptions:
@@ -293,4 +296,169 @@ class Extension:
             self.ready = False
         return assumptions
 
+    def parse_file_data_h2_pre(self,div=None):
+        '''Parse file extension data content from given division tag.'''
+        if self.ready:
+            assumptions = self.verify_assumptions_parse_file_h2_pre(div=div)
+            if div and assumptions:
+                # extension.hdu_number and header.title
+                (hdu_number,header_title) = (
+                            self.util.get_hdu_number_and_header_title(node=div))
+                # data.is_image
+                header = div.find_next('pre').string
+                rows = header.split('\n') if header else list()
+                image_row = [row for row in rows
+                        if row and 'XTENSION' in row and 'IMAGE' in row]
+                data_is_image = bool(image_row)
+                # combine in a dict
+                hdu_data = dict()
+                hdu_data['hdu_number']         = hdu_number
+                hdu_data['header_title']       = header_title
+                hdu_data['data_is_image']      = data_is_image
+                # This template type has no data
+                hdu_data['column_datatype']    = None
+                hdu_data['column_size']        = None
+                hdu_data['column_description'] = None
+                self.file_extension_data.append(hdu_data)
+                self.extension_count = len(self.file_extension_data)
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_data_h2_pre. ' +
+                                  'div: {}, '.format(div) +
+                                  'assumptions: {}.'.format(assumptions))
+
+    def parse_file_header_h2_pre(self,div=None):
+        '''Parse file extension data content from given division tag.'''
+        hdu_header = dict()
+        
+        if self.ready:
+            assumptions = self.verify_assumptions_parse_file_h2_pre(div=div)
+            if div and assumptions:
+                # table caption
+                table_caption = None
+                # table column headers
+                table_keywords = ['Key','Value','Type','Comment']
+                # table values
+                pre = div.find_next('pre')
+                rows = self.util.get_string(node=pre).split('\n')
+                table_rows = dict()
+                for (row_order,row) in enumerate(rows):
+                    table_rows[row_order] = self.get_row_data_h2_pre(row=row)
+                # Put it all together
+                hdu_header['table_caption']  = table_caption
+                hdu_header['table_keywords'] = table_keywords
+                hdu_header['table_rows']     = table_rows
+                self.file_extension_headers.append(hdu_header)
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_header_h2_pre. ' +
+                                  'div: {}, '.format(div) +
+                                  'assumptions: {}'.format(assumptions))
+
+    def get_row_data_h2_pre(self,row=None):
+        '''Set the header keyword-value pairs for the given row.'''
+        row_data = list()
+        if self.ready:
+            if row:
+                keyword = None
+                value = None
+                type = None # This is not used in this template type
+                comment = None
+                value_comment = None
+                # determine keyword
+                if 'HISTORY' in row:
+                    keyword = 'HISTORY'
+                    value_comment = row.replace('HISTORY','').strip()
+                elif '=' in row:
+                    split = row.split('=')
+                    keyword       = split[0].strip() if split else None
+                    value_comment = split[1]         if split else None
+                elif 'END' in row:
+                    keyword = 'END'
+                    value_comment = row.replace('END','').strip()
+                else:
+                    self.ready = False
+                    self.logger.error(
+                            'Unable to set_row_data_h2_pre. ' +
+                            "The strings 'HISTORY', 'END' and '=' " +
+                            'not found in row. ' +
+                            'row: {}'.format(row))
+                # determine value and comment
+                if value_comment:
+                    if '=' in row:
+                        if   ' / '  in value_comment: split_char = ' / '
+                        elif ' /'   in value_comment: split_char = ' /'
+                        elif '/'    in value_comment: split_char = '/'
+                        else:                         split_char = None
+                        split = value_comment.split(split_char) if split_char else None
+                        value   = split[0]         if split else None
+                        comment = split[1].strip() if split else None
+                    else:
+                        value = None
+                        comment = value_comment
+                else:
+                    value = value_comment
+                    comment = None
+                row_data = ([keyword,value,type,comment]
+                                if keyword or value or type or comment
+                                else list())
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_row_data_h2_pre. ' +
+                                  'row: {}'.format(row))
+        return row_data
+
+    def verify_assumptions_parse_file_h2_pre(self,div=None):
+        '''Verify assumptions made in parse_file_data_h2_p_dl_table.'''
+        assumptions = None
+        if div:
+            assumptions = True
+            child_names = self.util.get_child_names(node=div)
+            # Assume child_names.count('h2') == 1
+            if child_names.count('h2') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('h2') == 1")
+            # Assume child_names.count('pre') == 1
+            if child_names.count('pre') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('pre') == 1")
+            # h2 tag assumptions
+            # Assume 'HDUn: ExtensionTitle' is the h2 heading for some digit n
+            h2 = div.find_next('h2')
+            string = self.util.get_string(node=h2).lower()
+            if not ('hdu' in string and
+                    ':' in string   and
+                    string.split(':')[0].lower().replace('hdu','').isdigit()):
+                assumptions = False
+                self.logger.error(
+                        "Invalid assumption: " +
+                        "div.find_next('h2') = 'HDUn: ExtensionTitle', " +
+                        "where n is a digit")
+            # pre tag assumptions
+            pre = div.find_next('pre')
+            rows = self.util.get_string(node=pre).split('\n')
+            # Assume the pre tag is a string with rows separated by '\n'
+            if not rows:
+                assumptions = False
+                self.logger.error(
+                              "Invalid assumption: " +
+                              "pre tag is a string with rows separated by '\n'")
+            # Assume none of the list entries of rows are empty
+            rows1 = [row for row in rows if row]
+            if len(rows) != len(rows1):
+                assumptions = False
+                self.logger.error("Invalid assumption: " +
+                                  "none of the list entries of rows are empty")
+            # Assume the rows contain either '=' for data or 'HISTORY' or 'END'
+            for row in rows:
+                if not ('=' in row or 'HISTORY' in row or 'END' in row):
+                    assumptions = False
+                    self.logger.error(
+                        "Invalid assumption: " +
+                        "the rows contain either '=' for data or 'HISTORY' or 'END'")
+#        print(assumptions)
+#        input('pause')
+        if not assumptions:
+            self.ready = False
+        return assumptions
 

@@ -10,7 +10,7 @@ extracted spectra. They are simple FITS files.
 
 
 #### Naming Convention
-<dd id="filename"><code>ap2Dmodel-[abc]-[0-9]{8}\.fits</code></dd>
+ap2Dmodel-[abc]-[0-9]{8}\.fits
 
 
 #### Approximate Size
@@ -30,12 +30,12 @@ FITS
 
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
-| **SIMPLE** |                     T  | 		 | Primary Header created by MWRFITS v1.11 | 
-| **BITPIX** |                   -32  | 		 | 		 | 
-| **NAXIS** |                     2  | 		 | 		 | 
-| **NAXIS1** |                  2048  | 		 | 		 | 
-| **NAXIS2** |                  2048  | 		 | 		 | 
-| **EXTEND** |                     T  | 		 | Extensions may be present | 
+| **SIMPLE** |                     T | 		 | Primary Header created by MWRFITS v1.11 | 
+| **BITPIX** |                   -32 | 		 | 		 | 
+| **NAXIS** |                     2 | 		 | 		 | 
+| **NAXIS1** |                  2048 | 		 | 		 | 
+| **NAXIS2** |                  2048 | 		 | 		 | 
+| **EXTEND** |                     T | 		 | Extensions may be present | 
 | **END** | 		 | 		 | 		 | 
 
 

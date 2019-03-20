@@ -56,7 +56,7 @@ class File3:
                 self.parse_file_extensions()
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file. self.body: {0}'
+                self.logger.error('Unable to parse_file. self.body: {}'
                                     .format(self.body))
 
     def parse_file_intro(self):
@@ -133,8 +133,8 @@ class File3:
             else:
                 self.ready = None
                 self.logger.error('Unable to parse_file_intro. ' +
-                                  'self.body: {0}'.format(self.body) +
-                                  'self.body.children: {0}'
+                                  'self.body: {}'.format(self.body) +
+                                  'self.body.children: {}'
                                     .format(self.body.children))
 
     def parse_file_extensions(self):
@@ -168,13 +168,13 @@ class File3:
                 self.ready = False
                 self.logger.error(
                     'Unable to parse_file_extensions. ' +
-                    'self.extension_headings: {0}'
+                    'self.extension_headings: {}'
                         .format(self.extension_headings) +
-                    'self.extension_pres: {0}'
+                    'self.extension_pres: {}'
                         .format(self.extension_pres) +
-                    'len(self.extension_headings): {0}'
+                    'len(self.extension_headings): {}'
                         .format(len(self.extension_headings)) +
-                    'len(self.extension_pres): {0}'
+                    'len(self.extension_pres): {}'
                         .format(len(self.extension_pres)))
 
     def set_extension_tags(self):
@@ -201,8 +201,8 @@ class File3:
             else:
                 self.ready = None
                 self.logger.error('Unable to set_extension_tags. ' +
-                                  'self.body: {0}'.format(self.body) +
-                                  'self.body.children: {0}'
+                                  'self.body: {}'.format(self.body) +
+                                  'self.body.children: {}'
                                     .format(self.body.children))
 
     def set_extension_headings_and_pres(self):
@@ -235,7 +235,7 @@ class File3:
             else:
                 self.ready = None
                 self.logger.error('Unable to set_extension_headings_and_pres. ' +
-                                  'self.extension_tags: {0}'
+                                  'self.extension_tags: {}'
                                   .format(self.extension_tags))
 
     def parse_file_extension_data(self,header_title=None,header=None):
@@ -263,8 +263,8 @@ class File3:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
-                                  'header_title: {0}'.format(header_title) +
-                                  'header: {0}'.format(header))
+                                  'header_title: {}'.format(header_title) +
+                                  'header: {}'.format(header))
 
     def parse_file_extension_header(self,header=None):
         '''Parse file description content from given headerision tag.'''
@@ -292,11 +292,11 @@ class File3:
                     self.ready = False
                     self.logger.error(
                                 'Unable to parse_file_extension_header. ' +
-                                'rows: {0}'.format(rows))
+                                'rows: {}'.format(rows))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_header. ' +
-                                  'header: {0}'.format(header))
+                                  'header: {}'.format(header))
 
     def set_row_data(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
@@ -324,7 +324,7 @@ class File3:
                             'Unable to set_row_data. ' +
                             "The strings 'HISTORY', 'END' and '=' " +
                             'not found in row. ' +
-                            'row: {0}'.format(row))
+                            'row: {}'.format(row))
                 if value_comment and '/' in value_comment:
                     split = value_comment.split('/')
                     value   = split[0]         if split else None
@@ -338,7 +338,7 @@ class File3:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_row_data. ' +
-                                  'row: {0}'.format(row))
+                                  'row: {}'.format(row))
 
     def set_heading_tag_names(self,child_names=None):
         '''Set a list of child for the given BeautifulSoup child_names.'''
@@ -351,4 +351,4 @@ class File3:
             else:
                 self.ready = None
                 self.logger.error('Unable to set_heading_tag_names. ' +
-                                  'child_names: {0}'.format(child_names))
+                                  'child_names: {}'.format(child_names))

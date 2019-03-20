@@ -67,7 +67,7 @@ class Intro:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
-                                  'self.body: {0}'.format(self.body))
+                                  'self.body: {}'.format(self.body))
 
     def parse_file_div(self):
         '''Parse the HTML of the given BeautifulSoup div tag object.'''
@@ -75,18 +75,12 @@ class Intro:
             if self.body:
                 # Find intro div
                 for div in [div for div in self.body
-                            if not self.util.get_string(node=div).isspace()
-                            and self.util.ready]:
+                            if not self.util.get_string(node=div).isspace()]:
                     # Found intro div
                     self.intro_div = None
                     if div['id'] == 'intro':
                         self.intro_div = div
                         child_names = set(self.util.get_child_names(node=div))
-                        
-#                        print('child_names: %r' % child_names)
-#                        input('pause')
-
-                        
                         # process different div intro types
                         if child_names == {'h1', 'h4', 'p','div'}:
                             self.parse_file_h1_h4_p_div()
@@ -101,22 +95,22 @@ class Intro:
                     if not self.intro_div:
                         self.ready = False
                         self.logger.error('Intro div tag not found.' +
-                                          'self.intro_div: {0}'
+                                          'self.intro_div: {}'
                                             .format(self.intro_div))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
-                                  'self.body: {0}'.format(self.body))
+                                  'self.body: {}'.format(self.body))
 
     def parse_file_h1_h4_p_div(self):
         '''Parse the HTML of the given BeautifulSoup div tag object with
             children: h1, h4 and p.'''
         if self.ready:
-            if self.intro_div and self.verify_assumptions_parse_file_h1_h4_p_div():
+            assumptions = self.verify_assumptions_parse_file_h1_h4_p_div()
+            if self.intro_div and assumptions:
                 heading_order = -1
                 for child in [child for child in self.intro_div.children
-                              if not self.util.get_string(node=child).isspace()
-                              and self.util.ready]:
+                              if not self.util.get_string(node=child).isspace()]:
                     string = self.util.get_string(node=child)
                     self.ready = self.ready and self.util.ready
                     if self.ready:
@@ -148,7 +142,8 @@ class Intro:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_h1_h4_p_div. ' +
-                                  'self.intro_div: {0}'.format(self.intro_div))
+                                  'self.intro_div: {}'.format(self.intro_div) +
+                                  'assumptions: {}'.format(assumptions))
 
     def verify_assumptions_parse_file_h1_h4_p_div(self):
         '''Verify assumptions made in parse_file_h1_h4_p_div.'''
@@ -191,7 +186,8 @@ class Intro:
         '''Parse the HTML of the given BeautifulSoup div tag object with
             children: h1, h4 and p.'''
         if self.ready:
-            if self.intro_div and self.verify_assumptions_parse_file_h1_dl():
+            assumptions = self.verify_assumptions_parse_file_h1_dl()
+            if self.intro_div and assumptions:
                 # page title
                 h1 = self.intro_div.find_next('h1')
                 title = self.util.get_string(node=h1)
@@ -214,6 +210,11 @@ class Intro:
                 self.intro_heading_orders = list(range(number_headings))
                 self.intro_heading_levels = [1]
                 self.intro_heading_levels.extend([4] * (number_headings - 1))
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_h1_h4_p_div. ' +
+                                  'self.intro_div: {}'.format(self.intro_div) +
+                                  'assumptions: {}'.format(assumptions))
 
     def verify_assumptions_parse_file_h1_dl(self):
         '''Verify assumptions made in parse_file_h1_dl.'''
@@ -275,7 +276,8 @@ class Intro:
     def parse_section_h4_ul(self,node=None):
         '''Get extension names from the intro Section.'''
         if self.ready:
-            if node and self.verify_assumptions_parse_section_h4_ul(node=node):
+            assumptions = self.verify_assumptions_parse_section_h4_ul(node=node)
+            if node and assumptions:
                 for string in [item for item in node.strings if item != '\n']:
                     if 'HDU' in string:
                         split = string.split(':')
@@ -294,7 +296,8 @@ class Intro:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_section_h4_ul.' +
-                                  'node: {}'.format(node))
+                                  'node: {}'.format(node) +
+                                  'assumptions: {}'.format(assumptions))
 
     def verify_assumptions_parse_section_h4_ul(self,node=None):
         '''Verify assumptions made in parse_file_h1_h4_p_div.'''
@@ -325,11 +328,9 @@ class Intro:
                     "children_all_one_tag_type(node=ul,tag_name='li') == True")
         else:
             for li in [li for li in ul.children
-                       if not self.util.get_string(node=li).isspace()
-                       and self.util.ready]:
+                       if not self.util.get_string(node=li).isspace()]:
                 for child in [child for child in li.children
-                             if not self.util.get_string(node=child).isspace()
-                             and self.util.ready]:
+                             if not self.util.get_string(node=child).isspace()]:
                     if child.name != 'a':
                         assumptions = False
                         self.logger.error("Invalid assumption: child.name == 'a'")
@@ -346,11 +347,11 @@ class Intro:
     def parse_section_ul(self,node=None):
         '''Get extension names from the intro Section.'''
         if self.ready:
-            if node and self.verify_assumptions_parse_section_ul(node=node):
+            assumptions = self.verify_assumptions_parse_section_ul(node=node)
+            if node and assumptions:
                 extension_hdu_names = list()
                 for li in [li for li in node.find_all('li')
-                           if not self.util.get_string(node=li).isspace()
-                           and self.util.ready]:
+                           if not self.util.get_string(node=li).isspace()]:
                     section_name = li.contents[1].replace(':','').strip()
                     extension_hdu_names.append(section_name)
                 hdu_numbers = list(range(len(extension_hdu_names)))
@@ -358,7 +359,8 @@ class Intro:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_section_ul.' +
-                                  'node: {}'.format(node))
+                                  'node: {}'.format(node) +
+                                  'assumptions: {}'.format(assumptions))
 
     def verify_assumptions_parse_section_ul(self,node=None):
         '''Verify assumptions made in parse_file_h1_h4_p_div.'''

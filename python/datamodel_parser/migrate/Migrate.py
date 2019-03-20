@@ -91,7 +91,7 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_tree_edition. ' +
-                                  'self.datamodel_dir: {0}'
+                                  'self.datamodel_dir: {}'
                                   .format(self.datamodel_dir))
 
     def set_datamodel_dir(self):
@@ -120,14 +120,13 @@ class Migrate:
                     else:
                         self.ready = False
                         self.logger.error('Unable to set_html_text. ' +
-                                          'This file does not exist: {0}'
-                                          .format(file))
+                                          'This file does not exist: {}'.format(file))
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to set_html_text. ' +
-                    'self.datamodel_dir: {0}'.format(self.datamodel_dir) +
-                    'self.path: {0}'.format(self.path))
+                    'self.datamodel_dir: {}'.format(self.datamodel_dir) +
+                    'self.path: {}'.format(self.path))
 
     def validate_path(self,path=None):
         '''Check that path is a non-absolute path.'''
@@ -135,11 +134,11 @@ class Migrate:
             if path:
                 if path[0] == '/':
                     self.ready = False
-                    self.logger.error('Invalid self.path: {0}'.format(path))
+                    self.logger.error('Invalid self.path: {}'.format(path))
             else:
                 self.ready = False
                 self.logger.error('Unable to validate_path.' +
-                                  'path: {0}'.format(path))
+                                  'path: {}'.format(path))
 
     def set_database(self):
         '''Set class Database instance.'''
@@ -151,8 +150,8 @@ class Migrate:
             if not self.ready:
                 self.logger.error(
                     'Unable to set_database. ' +
-                    'self.database: {0}'.format(self.database) +
-                    'self.database.ready: {0}'.format(self.database.ready))
+                    'self.database: {}'.format(self.database) +
+                    'self.database.ready: {}'.format(self.database.ready))
 
     def render_template(self,template=None):
         '''Use database information to render the given template.'''
@@ -184,7 +183,7 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error('Unable to render_template.' +
-                                  'template: {0}'.format(template))
+                                  'template: {}'.format(template))
 
     def process_rendered_template(self,result=None,template=None):
         '''Process the result of the rendered Jinja2 template.'''
@@ -202,8 +201,8 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error('Unable to process_rendered_template. ' +
-                                  'result: {0}, '.format(result) +
-                                  'template: {0}, '.format(template))
+                                  'result: {}, '.format(result) +
+                                  'template: {}, '.format(template))
 
     def set_datamodel_parser_rendered_dir(self):
         '''Set the DATAMODEL_DIR file path on cypher.'''
@@ -253,8 +252,8 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error('Unable to populate_html_text_tables. ' +
-                                  'self.file: {0}, '.format(self.file) +
-                                  'self.file.ready: {0}.'.format(self.file.ready))
+                                  'self.file: {}, '.format(self.file) +
+                                  'self.file.ready: {}.'.format(self.file.ready))
 
     def parse_path(self):
         '''Extract information from the given file path.'''
@@ -279,7 +278,7 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_path. ' +
-                                  'self.path: {0}'.format(self.path))
+                                  'self.path: {}'.format(self.path))
 
     def set_soup(self):
         '''Set a class BeautifulSoup instance
@@ -291,7 +290,7 @@ class Migrate:
                          if self.html_text else None)
             if not self.soup:
                 self.ready = None
-                self.logger.error('Unable to set_soup. self.html_text: {0}'
+                self.logger.error('Unable to set_soup. self.html_text: {}'
                                     .format(self.html_text))
 
     def set_file(self):
@@ -317,8 +316,8 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_tree_table. ' +
-                    'self.database: {0}.'.format(self.database) +
-                    'self.tree_edition: {0}.'.format(self.tree_edition))
+                    'self.database: {}.'.format(self.database) +
+                    'self.tree_edition: {}.'.format(self.tree_edition))
 
     def populate_env_table(self):
         '''Populate the env table.'''
@@ -332,8 +331,8 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_env_table. ' +
-                    'self.database: {0}, '.format(self.database) +
-                    'self.env_variable: {0}.' .format(self.env_variable))
+                    'self.database: {}, '.format(self.database) +
+                    'self.env_variable: {}.' .format(self.env_variable))
 
     def populate_location_table(self):
         '''Populate the location table.'''
@@ -352,9 +351,9 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_location_table. '                +
-                    'self.tree_edition: {0}, '.format(self.tree_edition) +
-                    'self.env_variable: {0}, '.format(self.env_variable) +
-                    'self.location_path: {0}.'.format(self.location_path)
+                    'self.tree_edition: {}, '.format(self.tree_edition) +
+                    'self.env_variable: {}, '.format(self.env_variable) +
+                    'self.location_path: {}.'.format(self.location_path)
                     )
 
     def populate_directory_table(self):
@@ -382,11 +381,11 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_directory_table. '                     +
-                    'self.tree_edition: {0}, '   .format(self.tree_edition)    +
-                    'self.env_variable: {0}, '   .format(self.env_variable)    +
-                    'self.location_path: {0}, '  .format(self.location_path)   +
-                    'self.directory_names: {0}, '.format(self.directory_names) +
-                    'self.directory_depths: {0}.'.format(self.directory_depths))
+                    'self.tree_edition: {}, '   .format(self.tree_edition)    +
+                    'self.env_variable: {}, '   .format(self.env_variable)    +
+                    'self.location_path: {}, '  .format(self.location_path)   +
+                    'self.directory_names: {}, '.format(self.directory_names) +
+                    'self.directory_depths: {}.'.format(self.directory_depths))
 
     def populate_file_table(self):
         '''Populate the file table.'''
@@ -413,12 +412,12 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_file_table. '                      +
-                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {0}, ' .format(self.env_variable)  +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name)     +
-                    'self.file: {0}, '         .format(self.file)          +
-                    'self.file.extension_count: {0}.'
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'self.file: {}, '         .format(self.file)          +
+                    'self.file.extension_count: {}.'
                     .format(self.file.extension_count))
 
     def populate_intro_table(self):
@@ -463,17 +462,17 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_intro_table. '                     +
-                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {0}, ' .format(self.env_variable)  +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name)     +
-                    'self.file.intro_heading_orders: {0}, '
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'self.file.intro_heading_orders: {}, '
                     .format(self.file.intro_heading_orders)                +
-                    'self.file.intro_heading_levels: {0}, '
+                    'self.file.intro_heading_levels: {}, '
                     .format(self.file.intro_heading_levels)                +
-                    'self.file.intro_heading_titles: {0}, '
+                    'self.file.intro_heading_titles: {}, '
                     .format(self.file.intro_heading_titles)                +
-                    'self.file.intro_descriptions: {0}.'
+                    'self.file.intro_descriptions: {}.'
                     .format(self.file.intro_descriptions)
                     )
 
@@ -510,12 +509,12 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_section_table. '                   +
-                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {0}, ' .format(self.env_variable)  +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name)     +
-                    'self.file: {0},'          .format(self.file)          +
-                    'self.file.section_hdu_names: {0}.'
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'self.file: {},'          .format(self.file)          +
+                    'self.file.section_hdu_names: {}.'
                     .format(self.file.section_hdu_names))
 
     def populate_extension_table(self):
@@ -541,12 +540,12 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_extension_table. '                 +
-                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {0}, ' .format(self.env_variable)  +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name)     +
-                    'self.file: {0}'           .format(self.file)          +
-                    'self.file.file_extension_data: {0}'
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'self.file: {}'           .format(self.file)          +
+                    'self.file.file_extension_data: {}'
                     .format(self.file.file_extension_data)
                     )
 
@@ -577,12 +576,12 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_data_table. '                 +
-                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {0}, ' .format(self.env_variable)  +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name)     +
-                    'self.file: {0}'           .format(self.file)          +
-                    'self.file.file_extension_data: {0}'
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'self.file: {}'           .format(self.file)          +
+                    'self.file.file_extension_data: {}'
                     .format(self.file.file_extension_data)
                     )
 
@@ -620,12 +619,12 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_column_table. '                 +
-                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {0}, ' .format(self.env_variable)  +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name)     +
-                    'self.file: {0}'           .format(self.file)          +
-                    'self.file.file_extension_data: {0}'
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'self.file: {}'           .format(self.file)          +
+                    'self.file.file_extension_data: {}'
                     .format(self.file.file_extension_data)
                     )
 
@@ -666,21 +665,21 @@ class Migrate:
                     self.logger.error(
                             'Unable to populate_header_table. ' +
                             'Data and header lists have unequal length. ' +
-                            'len(data): {0}, '.format(len(data)) +
-                            'len(headers): {0}, '.format(len(headers)))
+                            'len(data): {}, '.format(len(data)) +
+                            'len(headers): {}, '.format(len(headers)))
                             
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_header_table. '                 +
-                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {0}, ' .format(self.env_variable)  +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name)     +
-                    'self.file: {0}'           .format(self.file)          +
-                    'self.file.file_extension_data: {0}'
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'self.file: {}'           .format(self.file)          +
+                    'self.file.file_extension_data: {}'
                     .format(self.file.file_extension_data)                 +
-                    'self.file.file_extension_headers: {0}'
+                    'self.file.file_extension_headers: {}'
                     .format(self.file.file_extension_headers)
                     )
 
@@ -721,21 +720,21 @@ class Migrate:
                     self.logger.error(
                             'Unable to populate_keyword_table. ' +
                             'Data and header lists have unequal length. ' +
-                            'len(data): {0}, '.format(len(data)) +
-                            'len(headers): {0}, '.format(len(headers)))
+                            'len(data): {}, '.format(len(data)) +
+                            'len(headers): {}, '.format(len(headers)))
                 
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_keyword_table. '                 +
-                    'self.tree_edition: {0}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {0}, ' .format(self.env_variable)  +
-                    'self.location_path: {0}, '.format(self.location_path) +
-                    'self.file_name: {0}, '    .format(self.file_name)     +
-                    'self.file: {0}'           .format(self.file)          +
-                    'self.file.file_extension_data: {0}'
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'self.file: {}'           .format(self.file)          +
+                    'self.file.file_extension_data: {}'
                     .format(self.file.file_extension_data)                 +
-                    'self.file.file_extension_headers: {0}'
+                    'self.file.file_extension_headers: {}'
                     .format(self.file.file_extension_headers)
                     )
 

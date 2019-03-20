@@ -142,3 +142,21 @@ class Util:
                 self.logger.error('Unable to get_dts_and_dds_from_dl. ' +
                                   'dl: {0}'.format(dl))
         return (definitions,descriptions)
+
+    def get_hdu_number_and_header_title(self,node=None):
+        '''Get extension.hdu_number and header.title from BeautifulSoup node.'''
+        hdu_number = None
+        header_title = None
+        if self.ready:
+            if node:
+                h2 = node.find_next('h2')
+                heading = self.get_string(node=h2)
+                split = heading.split(':')
+                hdu_number = int(split[0].lower().replace('hdu',''))
+                header_title = split[1].strip()
+            else:
+                self.ready = None
+                self.logger.error('Unable to get_hdu_number_and_header_title. ' +
+                                  'node: {0}'.format(node))
+        return (hdu_number,header_title)
+

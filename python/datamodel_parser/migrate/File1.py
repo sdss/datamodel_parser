@@ -29,7 +29,7 @@ class File1:
             if not self.divs:
                 self.ready = False
                 self.logger.error('Unable to set_divs. ' +
-                                  'body: {0}'.format(body))
+                                  'body: {}.'.format(body))
 
     def set_ready(self):
         '''Set error indicator.'''
@@ -61,11 +61,11 @@ class File1:
                     elif 'hdu' in div_id: self.parse_file_extension(div=div)
                     else:
                         self.ready = False
-                        self.logger.error('Unknown div_id: {0}'.format(div_id))
+                        self.logger.error('Unknown div_id: {}.'.format(div_id))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. ' +
-                                  'self.div_ids: {0}'.format(self.divs))
+                                  'self.div_ids: {}.'.format(self.divs))
 
     def parse_file_intro(self,intro=None):
         '''Parse file intro table content from given tag.'''
@@ -76,7 +76,7 @@ class File1:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_intro. ' +
-                                  'intro: {0}'.format(intro))
+                                  'intro: {}.'.format(intro))
 
     def set_intro_tag_names_and_contents(self,intro=None):
         ''' Set the tag names and contents for the children of the given tag.'''
@@ -107,8 +107,8 @@ class File1:
                     else:
                         self.ready = False
                         self.logger.error('Unexpected BeautifulSoup type. ' +
-                                          'child: {0}, type(child): {1}'
-                                          .format(child,type(child)))
+                                          'child: {}, '.format(child) +
+                                          'type(child): {}.'.format(type(child)))
                 self.remove_closing_division_tag(
                                         tag_names=self.intro_tag_names,
                                         tag_contents=self.intro_tag_contents)
@@ -116,8 +116,8 @@ class File1:
                 self.ready = False
                 self.logger.error(
                             'Unable to set_intro_tag_names_and_contents. ' +
-                            'intro: {0}'.format(intro) +
-                            'number_descendants: {0}'.format(number_descendants) 
+                            'intro: {}'.format(intro) +
+                            'number_descendants: {}'.format(number_descendants) 
                                 )
 
     def set_section_hdu_names(self,div=None):
@@ -181,8 +181,8 @@ class File1:
                 self.ready = False
                 self.logger.error(
                             'Unable to remove_closing_division_tag. ' +
-                            'tag_names: {0}'.format(tag_names) +
-                            'contents: {0}'.format(contents)
+                            'tag_names: {}'.format(tag_names) +
+                            'contents: {}'.format(contents)
                                 )
 
     def set_intro_table_information(self):
@@ -246,7 +246,7 @@ class File1:
                         self.logger.error(
                             'Invalid assumption: ' +
                             'names are either heading or paragraph tags.' +
-                            'unexpected_tag_names: {0}.'
+                            'unexpected_tag_names: {}.'
                             .format(unexpected_tag_names))
             else:
                 self.ready = False
@@ -304,7 +304,7 @@ class File1:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
-                                  'div: {0}'.format(div))
+                                  'div: {}'.format(div))
 
     def parse_file_extension_header(self,div=None):
         '''Parse file description content from given division tag.'''
@@ -338,4 +338,4 @@ class File1:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_header. ' +
-                                  'div: {0}'.format(div))
+                                  'div: {}'.format(div))

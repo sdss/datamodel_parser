@@ -120,14 +120,14 @@ class File:
                     else:
                         self.ready = False
                         self.logger.error('Unable to set_template_type_div. ' +
-                                          'child_names: {0}'.format(child_names)
+                                          'child_names: {}.'.format(child_names)
                                           )
             
                 else:
                     self.ready = False
                     self.logger.error('Unable to set_template_type_div. ' +
                                       "Expedted div_id='intro'." +
-                                      'div_id: {0}'.format(div_id))
+                                      'div_id: {}.'.format(div_id))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_template_type_div. ' +
@@ -154,7 +154,7 @@ class File:
                 else:
                     self.ready = False
                     self.logger.error('Unable to set_template_type_nondiv. ' +
-                                      'child_names: {0}'.format(child_names)
+                                      'child_names: {}.'.format(child_names)
                                       )
             else:
                 self.ready = False
@@ -177,12 +177,12 @@ class File:
                 if not self.ready:
                     self.logger.error(
                         'Unable to set_file1. '             +
-                        'self.file: {0}'.format(self.file) +
-                        'self.file.ready: {0}'.format(self.file.ready))
+                        'self.file: {}, '.format(self.file) +
+                        'self.file.ready: {}.'.format(self.file.ready))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_file1. ' +
-                                  'divs: {0}'.format(divs))
+                                  'divs: {},'.format(divs))
 
     def set_file2(self):
         '''
@@ -200,12 +200,12 @@ class File:
                 if not self.ready:
                     self.logger.error(
                         'Unable to set_file2. '             +
-                        'self.file: {0}'.format(self.file) +
-                        'self.file.ready: {0}'.format(self.file.ready))
+                        'self.file: {}, '.format(self.file) +
+                        'self.file.ready: {}.'.format(self.file.ready))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_file2. ' +
-                                  'divs: {0}'.format(divs))
+                                  'divs: {}.'.format(divs))
 
     def set_file3(self):
         '''
@@ -223,12 +223,12 @@ class File:
                 if not self.ready:
                     self.logger.error(
                         'Unable to set_file3. '             +
-                        'self.file: {0}'.format(self.file) +
-                        'self.file.ready: {0}'.format(self.file.ready))
+                        'self.file: {}, '.format(self.file) +
+                        'self.file.ready: {}.'.format(self.file.ready))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_file3. ' +
-                                  'divs: {0}'.format(divs))
+                                  'divs: {}.'.format(divs))
 
     def parse_file(self):
         '''Parse the given file using the determined File instance.'''
@@ -240,9 +240,9 @@ class File:
         self.intro_heading_titles    = self.intro.intro_heading_titles
         self.intro_descriptions      = self.intro.intro_descriptions
         self.section_hdu_names       = self.intro.section_hdu_names
-#        self.extension_count         = self.extension.extension_count
-#        self.file_extension_data     = self.extension.file_extension_data
-#        self.file_extension_headers  = self.extension.file_extension_headers
+        self.extension_count         = self.extension.extension_count
+        self.file_extension_data     = self.extension.file_extension_data
+        self.file_extension_headers  = self.extension.file_extension_headers
 
 #        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
 #        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
