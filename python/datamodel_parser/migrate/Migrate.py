@@ -238,9 +238,10 @@ class Migrate:
         if self.ready:
             self.set_soup()
             self.set_file()
-            if self.file and self.file.ready:
+            if self.ready:
                 self.file.parse_file()
-                if self.ready and self.file.ready:
+                self.ready = self.file and self.file.ready
+                if self.ready:
                     self.populate_file_table()
                     self.populate_intro_table()
                     self.populate_section_table()

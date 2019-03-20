@@ -187,6 +187,73 @@ class Intro:
         if not assumptions: self.ready = False
         return assumptions
 
+    def parse_file_h1_dl(self):
+        '''Parse the HTML of the given BeautifulSoup div tag object with
+            children: h1, h4 and p.'''
+        if self.ready:
+            if self.intro_div and self.verify_assumptions_parse_file_h1_dl():
+                # page title
+                h1 = self.intro_div.find_next('h1')
+                title = self.util.get_string(node=h1)
+                description = ''
+                self.intro_heading_titles.append(title)
+                self.intro_descriptions.append(description)
+                
+                # page intro
+                dl = self.intro_div.find_next('dl')
+                (titles,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
+                for dd in dl.find_all('dd'): pass # get last dd in dl
+                child_names = self.util.get_child_names(node=dd)
+                if child_names == ['ul']: # Section list in last dd
+                    titles.pop()
+                    descriptions.pop()
+                    self.parse_section(node=dd)
+                self.intro_heading_titles.extend(titles)
+                self.intro_descriptions.extend(descriptions)
+                number_headings = len(self.intro_heading_titles)
+                self.intro_heading_orders = list(range(number_headings))
+                self.intro_heading_levels = [1]
+                self.intro_heading_levels.extend([4] * (number_headings - 1))
+
+    def verify_assumptions_parse_file_h1_dl(self):
+        '''Verify assumptions made in parse_file_h1_dl.'''
+        assumptions = True
+        child_names = self.util.get_child_names(node=self.intro_div)
+        # Assume child_names.count('h1') == 1
+        if child_names.count('h1') != 1:
+            assumptions = False
+            self.logger.error("Invalid assumption: child_names.count('h1') == 1")
+        # Assume child_names.count('dl') == 1
+        if child_names.count('dl') != 1:
+            assumptions = False
+            self.logger.error("Invalid assumption: child_names.count('dl') == 1")
+        # dl assumptions
+        dl = self.intro_div.find_next('dl')
+        child_names = self.util.get_child_names(node=dl)
+        # Assume child_names == ['dt','dd']*4 or child_names == ['dt','dd']*5
+        if not (child_names != ['dt','dd']*4 or child_names != ['dt','dd']*5):
+            assumptions = False
+            self.logger.error("Invalid assumption: "
+                "child_names == ['dt','dd']*4 or child_names == ['dt','dd']*5")
+        else:
+            if child_names == ['dt','dd']*5:
+                for dd in dl.find_all('dd'): pass # get last dd
+                child_names = self.util.get_child_names(node=dd)
+                # Assume child_names == ['ul']
+                if child_names != ['ul']:
+                    assumptions = False
+                    self.logger.error("Invalid assumption: child_names.count('h1') == ['ul']")
+                else:
+                    # Asume all children of the <ul> tag are <li> tags
+                    ul = dd.find_next('ul')
+                    if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
+                        assumptions = False
+                        self.logger.error(
+                                "Invalid assumption: " +
+                                "children_all_one_tag_type(node=ul,tag_name='li') == True")
+        if not assumptions: self.ready = False
+        return assumptions
+
     def parse_section(self,node=None):
         '''Get extension names from the intro Section.'''
         if self.ready:
@@ -194,6 +261,8 @@ class Intro:
                 child_names = set(self.util.get_child_names(node=node))
                 if child_names == {'h4','ul'}:
                     self.parse_section_h4_ul(node=node)
+                elif child_names == {'ul'}:
+                    self.parse_section_ul(node=node)
                 else:
                     self.ready = False
                     self.logger.error('Unexpected child_names encountered ' +
@@ -210,10 +279,10 @@ class Intro:
                 for string in [item for item in node.strings if item != '\n']:
                     if 'HDU' in string:
                         split = string.split(':')
-                        extension = split[0].lower().strip() if split else None
-                        hdu_number = (int(extension.replace('hdu',''))
+                        extension = split[0].strip() if split else None
+                        hdu_number = (int(extension.lower().replace('hdu',''))
                                       if extension else None)
-                        hdu_name   = split[1].lower().strip() if split else None
+                        hdu_name   = split[1].strip() if split else None
                         if hdu_number is not None and hdu_name:
                             self.section_hdu_names[hdu_number] = hdu_name
                         else:
@@ -274,92 +343,38 @@ class Intro:
         if not assumptions: self.ready = False
         return assumptions
 
-    def parse_file_h1_dl(self):
-        '''Parse the HTML of the given BeautifulSoup div tag object with
-            children: h1, h4 and p.'''
+    def parse_section_ul(self,node=None):
+        '''Get extension names from the intro Section.'''
         if self.ready:
-            if self.intro_div and self.verify_assumptions_parse_file_h1_dl():
-                headings = list()
-                descriptions = list()
-                
-                # page title
-                h1 = self.intro_div.find_next('h1')
-                heading_title = self.util.get_string(node=h1).lower()
-                intro_description = ''
-                headings.append(heading)
-                descriptions.append('')
-                self.intro_heading_titles.append(heading_title)
-                self.intro_descriptions.append(intro_description)
-                
-                # page intro
-                dl = self.intro_div.find_next('dl')
-                dt_list = dl.find_all('dt')
-                dd_list = dl.find_all('dd')
-                if len(dt_list)==len(dd_list):
-                    section_title = dt_list[-1]
-                    sections      = dd_list[-1]
-                    # if number_descendants > 1: then there's a section list
-                    # else there's no section list
-                    number_descendants = self.util.get_number_descendants(node=sections)
-                    self.ready = self.ready and self.util.ready
-                    if self.ready:
-                        dt_headings      = (dt_list[:-1]
-                                         if number_descendants > 1 else dt_list)
-                        dd_descriptions  = (dd_list[:-1]
-                                         if number_descendants > 1 else dd_list)
-                                         
-                        # Intro table
-                        headings.extend(dt_headings)
-                        descriptions.extend(dd_descriptions)
-                        self.set_intro_table_information(headings     = headings,
-                                                         descriptions = descriptions)
+            if node and self.verify_assumptions_parse_section_ul(node=node):
+                extension_hdu_names = list()
+                for li in [li for li in node.find_all('li')
+                           if not self.util.get_string(node=li).isspace()
+                           and self.util.ready]:
+                    section_name = li.contents[1].replace(':','').strip()
+                    extension_hdu_names.append(section_name)
+                hdu_numbers = list(range(len(extension_hdu_names)))
+                self.section_hdu_names = dict(zip(hdu_numbers,extension_hdu_names))
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_section_ul.' +
+                                  'node: {}'.format(node))
 
-                        # Section table
-                        section_title = (section_title
-                                         if number_descendants > 1 else '')
-                        sections      = (sections
-                                         if number_descendants > 1 else list())
-                        self.set_section_hdu_names(section_title = section_title,
-                                               sections      = sections)
-
-    def verify_assumptions_parse_file_h1_dl(self):
-        '''Verify assumptions made in parse_file_h1_dl.'''
+    def verify_assumptions_parse_section_ul(self,node=None):
+        '''Verify assumptions made in parse_file_h1_h4_p_div.'''
         assumptions = True
-        child_names = self.util.get_child_names(node=self.intro_div)
-        # Assume child_names.count('h1') == 1
-        if child_names.count('h1') != 1:
+        child_names = self.util.get_child_names(node=node)
+        # Assume child_names == ['ul']
+        if child_names != ['ul']:
             assumptions = False
-            self.logger.error("Invalid assumption: child_names.count('h1') == 1")
-        # Assume child_names.count('dl') == 1
-        if child_names.count('dl') != 1:
+            self.logger.error("Invalid assumption: child_names == ['ul']")
+        # Asume all children of the <ul> tag are <li> tags
+        ul = node.find_next('ul')
+        if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
             assumptions = False
-            self.logger.error("Invalid assumption: child_names.count('dl') == 1")
-        # dl assumptions
-        dl = self.intro_div.find_next('dl')
-        child_names = self.util.get_child_names(node=dl)
-        # Assume child_names == ['dt','dd']*4 or child_names == ['dt','dd']*5
-        if not (child_names != ['dt','dd']*4 or child_names != ['dt','dd']*5):
-            assumptions = False
-            self.logger.error("Invalid assumption: "
-                "child_names == ['dt','dd']*4 or child_names == ['dt','dd']*5")
-        else:
-            if child_names == ['dt','dd']*5:
-                for dd in dl.find_all('dd'): pass # get last dd
-                child_names = self.util.get_child_names(node=dd)
-                # Assume child_names == ['ul']
-                if child_names != ['ul']:
-                    assumptions = False
-                    self.logger.error("Invalid assumption: child_names.count('h1') == ['ul']")
-                else:
-                    # Asume all children of the <ul> tag are <li> tags
-                    ul = dd.find_next('ul')
-                    if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
-                        assumptions = False
-                        self.logger.error(
-                                "Invalid assumption: " +
-                                "children_all_one_tag_type(node=ul,tag_name='li') == True")
-#        print('assumptions: %r' % assumptions)
-#        input('pause')
+            self.logger.error(
+                    "Invalid assumption: " +
+                    "children_all_one_tag_type(node=ul,tag_name='li') == True")
         if not assumptions: self.ready = False
         return assumptions
 

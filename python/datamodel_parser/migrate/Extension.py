@@ -112,30 +112,17 @@ class Extension:
                 heading = self.util.get_string(node=h2)
                 split = heading.split(':')
                 hdu_number = int(split[0].lower().replace('hdu',''))
-                header_title = split[1].lower().strip()
+                header_title = split[1].strip()
                 # column.description
                 p = div.find_next('p')
                 column_description = self.util.get_string(node=p)
 
                 # data.is_image, column.datatype, column.size
-                data = div.find_next('dl')
-                (definitions,descriptions) = self.util.get_dt_dd_from_dl(dl=data)
-#                dt = data.find_all('dt')
-#                dd = data.find_all('dd')
-#                definitions  = list()
-#                descriptions = list()
-#                for definition in dt:
-#                    string = self.util.get_string(node=definition).lower()
-#                    definitions.append(string)
-#                for description in dd:
-#                    string = self.util.get_string(node=description).lower()
-#                    descriptions.append(string)
-                print('definitions: %r' % definitions)
-                print('descriptions: %r' % descriptions)
-                input('pause')
+                dl = div.find_next('dl')
+                (definitions,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
                 for (definition,description) in list(zip(definitions,descriptions)):
-                    if 'hdu type' in definition: column_datatype = description
-                    if 'hdu size' in definition: column_size     = description
+                    if 'hdu type' in definition.lower(): column_datatype = description
+                    if 'hdu size' in definition.lower(): column_size     = description
                 data_is_image = bool('image' in descriptions)
                 
                 hdu_data = dict()
@@ -150,7 +137,7 @@ class Extension:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_data_p_h2_dl_table. ' +
-                                  'div: {0}'.format(div))
+                                  'bool(div): {0}'.format(bool(div)))
 
     def parse_file_header_p_h2_dl_table(self,div=None):
         '''Parse file description content from given division tag.'''
@@ -168,7 +155,7 @@ class Extension:
                 for th in [th for th in tr.children
                            if not self.util.get_string(node=th).isspace()
                            and self.util.ready]:
-                    string = self.util.get_string(node=th).lower()
+                    string = self.util.get_string(node=th)
                     table_keywords.append(string)
                 # table values
                 body = table.find_next('tbody')
@@ -301,7 +288,9 @@ class Extension:
                 'div: {0}'.format(div))
 #        print(assumptions)
 #        input('pause')
-        if not assumptions: self.ready = False
+        if not assumptions:
+            print('div: %r' % div)
+            self.ready = False
         return assumptions
 
 

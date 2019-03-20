@@ -234,14 +234,15 @@ class File:
         '''Parse the given file using the determined File instance.'''
         self.intro.parse_file()
         self.extension.parse_file()
+        self.ready = self.ready and self.intro.ready and self.extension.ready
         self.intro_heading_orders    = self.intro.intro_heading_orders
         self.intro_heading_levels    = self.intro.intro_heading_levels
         self.intro_heading_titles    = self.intro.intro_heading_titles
         self.intro_descriptions      = self.intro.intro_descriptions
         self.section_hdu_names       = self.intro.section_hdu_names
-        self.extension_count         = self.extension.extension_count
-        self.file_extension_data     = self.extension.file_extension_data
-        self.file_extension_headers  = self.extension.file_extension_headers
+#        self.extension_count         = self.extension.extension_count
+#        self.file_extension_data     = self.extension.file_extension_data
+#        self.file_extension_headers  = self.extension.file_extension_headers
 
 #        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
 #        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
