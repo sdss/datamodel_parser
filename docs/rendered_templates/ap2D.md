@@ -36,6 +36,7 @@ FITS
 | **SIMPLE** |                     T | 		 | image conforms to FITS standard | 
 | **BITPIX** |                    16 | 		 | bits per data value | 
 | **NAXIS** |                     0 | 		 | number of axes | 
+| **END** | 		 | 		 | EXT  =                    T /file may contain extensions | 
 | **EXTEND** |                     T | 		 | file may contain extensions | 
 | **INTDELAY** |                   0.1 | 		 | Integration Delay(S) | 
 | **DATE-OBS** |  '2011-09-09T03:52:24.384' | 		 | Date at start of integration | 
@@ -157,16 +158,16 @@ FITS
 | **HISTORY** | 		 | 		 | AP3D:         2 - cosmic ray | 
 | **HISTORY** | 		 | 		 | AP3D:         4 - saturated | 
 | **HISTORY** | 		 | 		 | AP3D:         8 - unfixable | 
-| **HISTORY** | 		 | 		 | 		 | 
-| **HISTORY** | AP3D: BAD PIXEL MASK file=" | 		 | net | 
+| **HISTORY** | 		 | 		 | AP3D: Global fractional variability = 0.272 | 
+| **HISTORY** | 		 | 		 | AP3D: BAD PIXEL MASK file="/net/apogee//v2test/cal/bpm/apBPM-a-05560001. | 
 | **HISTORY** | 		 | 		 | AP3D: fits" | 
-| **HISTORY** | AP3D: DETECTOR file=" | 		 | net | 
+| **HISTORY** | 		 | 		 | AP3D: DETECTOR file="/net/apogee//v2test/cal/detector/apDetector-a-55640 | 
 | **HISTORY** | 		 | 		 | AP3D: .fits" | 
-| **HISTORY** | AP3D: Dark Current Correction file=" | 		 | net | 
+| **HISTORY** | 		 | 		 | AP3D: Dark Current Correction file="/net/apogee//v2test/cal/darkcorr/apD | 
 | **HISTORY** | 		 | 		 | AP3D: ark-a-05560001.fits" | 
-| **HISTORY** | AP3D: Flat Field Correction file=" | 		 | net | 
+| **HISTORY** | 		 | 		 | AP3D: Flat Field Correction file="/net/apogee//v2test/cal/flatcorr/apFla | 
 | **HISTORY** | 		 | 		 | AP3D: t-a-04750009.fits" | 
-| **HISTORY** | AP3D: Persistence mask file=" | 		 | net | 
+| **HISTORY** | 		 | 		 | AP3D: Persistence mask file="/net/apogee//v2test/cal/persist/apPersist-a | 
 | **HISTORY** | 		 | 		 | AP3D: -04680019.fits" | 
 | **HISTORY** | 		 | 		 | AP3D: 42498 pixels are bad | 
 | **HISTORY** | 		 | 		 | AP3D: 455 pixels have cosmic rays | 
@@ -197,7 +198,7 @@ FITS
 | **CTYPE2** |  'Pixel   '           | 		 | 		 | 
 | **BUNIT** |  'Flux (ADU)'         | 		 | 		 | 
 | **HISTORY** | 		 | 		 | Image was compressed by CFITSIO using scaled integer quantization: | 
-| **HISTORY** | q = 4.000000 | 		 | quantized level scaling parameter | 
+| **HISTORY** | 		 | 		 | q = 4.000000 / quantized level scaling parameter | 
 | **HISTORY** | 		 | 		 | 'SUBTRACTIVE_DITHER_1' / Pixel Quantization Algorithm | 
 | **CHECKSUM** |  'XenSXclPXclPXclP'   | 		 | HDU checksum updated 2012-11-15T21:35:29 | 
 | **DATASUM** |  '3618308333'         | 		 | data unit checksum updated 2012-11-15T21:35:29 | 
@@ -220,7 +221,7 @@ FITS
 | **CTYPE2** |  'Pixel   '           | 		 | 		 | 
 | **BUNIT** |  'Error (ADU)'        | 		 | 		 | 
 | **HISTORY** | 		 | 		 | Image was compressed by CFITSIO using scaled integer quantization: | 
-| **HISTORY** | q = 4.000000 | 		 | quantized level scaling parameter | 
+| **HISTORY** | 		 | 		 | q = 4.000000 / quantized level scaling parameter | 
 | **HISTORY** | 		 | 		 | 'SUBTRACTIVE_DITHER_1' / Pixel Quantization Algorithm | 
 | **CHECKSUM** |  '9GTHGFR99FREGFR9'   | 		 | HDU checksum updated 2012-11-15T21:35:57 | 
 | **DATASUM** |  '908871677'          | 		 | data unit checksum updated 2012-11-15T21:35:57 | 

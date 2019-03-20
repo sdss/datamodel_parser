@@ -366,16 +366,14 @@ class Extension:
                 comment = None
                 value_comment = None
                 # determine keyword
-                if 'HISTORY' in row:
-                    keyword = 'HISTORY'
-                    value_comment = row.replace('HISTORY','').strip()
+                if 'HISTORY' in row or 'END' in row:
+                    if 'HISTORY' in row: keyword = 'HISTORY'
+                    else:                keyword = 'END'
+                    value_comment = row.replace(keyword,'').strip()
                 elif '=' in row:
                     split = row.split('=')
                     keyword       = split[0].strip() if split else None
                     value_comment = split[1]         if split else None
-                elif 'END' in row:
-                    keyword = 'END'
-                    value_comment = row.replace('END','').strip()
                 else:
                     self.ready = False
                     self.logger.error(
@@ -384,8 +382,11 @@ class Extension:
                             'not found in row. ' +
                             'row: {}'.format(row))
                 # determine value and comment
-                if value_comment:
-                    if '=' in row:
+                if self.ready:
+                    if 'HISTORY' in row or 'END' in row:
+                        value = None
+                        comment = value_comment
+                    elif '=' in row:
                         if   ' / '  in value_comment: split_char = ' / '
                         elif ' /'   in value_comment: split_char = ' /'
                         elif '/'    in value_comment: split_char = '/'
@@ -393,12 +394,6 @@ class Extension:
                         split = value_comment.split(split_char) if split_char else None
                         value   = split[0]         if split else None
                         comment = split[1].strip() if split else None
-                    else:
-                        value = None
-                        comment = value_comment
-                else:
-                    value = value_comment
-                    comment = None
                 row_data = ([keyword,value,type,comment]
                                 if keyword or value or type or comment
                                 else list())

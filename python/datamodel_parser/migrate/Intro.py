@@ -61,6 +61,8 @@ class Intro:
                                                        tag_name = 'div'):
                     self.parse_file_div()
                 else:
+#                    child_names = set(self.util.get_child_names(node=self.body))
+#                    print(')
                     self.ready = False
                     self.logger.error('Unexpected intro type encountered ' +
                                       'in parse_file.')
