@@ -420,7 +420,70 @@ class Intro:
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h1_p_h3_ul_pre()
             if self.body and assumptions:
-                pass
+                heading_order = -1
+                found_format_notes = False
+                append_discussions = False
+
+#                for child in [child for child in self.body.children if child != '\n']:
+#                    if not child.name: print('child: %r' % child)
+#                    input('pause')
+
+                for child in [child for child in self.body.children if child != '\n']:
+                    child_name = child.name if child else None
+                    string = self.util.get_string(node=child)
+                    # found extension tags
+                    if (child_name in self.heading_tags and 'HDU' in string):
+                        break
+                    # intro heading tags
+                    elif child_name in self.heading_tags:
+                        # page title
+                        heading_order += 1
+                        self.intro_heading_orders.append(heading_order)
+                        level = int(child_name.replace('h',''))
+                        self.intro_heading_levels.append(level)
+                        title = self.util.get_string(node=child)
+                        # page title
+                        if child_name == 'h1':
+                            self.intro_descriptions.append('')
+                        # multiple non-nested tags
+                        if 'Format notes' in title:
+                            found_format_notes = True
+                            title = title.replace(':','')
+                        self.intro_heading_titles.append(title)
+                    # intro non-heading tags containing headings and descriptions
+                    elif (child_name in self.paragraph_tags or
+                          child_name in self.unordered_list_tags
+                        ):
+                        contents = child.contents
+                        for content in [content for content in contents if content != '\n']:
+                            # heading content
+                            if content.name in self.bold_tags:
+                                heading_order += 1
+                                title = (self.util.get_string(node=content)
+                                            .replace(':',''))
+                                self.intro_heading_orders.append(heading_order)
+                                self.intro_heading_levels.append(3)
+                                self.intro_heading_titles.append(title)
+                            # descriptions
+                            else:
+                                string = str(content)
+                                if not append_discussions:
+                                    self.intro_descriptions.append(string.strip())
+                                else:
+                                    self.intro_descriptions[-1] += ' ' + string
+                                if found_format_notes:
+                                    append_discussions = True
+                    else:
+                        self.ready = False
+                        self.logger.error('Unable to parse_file_intro. ' +
+                                          'Unexpected tag type: {}'
+                                            .format(child_name))
+                        break
+                print('self.intro_heading_orders: %r' % self.intro_heading_orders)
+                print('self.intro_heading_levels: %r' % self.intro_heading_levels)
+                print('self.intro_heading_titles: \n' + dumps( self.intro_heading_titles,indent=1))
+                print('self.intro_descriptions:\n' + dumps( self.intro_descriptions,indent=1))
+                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_h1_p_h3_ul_pre. ' +
@@ -441,14 +504,25 @@ class Intro:
             if child_names.count('p') != 10:
                 assumptions = False
                 self.logger.error("Invalid assumption: child_names.count('p') == 10")
-            print('child_names: %r' % child_names)
-            print('assumptions: %r' % assumptions)
-            input('pause')
+            # Assume child_names.count('h3') == 2
+            if child_names.count('h3') != 2:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('h3') == 2")
+            # Assume child_names.count('ul') == 1
+            if child_names.count('ul') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('ul') == 1")
+            # Assume child_names.count('pre') == 3
+            if child_names.count('pre') != 3:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('pre') == 3")
         else:
             self.ready = False
             self.logger.error(
                 'Unable to verify_assumptions_parse_file_h1_p_h3_ul_pre. ' +
                 'self.body: {}.'.format(self.body))
+#        print('assumptions: %r' % assumptions)
+#        input('pause')
         if not assumptions: self.ready = False
         return assumptions
 
