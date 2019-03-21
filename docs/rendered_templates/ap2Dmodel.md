@@ -35,8 +35,8 @@ FITS
 | **NAXIS** |                     2 | 		 | 		 | 
 | **NAXIS1** |                  2048 | 		 | 		 | 
 | **NAXIS2** |                  2048 | 		 | 		 | 
-| **EXTEND** |                     T | 		 | Extensions may be present | 
 | **END** | 		 | 		 | EXT  =                    T /Extensions may be present | 
+| **EXTEND** | 		 | 		 |                     T /Extensions may be present | 
 | **END** | 		 | 		 | 		 | 
 
 

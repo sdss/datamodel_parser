@@ -374,12 +374,12 @@ class Extension:
                 comment = None
                 value_comment = None
                 # determine keyword
-                if 'HISTORY' in row or 'END' in row:
+                if 'HISTORY' in row or row.strip() == 'END':
                     if   'HISTORY AP3D:' in row: keyword = 'HISTORY AP3D:'
                     elif 'HISTORY' in row:       keyword = 'HISTORY'
                     else:                        keyword = 'END'
                     value_comment = row.replace(keyword,'').strip()
-                    keyword.replace(':','')
+                    keyword = keyword.replace(':','')
                 elif '=' in row:
                     split = row.split('=')
                     keyword       = split[0].strip() if split else None
