@@ -244,6 +244,7 @@ class File:
         self.file_extension_data     = self.extension.file_extension_data
         self.file_extension_headers  = self.extension.file_extension_headers
 
+#        print('HI File.parse_file()')
 #        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
 #        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
 #        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))

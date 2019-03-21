@@ -479,23 +479,19 @@ class Intro:
                                           'Unexpected tag type: {}'
                                             .format(child_name))
                         break
-                print('self.intro_heading_orders: %r' % self.intro_heading_orders)
-                print('self.intro_heading_levels: %r' % self.intro_heading_levels)
-                print('self.intro_heading_titles: \n' + dumps( self.intro_heading_titles,indent=1))
-                print('self.intro_descriptions:\n' + dumps( self.intro_descriptions,indent=1))
-                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_h1_p_h3_ul_pre. ' +
                                   'self.body: {}'.format(self.body) +
                                   'assumptions: {}'.format(assumptions))
 
-    def verify_assumptions_parse_file_h1_p_h3_ul_pre(self):
+    def verify_assumptions_parse_file_h1_p_h3_ul_pre(self,body=None):
         '''Verify assumptions made in parse_file_h1_h4_p_div.'''
         assumptions = None
-        if self.body:
+        body = body if body else self.body
+        if body:
             assumptions = True
-            child_names = self.util.get_child_names(node=self.body)
+            child_names = self.util.get_child_names(node=body)
             # Assume child_names.count('h1') == 1
             if child_names.count('h1') != 1:
                 assumptions = False
@@ -520,7 +516,7 @@ class Intro:
             self.ready = False
             self.logger.error(
                 'Unable to verify_assumptions_parse_file_h1_p_h3_ul_pre. ' +
-                'self.body: {}.'.format(self.body))
+                'body: {}.'.format(body))
 #        print('assumptions: %r' % assumptions)
 #        input('pause')
         if not assumptions: self.ready = False
