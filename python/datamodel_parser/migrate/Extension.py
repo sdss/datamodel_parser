@@ -116,7 +116,9 @@ class Extension:
             if div and assumptions:
                 # extension.hdu_number and header.title
                 (hdu_number,header_title) = (
-                            self.util.get_hdu_number_and_header_title(node=div))
+                    self.util.get_hdu_number_and_header_title(
+                                                        node=div,
+                                                        header_tag_name='h2'))
 
                 # column.description
                 p = div.find_next('p')
@@ -203,10 +205,11 @@ class Extension:
             if child_names.count('dl') != 1:
                 assumptions = False
                 self.logger.error("Invalid assumption: child_names.count('dl') == 1")
-            # Assume child_names.count('table') == 1
-            if child_names.count('table') != 1:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('table') == 1")
+# NEED TO UPDATE TO ALLOW FOR child_names.count('table') == 2
+#            # Assume child_names.count('table') == 1
+#            if child_names.count('table') != 1:
+#                assumptions = False
+#                self.logger.error("Invalid assumption: child_names.count('table') == 1")
             # h2 tag assumptions
             # Assume 'HDUn: ExtensionTitle' is the h2 heading for some digit n
             h2 = div.find_next('h2')
@@ -306,7 +309,9 @@ class Extension:
             if div and assumptions:
                 # extension.hdu_number and header.title
                 (hdu_number,header_title) = (
-                            self.util.get_hdu_number_and_header_title(node=div))
+                    self.util.get_hdu_number_and_header_title(
+                                                        node=div,
+                                                        header_tag_name='h2'))
                 # data.is_image
                 header = div.find_next('pre').string
                 rows = header.split('\n') if header else list()

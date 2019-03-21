@@ -3,45 +3,39 @@
 
 
 
-### General description
+# Data model: sdR
 
+
+
+### General description
 This file contains raw spectro data from the BOSS spectro CCDs.
 Simultaneous frames in different chips all have the same frame number.
 Which frames are what type of observation is indicated by the FLAVOR keyword in each header.
 HDU 0 contains the raw counts as integers (4352x4224).
 
 
-
 ### Naming convention
-
 sdR-[br][12]-[FRAME].fit, indicating which blue or red spectrograph (1 or 2), and the frame number.
 
-https://wiki.sdss.org/display/DATA/md+file+test+sdR#hdu0-example-header-hdu-0
-### Approximate size
 
+### Approximate size
 36771840 bytes.
 
 
-
 ### File type
-
 FITS
 
 
-
 ### Read by products
-idlspec2d, sdssproc.pro
+<code>idlspec2d, sdssproc.pro</code>
 
 
 ### Written by products
-
 ???
 
 
-
 ### Format notes
-The overscan regions for each amplifier are currently hardcoded in
- sdssproc .  They are (in IDL slice notation): <li>Red spectrograph MJD 55067 and later:<br/>
+The overscan regions for each amplifier are currently hardcoded in <code>sdssproc</code> .  They are (in IDL slice notation): <li>Red spectrograph MJD 55067 and later:<br/>
 <table>
 <tr><td>data[ 119:2175,   48:2111]</td><td>bias[  10:100,    48:2111]</td></tr>
 <tr><td>data[2176:4232,   48:2111]</td><td>bias[4250:4340,   48:2111]</td></tr>

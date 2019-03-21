@@ -143,20 +143,21 @@ class Util:
                                   'dl: {0}'.format(dl))
         return (definitions,descriptions)
 
-    def get_hdu_number_and_header_title(self,node=None):
+    def get_hdu_number_and_header_title(self,node=None,header_tag_name=None):
         '''Get extension.hdu_number and header.title from BeautifulSoup node.'''
         hdu_number = None
         header_title = None
         if self.ready:
-            if node:
-                h2 = node.find_next('h2')
-                heading = self.get_string(node=h2)
+            if node and header_tag_name:
+                header_tag = node.find_next(header_tag_name)
+                heading = self.get_string(node=header_tag)
                 split = heading.split(':')
                 hdu_number = int(split[0].lower().replace('hdu',''))
                 header_title = split[1].strip()
             else:
                 self.ready = None
                 self.logger.error('Unable to get_hdu_number_and_header_title. ' +
-                                  'node: {0}'.format(node))
+                                  'node: {0}'.format(node) +
+                                  'header_tag_name: {0}'.format(header_tag_name))
         return (hdu_number,header_title)
 
