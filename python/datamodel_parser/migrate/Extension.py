@@ -291,9 +291,7 @@ class Extension:
                 'div: {}.'.format(div))
 #        print(assumptions)
 #        input('pause')
-        if not assumptions:
-            print('div: %r' % div)
-            self.ready = False
+        if not assumptions: self.ready = False
         return assumptions
 
     def parse_file_data_h2_pre(self,div=None):
@@ -453,9 +451,13 @@ class Extension:
                     self.logger.error(
                         "Invalid assumption: " +
                         "the rows contain either '=' for data or 'HISTORY' or 'END'")
+        else:
+            self.ready = False
+            self.logger.error(
+                'Unable to verify_assumptions_parse_file_h2_pre. ' +
+                'div: {}.'.format(div))
 #        print(assumptions)
 #        input('pause')
-        if not assumptions:
-            self.ready = False
+        if not assumptions: self.ready = False
         return assumptions
 

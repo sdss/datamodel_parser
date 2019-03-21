@@ -56,16 +56,19 @@ class Intro:
         if self.ready:
             if self.body:
                 # process different intro types
-                # body all div tags
+                # self.body all div tags
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
                     self.parse_file_div()
                 else:
-#                    child_names = set(self.util.get_child_names(node=self.body))
-#                    print(')
-                    self.ready = False
-                    self.logger.error('Unexpected intro type encountered ' +
-                                      'in parse_file.')
+                    # self.body not all div tags
+                    child_names = set(self.util.get_child_names(node=self.body))
+                    if child_names == {'h1','p','h3','ul','pre'}:
+                        self.parse_file_h1_p_h3_ul_pre()
+                    else:
+                        self.ready = False
+                        self.logger.error('Unexpected intro type encountered ' +
+                                          'in parse_file.')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_extension_data. ' +
@@ -149,38 +152,45 @@ class Intro:
 
     def verify_assumptions_parse_file_h1_h4_p_div(self):
         '''Verify assumptions made in parse_file_h1_h4_p_div.'''
-        assumptions = True
-        child_names = self.util.get_child_names(node=self.intro_div)
-        # Assume child_names.count('h1') == 1
-        if child_names.count('h1') != 1:
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names.count('h1') == 1")
-        # Assume child_names.count('div') == 1
-        if child_names.count('div') != 1:
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names.count('div') == 1")
-        # Assume child_names[0] == 'h1'
-        if child_names[0] != 'h1':
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names[0] == 'h1'")
-        # Assume child_names[-1] == 'div'
-        if child_names[-1] != 'div':
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names[-1] == 'div'")
-        # Assume (h4,p) pairs, i.e., length is even
-        if not (len(child_names) % 2) == 0:
-            assumptions = False
-            self.logger.error("Invalid assumption: len(child_names) is even")
-        else:
-            for i in range( (len(child_names) - 2)//2):
-                child_names.remove('h4')
-                child_names.remove('p')
-            # Assume child_names=['h1'] + ['h4', 'p']*n + ['div'] for some n
-            if child_names != ['h1','div']:
+        assumptions = None
+        if self.intro_div:
+            assumptions = True
+            child_names = self.util.get_child_names(node=self.intro_div)
+            # Assume child_names.count('h1') == 1
+            if child_names.count('h1') != 1:
                 assumptions = False
-                self.logger.error(
-                    "Invalid assumption: " +
-                    "child_names=['h1'] + ['h4', 'p']*n + ['div'] for some n")
+                self.logger.error("Invalid assumption: child_names.count('h1') == 1")
+            # Assume child_names.count('div') == 1
+            if child_names.count('div') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('div') == 1")
+            # Assume child_names[0] == 'h1'
+            if child_names[0] != 'h1':
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names[0] == 'h1'")
+            # Assume child_names[-1] == 'div'
+            if child_names[-1] != 'div':
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names[-1] == 'div'")
+            # Assume (h4,p) pairs, i.e., length is even
+            if not (len(child_names) % 2) == 0:
+                assumptions = False
+                self.logger.error("Invalid assumption: len(child_names) is even")
+            else:
+                for i in range( (len(child_names) - 2)//2):
+                    child_names.remove('h4')
+                    child_names.remove('p')
+                # Assume child_names=['h1'] + ['h4', 'p']*n + ['div'] for some n
+                if child_names != ['h1','div']:
+                    assumptions = False
+                    self.logger.error(
+                        "Invalid assumption: " +
+                        "child_names=['h1'] + ['h4', 'p']*n + ['div'] for some n")
+        else:
+            self.ready = False
+            self.logger.error(
+                'Unable to verify_assumptions_parse_file_h1_h4_p_div. ' +
+                'self.intro_div: {}.'.format(self.intro_div))
         if not assumptions: self.ready = False
         return assumptions
 
@@ -220,40 +230,48 @@ class Intro:
 
     def verify_assumptions_parse_file_h1_dl(self):
         '''Verify assumptions made in parse_file_h1_dl.'''
-        assumptions = True
-        child_names = self.util.get_child_names(node=self.intro_div)
-        # Assume child_names.count('h1') == 1
-        if child_names.count('h1') != 1:
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names.count('h1') == 1")
-        # Assume child_names.count('dl') == 1
-        if child_names.count('dl') != 1:
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names.count('dl') == 1")
-        # dl assumptions
-        dl = self.intro_div.find_next('dl')
-        child_names = self.util.get_child_names(node=dl)
-        # Assume child_names == ['dt','dd']*4 or child_names == ['dt','dd']*5
-        if not (child_names != ['dt','dd']*4 or child_names != ['dt','dd']*5):
-            assumptions = False
-            self.logger.error("Invalid assumption: "
-                "child_names == ['dt','dd']*4 or child_names == ['dt','dd']*5")
-        else:
-            if child_names == ['dt','dd']*5:
-                for dd in dl.find_all('dd'): pass # get last dd
-                child_names = self.util.get_child_names(node=dd)
-                # Assume child_names == ['ul']
-                if child_names != ['ul']:
-                    assumptions = False
-                    self.logger.error("Invalid assumption: child_names.count('h1') == ['ul']")
-                else:
-                    # Asume all children of the <ul> tag are <li> tags
-                    ul = dd.find_next('ul')
-                    if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
+        assumptions = None
+        if self.intro_div:
+            assumptions = True
+            child_names = self.util.get_child_names(node=self.intro_div)
+            # Assume child_names.count('h1') == 1
+            if child_names.count('h1') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('h1') == 1")
+            # Assume child_names.count('dl') == 1
+            if child_names.count('dl') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('dl') == 1")
+            # dl assumptions
+            dl = self.intro_div.find_next('dl')
+            child_names = self.util.get_child_names(node=dl)
+            # Assume child_names == ['dt','dd']*4 or child_names == ['dt','dd']*5
+            if not (child_names != ['dt','dd']*4 or child_names != ['dt','dd']*5):
+                assumptions = False
+                self.logger.error("Invalid assumption: "
+                    "child_names == ['dt','dd']*4 or child_names == ['dt','dd']*5")
+            else:
+                if child_names == ['dt','dd']*5:
+                    for dd in dl.find_all('dd'): pass # get last dd
+                    child_names = self.util.get_child_names(node=dd)
+                    # Assume child_names == ['ul']
+                    if child_names != ['ul']:
                         assumptions = False
-                        self.logger.error(
+                        self.logger.error("Invalid assumption: " +
+                                          "child_names.count('h1') == ['ul']")
+                    else:
+                        # Asume all children of the <ul> tag are <li> tags
+                        ul = dd.find_next('ul')
+                        if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
+                            assumptions = False
+                            self.logger.error(
                                 "Invalid assumption: " +
                                 "children_all_one_tag_type(node=ul,tag_name='li') == True")
+        else:
+            self.ready = False
+            self.logger.error(
+                'Unable to verify_assumptions_parse_file_h1_dl. ' +
+                'self.intro_div: {}.'.format(self.intro_div))
         if not assumptions: self.ready = False
         return assumptions
 
@@ -303,46 +321,53 @@ class Intro:
 
     def verify_assumptions_parse_section_h4_ul(self,node=None):
         '''Verify assumptions made in parse_file_h1_h4_p_div.'''
-        assumptions = True
-        child_names = self.util.get_child_names(node=node)
-        # Assume child_names.count('h4') == 1
-        if child_names.count('h4') != 1:
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names.count('h4') == 1")
-        # Assume child_names.count('ul') == 1
-        if child_names.count('ul') != 1:
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names.count('ul') == 1")
-        # Assume child_names[0] == 'h4'
-        if child_names[0] != 'h4':
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names[0] == 'h4'")
-        # Assume child_names[-1] == 'ul'
-        if child_names[-1] != 'ul':
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names[-1] == 'ul'")
-        # Asume all children of the <ul> tag are <li> tags
-        ul = node.find_next('ul')
-        if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
-            assumptions = False
-            self.logger.error(
-                    "Invalid assumption: " +
-                    "children_all_one_tag_type(node=ul,tag_name='li') == True")
+        assumptions = None
+        if node:
+            assumptions = True
+            child_names = self.util.get_child_names(node=node)
+            # Assume child_names.count('h4') == 1
+            if child_names.count('h4') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('h4') == 1")
+            # Assume child_names.count('ul') == 1
+            if child_names.count('ul') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('ul') == 1")
+            # Assume child_names[0] == 'h4'
+            if child_names[0] != 'h4':
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names[0] == 'h4'")
+            # Assume child_names[-1] == 'ul'
+            if child_names[-1] != 'ul':
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names[-1] == 'ul'")
+            # Asume all children of the <ul> tag are <li> tags
+            ul = node.find_next('ul')
+            if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
+                assumptions = False
+                self.logger.error(
+                        "Invalid assumption: " +
+                        "children_all_one_tag_type(node=ul,tag_name='li') == True")
+            else:
+                for li in [li for li in ul.children
+                           if not self.util.get_string(node=li).isspace()]:
+                    for child in [child for child in li.children
+                                 if not self.util.get_string(node=child).isspace()]:
+                        if child.name != 'a':
+                            assumptions = False
+                            self.logger.error("Invalid assumption: child.name == 'a'")
+                        string = self.util.get_string(node=child)
+                        if 'HDU' not in string:
+                            assumptions = False
+                            self.logger.error("Invalid assumption: 'HDU' in string")
+                        if ':' not in string:
+                            assumptions = False
+                            self.logger.error("Invalid assumption: ':' in string")
         else:
-            for li in [li for li in ul.children
-                       if not self.util.get_string(node=li).isspace()]:
-                for child in [child for child in li.children
-                             if not self.util.get_string(node=child).isspace()]:
-                    if child.name != 'a':
-                        assumptions = False
-                        self.logger.error("Invalid assumption: child.name == 'a'")
-                    string = self.util.get_string(node=child)
-                    if 'HDU' not in string:
-                        assumptions = False
-                        self.logger.error("Invalid assumption: 'HDU' in string")
-                    if ':' not in string:
-                        assumptions = False
-                        self.logger.error("Invalid assumption: ':' in string")
+            self.ready = False
+            self.logger.error(
+                'Unable to verify_assumptions_parse_section_h4_ul. ' +
+                'node: {}.'.format(node))
         if not assumptions: self.ready = False
         return assumptions
 
@@ -366,19 +391,64 @@ class Intro:
 
     def verify_assumptions_parse_section_ul(self,node=None):
         '''Verify assumptions made in parse_file_h1_h4_p_div.'''
-        assumptions = True
-        child_names = self.util.get_child_names(node=node)
-        # Assume child_names == ['ul']
-        if child_names != ['ul']:
-            assumptions = False
-            self.logger.error("Invalid assumption: child_names == ['ul']")
-        # Asume all children of the <ul> tag are <li> tags
-        ul = node.find_next('ul')
-        if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
-            assumptions = False
+        assumptions = None
+        if node:
+            assumptions = True
+            child_names = self.util.get_child_names(node=node)
+            # Assume child_names == ['ul']
+            if child_names != ['ul']:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names == ['ul']")
+            # Asume all children of the <ul> tag are <li> tags
+            ul = node.find_next('ul')
+            if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
+                assumptions = False
+                self.logger.error(
+                        "Invalid assumption: " +
+                        "children_all_one_tag_type(node=ul,tag_name='li') == True")
+        else:
+            self.ready = False
             self.logger.error(
-                    "Invalid assumption: " +
-                    "children_all_one_tag_type(node=ul,tag_name='li') == True")
+                'Unable to verify_assumptions_parse_section_ul. ' +
+                'node: {}.'.format(node))
+        if not assumptions: self.ready = False
+        return assumptions
+
+    def parse_file_h1_p_h3_ul_pre(self):
+        '''Parse the HTML of the given BeautifulSoup div tag object with
+            children: h1, h4 and p.'''
+        if self.ready:
+            assumptions = self.verify_assumptions_parse_file_h1_p_h3_ul_pre()
+            if self.body and assumptions:
+                pass
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_h1_p_h3_ul_pre. ' +
+                                  'self.body: {}'.format(self.body) +
+                                  'assumptions: {}'.format(assumptions))
+
+    def verify_assumptions_parse_file_h1_p_h3_ul_pre(self):
+        '''Verify assumptions made in parse_file_h1_h4_p_div.'''
+        assumptions = None
+        if self.body:
+            assumptions = True
+            child_names = self.util.get_child_names(node=self.body)
+            # Assume child_names.count('h1') == 1
+            if child_names.count('h1') != 1:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('h1') == 1")
+            # Assume child_names.count('p') == 10
+            if child_names.count('p') != 10:
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names.count('p') == 10")
+            print('child_names: %r' % child_names)
+            print('assumptions: %r' % assumptions)
+            input('pause')
+        else:
+            self.ready = False
+            self.logger.error(
+                'Unable to verify_assumptions_parse_file_h1_p_h3_ul_pre. ' +
+                'self.body: {}.'.format(self.body))
         if not assumptions: self.ready = False
         return assumptions
 
