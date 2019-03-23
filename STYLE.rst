@@ -450,7 +450,7 @@ It is beyond the purpose of this document to explain how to use Sphinx,
 but `its
 documentation <http://www.sphinx-doc.org/en/stable/contents.html>`__ is
 quite good and multiple tutorials exist online. A large ecosystem of
-plugins and extensions exist to perform almost any imaginable task. This
+plugins and hdus exist to perform almost any imaginable task. This
 template includes a basic but functional `Sphinx
 template <./docs/sphinx>`__ that you can build by running ``make html``.
 

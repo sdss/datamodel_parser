@@ -9,10 +9,10 @@
 {% endfor %}
 ## Page Contents
 {% for hdu_number in hdus.keys() -%}
-* [HDU{{hdu_number}}: {{hdus[hdu_number]['extension']['header'].title.upper()}}](#hdu{{hdu_number}}-{{hdus[hdu_number]['extension']['header'].title.lower()}})
+* [HDU{{hdu_number}}: {{hdus[hdu_number]['hdu']['header'].title.upper()}}](#hdu{{hdu_number}}-{{hdus[hdu_number]['hdu']['header'].title.lower()}})
 {% endfor %}
 {% for hdu_number in hdus.keys() -%}
-## HDU{{hdu_number}}: {{hdus[hdu_number]['extension']['header'].title.upper()}}
+## HDU{{hdu_number}}: {{hdus[hdu_number]['hdu']['header'].title.upper()}}
 {% if hdus[hdu_number]['column'] %}
 {{hdus[hdu_number]['column'].description}}
 {% if hdus[hdu_number]['column'].datatype %}
@@ -24,12 +24,12 @@
 {% endif %}
 ### HDU Size
 {{hdus[hdu_number]['column'].size}}
-            {{hdus[hdu_number]['extension']['header'].table_caption}}
+            {{hdus[hdu_number]['hdu']['header'].table_caption}}
 {% endif %}
 {{'\n'}}
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
-{% for keyword in hdus[hdu_number]['extension']['keywords'] -%}
+{% for keyword in hdus[hdu_number]['hdu']['keywords'] -%}
 | **{{keyword.keyword or '\t\t'}}** | {{keyword.value or '\t\t'}} | {{keyword.type or '\t\t'}} | {{keyword.comment or '\t\t'}} | 
 {% endfor %}
 {% endfor %}

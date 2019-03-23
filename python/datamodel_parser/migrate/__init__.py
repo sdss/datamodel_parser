@@ -1,6 +1,6 @@
 from .Util import Util
 from .Intro import Intro
-from .Extension import Extension
+from .Hdu import Hdu
 from .File3 import File3
 from .File2 import File2
 from .File1 import File1

@@ -12,7 +12,7 @@ HDU{{ section.hdu_number }}: {{ section.hdu_name }}
 {% endif %}
 
 {% for hdu_number in hdus.keys() %}
-HDU{{ hdu_number }}: {{hdus[hdu_number]['extension']['header'].title.upper()}}
+HDU{{ hdu_number }}: {{hdus[hdu_number]['hdu']['header'].title.upper()}}
 
 {% if hdus[hdu_number]['column'] %}
 {{hdus[hdu_number]['column'].description}}
@@ -27,11 +27,11 @@ HDU Type
 
 HDU Size
 {{hdus[hdu_number]['column'].size}}
-            {{hdus[hdu_number]['extension']['header'].table_caption}}
+            {{hdus[hdu_number]['hdu']['header'].table_caption}}
 {% endif %}
 
 Key         Value           Type            Comment
-{% for keyword in hdus[hdu_number]['extension']['keywords'] %}
+{% for keyword in hdus[hdu_number]['hdu']['keywords'] %}
 {{keyword.keyword or '\t\t'}}       {{keyword.value or '\t\t'}}     {{keyword.type or '\t\t'}}      {{keyword.comment or '\t\t'}}
 {% endfor %}
 {% endfor %}

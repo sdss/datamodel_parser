@@ -144,7 +144,7 @@ class Util:
         return (definitions,descriptions)
 
     def get_hdu_number_and_header_title(self,node=None,header_tag_name=None):
-        '''Get extension.hdu_number and header.title from BeautifulSoup node.'''
+        '''Get hdu.hdu_number and header.title from BeautifulSoup node.'''
         hdu_number = None
         header_title = None
         if self.ready:

@@ -53,12 +53,12 @@ class File1:
         if self.ready:
             if self.divs:
                 # define these lists here so they're not overwritten in for loop
-                self.file_extension_data    = list()
-                self.file_extension_headers = list()
+                self.file_hdu_data    = list()
+                self.file_hdu_headers = list()
                 for div in self.divs:
                     div_id = div['id']
                     if div_id == 'intro': self.parse_file_intro(intro=div)
-                    elif 'hdu' in div_id: self.parse_file_extension(div=div)
+                    elif 'hdu' in div_id: self.parse_file_hdu(div=div)
                     else:
                         self.ready = False
                         self.logger.error('Unknown div_id: {}.'.format(div_id))
@@ -121,16 +121,16 @@ class File1:
                                 )
 
     def set_section_hdu_names(self,div=None):
-        '''Get the extension names from the intro Section.'''
+        '''Get the hdu names from the intro Section.'''
         self.section_hdu_names = dict()
         if self.ready:
             if div:
                 for string in [item for item in div.strings if item != '\n']:
                     if 'HDU' in string:
                         split = string.split(':')
-                        extension = split[0].lower().strip() if split else None
-                        hdu_number = (int(extension.replace('hdu',''))
-                                      if extension else None)
+                        hdu = split[0].lower().strip() if split else None
+                        hdu_number = (int(hdu.replace('hdu',''))
+                                      if hdu else None)
                         hdu_name   = split[1].lower().strip() if split else None
                         if hdu_number is not None and hdu_name:
                             self.section_hdu_names[hdu_number] = hdu_name
@@ -254,17 +254,17 @@ class File1:
                     'Unable to check_valid_assumptions. ' +
                     'names: {0}, contents: {1}'.format(names,contents))
 
-    def parse_file_extension(self,div=None):
-        '''Parse file extension content from given division tag.'''
+    def parse_file_hdu(self,div=None):
+        '''Parse file hdu content from given division tag.'''
         if self.ready:
-            self.parse_file_extension_data(div=div)
-            self.parse_file_extension_header(div=div)
+            self.parse_file_hdu_data(div=div)
+            self.parse_file_hdu_header(div=div)
 
-    def parse_file_extension_data(self,div=None):
+    def parse_file_hdu_data(self,div=None):
         '''Parse file description content from given division tag.'''
         if self.ready:
             if div:
-                # extension.hdu_number and header.title
+                # hdu.hdu_number and header.title
                 heading = div.find_next('h2').string
                 split = heading.split(':')
                 if split:
@@ -299,14 +299,14 @@ class File1:
                 hdu_data['column_datatype']    = column_datatype
                 hdu_data['column_size']        = column_size
                 hdu_data['column_description'] = column_description
-                self.file_extension_data.append(hdu_data)
-                self.extension_count = len(self.file_extension_data)
+                self.file_hdu_data.append(hdu_data)
+                self.hdu_count = len(self.file_hdu_data)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_extension_data. ' +
+                self.logger.error('Unable to parse_file_hdu_data. ' +
                                   'div: {}'.format(div))
 
-    def parse_file_extension_header(self,div=None):
+    def parse_file_hdu_header(self,div=None):
         '''Parse file description content from given division tag.'''
         hdu_header = dict()
         if self.ready:
@@ -334,8 +334,8 @@ class File1:
                 hdu_header['table_caption']  = table_caption
                 hdu_header['table_keywords'] = table_keywords
                 hdu_header['table_rows']     = table_rows
-                self.file_extension_headers.append(hdu_header)
+                self.file_hdu_headers.append(hdu_header)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_extension_header. ' +
+                self.logger.error('Unable to parse_file_hdu_header. ' +
                                   'div: {}'.format(div))

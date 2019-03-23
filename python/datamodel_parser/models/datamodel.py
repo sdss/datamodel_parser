@@ -228,7 +228,7 @@ class File(db.Model):
                             db.ForeignKey('sdss.location.id'),
                             nullable = False)
     name = db.Column(db.String(64), nullable = False, unique = True)
-    extension_count = db.Column(db.Integer, nullable = False)
+    hdu_count = db.Column(db.Integer, nullable = False)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -399,41 +399,44 @@ class Section(db.Model):
                                         for column in self.__table__.columns])
 
 
-class Extension(db.Model):
-    __tablename__ = 'extension'
+class Hdu(db.Model):
+    __tablename__ = 'hdu'
     __table_args__ = {'schema':'sdss'}
     id = db.Column(db.Integer, primary_key = True)
     file_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
-    hdu_number = db.Column(db.Integer, nullable = False)
+    number = db.Column(db.Integer, nullable = False)
+    title = db.Column(db.String(32), nullable = False)
+    datatype = db.Column(db.String(64))
+    size = db.Column(db.String(32))
+    description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(file_id=None,hdu_number=None):
-        if file_id and hdu_number is not None:
-            try: extension = (Extension.query
-                                       .filter(Extension.file_id==file_id)
-                                       .filter(Extension.hdu_number==hdu_number)
-                                       .one())
-            except: extension = None
+    def load(file_id=None,number=None):
+        if file_id and number is not None:
+            try: hdu = (Hdu.query.filter(Hdu.file_id==file_id)
+                                 .filter(Hdu.number==number)
+                                 .one())
+            except: hdu = None
         else:
-            extension = None
-        return extension
+            hdu = None
+        return hdu
     
     @staticmethod
     def load_all(file_id=None):
         if file_id:
-            try: extensions = (Extension.query.filter(Extension.file_id==file_id)
-                                .order_by(Extension.hdu_number)
+            try: hdus = (Hdu.query.filter(Hdu.file_id==file_id)
+                                .order_by(Hdu.number)
                                 .all())
-            except: extensions = None
+            except: hdus = None
         else:
-            extensions = None
-        return extensions
+            hdus = None
+        return hdus
     
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
@@ -465,21 +468,20 @@ class Header(db.Model):
     __tablename__ = 'header'
     __table_args__ = {'schema':'sdss'}
     id = db.Column(db.Integer, primary_key = True)
-    extension_id = db.Column(db.Integer,
-                             db.ForeignKey('sdss.extension.id'),
+    hdu_id = db.Column(db.Integer,
+                             db.ForeignKey('sdss.hdu.id'),
                              nullable = False)
     hdu_number = db.Column(db.Integer, nullable = False)
-    title = db.Column(db.String(32), nullable = False)
     table_caption = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
     @staticmethod
-    def load(extension_id=None):
-        if extension_id:
+    def load(hdu_id=None):
+        if hdu_id:
             try: header = (Header.query
-                                .filter(Header.extension_id==extension_id)
+                                .filter(Header.hdu_id==hdu_id)
                                 .one())
             except: header = None
         else:
@@ -487,14 +489,14 @@ class Header(db.Model):
         return header
     
     @staticmethod
-    def load_all(extensions=None):
-        if extensions:
+    def load_all(hdus=None):
+        if hdus:
             try:
                 headers = list()
-                for extension in extensions:
+                for hdu in hdus:
                     
                     header = (Header.query
-                                    .filter(Header.extension_id==extension.id)
+                                    .filter(Header.hdu_id==hdu.id)
                                     .one())
                     headers.append(header)
             except: headers = None
@@ -535,22 +537,22 @@ class Keyword(db.Model):
     header_id = db.Column(db.Integer,
                           db.ForeignKey('sdss.header.id'),
                           nullable = False)
-    keyword_order = db.Column(db.Integer, nullable = False)
+    position = db.Column(db.Integer, nullable = False)
     keyword = db.Column(db.String(64), nullable = False)
     value = db.Column(db.String(256))
     type = db.Column(db.String(80))
-    comment = db.Column(db.String(256))
+    comment = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(header_id=None,keyword_order=None,keyword=None):
-        if header_id and keyword_order is not None and keyword:
+    def load(header_id=None,position=None,keyword=None):
+        if header_id and position is not None and keyword:
             try: header = (Keyword.query
                                 .filter(Keyword.header_id==header_id)
-                                .filter(Keyword.keyword_order==keyword_order)
+                                .filter(Keyword.position==position)
                                 .filter(Keyword.keyword==keyword)
                                 .one())
             except: header = None
@@ -563,7 +565,7 @@ class Keyword(db.Model):
         if header_id:
             try: keywords = (Keyword.query
                                   .filter(Keyword.header_id==header_id)
-                                  .order_by(Keyword.keyword_order)
+                                  .order_by(Keyword.position)
                                   .all())
             except: keywords = None
         else:
@@ -600,32 +602,33 @@ class Data(db.Model):
     __tablename__ = 'data'
     __table_args__ = {'schema':'sdss'}
     id = db.Column(db.Integer, primary_key = True)
-    extension_id = db.Column(db.Integer,
-                             db.ForeignKey('sdss.extension.id'),
+    hdu_id = db.Column(db.Integer,
+                             db.ForeignKey('sdss.hdu.id'),
                              nullable = False)
-    is_image = db.Column(db.Boolean, nullable = False, default = False)
+    hdu_number = db.Column(db.Integer, nullable = False)
+    table_caption = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
                          
     @staticmethod
-    def load(extension_id=None):
-        if extension_id:
-            try: data = Data.query.filter(Data.extension_id==extension_id).one()
+    def load(hdu_id=None):
+        if hdu_id:
+            try: data = Data.query.filter(Data.hdu_id==hdu_id).one()
             except: data = None
         else:
             data = None
         return data
     
     @staticmethod
-    def load_all(extensions=None):
-        if extensions:
+    def load_all(hdus=None):
+        if hdus:
             try:
                 datas = list()
-                for extension in extensions:
+                for hdu in hdus:
                     data = (Data.query
-                                    .filter(Data.extension_id==extension.id)
+                                    .filter(Data.hdu_id==hdu.id)
                                     .one())
                     datas.append(data)
             except: datas = None
@@ -666,9 +669,10 @@ class Column(db.Model):
     data_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.data.id'),
                         nullable = False)
-    header_title = db.Column(db.String(32), nullable = False)
+    position = db.Column(db.Integer, nullable = False)
+    name = db.Column(db.String(64), nullable = False)
     datatype = db.Column(db.String(64))
-    size = db.Column(db.String(32))
+    units = db.Column(db.String(16))
     description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
@@ -676,14 +680,19 @@ class Column(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(data_id=None):
-        if data_id:
-            try: column = Column.query.filter(Column.data_id==data_id).one()
+    def load(data_id=None,position=None,name=None):
+        if data_id and position is not None and name:
+            try: column = (Column.query
+                                .filter(Column.data_id==data_id)
+                                .filter(Column.position==position)
+                                .filter(Column.name==name)
+                                .one())
             except: column = None
         else:
             column = None
         return column
     
+
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False
         for key,column in columns.items():

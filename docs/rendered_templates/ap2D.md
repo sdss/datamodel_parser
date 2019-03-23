@@ -147,95 +147,95 @@ FITS
 | **NREAD** |                    47 | 		 | 		 | 
 | **CHECKSUM** |  'gEdci9ZbgCdbg9Zb'   | 		 | HDU checksum updated 2012-11-15T13:03:37 | 
 | **HISTORY AP3D:** | 		 | 		 | Thu Nov 15 03:01:03 2012 | 
-| **HISTORY AP3D** | 		 | 		 | Thu Nov 15 03:01:03 2012 | 
+| **HISTORY AP3D** | 		 | 		 |  Thu Nov 15 03:01:03 2012 | 
 | **HISTORY** | 		 | 		 | AP3D: Thu Nov 15 03:01:03 2012 | 
-| **HISTORY AP3D:** | 		 | 		 | holtz on milkyway.nmsu.edu | 
+| **HISTORY AP3D** | 		 | 		 |  holtz on milkyway.nmsu.edu | 
 | **HISTORY** | 		 | 		 | AP3D: holtz on milkyway.nmsu.edu | 
-| **HISTORY AP3D** | 		 | 		 | holtz on milkyway.nmsu.edu | 
-| **HISTORY AP3D:** | 		 | 		 | IDL 8.0.1 linux x86_64 | 
-| **HISTORY AP3D** | 		 | 		 | IDL 8.0.1 linux x86_64 | 
+| **HISTORY AP3D:** | 		 | 		 | holtz on milkyway.nmsu.edu | 
 | **HISTORY** | 		 | 		 | AP3D: IDL 8.0.1 linux x86_64 | 
-| **HISTORY AP3D** | 		 | 		 | APOGEE Reduction Pipeline Version: trunk | 
+| **HISTORY AP3D:** | 		 | 		 | IDL 8.0.1 linux x86_64 | 
+| **HISTORY AP3D** | 		 | 		 |  IDL 8.0.1 linux x86_64 | 
 | **HISTORY** | 		 | 		 | AP3D:  APOGEE Reduction Pipeline Version: trunk | 
+| **HISTORY AP3D** | 		 | 		 |   APOGEE Reduction Pipeline Version: trunk | 
 | **HISTORY AP3D:** | 		 | 		 | APOGEE Reduction Pipeline Version: trunk | 
-| **HISTORY AP3D** | 		 | 		 | Output File: | 
-| **HISTORY AP3D:** | 		 | 		 | Output File: | 
 | **HISTORY** | 		 | 		 | AP3D: Output File: | 
+| **HISTORY AP3D** | 		 | 		 |  Output File: | 
+| **HISTORY AP3D:** | 		 | 		 | Output File: | 
+| **HISTORY AP3D** | 		 | 		 |   HDU1 - image (ADU) | 
 | **HISTORY** | 		 | 		 | AP3D:  HDU1 - image (ADU) | 
-| **HISTORY AP3D** | 		 | 		 | HDU1 - image (ADU) | 
 | **HISTORY AP3D:** | 		 | 		 | HDU1 - image (ADU) | 
+| **HISTORY AP3D** | 		 | 		 |   HDU2 - error (ADU) | 
 | **HISTORY** | 		 | 		 | AP3D:  HDU2 - error (ADU) | 
 | **HISTORY AP3D:** | 		 | 		 | HDU2 - error (ADU) | 
-| **HISTORY AP3D** | 		 | 		 | HDU2 - error (ADU) | 
 | **HISTORY AP3D:** | 		 | 		 | HDU3 - flag mask | 
+| **HISTORY AP3D** | 		 | 		 |   HDU3 - flag mask | 
 | **HISTORY** | 		 | 		 | AP3D:  HDU3 - flag mask | 
-| **HISTORY AP3D** | 		 | 		 | HDU3 - flag mask | 
 | **HISTORY AP3D:** | 		 | 		 | 1 - bad pixels | 
 | **HISTORY** | 		 | 		 | AP3D:         1 - bad pixels | 
-| **HISTORY AP3D** | 		 | 		 | 1 - bad pixels | 
-| **HISTORY** | 		 | 		 | AP3D:         2 - cosmic ray | 
-| **HISTORY AP3D** | 		 | 		 | 2 - cosmic ray | 
+| **HISTORY AP3D** | 		 | 		 |          1 - bad pixels | 
+| **HISTORY AP3D** | 		 | 		 |          2 - cosmic ray | 
 | **HISTORY AP3D:** | 		 | 		 | 2 - cosmic ray | 
+| **HISTORY** | 		 | 		 | AP3D:         2 - cosmic ray | 
 | **HISTORY AP3D:** | 		 | 		 | 4 - saturated | 
-| **HISTORY AP3D** | 		 | 		 | 4 - saturated | 
+| **HISTORY AP3D** | 		 | 		 |          4 - saturated | 
 | **HISTORY** | 		 | 		 | AP3D:         4 - saturated | 
 | **HISTORY** | 		 | 		 | AP3D:         8 - unfixable | 
-| **HISTORY AP3D** | 		 | 		 | 8 - unfixable | 
 | **HISTORY AP3D:** | 		 | 		 | 8 - unfixable | 
+| **HISTORY AP3D** | 		 | 		 |          8 - unfixable | 
 | **HISTORY** | 		 | 		 | AP3D: Global fractional variability = 0.272 | 
-| **HISTORY AP3D** | 		 | 		 | Global fractional variability = 0.272 | 
+| **HISTORY AP3D** | 		 | 		 |  Global fractional variability = 0.272 | 
 | **HISTORY AP3D:** | 		 | 		 | Global fractional variability = 0.272 | 
+| **HISTORY AP3D** | 		 | 		 |  BAD PIXEL MASK file="/net/apogee//v2test/cal/bpm/apBPM-a-05560001. | 
 | **HISTORY AP3D:** | 		 | 		 | BAD PIXEL MASK file="/net/apogee//v2test/cal/bpm/apBPM-a-05560001. | 
-| **HISTORY AP3D** | 		 | 		 | BAD PIXEL MASK file="/net/apogee//v2test/cal/bpm/apBPM-a-05560001. | 
 | **HISTORY** | 		 | 		 | AP3D: BAD PIXEL MASK file="/net/apogee//v2test/cal/bpm/apBPM-a-05560001. | 
 | **HISTORY** | 		 | 		 | AP3D: fits" | 
 | **HISTORY AP3D:** | 		 | 		 | fits" | 
-| **HISTORY AP3D** | 		 | 		 | fits" | 
+| **HISTORY AP3D** | 		 | 		 |  fits" | 
 | **HISTORY AP3D:** | 		 | 		 | DETECTOR file="/net/apogee//v2test/cal/detector/apDetector-a-55640 | 
-| **HISTORY AP3D** | 		 | 		 | DETECTOR file="/net/apogee//v2test/cal/detector/apDetector-a-55640 | 
 | **HISTORY** | 		 | 		 | AP3D: DETECTOR file="/net/apogee//v2test/cal/detector/apDetector-a-55640 | 
+| **HISTORY AP3D** | 		 | 		 |  DETECTOR file="/net/apogee//v2test/cal/detector/apDetector-a-55640 | 
 | **HISTORY AP3D:** | 		 | 		 | .fits" | 
 | **HISTORY** | 		 | 		 | AP3D: .fits" | 
-| **HISTORY AP3D** | 		 | 		 | .fits" | 
-| **HISTORY AP3D** | 		 | 		 | Dark Current Correction file="/net/apogee//v2test/cal/darkcorr/apD | 
+| **HISTORY AP3D** | 		 | 		 |  .fits" | 
 | **HISTORY** | 		 | 		 | AP3D: Dark Current Correction file="/net/apogee//v2test/cal/darkcorr/apD | 
+| **HISTORY AP3D** | 		 | 		 |  Dark Current Correction file="/net/apogee//v2test/cal/darkcorr/apD | 
 | **HISTORY AP3D:** | 		 | 		 | Dark Current Correction file="/net/apogee//v2test/cal/darkcorr/apD | 
-| **HISTORY AP3D** | 		 | 		 | ark-a-05560001.fits" | 
+| **HISTORY AP3D** | 		 | 		 |  ark-a-05560001.fits" | 
 | **HISTORY** | 		 | 		 | AP3D: ark-a-05560001.fits" | 
 | **HISTORY AP3D:** | 		 | 		 | ark-a-05560001.fits" | 
 | **HISTORY AP3D:** | 		 | 		 | Flat Field Correction file="/net/apogee//v2test/cal/flatcorr/apFla | 
 | **HISTORY** | 		 | 		 | AP3D: Flat Field Correction file="/net/apogee//v2test/cal/flatcorr/apFla | 
-| **HISTORY AP3D** | 		 | 		 | Flat Field Correction file="/net/apogee//v2test/cal/flatcorr/apFla | 
-| **HISTORY AP3D** | 		 | 		 | t-a-04750009.fits" | 
+| **HISTORY AP3D** | 		 | 		 |  Flat Field Correction file="/net/apogee//v2test/cal/flatcorr/apFla | 
+| **HISTORY AP3D** | 		 | 		 |  t-a-04750009.fits" | 
 | **HISTORY** | 		 | 		 | AP3D: t-a-04750009.fits" | 
 | **HISTORY AP3D:** | 		 | 		 | t-a-04750009.fits" | 
 | **HISTORY AP3D:** | 		 | 		 | Persistence mask file="/net/apogee//v2test/cal/persist/apPersist-a | 
 | **HISTORY** | 		 | 		 | AP3D: Persistence mask file="/net/apogee//v2test/cal/persist/apPersist-a | 
-| **HISTORY AP3D** | 		 | 		 | Persistence mask file="/net/apogee//v2test/cal/persist/apPersist-a | 
+| **HISTORY AP3D** | 		 | 		 |  Persistence mask file="/net/apogee//v2test/cal/persist/apPersist-a | 
 | **HISTORY** | 		 | 		 | AP3D: -04680019.fits" | 
 | **HISTORY AP3D:** | 		 | 		 | -04680019.fits" | 
-| **HISTORY AP3D** | 		 | 		 | -04680019.fits" | 
+| **HISTORY AP3D** | 		 | 		 |  -04680019.fits" | 
 | **HISTORY** | 		 | 		 | AP3D: 42498 pixels are bad | 
-| **HISTORY AP3D** | 		 | 		 | 42498 pixels are bad | 
+| **HISTORY AP3D** | 		 | 		 |  42498 pixels are bad | 
 | **HISTORY AP3D:** | 		 | 		 | 42498 pixels are bad | 
-| **HISTORY AP3D** | 		 | 		 | 455 pixels have cosmic rays | 
+| **HISTORY AP3D** | 		 | 		 |  455 pixels have cosmic rays | 
 | **HISTORY** | 		 | 		 | AP3D: 455 pixels have cosmic rays | 
 | **HISTORY AP3D:** | 		 | 		 | 455 pixels have cosmic rays | 
 | **HISTORY** | 		 | 		 | AP3D: Cosmic Rays FIXED | 
 | **HISTORY AP3D:** | 		 | 		 | Cosmic Rays FIXED | 
-| **HISTORY AP3D** | 		 | 		 | Cosmic Rays FIXED | 
+| **HISTORY AP3D** | 		 | 		 |  Cosmic Rays FIXED | 
 | **HISTORY AP3D:** | 		 | 		 | 32 pixels are saturated | 
 | **HISTORY** | 		 | 		 | AP3D: 32 pixels are saturated | 
-| **HISTORY AP3D** | 		 | 		 | 32 pixels are saturated | 
+| **HISTORY AP3D** | 		 | 		 |  32 pixels are saturated | 
 | **HISTORY** | 		 | 		 | AP3D: 32 saturated pixels FIXED | 
 | **HISTORY AP3D:** | 		 | 		 | 32 saturated pixels FIXED | 
-| **HISTORY AP3D** | 		 | 		 | 32 saturated pixels FIXED | 
-| **HISTORY AP3D** | 		 | 		 | 0 pixels are unfixable | 
+| **HISTORY AP3D** | 		 | 		 |  32 saturated pixels FIXED | 
+| **HISTORY AP3D** | 		 | 		 |  0 pixels are unfixable | 
 | **HISTORY AP3D:** | 		 | 		 | 0 pixels are unfixable | 
 | **HISTORY** | 		 | 		 | AP3D: 0 pixels are unfixable | 
 | **HISTORY** | 		 | 		 | AP3D: UP-THE-RAMP Sampling | 
 | **HISTORY AP3D:** | 		 | 		 | UP-THE-RAMP Sampling | 
-| **HISTORY AP3D** | 		 | 		 | UP-THE-RAMP Sampling | 
+| **HISTORY AP3D** | 		 | 		 |  UP-THE-RAMP Sampling | 
 | **UT-MID** |  '2011-09-09T03:56:34.6' | 		 | Date at midpoint of exposure | 
 | **JD-MID** |         2455813.66429 | 		 | JD at midpoint of exposure | 
 | **DATASUM** |  '         0'         | 		 | data unit checksum updated 2012-11-15T13:03:37 | 
@@ -257,9 +257,9 @@ FITS
 | **CTYPE1** |  'Pixel   '           | 		 | 		 | 
 | **CTYPE2** |  'Pixel   '           | 		 | 		 | 
 | **BUNIT** |  'Flux (ADU)'         | 		 | 		 | 
-| **HISTORY** | 		 | 		 | Image was compressed by CFITSIO using scaled integer quantization: | 
-| **HISTORY** | 		 | 		 | q = 4.000000 / quantized level scaling parameter | 
-| **HISTORY** | 		 | 		 | 'SUBTRACTIVE_DITHER_1' / Pixel Quantization Algorithm | 
+| **HISTORY** | 		 | 		 |  Image was compressed by CFITSIO using scaled integer quantization: | 
+| **HISTORY** | 		 | 		 |    q = 4.000000 / quantized level scaling parameter | 
+| **HISTORY** | 		 | 		 |  'SUBTRACTIVE_DITHER_1' / Pixel Quantization Algorithm | 
 | **CHECKSUM** |  'XenSXclPXclPXclP'   | 		 | HDU checksum updated 2012-11-15T21:35:29 | 
 | **DATASUM** |  '3618308333'         | 		 | data unit checksum updated 2012-11-15T21:35:29 | 
 | **END** | 		 | 		 | 		 | 
@@ -280,9 +280,9 @@ FITS
 | **CTYPE1** |  'Pixel   '           | 		 | 		 | 
 | **CTYPE2** |  'Pixel   '           | 		 | 		 | 
 | **BUNIT** |  'Error (ADU)'        | 		 | 		 | 
-| **HISTORY** | 		 | 		 | Image was compressed by CFITSIO using scaled integer quantization: | 
-| **HISTORY** | 		 | 		 | q = 4.000000 / quantized level scaling parameter | 
-| **HISTORY** | 		 | 		 | 'SUBTRACTIVE_DITHER_1' / Pixel Quantization Algorithm | 
+| **HISTORY** | 		 | 		 |  Image was compressed by CFITSIO using scaled integer quantization: | 
+| **HISTORY** | 		 | 		 |    q = 4.000000 / quantized level scaling parameter | 
+| **HISTORY** | 		 | 		 |  'SUBTRACTIVE_DITHER_1' / Pixel Quantization Algorithm | 
 | **CHECKSUM** |  '9GTHGFR99FREGFR9'   | 		 | HDU checksum updated 2012-11-15T21:35:57 | 
 | **DATASUM** |  '908871677'          | 		 | data unit checksum updated 2012-11-15T21:35:57 | 
 | **END** | 		 | 		 | 		 | 
@@ -303,11 +303,11 @@ FITS
 | **CTYPE1** |  'Pixel   '           | 		 | 		 | 
 | **CTYPE2** |  'Pixel   '           | 		 | 		 | 
 | **BUNIT** |  'Flag Mask (bitwise)' | 		 | 		 | 
-| **HISTORY** | 		 | 		 | Explanation of BITWISE flag mask | 
-| **HISTORY** | 		 | 		 | 1 - bad pixels | 
-| **HISTORY** | 		 | 		 | 2 - cosmic ray | 
-| **HISTORY** | 		 | 		 | 4 - saturated | 
-| **HISTORY** | 		 | 		 | 8 - unfixable | 
+| **HISTORY** | 		 | 		 |  Explanation of BITWISE flag mask | 
+| **HISTORY** | 		 | 		 |   1 - bad pixels | 
+| **HISTORY** | 		 | 		 |   2 - cosmic ray | 
+| **HISTORY** | 		 | 		 |   4 - saturated | 
+| **HISTORY** | 		 | 		 |   8 - unfixable | 
 | **CHECKSUM** |  '1Gjd4Fgb1Fgb1Fgb'   | 		 | HDU checksum updated 2012-11-15T21:36:14 | 
 | **DATASUM** |  '1362512632'         | 		 | data unit checksum updated 2012-11-15T21:36:14 | 
 | **END** | 		 | 		 | 		 | 

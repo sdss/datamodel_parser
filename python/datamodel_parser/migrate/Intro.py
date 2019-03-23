@@ -71,7 +71,7 @@ class Intro:
                                           'in parse_file.')
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_extension_data. ' +
+                self.logger.error('Unable to parse_file_hdu_data. ' +
                                   'self.body: {}'.format(self.body))
 
     def parse_file_div(self):
@@ -104,7 +104,7 @@ class Intro:
                                             .format(self.intro_div))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_extension_data. ' +
+                self.logger.error('Unable to parse_file_hdu_data. ' +
                                   'self.body: {}'.format(self.body))
 
     def parse_file_h1_h4_p_div(self):
@@ -276,7 +276,7 @@ class Intro:
         return assumptions
 
     def parse_section(self,node=None):
-        '''Get extension names from the intro Section.'''
+        '''Get hdu names from the intro Section.'''
         if self.ready:
             if node:
                 child_names = set(self.util.get_child_names(node=node))
@@ -294,16 +294,16 @@ class Intro:
                                   'node: {}'.format(node))
 
     def parse_section_h4_ul(self,node=None):
-        '''Get extension names from the intro Section.'''
+        '''Get hdu names from the intro Section.'''
         if self.ready:
             assumptions = self.verify_assumptions_parse_section_h4_ul(node=node)
             if node and assumptions:
                 for string in [item for item in node.strings if item != '\n']:
                     if 'HDU' in string:
                         split = string.split(':')
-                        extension = split[0].strip() if split else None
-                        hdu_number = (int(extension.lower().replace('hdu',''))
-                                      if extension else None)
+                        hdu = split[0].strip() if split else None
+                        hdu_number = (int(hdu.lower().replace('hdu',''))
+                                      if hdu else None)
                         hdu_name   = split[1].strip() if split else None
                         if hdu_number is not None and hdu_name:
                             self.section_hdu_names[hdu_number] = hdu_name
@@ -372,17 +372,17 @@ class Intro:
         return assumptions
 
     def parse_section_ul(self,node=None):
-        '''Get extension names from the intro Section.'''
+        '''Get hdu names from the intro Section.'''
         if self.ready:
             assumptions = self.verify_assumptions_parse_section_ul(node=node)
             if node and assumptions:
-                extension_hdu_names = list()
+                hdu_hdu_names = list()
                 for li in [li for li in node.find_all('li')
                            if not self.util.get_string(node=li).isspace()]:
                     section_name = li.contents[1].replace(':','').strip()
-                    extension_hdu_names.append(section_name)
-                hdu_numbers = list(range(len(extension_hdu_names)))
-                self.section_hdu_names = dict(zip(hdu_numbers,extension_hdu_names))
+                    hdu_hdu_names.append(section_name)
+                hdu_numbers = list(range(len(hdu_hdu_names)))
+                self.section_hdu_names = dict(zip(hdu_numbers,hdu_hdu_names))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_section_ul.' +
@@ -431,7 +431,7 @@ class Intro:
                 for child in [child for child in self.body.children if child != '\n']:
                     child_name = child.name if child else None
                     string = self.util.get_string(node=child)
-                    # found extension tags
+                    # found hdu tags
                     if (child_name in self.heading_tags and 'HDU' in string):
                         break
                     # intro heading tags

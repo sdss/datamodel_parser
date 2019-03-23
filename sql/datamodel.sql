@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS sdss.column;
 DROP TABLE IF EXISTS sdss.data;
 DROP TABLE IF EXISTS sdss.keyword;
 DROP TABLE IF EXISTS sdss.header;
-DROP TABLE IF EXISTS sdss.extension;
+DROP TABLE IF EXISTS sdss.hdu;
 DROP TABLE IF EXISTS sdss.section;
 DROP TABLE IF EXISTS sdss.intro;
 DROP TABLE IF EXISTS sdss.file;
@@ -51,7 +51,7 @@ CREATE TABLE sdss.file (
     id SERIAL NOT NULL PRIMARY KEY,
     location_id INT4 REFERENCES sdss.location(id) NOT NULL,
     name VARCHAR(64) NOT NULL UNIQUE,
-    extension_count INT2,
+    hdu_count INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -59,7 +59,7 @@ CREATE TABLE sdss.file (
 CREATE TABLE sdss.intro (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
-    heading_order INT2 NOT NULL,
+    position INT2 NOT NULL,
     heading_level INT2,
     heading_title VARCHAR(64) NOT NULL,
     description VARCHAR(1024),
@@ -76,19 +76,22 @@ CREATE TABLE sdss.section (
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TABLE sdss.extension (
+CREATE TABLE sdss.hdu (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
-    hdu_number INT2 NOT NULL,
+    number INT2 NOT NULL,
+    title VARCHAR(32) NOT NULL,
+    datatype VARCHAR(64),
+    size VARCHAR(32),
+    description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE sdss.header (
     id SERIAL NOT NULL PRIMARY KEY,
-    extension_id INT4 REFERENCES sdss.extension(id) NOT NULL,
+    hdu_id INT4 REFERENCES sdss.hdu(id) NOT NULL,
     hdu_number INT2 NOT NULL,
-    title VARCHAR(32) NOT NULL,
     table_caption VARCHAR(128),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -97,19 +100,20 @@ CREATE TABLE sdss.header (
 CREATE TABLE sdss.keyword (
     id SERIAL NOT NULL PRIMARY KEY,
     header_id INT4 REFERENCES sdss.header(id) NOT NULL,
-    keyword_order INT2 NOT NULL,
+    position INT2 NOT NULL,
     keyword VARCHAR(64) NOT NULL,
     value VARCHAR(256),
     type VARCHAR(80),
-    comment VARCHAR(256),
+    comment VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE sdss.data (
     id SERIAL NOT NULL PRIMARY KEY,
-    extension_id INT4 REFERENCES sdss.extension(id) NOT NULL,
-    is_image BOOLEAN NOT NULL DEFAULT FALSE,
+    hdu_id INT4 REFERENCES sdss.hdu(id) NOT NULL,
+    hdu_number INT2 NOT NULL,
+    table_caption VARCHAR(128),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -117,9 +121,10 @@ CREATE TABLE sdss.data (
 CREATE TABLE sdss.column (
     id SERIAL NOT NULL PRIMARY KEY,
     data_id INT4 REFERENCES sdss.data(id) NOT NULL,
-    header_title VARCHAR(32) NOT NULL,
+    position INT2 NOT NULL,
+    name VARCHAR(64) NOT NULL,
     datatype VARCHAR(64),
-    size VARCHAR(32),
+    units VARCHAR(16),
     description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()

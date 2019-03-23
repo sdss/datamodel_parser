@@ -5,7 +5,7 @@ from datamodel_parser.migrate import Util
 from datamodel_parser.migrate import Intro
 
 
-class Extension:
+class Hdu:
     '''
         
     '''
@@ -50,12 +50,12 @@ class Extension:
 
     def parse_file(self):
         '''Parse the HTML of the given BeautifulSoup object.'''
-        self.extension_count = None
-        self.file_extension_data    = list()
-        self.file_extension_headers = list()
+        self.hdu_count = None
+        self.file_hdu_data    = list()
+        self.file_hdu_headers = list()
         if self.ready:
             if self.body:
-                # process different extension types
+                # process different hdu types
                 # self.body all div tags
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
@@ -78,22 +78,22 @@ class Extension:
         '''Parse the HTML of the given BeautifulSoup div tag object.'''
         if self.ready:
             if self.body:
-                # Find extension div
+                # Find hdu div
                 for div in [div for div in self.body
                             if not self.util.get_string(node=div).isspace()]:
                     # Found intro div
-                    if 'hdu' in div['id']: self.parse_file_extension_div(div=div)
+                    if 'hdu' in div['id']: self.parse_file_hdu_div(div=div)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_div. ' +
                                   'self.body: {}.'.format(self.body))
 
-    def parse_file_extension_div(self,div=None):
-        '''Parse file extension content from given division tag.'''
+    def parse_file_hdu_div(self,div=None):
+        '''Parse file hdu content from given division tag.'''
         if self.ready:
             if div:
                 child_names = set(self.util.get_child_names(node=div))
-                # process different div extension types
+                # process different div hdu types
                 if child_names == {'h2','p','dl','table'}:
                     self.parse_file_data_h2_p_dl_table(div=div)
                     self.parse_file_header_h2_p_dl_table(div=div)
@@ -103,18 +103,18 @@ class Extension:
                 else:
                     self.ready = False
                     self.logger.error('Unexpected child_names encountered ' +
-                                      'in parse_file_extension_div.')
+                                      'in parse_file_hdu_div.')
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_extension_div. ' +
+                self.logger.error('Unable to parse_file_hdu_div. ' +
                                   'div: {}.'.format(div))
 
     def parse_file_data_h2_p_dl_table(self,div=None):
-        '''Parse file extension data content from given division tag.'''
+        '''Parse file hdu data content from given division tag.'''
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h2_p_dl_table(div=div)
             if div and assumptions:
-                # extension.hdu_number and header.title
+                # hdu.hdu_number and header.title
                 (hdu_number,header_title) = (
                     self.util.get_hdu_number_and_header_title(
                                                         node=div,
@@ -139,8 +139,8 @@ class Extension:
                 hdu_data['column_datatype']    = column_datatype
                 hdu_data['column_size']        = column_size
                 hdu_data['column_description'] = column_description
-                self.file_extension_data.append(hdu_data)
-                self.extension_count = len(self.file_extension_data)
+                self.file_hdu_data.append(hdu_data)
+                self.hdu_count = len(self.file_hdu_data)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_data_h2_p_dl_table. ' +
@@ -149,7 +149,7 @@ class Extension:
                                   )
 
     def parse_file_header_h2_p_dl_table(self,div=None):
-        '''Parse file extension keyword/value/type/comment content
+        '''Parse file hdu keyword/value/type/comment content
         from given division tag.'''
         hdu_header = dict()
         if self.ready:
@@ -180,7 +180,7 @@ class Extension:
                 hdu_header['table_caption']  = table_caption
                 hdu_header['table_keywords'] = table_keywords
                 hdu_header['table_rows']     = table_rows
-                self.file_extension_headers.append(hdu_header)
+                self.file_hdu_headers.append(hdu_header)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_header_h2_p_dl_table. ' +
@@ -211,7 +211,7 @@ class Extension:
 #                assumptions = False
 #                self.logger.error("Invalid assumption: child_names.count('table') == 1")
             # h2 tag assumptions
-            # Assume 'HDUn: ExtensionTitle' is the h2 heading for some digit n
+            # Assume 'HDUn: HduTitle' is the h2 heading for some digit n
             h2 = div.find_next('h2')
             string = self.util.get_string(node=h2).lower()
             if not ('hdu' in string and
@@ -220,7 +220,7 @@ class Extension:
                 assumptions = False
                 self.logger.error(
                         "Invalid assumption: " +
-                        "div.find_next('h2') = 'HDUn: ExtensionTitle', " +
+                        "div.find_next('h2') = 'HDUn: HduTitle', " +
                         "where n is a digit")
             # dl tag assumptions
             dl = div.find_next('dl')
@@ -303,11 +303,11 @@ class Extension:
         return assumptions
 
     def parse_file_data_h2_pre(self,div=None):
-        '''Parse file extension data content from given division tag.'''
+        '''Parse file hdu data content from given division tag.'''
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h2_pre(div=div)
             if div and assumptions:
-                # extension.hdu_number and header.title
+                # hdu.hdu_number and header.title
                 (hdu_number,header_title) = (
                     self.util.get_hdu_number_and_header_title(
                                                         node=div,
@@ -327,8 +327,8 @@ class Extension:
                 hdu_data['column_datatype']    = None
                 hdu_data['column_size']        = None
                 hdu_data['column_description'] = None
-                self.file_extension_data.append(hdu_data)
-                self.extension_count = len(self.file_extension_data)
+                self.file_hdu_data.append(hdu_data)
+                self.hdu_count = len(self.file_hdu_data)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_data_h2_pre. ' +
@@ -336,7 +336,7 @@ class Extension:
                                   'assumptions: {}.'.format(assumptions))
 
     def parse_file_header_h2_pre(self,div=None):
-        '''Parse file extension data content from given division tag.'''
+        '''Parse file hdu data content from given division tag.'''
         hdu_header = dict()
         
         if self.ready:
@@ -356,7 +356,7 @@ class Extension:
                 hdu_header['table_caption']  = table_caption
                 hdu_header['table_keywords'] = table_keywords
                 hdu_header['table_rows']     = table_rows
-                self.file_extension_headers.append(hdu_header)
+                self.file_hdu_headers.append(hdu_header)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_header_h2_pre. ' +
@@ -378,7 +378,7 @@ class Extension:
                     if   'HISTORY AP3D:' in row: keyword = 'HISTORY AP3D:'
                     elif 'HISTORY' in row:       keyword = 'HISTORY'
                     else:                        keyword = 'END'
-                    value_comment = row.replace(keyword,'').strip()
+                    value_comment = row.replace(keyword,'')
                     keyword = keyword.replace(':','')
                 elif '=' in row:
                     split = row.split('=')
@@ -399,6 +399,7 @@ class Extension:
                     elif '=' in row:
                         if   ' / '  in value_comment: split_char = ' / '
                         elif ' /'   in value_comment: split_char = ' /'
+                        elif '/ '   in value_comment: split_char = '/ '
                         elif '/'    in value_comment: split_char = '/'
                         else:                         split_char = None
                         split = value_comment.split(split_char) if split_char else None
@@ -428,7 +429,7 @@ class Extension:
                 assumptions = False
                 self.logger.error("Invalid assumption: child_names.count('pre') == 1")
             # h2 tag assumptions
-            # Assume 'HDUn: ExtensionTitle' is the h2 heading for some digit n
+            # Assume 'HDUn: HduTitle' is the h2 heading for some digit n
             h2 = div.find_next('h2')
             string = self.util.get_string(node=h2).lower()
             if not ('hdu' in string and
@@ -437,7 +438,7 @@ class Extension:
                 assumptions = False
                 self.logger.error(
                         "Invalid assumption: " +
-                        "div.find_next('h2') = 'HDUn: ExtensionTitle', " +
+                        "div.find_next('h2') = 'HDUn: HduTitle', " +
                         "where n is a digit")
             # pre tag assumptions
             pre = div.find_next('pre')
@@ -477,14 +478,14 @@ class Extension:
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h1_p_h3_ul_pre()
             if self.body and assumptions:
-                self.set_extension_tags()
-                self.set_extension_headings_and_pres()
+                self.set_hdu_tags()
+                self.set_hdu_headings_and_pres()
                 if (self.ready and
-                    self.extension_headings and self.extension_pres and
-                    len(self.extension_headings) == len(self.extension_pres)):
+                    self.hdu_headings and self.hdu_pres and
+                    len(self.hdu_headings) == len(self.hdu_pres)):
                     intro_heading_order = -1
-                    for (heading_tag,pre_tags) in list(zip(self.extension_headings,
-                                                          self.extension_pres)):
+                    for (heading_tag,pre_tags) in list(zip(self.hdu_headings,
+                                                          self.hdu_pres)):
                         header_title = (self.util.get_string(node=heading_tag)
                                             .replace(':',''))
                         self.ready = self.ready and self.util.ready
@@ -496,35 +497,35 @@ class Extension:
                                 if self.ready: header.append(string)
                                 else: break
                             header = '\n' + '\n'.join(header)
-                            self.parse_file_extension_header(header=header)
-                            self.parse_file_extension_data(header_title = header_title,
+                            self.parse_file_hdu_header(header=header)
+                            self.parse_file_hdu_data(header_title = header_title,
                                                            header       = header)
                         else: break
                 else:
                     self.ready = False
                     self.logger.error(
-                        'Unable to parse_file_extensions. ' +
-                        'self.extension_headings: {}'
-                            .format(self.extension_headings) +
-                        'self.extension_pres: {}'
-                            .format(self.extension_pres) +
-                        'len(self.extension_headings): {}'
-                            .format(len(self.extension_headings)) +
-                        'len(self.extension_pres): {}'
-                            .format(len(self.extension_pres)))
+                        'Unable to parse_file_hdus. ' +
+                        'self.hdu_headings: {}'
+                            .format(self.hdu_headings) +
+                        'self.hdu_pres: {}'
+                            .format(self.hdu_pres) +
+                        'len(self.hdu_headings): {}'
+                            .format(len(self.hdu_headings)) +
+                        'len(self.hdu_pres): {}'
+                            .format(len(self.hdu_pres)))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_h1_p_h3_ul_pre. ' +
                                   'self.body: {}'.format(self.body) +
                                   'assumptions: {}'.format(assumptions))
 
-    def set_extension_tags(self):
-        '''Set extensions from given body tag.'''
-        self.extension_tags = None
+    def set_hdu_tags(self):
+        '''Set hdus from given body tag.'''
+        self.hdu_tags = None
         if self.ready:
             if self.body and self.body.children:
                 previous_child = None
-                found_extension_tags = False
+                found_hdu_tags = False
                 for child in self.body.children:
                     child_name = child.name if child else None
                     if child_name and child_name in self.heading_tags:
@@ -532,59 +533,59 @@ class Extension:
                         self.ready = self.ready and self.util.ready
                         if self.ready:
                             if string and 'HDU' in string:
-                                found_extension_tags = True
-                                self.extension_tags = (previous_child.next_siblings
+                                found_hdu_tags = True
+                                self.hdu_tags = (previous_child.next_siblings
                                                        if previous_child else None)
                                 break
                         else: break
-                    if not found_extension_tags:
+                    if not found_hdu_tags:
                         previous_child = child if child else None
             else:
                 self.ready = None
-                self.logger.error('Unable to set_extension_tags. ' +
+                self.logger.error('Unable to set_hdu_tags. ' +
                                   'self.body: {}'.format(self.body) +
                                   'self.body.children: {}'
                                     .format(self.body.children))
 
-    def set_extension_headings_and_pres(self):
-        '''Set extension_headings and extension_pres from the extension_tags'''
+    def set_hdu_headings_and_pres(self):
+        '''Set hdu_headings and hdu_pres from the hdu_tags'''
         if self.ready:
-            if self.extension_tags:
-                first_extension = True
-                self.extension_headings = list()
-                self.extension_pres = list()
+            if self.hdu_tags:
+                first_hdu = True
+                self.hdu_headings = list()
+                self.hdu_pres = list()
                 pres = list()
-                for tag in self.extension_tags:
+                for tag in self.hdu_tags:
                     name = tag.name
                     if name:
                         string = self.util.get_string(node=tag)
                         self.ready = self.ready and self.util.ready
                         if self.ready:
                             if name in self.heading_tags and 'HDU' in string:
-                                self.extension_headings.append(tag)
-                                if first_extension:
-                                    first_extension = False
+                                self.hdu_headings.append(tag)
+                                if first_hdu:
+                                    first_hdu = False
                                 else:
-                                    self.extension_pres.append(pres)
+                                    self.hdu_pres.append(pres)
                                     pres = list()
                             elif name == 'pre':
                                 pres.append(tag)
                             else: # Do nothing; only processing heading and pre tags
                                 pass
                         else: break
-                self.extension_pres.append(pres)
+                self.hdu_pres.append(pres)
             else:
                 self.ready = None
-                self.logger.error('Unable to set_extension_headings_and_pres. ' +
-                                  'self.extension_tags: {}'
-                                  .format(self.extension_tags))
+                self.logger.error('Unable to set_hdu_headings_and_pres. ' +
+                                  'self.hdu_tags: {}'
+                                  .format(self.hdu_tags))
 
-    def parse_file_extension_data(self,header_title=None,header=None):
+    def parse_file_hdu_data(self,header_title=None,header=None):
         '''Parse file description content from given header_titleision tag.'''
         if self.ready:
             if header_title and header:
                 if self.ready:
-                    # extension.hdu_number and header.title
+                    # hdu.hdu_number and header.title
                     hdu_number = (
                         [int(s) for s in list(header_title) if s.isdigit()][0])
                     # data.is_image
@@ -599,15 +600,15 @@ class Extension:
                     hdu_data['column_datatype']    = None
                     hdu_data['column_size']        = None
                     hdu_data['column_description'] = None
-                    self.file_extension_data.append(hdu_data)
-                    self.extension_count = len(self.file_extension_data)
+                    self.file_hdu_data.append(hdu_data)
+                    self.hdu_count = len(self.file_hdu_data)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_extension_data. ' +
+                self.logger.error('Unable to parse_file_hdu_data. ' +
                                   'header_title: {}'.format(header_title) +
                                   'header: {}'.format(header))
 
-    def parse_file_extension_header(self,header=None):
+    def parse_file_hdu_header(self,header=None):
         '''Parse file description content from given headerision tag.'''
         hdu_header = dict()
         if self.ready:
@@ -628,15 +629,15 @@ class Extension:
                     hdu_header['table_caption']  = table_caption
                     hdu_header['table_keywords'] = table_keywords
                     hdu_header['table_rows']     = table_rows
-                    self.file_extension_headers.append(hdu_header)
+                    self.file_hdu_headers.append(hdu_header)
                 else:
                     self.ready = False
                     self.logger.error(
-                                'Unable to parse_file_extension_header. ' +
+                                'Unable to parse_file_hdu_header. ' +
                                 'rows: {}'.format(rows))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_extension_header. ' +
+                self.logger.error('Unable to parse_file_hdu_header. ' +
                                   'header: {}'.format(header))
 
     def set_row_data(self,row=None):

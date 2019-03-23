@@ -1,6 +1,6 @@
 from datamodel_parser.migrate import Util
 from datamodel_parser.migrate import Intro
-from datamodel_parser.migrate import Extension
+from datamodel_parser.migrate import Hdu
 from datamodel_parser.migrate import File1
 from datamodel_parser.migrate import File2
 from datamodel_parser.migrate import File3
@@ -14,7 +14,7 @@ class File:
         self.set_body(body=body)
         self.set_ready()
         self.set_attributes()
-        self.set_intro_and_extension()
+        self.set_intro_and_hdu()
 #        self.set_file()
 
     def initialize(self,logger=None,options=None):
@@ -48,21 +48,21 @@ class File:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
 
-    def set_intro_and_extension(self):
-        '''Set file intro tags and extension tags.'''
+    def set_intro_and_hdu(self):
+        '''Set file intro tags and hdu tags.'''
         self.intro = None
-        self.extension = None
+        self.hdu = None
         if self.ready:
             if self.body:
                 self.intro = Intro(logger  = self.logger,
                                    options = self.options,
                                    body    = self.body)
-                self.extension = Extension(logger  = self.logger,
+                self.hdu = Hdu(logger  = self.logger,
                                            options = self.options,
                                            body    = self.body)
             else:
                 self.ready = False
-                self.logger.error('Unable to set_intro_and_extension. ' +
+                self.logger.error('Unable to set_intro_and_hdu. ' +
                                   'self.body: '.format(self.body))
 
     def set_file(self):
@@ -233,16 +233,16 @@ class File:
     def parse_file(self):
         '''Parse the given file using the determined File instance.'''
         self.intro.parse_file()
-        self.extension.parse_file()
-        self.ready = self.ready and self.intro.ready and self.extension.ready
+        self.hdu.parse_file()
+        self.ready = self.ready and self.intro.ready and self.hdu.ready
         self.intro_heading_orders    = self.intro.intro_heading_orders
         self.intro_heading_levels    = self.intro.intro_heading_levels
         self.intro_heading_titles    = self.intro.intro_heading_titles
         self.intro_descriptions      = self.intro.intro_descriptions
         self.section_hdu_names       = self.intro.section_hdu_names
-        self.extension_count         = self.extension.extension_count
-        self.file_extension_data     = self.extension.file_extension_data
-        self.file_extension_headers  = self.extension.file_extension_headers
+        self.hdu_count         = self.hdu.hdu_count
+        self.file_hdu_data     = self.hdu.file_hdu_data
+        self.file_hdu_headers  = self.hdu.file_hdu_headers
 
 #        print('HI File.parse_file()')
 #        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
@@ -250,9 +250,9 @@ class File:
 #        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 #        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
 #        print('self.section_hdu_names: {}'.format(self.section_hdu_names))
-#        print('self.extension_count: {}'.format(self.extension_count))
-#        print('self.file_extension_data: \n' + dumps(self.file_extension_data,indent=1))
-#        print('self.file_extension_headers: {}'.format(self.file_extension_headers))
+#        print('self.hdu_count: {}'.format(self.hdu_count))
+#        print('self.file_hdu_data: \n' + dumps(self.file_hdu_data,indent=1))
+#        print('self.file_hdu_headers: {}'.format(self.file_hdu_headers))
 #        input('pause')
 
 #    def parse_file(self):
@@ -263,18 +263,18 @@ class File:
 #        self.intro_heading_titles    = self.file.intro_heading_titles
 #        self.intro_descriptions      = self.file.intro_descriptions
 #        self.section_hdu_names       = self.file.section_hdu_names
-#        self.extension_count         = self.file.extension_count
-#        self.file_extension_data     = self.file.file_extension_data
-#        self.file_extension_headers  = self.file.file_extension_headers
+#        self.hdu_count         = self.file.hdu_count
+#        self.file_hdu_data     = self.file.file_hdu_data
+#        self.file_hdu_headers  = self.file.file_hdu_headers
 #
 ##        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
 ##        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
 ##        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 ##        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
 ##        print('self.section_hdu_names: {}'.format(self.section_hdu_names))
-##        print('self.extension_count: {}'.format(self.extension_count))
-##        print('self.file_extension_data: \n' + dumps(self.file_extension_data,indent=1))
-##        print('self.file_extension_headers: {}'.format(self.file_extension_headers))
+##        print('self.hdu_count: {}'.format(self.hdu_count))
+##        print('self.file_hdu_data: \n' + dumps(self.file_hdu_data,indent=1))
+##        print('self.file_hdu_headers: {}'.format(self.file_hdu_headers))
 ##        input('pause')
 
 
