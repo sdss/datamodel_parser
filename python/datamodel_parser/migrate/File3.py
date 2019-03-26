@@ -274,18 +274,18 @@ class File3:
                 # table caption
                 table_caption = None
                 # table column headers
-                table_keywords = ['key','value','type','comment']
+                table_column_names = ['key','value','type','comment']
                 # table values
                 table_rows = dict()
                 rows = header.split('\n') if header else list()
                 rows = [row for row in rows if row]
                 if rows:
-                    for (row_order,row) in enumerate(rows):
+                    for (position,row) in enumerate(rows):
                         self.set_row_data(row=row)
-                        table_rows[row_order] = (self.row_data
+                        table_rows[position] = (self.row_data
                                                  if self.row_data else None)
                     hdu['table_caption']  = table_caption
-                    hdu['table_keywords'] = table_keywords
+                    hdu['table_column_names'] = table_column_names
                     hdu['table_rows']     = table_rows
                     self.file_hdu_tables.append(hdu)
                 else:

@@ -160,30 +160,29 @@ class Hdu:
                     # table caption
                     caption = table.find_next('caption')
                     table_caption = self.util.get_string(node=caption)
-                    # table column headers
-                    tr = table.find_next('thead').find_next('tr')
-                    table_keywords = list()
-                    for th in [th for th in tr.children
+                    # table_column_names
+                    ths = table.find_next('thead').find_next('tr').find_all('th')
+                    table_column_names = list()
+                    for th in [th for th in ths
                                if not self.util.get_string(node=th).isspace()]:
-                        string = self.util.get_string(node=th)
-                        table_keywords.append(string)
-                    # table values
-                    body = table.find_next('tbody')
-                    rows = body.find_all('tr')
+                        column_name = self.util.get_string(node=th)
+                        table_column_names.append(column_name)
+                    # table keyword/values
+                    trs = table.find_next('tbody').find_all('tr')
                     table_rows = dict()
-                    for (row_order,row) in enumerate(rows):
-                        row_data = list()
-                        for data in row.find_all('td'):
-                            string = self.util.get_string(node=data)
-                            row_data.append(string)
-                        table_rows[row_order]  = row_data
+                    for (position,tr) in enumerate(trs):
+                        table_row = list()
+                        for td in tr.find_all('td'):
+                            string = self.util.get_string(node=td)
+                            table_row.append(string)
+                        table_rows[position]  = table_row
                     # Put it all together
-                    s = set([x.lower() for x in table_keywords])
+                    s = set([x.lower() for x in table_column_names])
                     is_header = (s == {'key','value','type','comment'})
-                    hdu_table['is_header']      = is_header
-                    hdu_table['table_caption']  = table_caption
-                    hdu_table['table_keywords'] = table_keywords
-                    hdu_table['table_rows']     = table_rows
+                    hdu_table['is_header']          = is_header
+                    hdu_table['table_caption']      = table_caption
+                    hdu_table['table_column_names'] = table_column_names
+                    hdu_table['table_rows']         = table_rows
                     hdu_tables.append(hdu_table)
                 self.file_hdu_tables.append(hdu_tables)
             else:
@@ -351,16 +350,16 @@ class Hdu:
                 # table caption
                 table_caption = None
                 # table column headers
-                table_keywords = ['Key','Value','Type','Comment']
+                table_column_names = ['Key','Value','Type','Comment']
                 # table values
                 pre = div.find_next('pre')
                 rows = self.util.get_string(node=pre).split('\n')
                 table_rows = dict()
-                for (row_order,row) in enumerate(rows):
-                    table_rows[row_order] = self.get_row_data_h2_pre(row=row)
+                for (position,row) in enumerate(rows):
+                    table_rows[position] = self.get_row_data_h2_pre(row=row)
                 # Put it all together
                 hdu['table_caption']  = table_caption
-                hdu['table_keywords'] = table_keywords
+                hdu['table_column_names'] = table_column_names
                 hdu['table_rows']     = table_rows
                 self.file_hdu_tables.append(hdu)
             else:
@@ -371,7 +370,7 @@ class Hdu:
 
     def get_row_data_h2_pre(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
-        row_data = list()
+        row_data = dict()
         if self.ready:
             if row:
                 keyword = None
@@ -411,9 +410,10 @@ class Hdu:
                         split = value_comment.split(split_char) if split_char else None
                         value   = split[0]         if split else None
                         comment = split[1].strip() if split else None
-                row_data = ([keyword,value,type,comment]
-                                if keyword or value or type or comment
-                                else list())
+                row_data['keyword'] = keyword if keyword else None
+                row_data['value']   = value   if value   else None
+                row_data['type']    = type    if type    else None
+                row_data['comment'] = comment if comment else None
             else:
                 self.ready = False
                 self.logger.error('Unable to get_row_data_h2_pre. ' +
@@ -622,18 +622,18 @@ class Hdu:
                 # table caption
                 table_caption = None
                 # table column headers
-                table_keywords = ['key','value','type','comment']
+                table_column_names = ['key','value','type','comment']
                 # table values
                 table_rows = dict()
                 rows = header.split('\n') if header else list()
                 rows = [row for row in rows if row]
                 if rows:
-                    for (row_order,row) in enumerate(rows):
+                    for (position,row) in enumerate(rows):
                         self.set_row_data(row=row)
-                        table_rows[row_order] = (self.row_data
+                        table_rows[position] = (self.row_data
                                                  if self.row_data else None)
                     hdu['table_caption']  = table_caption
-                    hdu['table_keywords'] = table_keywords
+                    hdu['table_column_names'] = table_column_names
                     hdu['table_rows']     = table_rows
                     self.file_hdu_tables.append(hdu)
                 else:
@@ -648,7 +648,7 @@ class Hdu:
 
     def set_row_data(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
-        self.row_data = list()
+        self.row_data = dict()
         if self.ready:
             if row:
                 keyword = None
@@ -680,9 +680,10 @@ class Hdu:
                 else:
                     value = value_comment
                     comment = None
-                self.row_data = ([keyword,value,type,comment]
-                                if keyword or value or type or comment
-                                else list())
+                self.row_data['keyword'] = keyword if keyword else None
+                self.row_data['value']   = value   if value   else None
+                self.row_data['type']    = type    if type    else None
+                self.row_data['comment'] = comment if comment else None
             else:
                 self.ready = False
                 self.logger.error('Unable to set_row_data. ' +

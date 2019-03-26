@@ -1218,42 +1218,31 @@ class Database:
                 self.logger.error('Unable to create_data_row. ' +
                                   'columns: {}.'.format(columns))
 
-    def set_column_columns(self,
-                           hdu_title=None,
-                           datatype=None,
-                           size=None,
-                           description=None):
+    def set_column_columns(self,position=None,table_row=None):
         '''Set columns of the column table.'''
         self.column_columns = dict()
         if self.ready:
             data_id = self.data_id if self.data_id else None
-            if (data_id              and
-                hdu_title
-#                datatype is not None and
-#                size     is not None and
-#                description is not None
-                ):
+            if data_id and position is not None and table_row:
+                name        = table_row[0] if table_row else None
+                datatype    = table_row[1] if table_row else None
+                units       = table_row[2] if table_row else None
+                description = table_row[3] if table_row else None
                 self.column_columns = {
-                    'data_id'      : data_id
-                                        if data_id                 else None,
-                    'hdu_title' : hdu_title
-                                        if hdu_title            else None,
-                    'datatype'     : datatype
-                                        if datatype    is not None else None,
-                    'size'         : size
-                                        if size        is not None else None,
-                    'description'  : description
-                                        if description is not None else None,
+                    'data_id'     : data_id     if data_id              else None,
+                    'position'    : position    if position is not None else None,
+                    'name'        : name        if name                 else None,
+                    'datatype'    : datatype    if datatype is not None else None,
+                    'units'       : units       if units                else None,
+                    'description' : description if description          else None,
                     }
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to set_column_columns. ' +
                     'data_id: {}, '.format(data_id) +
-                    'hdu_title: {}, '.format(hdu_title) +
-                    'datatype: {}, '.format(datatype) +
-                    'size: {}, '.format(size) +
-                    'description: {}, '.format(description))
+                    'position: {}, '.format(position) +
+                    'table_row: {}, '.format(table_row))
 
     def populate_column_table(self):
         '''Update/Create column table row.'''
@@ -1262,7 +1251,7 @@ class Database:
             if self.column: self.update_column_row()
             else:           self.create_column_row()
 
-    def set_column(self,data_id=None):
+    def set_column(self,data_id=None,position=None,name=None):
         '''Load row from column table.'''
         self.column = None
         if self.ready:
@@ -1270,8 +1259,22 @@ class Database:
                 else self.column_columns['data_id']
                 if self.column_columns and 'data_id' in self.column_columns
                 else None)
-            if data_id:
-                self.column = Column.load(data_id=data_id) if data_id  else None
+            position = (position if position is not None
+                else self.column_columns['position']
+                if self.column_columns and 'position' in self.column_columns
+                else None)
+            name = (name if name
+                else self.column_columns['name']
+                if self.column_columns and 'name' in self.column_columns
+                else None)
+            if data_id and position is not None and name:
+                self.column = (Column.load(data_id = data_id,
+                                           position  = position,
+                                           name      = name)
+                                if data_id
+                                and position is not None
+                                and name
+                                else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_column. ' +
@@ -1291,7 +1294,8 @@ class Database:
                 if self.column.updated:
                     self.logger.info(
                         'Updated Column[id={}], '.format(self.column.id) +
-                        'hdu_title: {}, '.format(self.column.hdu_title))
+                        'data_id: {}, '.format(self.column.data_id) +
+                        'name: {}.'.format(self.column.name))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_column_row. ' +
@@ -1308,12 +1312,14 @@ class Database:
                 column = Column(
                     data_id = columns['data_id']
                         if columns and 'data_id' in columns else None,
-                    hdu_title = columns['hdu_title']
-                        if columns and 'hdu_title' in columns else None,
+                    position = columns['position']
+                        if columns and 'position' in columns else None,
+                    name = columns['name']
+                        if columns and 'name' in columns else None,
                     datatype = columns['datatype']
                         if columns and 'datatype' in columns else None,
-                    size = columns['size']
-                        if columns and 'size' in columns else None,
+                    units = columns['units']
+                        if columns and 'units' in columns else None,
                     description = columns['description']
                         if columns and 'description' in columns else None,
                                   )
@@ -1322,11 +1328,12 @@ class Database:
                     column.commit()
                     self.logger.info(
                         'Added Column[id={}], '.format(column.id) +
-                        'hdu_title: {}.'.format(column.hdu_title))
+                        'data_id: {}, '.format(column.data_id) +
+                        'name: {}.'.format(column.name))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_column_row. ' +
-                                      'column = \n{}.'.format(column))
+                                      'name = \n{}.'.format(name))
             else:
                 self.ready = False
                 self.logger.error('Unable to create_column_row. ' +

@@ -315,14 +315,14 @@ class File1:
                 # table caption
                 table_caption = table.find_next('caption').string
                 # table column headers
-                table_keywords = list()
+                table_column_names = list()
                 for string in table.find_next('thead').stripped_strings:
-                    table_keywords.append(string.lower())
+                    table_column_names.append(string.lower())
                 # table values
                 body = table.find_next('tbody')
                 rows = body.find_all('tr')
                 table_rows = dict()
-                for (row_order,row) in enumerate(rows):
+                for (position,row) in enumerate(rows):
                     if not self.ready: break
                     row_data = list()
                     for data in row.find_all('td'):
@@ -330,9 +330,9 @@ class File1:
                         self.ready = self.ready and self.util.ready
                         if self.ready: row_data.append(string)
                         else: break
-                    table_rows[row_order]  = row_data
+                    table_rows[position]  = row_data
                 hdu['table_caption']  = table_caption
-                hdu['table_keywords'] = table_keywords
+                hdu['table_column_names'] = table_column_names
                 hdu['table_rows']     = table_rows
                 self.file_hdu_tables.append(hdu)
             else:
