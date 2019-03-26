@@ -490,16 +490,16 @@ class Header(db.Model):
     
     @staticmethod
     def load_all(hdus=None):
+        '''Create a list of all header rows with id's in the given hdu list.'''
         if hdus:
-            try:
-                headers = list()
-                for hdu in hdus:
-                    
+            headers = dict()
+            for hdu in hdus:
+                try:
                     header = (Header.query
                                     .filter(Header.hdu_id==hdu.id)
                                     .one())
-                    headers.append(header)
-            except: headers = None
+                    headers[header.hdu_number] = header
+                except: pass # do nothing
         else:
             headers = None
         return headers
@@ -623,15 +623,16 @@ class Data(db.Model):
     
     @staticmethod
     def load_all(hdus=None):
+        '''Create a list of all data rows with id's in the given hdu list.'''
         if hdus:
-            try:
-                datas = list()
-                for hdu in hdus:
+            datas = dict()
+            for hdu in hdus:
+                try:
                     data = (Data.query
-                                    .filter(Data.hdu_id==hdu.id)
-                                    .one())
-                    datas.append(data)
-            except: datas = None
+                                .filter(Data.hdu_id==hdu.id)
+                                .one())
+                    datas[data.hdu_number] = data
+                except: pass # do nothing
         else:
             datas = None
         return datas
@@ -691,7 +692,18 @@ class Column(db.Model):
         else:
             column = None
         return column
-    
+
+    @staticmethod
+    def load_all(data_id=None):
+        if data_id:
+            try: columns = (Column.query
+                                  .filter(Column.data_id==data_id)
+                                  .order_by(Column.position)
+                                  .all())
+            except: columns = None
+        else:
+            columns = None
+        return columns
 
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False

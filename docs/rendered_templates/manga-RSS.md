@@ -41,16 +41,17 @@ gzipped multi-extension FITS
 * [HDU13: YPOS](#hdu13-ypos)
 
 ## HDU0: PRIMARY
-
 Empty except for global header
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 0 bytes
-            Header Table Caption for HDU0
 
+
+            Header Table Caption for HDU0
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -127,17 +128,20 @@ IMAGE
 | **DATASUM** | 0 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | YG5FZ949YE4EY949 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU1: FLUX
 
+
+## HDU1: FLUX
 Row-stacked spectra in units of 10^{-17} erg/s/cm2/Angstrom/fiber
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 2 MB
-            Header Table Caption for HDU1
 
+
+            Header Table Caption for HDU1
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -228,17 +232,20 @@ IMAGE
 | **DATASUM** | 404143304 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | MZISMYFQMYFQMYFQ | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU2: IVAR
 
+
+## HDU2: IVAR
 Inverse variance of row-stacked spectra
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 2 MB
-            Header Table Caption for HDU2
 
+
+            Header Table Caption for HDU2
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -260,17 +267,20 @@ IMAGE
 | **DATASUM** | 1140307641 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | 6K5C9K396K3C6K39 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU3: MASK
 
+
+## HDU3: MASK
 Pixel mask (MANGA_DRP2PIXMASK)
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 2 MB
-            Header Table Caption for HDU3
 
+
+            Header Table Caption for HDU3
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -292,17 +302,20 @@ IMAGE
 | **DATASUM** | 2359936278 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | cbdRdabOcabOcabO | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU4: DISP
 
+
+## HDU4: DISP
 Spectral LSF  (1-sigma) in units of Angstroms
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 2 MB
-            Header Table Caption for HDU4
 
+
+            Header Table Caption for HDU4
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -318,17 +331,20 @@ IMAGE
 | **DATASUM** | 2453379726 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | RAH2S3G2R9G2R9G2 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU5: PREDISP
 
+
+## HDU5: PREDISP
 Broadened pre-pixel dispersion solution (1sigma LSF in Angstroms)
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 2 MB
-            Header Table Caption for HDU5
 
+
+            Header Table Caption for HDU5
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -344,17 +360,20 @@ IMAGE
 | **DATASUM** | 1425839999 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | FAP7F3O4FAO4F3O4 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU6: WAVE
 
+
+## HDU6: WAVE
 Wavelength vector in units of Angstroms (vacuum heliocentric)
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 35 KB
-            Header Table Caption for HDU6
 
+
+            Header Table Caption for HDU6
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -369,17 +388,20 @@ IMAGE
 | **DATASUM** | 3938867060 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | cL7TfJ5TcJ5TcJ5T | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU7: SPECRES
 
+
+## HDU7: SPECRES
 Median spectral resolution vs wavelength
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 35 KB
-            Header Table Caption for HDU7
 
+
+            Header Table Caption for HDU7
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -394,17 +416,20 @@ IMAGE
 | **DATASUM** | 1547448224 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | OcOcRaOZOaObOaOZ | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU8: SPECRESD
 
+
+## HDU8: SPECRESD
 Standard deviation (1-sigma) of spectral resolution vs wavelength
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 35 KB
-            Header Table Caption for HDU8
 
+
+            Header Table Caption for HDU8
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -419,17 +444,20 @@ IMAGE
 | **DATASUM** | 706612906 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | K3YcN3WZK3WbK3WZ | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU9: PRESPECRES
 
+
+## HDU9: PRESPECRES
 Median pre-pixel spectral resolution vs wavelength
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 35 KB
-            Header Table Caption for HDU9
 
+
+            Header Table Caption for HDU9
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -444,17 +472,20 @@ IMAGE
 | **DATASUM** | 2694726452 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | bD8IeD8IbD8IbD8I | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU10: PRESPECRESD
 
+
+## HDU10: PRESPECRESD
 Standard deviation of pre-pixel spectral resolution vs wavelength
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 35 KB
-            Header Table Caption for HDU10
 
+
+            Header Table Caption for HDU10
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -469,17 +500,20 @@ IMAGE
 | **DATASUM** | 2908884265 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | eDDUe9BTeABTe9BT | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU11: OBSINFO
 
+
+## HDU11: OBSINFO
 Table detailing exposures combined to create this file
 
 ### HDU Type
 BINARY TABLE
 
+
 ### HDU Size
 2 KB
-            Header Table Caption for HDU11
 
+
+            Header Table Caption for HDU11
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -503,17 +537,92 @@ BINARY TABLE
 | **COMMENT** | *** Column formats *** | 		 | 		 | 
 | **COMMENT** | 		 | 		 | 		 | 
 
-## HDU12: XPOS
 
+
+            Binary Table Caption for HDU11
+
+
+| **Name** | **Type** | **Unit** | **Description** |
+| :--- | :----- | :---- | :------- |
+| **SLITFILE** | char[25] | 		 | Name of the slitmap |
+| **METFILE** | char[17] | 		 | Name of the metrology file |
+| **HARNAME** | char[5] | 		 | Harness name |
+| **IFUDESIGN** | int32 | 		 | ifudesign (e.g., 12701) |
+| **FRLPLUG** | int16 | 		 | The physical ferrule matching this part of the slit |
+| **MANGAID** | char[8] | 		 | MaNGA identification number |
+| **AIRTEMP** | float32 | 		 | Temperature in Celsius |
+| **HUMIDITY** | float32 | 		 | Relative humidity in percent |
+| **PRESSURE** | float32 | 		 | Pressure in inHg |
+| **SEEING** | float32 | 		 | Best guider seeing in Arcsec |
+| **PSFFAC** | float32 | 		 | Best-fit PSF size relative to guider measurement |
+| **TRANSPAR** | float32 | 		 | Guider transparency |
+| **PLATEID** | int32 | 		 | Plate id number |
+| **DESIGNID** | int32 | 		 | Design id number |
+| **CARTID** | int16 | 		 | Cart id number |
+| **MJD** | int32 | 		 | MJD of observation |
+| **EXPTIME** | float32 | 		 | Exposure time (seconds) |
+| **EXPNUM** | char[12] | 		 | Exposure number |
+| **SET** | int32 | 		 | Which set this exposure belongs to |
+| **MGDPOS** | char[8] | 		 | MaNGA dither position (NSEC) |
+| **MGDRA** | float32 | 		 | MaNGA dither offset in RA (arcsec) |
+| **MGDDEC** | float32 | 		 | MaNGA dither offset in DEC (arcsec) |
+| **OMEGASET_U** | float32 | 		 | Omega value of this set in u-band (3622 Angstrom) |
+| **OMEGASET_G** | float32 | 		 | Omega value of this set in g-band (4703 Angstrom) |
+| **OMEGASET_R** | float32 | 		 | Omega value of this set in r-band (6177 Angstrom) |
+| **OMEGASET_I** | float32 | 		 | Omega value of this set in i-band (7496 Angstrom) |
+| **OMEGASET_Z** | float32 | 		 | Omega value of this set in z-band (10354 Angstrom) |
+| **EAMFIT_RA** | float32 | 		 | DeltaRA (arcsec) from extended astrometry module |
+| **EAMFIT_DEC** | float32 | 		 | DeltaDEC (arcsec) from extended astrometry module |
+| **EAMFIT_THETA** | float32 | 		 | Final DeltaTHETA (degrees) from extended astrometry module |
+| **EAMFIT_THETA0** | float32 | 		 | Original DeltaTHETA from the EAM (free for all exposures) |
+| **EAMFIT_A** | float32 | 		 | A (flux scaling) from extended astrometry module |
+| **EAMFIT_B** | float32 | 		 | B (flux zeropoint) from extended astrometry module |
+| **EAMFIT_RAERR** | float32 | 		 | 1-sigma uncertainty in DeltaRA (arcsec) |
+| **EAMFIT_DECERR** | float32 | 		 | 1-sigma uncertainty in DeltaDEC (arcsec) |
+| **EAMFIT_THETAERR** | float32 | 		 | 1-sigma uncertainty in DeltaTHETA (degrees) |
+| **EAMFIT_THETA0ERR** | float32 | 		 | 1-sigma uncertainty in DeltaTHETA0 (degrees) |
+| **EAMFIT_AERR** | float32 | 		 | 1-sigma uncertainty in A |
+| **EAMFIT_BERR** | float32 | 		 | 1-sigma uncertainty in B |
+| **TAIBEG** | char[13] | 		 | TAI at the start of the exposure |
+| **HADRILL** | float32 | 		 | Hour angle plate was drilled for |
+| **LSTMID** | float32 | 		 | Local sidereal time at midpoint of exposure |
+| **HAMID** | float32 | 		 | Hour angle at midpoint of exposure for this IFU |
+| **AIRMASS** | float32 | 		 | Airmass at midpoint of exposure for this IFU |
+| **IFURA** | float64 | 		 | IFU right ascension (J2000) |
+| **IFUDEC** | float64 | 		 | IFU declination (J2000) |
+| **CENRA** | float64 | 		 | Plate center right ascension (J2000) |
+| **CENDEC** | float64 | 		 | Plate center declination (J2000) |
+| **XFOCAL** | float32 | 		 | Hole location in xfocal coordinates (mm) |
+| **YFOCAL** | float32 | 		 | Hole location in yfocal coordinates (mm) |
+| **MNGTARG1** | int32 | 		 | manga_target1 maskbit for galaxy target catalog |
+| **MNGTARG2** | int32 | 		 | manga_target2 maskbit for non-galaxy target catalog |
+| **MNGTARG3** | int32 | 		 | manga_target3 maskbit for ancillary target catalog |
+| **BLUESN2** | float32 | 		 | SN2 in blue for this exposure |
+| **REDSN2** | float32 | 		 | SN2 in red for this exposure |
+| **BLUETHRUPT** | float32 | 		 | Throughput in blue for this exposure |
+| **REDTHRUPT** | float32 | 		 | Throughput in red for this exposure |
+| **BLUEPSTAT** | float32 | 		 | Poisson statistic in blue for this exposure |
+| **REDPSTAT** | float32 | 		 | Poisson statistic in red for this exposure |
+| **DRP2QUAL** | int32 | 		 | DRP-2d quality bitmask |
+| **THISBADIFU** | int32 | 		 | 0 if good, 1 if this IFU was bad in this frame |
+| **PF_FWHM_G** | float32 | 		 | FWHM (arcsec) of a single-gaussian fit to the point source response function Prior to Fiber convolution in g band |
+| **PF_FWHM_R** | float32 | 		 | FWHM (arcsec) of a single-gaussian fit to the point source response function Prior to Fiber convolution in r band |
+| **PF_FWHM_I** | float32 | 		 | FWHM (arcsec) of a single-gaussian fit to the point source response function Prior to Fiber convolution in i band |
+| **PF_FWHM_Z** | float32 | 		 | FWHM (arcsec) of a single-gaussian fit to the point source response function Prior to Fiber convolution in z band |
+
+
+## HDU12: XPOS
 Array of fiber X-positions (units of arcsec) relative to the IFU center.  Because of chromatic DAR, each wavelength for a given fiber has a slightly different position, and therefore the positional arrays have the same dimensionality as the corresponding flux array.
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 2 MB
-            Header Table Caption for HDU12
 
+
+            Header Table Caption for HDU12
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -529,17 +638,20 @@ IMAGE
 | **DATASUM** | 3023661791 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | 64MB71K961KA61K9 | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
 
-## HDU13: YPOS
 
+
+## HDU13: YPOS
 Array of fiber Y-positions (units of arcsec) relative to the IFU center.  Because of chromatic DAR, each wavelength for a given fiber has a slightly different position, and therefore the positional arrays have the same dimensionality as the corresponding flux array.
 
 ### HDU Type
 IMAGE
 
+
 ### HDU Size
 2 MB
-            Header Table Caption for HDU13
 
+
+            Header Table Caption for HDU13
 
 
 | **Key** | **Value** | **Type** | **Comment** |
@@ -554,5 +666,7 @@ IMAGE
 | **EXTNAME** | YPOS | 		 | 		 | 
 | **DATASUM** | 2342972923 | 		 | data unit checksum updated 2018-03-21T06:08:46 | 
 | **CHECKSUM** | 0Apa14oX0Aoa03oW | 		 | HDU checksum updated 2018-03-21T06:08:46 | 
+
+
 
 

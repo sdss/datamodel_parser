@@ -51,62 +51,80 @@ class Database:
             Get the rows from the intro and section table, as well as a data
             structure with columns from the data, header, and keyword tables.
         '''
-        (intros,sections,hdus)=(None,None,None)
+        (intros,hdu_info_dict)=(None,None)
         if self.ready:
             if self.file_id:
-                intros     = Intro.load_all(file_id=self.file_id)
-                sections   = Section.load_all(file_id=self.file_id)
-                hdus = Hdu.load_all(file_id=self.file_id)
-                headers    = (Header.load_all(hdus=hdus)
-                              if hdus else None)
-                datas      = (Data.load_all(hdus=hdus)
-                              if hdus else None)
-                # set sections = None if sections has empty hdu information
-                if (len(sections) == 1             and
-                    sections[0].hdu_number is None and
-                    sections[0].hdu_title   is None
-                    ):
-                    sections = None
-                hdus = self.get_hdus(intros=intros,headers=headers,datas=datas)
-                if not (intros and headers and hdus):
+                intros        = Intro.load_all(file_id=self.file_id)
+                hdus          = Hdu.load_all(file_id=self.file_id)
+                hdu_info_dict = self.get_hdu_info_dict(hdus=hdus)
+                if not (intros and hdu_info_dict):
                     self.ready = False
                     self.logger.error('Unable to get_intros_sections_hdus.' +
                                       'intros: {}, '.format(intros) +
-                                      'headers: {}.'.format(headers))
+                                      'hdu_info_dict: {}.'.format(hdu_info_dict))
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intros_sections_hdus.' +
                                   'self.file_id: {}.'.format(self.file_id))
-        return (intros,sections,hdus)
+        return (intros,hdu_info_dict)
 
-    def get_hdus(self,intros=None,headers=None,datas=None):
+    def get_hdu_info_dict(self,hdus=None):
         '''
             Get a data structure with columns from the data, header,
-            and keyword tables.
+            and keyword hdus.
         '''
-        hdus = None
+        hdu_info_dict = None
         if self.ready:
-            if intros and headers and datas:
-                hdus = dict()
-                for (data,header) in list(zip(datas,headers)):
-                    hdu = dict()
-                    hdu['hdu'] = dict()
-                    column = (Column.load(data_id=data.id)
-                                if data and data.id else None)
-                    hdu['column'] = (column if column
-                                    and column.datatype is not None
-                                    else None)
-                    hdu['hdu']['header'] = header
-                    hdu['hdu']['keywords'] = (Keyword.load_all(header_id=header.id)
-                        if header and header.id else None)
-                    hdus[header.hdu_number] = hdu
+            headers = Header.load_all(hdus=hdus) if hdus else None
+            datas   = Data.load_all(hdus=hdus)   if hdus else None
+            if hdus and headers and datas:
+                hdu_info_dict = dict()
+                for hdu in hdus:
+                    hdu_info_dict[hdu.number] = dict()
+                    # hdu table information
+                    hdu_info_dict[hdu.number]['hdu_number'] = (
+                                               hdu.number if hdu else None)
+                    hdu_info_dict[hdu.number]['hdu_title'] = (
+                                               hdu.title if hdu else None)
+                    hdu_info_dict[hdu.number]['hdu_description'] = (
+                                               hdu.description if hdu else None)
+                    hdu_info_dict[hdu.number]['hdu_type'] = (
+                                                'IMAGE' if hdu.is_image
+                                                        else 'BINARY TABLE')
+                    hdu_info_dict[hdu.number]['hdu_size'] = (
+                                               hdu.size if hdu else None)
+                    # header and data tables
+                    hdu_info_dict[hdu.number]['header_table'] = dict()
+                    hdu_info_dict[hdu.number]['data_table']    = dict()
+                    header = headers[hdu.number] if hdu.number in headers else None
+                    data   = datas[hdu.number]   if hdu.number in datas   else None
+                    keywords = (Keyword.load_all(header_id=header.id)
+                                if header else None)
+                    columns =  (Column.load_all(data_id=data.id)
+                                if data else None)
+                    hdu_info_dict[hdu.number]['header_table']['caption'] = (
+                                    header.table_caption if header else None)
+                    hdu_info_dict[hdu.number]['header_table']['keywords'] = (
+                                    keywords if keywords else None)
+                    hdu_info_dict[hdu.number]['data_table']['caption'] = (
+                                    data.table_caption if data else None)
+                    hdu_info_dict[hdu.number]['data_table']['columns'] = (
+                                    columns if columns else None)
+#
+#                    print('\n hdu.number: %r' % hdu.number)
+#                    print('\n header: \n%r' % header)
+#                    print('\n data: \n%r' % data)
+#                    print('\n keywords: \n%r' % keywords)
+#                    print('\n columns: \n%r' % columns)
+#                    print('\n hdu.number: %r' % hdu.number)
+#                    input('pause')
+
             else:
                 self.ready = False
-                self.logger.error('Unable to get_hdus.' +
-                                  'intros: {}, '.format(intros) +
+                self.logger.error('Unable to get_hdu_info_dict.' +
                                   'headers: {}, '.format(headers) +
                                   'datas: {}.'.format(datas))
-        return hdus
+        return hdu_info_dict
 
     def set_tree_id(self,tree_edition=None):
         '''Get tree_id.'''

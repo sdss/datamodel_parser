@@ -163,7 +163,7 @@ class Migrate:
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
-                (intros,sections,hdus) = (self.database.get_intros_sections_hdus()
+                (intros,hdu_info_dict) = (self.database.get_intros_sections_hdus()
                                           if self.ready and self.database.ready
                                           else None)
                 self.ready = self.ready and self.database.ready
@@ -171,9 +171,8 @@ class Migrate:
                     result = None
                     with app.app_context():
                         result = render_template(template,
-                                                 intros   = intros,
-                                                 sections = sections,
-                                                 hdus     = hdus,
+                                                 intros        = intros,
+                                                 hdu_info_dict = hdu_info_dict,
                                                  )
                     self.process_rendered_template(result   = result,
                                                    template = template)

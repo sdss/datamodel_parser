@@ -8,29 +8,37 @@
 {% endif %}
 {% endfor %}
 ## Page Contents
-{% for hdu_number in hdus.keys() -%}
-* [HDU{{hdu_number}}: {{hdus[hdu_number]['hdu']['header'].title.upper()}}](#hdu{{hdu_number}}-{{hdus[hdu_number]['hdu']['header'].title.lower()}})
+{% for hdu_number in hdu_info_dict.keys() -%}
+* [HDU{{hdu_number}}: {{hdu_info_dict[hdu_number]['hdu_title'].upper()}}](#hdu{{hdu_number}}-{{hdu_info_dict[hdu_number]['hdu_title'].lower()}})
 {% endfor %}
-{% for hdu_number in hdus.keys() -%}
-## HDU{{hdu_number}}: {{hdus[hdu_number]['hdu']['header'].title.upper()}}
-{% if hdus[hdu_number]['column'] %}
-{{hdus[hdu_number]['column'].description}}
-{% if hdus[hdu_number]['column'].datatype %}
+{% for hdu_number in hdu_info_dict.keys() -%}
+## HDU{{hdu_number}}: {{hdu_info_dict[hdu_number]['hdu_title'].upper()}}
+{{hdu_info_dict[hdu_number]['hdu_description'] or ''}}
+{% if hdu_info_dict[hdu_number]['hdu_type'] %}
 ### HDU Type
-{{hdus[hdu_number]['column'].datatype}}
-{% else %}
-### HDU Type
-{{hdus[hdu_number]['column'].datatype}}
+{{hdu_info_dict[hdu_number]['hdu_type']}}
 {% endif %}
+{% if hdu_info_dict[hdu_number]['hdu_size'] %}
 ### HDU Size
-{{hdus[hdu_number]['column'].size}}
-            {{hdus[hdu_number]['hdu']['header'].table_caption}}
+{{hdu_info_dict[hdu_number]['hdu_size']}}
 {% endif %}
+{% if hdu_info_dict[hdu_number]['header_table']['keywords'] %}
+            {{hdu_info_dict[hdu_number]['header_table']['caption'] or ''}}
 {{'\n'}}
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
-{% for keyword in hdus[hdu_number]['hdu']['keywords'] -%}
-| **{{keyword.keyword or '\t\t'}}** | {{keyword.value or '\t\t'}} | {{keyword.type or '\t\t'}} | {{keyword.comment or '\t\t'}} | 
+{% for keyword in hdu_info_dict[hdu_number]['header_table']['keywords'] -%}
+| **{{keyword.keyword or '\t\t'}}** | {{keyword.value or '\t\t'}} | {{keyword.datatype or '\t\t'}} | {{keyword.comment or '\t\t'}} | 
 {% endfor %}
+{% endif %}
+{% if hdu_info_dict[hdu_number]['data_table']['columns'] %}
+            {{hdu_info_dict[hdu_number]['data_table']['caption'] or ''}}
+{{'\n'}}
+| **Name** | **Type** | **Unit** | **Description** |
+| :--- | :----- | :---- | :------- |
+{% for column in hdu_info_dict[hdu_number]['data_table']['columns'] -%}
+| **{{column.name or '\t\t'}}** | {{column.datatype or '\t\t'}} | {{column.units or '\t\t'}} | {{column.description or '\t\t'}} |
+{% endfor %}
+{% endif %}
 {% endfor %}
 
