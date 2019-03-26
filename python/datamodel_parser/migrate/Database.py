@@ -64,7 +64,7 @@ class Database:
                 # set sections = None if sections has empty hdu information
                 if (len(sections) == 1             and
                     sections[0].hdu_number is None and
-                    sections[0].hdu_name   is None
+                    sections[0].hdu_title   is None
                     ):
                     sections = None
                 hdus = self.get_hdus(intros=intros,headers=headers,datas=datas)
@@ -94,11 +94,8 @@ class Database:
                     column = (Column.load(data_id=data.id)
                                 if data and data.id else None)
                     hdu['column'] = (column if column
-                                    and not
-                                    (column.datatype is None and
-                                     column.datatype is None and
-                                     column.datatype is None)
-                                     else None)
+                                    and column.datatype is not None
+                                    else None)
                     hdu['hdu']['header'] = header
                     hdu['hdu']['keywords'] = (Keyword.load_all(header_id=header.id)
                         if header and header.id else None)
@@ -221,7 +218,7 @@ class Database:
                                  env_variable  = env_variable,
                                  location_path = location_path,
                                  file_name     = file_name)
-                self.set_hdu(file_id=self.file_id,hdu_number=hdu_number)
+                self.set_hdu(file_id=self.file_id,number=hdu_number)
                 self.hdu_id = (self.hdu.id
                                      if self.hdu else None)
                 if not self.hdu_id:
@@ -769,7 +766,7 @@ class Database:
                                   'columns: {}.'.format(columns))
 
     def set_intro_columns(self,
-                          heading_order = None,
+                          position = None,
                           heading_level = None,
                           heading_title = None,
                           description   = None,
@@ -779,7 +776,7 @@ class Database:
         if self.ready:
             file_id = self.file_id if self.file_id else None
             if (file_id                   and
-                heading_order is not None and
+                position is not None and
 #                heading_level is not None and
                 heading_title         and
                 description is not None
@@ -787,8 +784,8 @@ class Database:
                 self.intro_columns = {
                     'file_id'       : file_id
                                       if file_id                   else None,
-                    'heading_order' : heading_order
-                                      if heading_order is not None else None,
+                    'position' : position
+                                      if position is not None else None,
                     'heading_level' : heading_level
                                       if heading_level is not None else None,
                     'heading_title' : heading_title
@@ -801,7 +798,7 @@ class Database:
                 self.logger.error(
                     'Unable to set_intro_columns. ' +
                     'file_id: {}, '.format(file_id) +
-                    'heading_order: {}, '.format(heading_order) +
+                    'position: {}, '.format(position) +
                     'heading_level: {}, '.format(heading_level) +
                     'heading_title: {}, '.format(heading_title) +
                     'description: {}.'.format(description))
@@ -865,8 +862,8 @@ class Database:
                 intro = Intro(
                     file_id = columns['file_id']
                         if columns and 'file_id' in columns else None,
-                    heading_order = columns['heading_order']
-                        if columns and 'heading_order' in columns else None,
+                    position = columns['position']
+                        if columns and 'position' in columns else None,
                     heading_level = columns['heading_level']
                         if columns and 'heading_level' in columns else None,
                     heading_title = columns['heading_title']
@@ -888,24 +885,24 @@ class Database:
                 self.logger.error('Unable to create_intro_row. ' +
                                   'columns: {}.'.format(columns))
 
-    def set_section_columns(self,hdu_number=None,hdu_name=None):
+    def set_section_columns(self,hdu_number=None,hdu_title=None):
         '''Set columns of the section table.'''
         self.section_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            # When there's no file section hdu_number and hdu_name are None
+            # When there's no file section hdu_number and hdu_title are None
             if file_id:
                 self.section_columns = {
                     'file_id'    : file_id    if file_id                else None,
                     'hdu_number' : hdu_number if hdu_number is not None else None,
-                    'hdu_name'   : hdu_name   if hdu_name               else None,
+                    'hdu_title'   : hdu_title   if hdu_title               else None,
                     }
             else:
                 self.ready = False
                 self.logger.error('Unable to set_section_columns. ' +
                                   'file_id: {}, '.format(file_id) +
                                   'hdu_number: {}, '.format(hdu_number) +
-                                  'hdu_name: {}.'.format(hdu_name))
+                                  'hdu_title: {}.'.format(hdu_title))
 
     def populate_section_table(self):
         '''Update/Create section table row.'''
@@ -914,7 +911,7 @@ class Database:
             if self.section: self.update_section_row()
             else:            self.create_section_row()
 
-    def set_section(self,file_id=None,hdu_number=None,hdu_name=None):
+    def set_section(self,file_id=None,hdu_number=None,hdu_title=None):
         '''Load row from section table.'''
         self.section = None
         if self.ready:
@@ -926,14 +923,14 @@ class Database:
                 else self.section_columns['hdu_number']
                 if self.section_columns and 'hdu_number' in self.section_columns
                 else None)
-            hdu_name = (hdu_name if hdu_name
-                else self.section_columns['hdu_name']
-                if self.section_columns and 'hdu_name' in self.section_columns
+            hdu_title = (hdu_title if hdu_title
+                else self.section_columns['hdu_title']
+                if self.section_columns and 'hdu_title' in self.section_columns
                 else None)
-            if file_id: # if there's no file section hdu_number=hdu_name=None
+            if file_id: # if there's no file section hdu_number=hdu_title=None
                 self.section = Section.load(file_id  = file_id,
                                            hdu_number = hdu_number,
-                                           hdu_name   = hdu_name)
+                                           hdu_title   = hdu_title)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_section. ' +
@@ -951,10 +948,10 @@ class Database:
                 self.section.update_if_needed(columns=columns,skip_keys=skip_keys)
                 if self.section.updated:
                     self.logger.info(
-                        'Updated Section[id={0}], hdu_number: {1}, hdu_name: {2}'
+                        'Updated Section[id={0}], hdu_number: {1}, hdu_title: {2}'
                         .format(self.section.id,
                                 self.section.hdu_number,
-                                self.section.hdu_name))
+                                self.section.hdu_title))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_section_row. ' +
@@ -973,15 +970,15 @@ class Database:
                         if columns and 'file_id' in columns else None,
                     hdu_number = columns['hdu_number']
                         if columns and 'hdu_number' in columns else None,
-                    hdu_name = columns['hdu_name']
-                        if columns and 'hdu_name' in columns else None,
+                    hdu_title = columns['hdu_title']
+                        if columns and 'hdu_title' in columns else None,
                                   )
                 if section:
                     section.add()
                     section.commit()
                     self.logger.info(
-                        'Added Section[id={0}], hdu_number: {1}, hdu_name: {2}'
-                        .format(section.id,section.hdu_number,section.hdu_name))
+                        'Added Section[id={0}], hdu_number: {1}, hdu_title: {2}'
+                        .format(section.id,section.hdu_number,section.hdu_title))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_section_row. ' +
@@ -991,31 +988,51 @@ class Database:
                 self.logger.error('Unable to create_section_row. ' +
                                   'columns: {}.'.format(columns))
 
-    def set_hdu_columns(self,hdu_number=None):
+    def set_hdu_columns(self,
+                        is_image=None,
+                        number=None,
+                        title=None,
+                        size=None,
+                        description=None,
+                        ):
         '''Set columns of the hdu table.'''
         self.hdu_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            if file_id and hdu_number is not None:
+            if file_id and is_image is not None and number is not None and title:
+                # size and description can be null
                 self.hdu_columns = {
-                    'file_id'    : file_id    if file_id                else None,
-                    'hdu_number'  : hdu_number  if hdu_number is not None else None,
+                    'file_id'      : file_id
+                                        if file_id              else None,
+                    'is_image'     : is_image
+                                        if is_image is not None else None,
+                    'number'       : number
+                                        if number   is not None else None,
+                    'title'        : title
+                                        if title                else None,
+                    'size'         : size
+                                        if size                 else None,
+                    'description'  : description
+                                        if description          else None,
+
                     }
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to set_hdu_columns. ' +
                     'file_id: {}, '.format(file_id) +
-                    'hdu_number: {}, '.format(hdu_number))
+                    'is_image: {}, '.format(is_image) +
+                    'number: {}, '.format(number) +
+                    'title: {}.'.format(title))
 
     def populate_hdu_table(self):
         '''Update/Create hdu table row.'''
         if self.ready:
             self.set_hdu()
             if self.hdu: self.update_hdu_row()
-            else:              self.create_hdu_row()
+            else:        self.create_hdu_row()
 
-    def set_hdu(self,file_id=None,hdu_number=None):
+    def set_hdu(self,file_id=None,number=None):
         '''Load row from hdu table.'''
         self.hdu = None
         if self.ready:
@@ -1024,20 +1041,20 @@ class Database:
                 if self.hdu_columns
                 and 'file_id' in self.hdu_columns
                 else None)
-            hdu_number = (hdu_number if hdu_number is not None
-                else self.hdu_columns['hdu_number']
+            number = (number if number is not None
+                else self.hdu_columns['number']
                 if self.hdu_columns
-                and 'hdu_number' in self.hdu_columns
+                and 'number' in self.hdu_columns
                 else None)
-            if file_id and hdu_number is not None:
-                self.hdu = (Hdu.load(file_id    = file_id,
-                                                 hdu_number = hdu_number)
-                                  if file_id and hdu_number is not None
-                                  else None)
+            if file_id and number is not None:
+                self.hdu = (Hdu.load(file_id=file_id,number=number)
+                            if file_id and number is not None
+                            else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_hdu. ' +
-                                  'file_id: {}, '.format(file_id))
+                                  'file_id: {}, '.format(file_id)+
+                                  'number: {}.'.format(number))
 
     def update_hdu_row(self):
         '''Update row in hdu table.'''
@@ -1052,10 +1069,10 @@ class Database:
                                                 skip_keys=skip_keys)
                 if self.hdu.updated:
                     self.logger.info(
-                        'Updated Hdu[id={0}], file_id: {1}, hdu_number: {2}'
+                        'Updated Hdu[id={0}], file_id: {1}, number: {2}'
                         .format(self.hdu.id,
                                 self.hdu.file_id,
-                                self.hdu.hdu_number))
+                                self.hdu.number))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_hdu_row. ' +
@@ -1072,17 +1089,23 @@ class Database:
                 hdu = Hdu(
                     file_id = columns['file_id']
                         if columns and 'file_id' in columns else None,
-                    hdu_number = columns['hdu_number']
-                        if columns and 'hdu_number' in columns else None,
+                    is_image = columns['is_image']
+                        if columns and 'is_image' in columns else None,
+                    number = columns['number']
+                        if columns and 'number' in columns else None,
+                    title = columns['title']
+                        if columns and 'title' in columns else None,
+                    size = columns['size']
+                        if columns and 'size' in columns else None,
+                    description = columns['description']
+                        if columns and 'description' in columns else None,
                                   )
                 if hdu:
                     hdu.add()
                     hdu.commit()
                     self.logger.info(
-                        'Added Hdu[id={0}], file_id: {1}, hdu_number: {2}'
-                        .format(hdu.id,
-                                hdu.file_id,
-                                hdu.hdu_number))
+                        'Added Hdu[id={0}], file_id: {1}, number: {2}'
+                        .format(hdu.id, hdu.file_id,  hdu.number))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_hdu_row. ' +
@@ -1186,7 +1209,7 @@ class Database:
                                   'columns: {}.'.format(columns))
 
     def set_column_columns(self,
-                           header_title=None,
+                           hdu_title=None,
                            datatype=None,
                            size=None,
                            description=None):
@@ -1195,7 +1218,7 @@ class Database:
         if self.ready:
             data_id = self.data_id if self.data_id else None
             if (data_id              and
-                header_title
+                hdu_title
 #                datatype is not None and
 #                size     is not None and
 #                description is not None
@@ -1203,8 +1226,8 @@ class Database:
                 self.column_columns = {
                     'data_id'      : data_id
                                         if data_id                 else None,
-                    'header_title' : header_title
-                                        if header_title            else None,
+                    'hdu_title' : hdu_title
+                                        if hdu_title            else None,
                     'datatype'     : datatype
                                         if datatype    is not None else None,
                     'size'         : size
@@ -1217,7 +1240,7 @@ class Database:
                 self.logger.error(
                     'Unable to set_column_columns. ' +
                     'data_id: {}, '.format(data_id) +
-                    'header_title: {}, '.format(header_title) +
+                    'hdu_title: {}, '.format(hdu_title) +
                     'datatype: {}, '.format(datatype) +
                     'size: {}, '.format(size) +
                     'description: {}, '.format(description))
@@ -1258,7 +1281,7 @@ class Database:
                 if self.column.updated:
                     self.logger.info(
                         'Updated Column[id={}], '.format(self.column.id) +
-                        'header_title: {}, '.format(self.column.header_title))
+                        'hdu_title: {}, '.format(self.column.hdu_title))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_column_row. ' +
@@ -1275,8 +1298,8 @@ class Database:
                 column = Column(
                     data_id = columns['data_id']
                         if columns and 'data_id' in columns else None,
-                    header_title = columns['header_title']
-                        if columns and 'header_title' in columns else None,
+                    hdu_title = columns['hdu_title']
+                        if columns and 'hdu_title' in columns else None,
                     datatype = columns['datatype']
                         if columns and 'datatype' in columns else None,
                     size = columns['size']
@@ -1289,7 +1312,7 @@ class Database:
                     column.commit()
                     self.logger.info(
                         'Added Column[id={}], '.format(column.id) +
-                        'header_title: {}.'.format(column.header_title))
+                        'hdu_title: {}.'.format(column.hdu_title))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_column_row. ' +
@@ -1299,18 +1322,16 @@ class Database:
                 self.logger.error('Unable to create_column_row. ' +
                                   'columns: {}.'.format(columns))
 
-    def set_header_columns(self,hdu_number=None,title=None,table_caption=None):
+    def set_header_columns(self,hdu_number=None,table_caption=None):
         '''Set columns of the header table.'''
         self.header_columns = dict()
         if self.ready:
             hdu_id = self.hdu_id if self.hdu_id else None
-            if hdu_id and hdu_number is not None and title:
+            if hdu_id and hdu_number is not None:
                 self.header_columns = {
                     'hdu_id'  : hdu_id  if hdu_id
                                                     else None,
                     'hdu_number'    : hdu_number    if hdu_number is not None
-                                                    else None,
-                    'title'         : title         if title
                                                     else None,
                     'table_caption' : table_caption if table_caption is not None
                                                     else None,
@@ -1321,7 +1342,6 @@ class Database:
                     'Unable to set_header_columns. ' +
                     'hdu_id: {}, '.format(hdu_id) +
                     'hdu_number: {}, '.format(hdu_number) +
-                    'title: {}, '.format(title) +
                     'table_caption: {}, '.format(table_caption))
 
     def populate_header_table(self):
@@ -1331,7 +1351,7 @@ class Database:
             if self.header: self.update_header_row()
             else:           self.create_header_row()
 
-    def set_header(self,hdu_id=None,hdu_number=None,title=None):
+    def set_header(self,hdu_id=None,hdu_number=None):
         '''Load row from header table.'''
         self.header = None
         if self.ready:
@@ -1343,11 +1363,7 @@ class Database:
                 else self.header_columns['hdu_number']
                 if self.header_columns and 'hdu_number' in self.header_columns
                 else None)
-            title = (title if title
-                else self.header_columns['title']
-                if self.header_columns and 'title' in self.header_columns
-                else None)
-            if hdu_id and hdu_number is not None and title:
+            if hdu_id and hdu_number is not None:
                 self.header = (Header.load(hdu_id=hdu_id)
                                if hdu_id else None)
             else:
@@ -1371,7 +1387,6 @@ class Database:
                         'Updated Header[id={}], '.format(self.header.id) +
                         'hdu_id: {}, '.format(self.header.hdu_id) +
                         'hdu_number: {}.'.format(self.header.hdu_number) +
-                        'title: {}.'.format(self.header.title) +
                         'table_caption: {}.'.format(self.header.table_caption))
             else:
                 self.ready = False
@@ -1391,8 +1406,6 @@ class Database:
                         if columns and 'hdu_id' in columns else None,
                     hdu_number = columns['hdu_number']
                         if columns and 'hdu_number' in columns else None,
-                    title = columns['title']
-                        if columns and 'title' in columns else None,
                     table_caption = columns['table_caption']
                         if columns and 'table_caption' in columns else None,
                                   )
@@ -1402,8 +1415,7 @@ class Database:
                     self.logger.info(
                         'Added Header[id={}], '.format(header.id) +
                         'hdu_id: {}, '.format(header.hdu_id) +
-                        'hdu_number: {}.'.format(header.hdu_number) +
-                        'title: {}.'.format(header.title))
+                        'hdu_number: {}.'.format(header.hdu_number))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_header_row. ' +
@@ -1419,10 +1431,10 @@ class Database:
         if self.ready:
             header_id = self.header_id if self.header_id else None
             if header_id and position is not None and table_row:
-                keyword = table_row[0] if table_row else None
-                value   = table_row[1] if table_row else None
-                type    = table_row[2] if table_row else None
-                comment = table_row[3] if table_row else None
+                keyword  = table_row[0] if table_row else None
+                value    = table_row[1] if table_row else None
+                datatype = table_row[2] if table_row else None
+                comment  = table_row[3] if table_row else None
                 self.keyword_columns = {
                     'header_id'     : header_id     if header_id
                                                     else None,
@@ -1432,7 +1444,7 @@ class Database:
                                                     else None,
                     'value'         : value         if value is not None
                                                     else None,
-                    'type'          : type          if type
+                    'datatype'      : datatype      if datatype
                                                     else None,
                     'comment'       : comment       if comment
                                                     else None,
@@ -1519,8 +1531,8 @@ class Database:
                         if columns and 'keyword' in columns else None,
                     value = columns['value']
                         if columns and 'value' in columns else None,
-                    type = columns['type']
-                        if columns and 'type' in columns else None,
+                    datatype = columns['datatype']
+                        if columns and 'datatype' in columns else None,
                     comment = columns['comment']
                         if columns and 'comment' in columns else None,
                                   )

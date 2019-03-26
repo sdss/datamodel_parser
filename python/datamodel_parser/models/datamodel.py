@@ -276,7 +276,7 @@ class Intro(db.Model):
     file_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
-    heading_order = db.Column(db.Integer, nullable = False)
+    position = db.Column(db.Integer, nullable = False)
     heading_level = db.Column(db.Integer)
     heading_title = db.Column(db.String(64), nullable = False)
     description = db.Column(db.String(1024))
@@ -300,7 +300,7 @@ class Intro(db.Model):
     def load_all(file_id=None):
         if file_id:
             try: intros = (Intro.query.filter(Intro.file_id==file_id)
-                                .order_by(Intro.heading_order)
+                                .order_by(Intro.position)
                                 .all())
             except: intros = None
         else:
@@ -340,21 +340,21 @@ class Section(db.Model):
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
     hdu_number = db.Column(db.Integer)
-    hdu_name = db.Column(db.String(32))
+    hdu_title = db.Column(db.String(32))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(file_id=None,hdu_number=None,hdu_name=None):
-        if file_id and hdu_number is not None and hdu_name:
+    def load(file_id=None,hdu_number=None,hdu_title=None):
+        if file_id and hdu_number is not None and hdu_title:
             try: section = (Section.query.filter(Section.file_id==file_id)
                                          .filter(Section.hdu_number==hdu_number)
-                                         .filter(Section.hdu_name==hdu_name)
+                                         .filter(Section.hdu_title==hdu_title)
                                          .one())
             except: section = None
-        elif file_id and hdu_number is None and hdu_name is None:
+        elif file_id and hdu_number is None and hdu_title is None:
             try: section = Section.query.filter(Section.file_id==file_id).one()
             except: section = None
         else:
@@ -406,9 +406,9 @@ class Hdu(db.Model):
     file_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
+    is_image = db.Column(db.Boolean, nullable = False, default = False)
     number = db.Column(db.Integer, nullable = False)
     title = db.Column(db.String(32), nullable = False)
-    datatype = db.Column(db.String(64))
     size = db.Column(db.String(32))
     description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
@@ -540,7 +540,7 @@ class Keyword(db.Model):
     position = db.Column(db.Integer, nullable = False)
     keyword = db.Column(db.String(64), nullable = False)
     value = db.Column(db.String(256))
-    type = db.Column(db.String(80))
+    datatype = db.Column(db.String(80))
     comment = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,

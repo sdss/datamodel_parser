@@ -48,12 +48,12 @@ class File3:
 
     def parse_file(self):
         '''Parse the HTML of the given division tags.'''
-        self.file_hdu_data    = list()
-        self.file_hdu_headers = list()
+        self.file_hdu_info    = list()
+        self.file_hdu_tables = list()
         if self.ready:
             if self.body:
                 self.parse_file_intro()
-                self.parse_file_hdus()
+                self.parse_file_hdu_tables()
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. self.body: {}'
@@ -61,13 +61,13 @@ class File3:
 
     def parse_file_intro(self):
         '''Parse file intro content from given body tag.'''
-        self.intro_heading_orders = list()
+        self.intro_positions = list()
         self.intro_heading_levels = list()
         self.intro_heading_titles = list()
         self.intro_descriptions   = list()
         if self.ready:
             if self.body and self.body.children:
-                heading_order = -1
+                position = -1
                 found_format_notes = False
                 append_discussions = False
                 for child in self.body.children:
@@ -81,8 +81,8 @@ class File3:
                         # intro heading tags
                         elif child_name in self.heading_tags:
                             # page title
-                            heading_order += 1
-                            self.intro_heading_orders.append(heading_order)
+                            position += 1
+                            self.intro_positions.append(position)
                             level = int(child_name.replace('h',''))
                             self.intro_heading_levels.append(level)
                             title = self.util.get_string(node=child).replace(':','')
@@ -108,8 +108,8 @@ class File3:
                                 if self.ready and not title.isspace():  # skip '\n'
                                     # heading content
                                     if content.name in self.bold_tags:
-                                        heading_order += 1
-                                        self.intro_heading_orders.append(heading_order)
+                                        position += 1
+                                        self.intro_positions.append(position)
                                         self.intro_heading_levels.append(3)
                                         self.intro_heading_titles.append(title)
                                     # descriptions
@@ -137,19 +137,19 @@ class File3:
                                   'self.body.children: {}'
                                     .format(self.body.children))
 
-    def parse_file_hdus(self):
+    def parse_file_hdu_tables(self):
         '''Parse file hdu content from given body tag.'''
-        self.section_hdu_names = dict() # if no section this stays empty
+        self.section_hdu_titles = dict() # if no section this stays empty
         if self.ready:
             self.set_hdu_tags()
             self.set_hdu_headings_and_pres()
             if (self.ready and
                 self.hdu_headings and self.hdu_pres and
                 len(self.hdu_headings) == len(self.hdu_pres)):
-                intro_heading_order = -1
+                intro_position = -1
                 for (heading_tag,pre_tags) in list(zip(self.hdu_headings,
                                                       self.hdu_pres)):
-                    header_title = (self.util.get_string(node=heading_tag)
+                    hdu_title = (self.util.get_string(node=heading_tag)
                                         .replace(':',''))
                     self.ready = self.ready and self.util.ready
                     if self.ready:
@@ -160,14 +160,14 @@ class File3:
                             if self.ready: header.append(string)
                             else: break
                         header = '\n' + '\n'.join(header)
-                        self.parse_file_hdu_header(header=header)
-                        self.parse_file_hdu_data(header_title = header_title,
+                        self.parse_file_hdu(header=header)
+                        self.parse_file_hdu_info(hdu_title = hdu_title,
                                                        header       = header)
                     else: break
             else:
                 self.ready = False
                 self.logger.error(
-                    'Unable to parse_file_hdus. ' +
+                    'Unable to parse_file_hdu_tables. ' +
                     'self.hdu_headings: {}'
                         .format(self.hdu_headings) +
                     'self.hdu_pres: {}'
@@ -238,37 +238,37 @@ class File3:
                                   'self.hdu_tags: {}'
                                   .format(self.hdu_tags))
 
-    def parse_file_hdu_data(self,header_title=None,header=None):
-        '''Parse file description content from given header_titleision tag.'''
+    def parse_file_hdu_info(self,hdu_title=None,header=None):
+        '''Parse file description content from given hdu_titleision tag.'''
         if self.ready:
-            if header_title and header:
+            if hdu_title and header:
                 if self.ready:
                     # hdu.hdu_number and header.title
                     hdu_number = (
-                        [int(s) for s in list(header_title) if s.isdigit()][0])
+                        [int(s) for s in list(hdu_title) if s.isdigit()][0])
                     # data.is_image
                     rows = header.split('\n') if header else list()
                     rows = [row for row in rows
                             if row and 'XTENSION' in row and 'IMAGE' in row]
-                    data_is_image = bool(rows)
-                    hdu_data = dict()
-                    hdu_data['hdu_number']         = hdu_number
-                    hdu_data['header_title']       = header_title
-                    hdu_data['data_is_image']      = data_is_image
-                    hdu_data['column_datatype']    = None
-                    hdu_data['column_size']        = None
-                    hdu_data['column_description'] = None
-                    self.file_hdu_data.append(hdu_data)
-                    self.hdu_count = len(self.file_hdu_data)
+                    is_image = bool(rows)
+                    hdu_info = dict()
+                    hdu_info['hdu_number']         = hdu_number
+                    hdu_info['hdu_title']       = hdu_title
+                    hdu_info['is_image']           = is_image
+                    hdu_info['column_datatype']    = None
+                    hdu_info['column_size']        = None
+                    hdu_info['column_description'] = None
+                    self.file_hdu_info.append(hdu_info)
+                    self.hdu_count = len(self.file_hdu_info)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_data. ' +
-                                  'header_title: {}'.format(header_title) +
+                self.logger.error('Unable to parse_file_hdu_info. ' +
+                                  'hdu_title: {}'.format(hdu_title) +
                                   'header: {}'.format(header))
 
-    def parse_file_hdu_header(self,header=None):
+    def parse_file_hdu(self,header=None):
         '''Parse file description content from given headerision tag.'''
-        hdu_header = dict()
+        hdu = dict()
         if self.ready:
             if header:
                 # table caption
@@ -284,18 +284,18 @@ class File3:
                         self.set_row_data(row=row)
                         table_rows[row_order] = (self.row_data
                                                  if self.row_data else None)
-                    hdu_header['table_caption']  = table_caption
-                    hdu_header['table_keywords'] = table_keywords
-                    hdu_header['table_rows']     = table_rows
-                    self.file_hdu_headers.append(hdu_header)
+                    hdu['table_caption']  = table_caption
+                    hdu['table_keywords'] = table_keywords
+                    hdu['table_rows']     = table_rows
+                    self.file_hdu_tables.append(hdu)
                 else:
                     self.ready = False
                     self.logger.error(
-                                'Unable to parse_file_hdu_header. ' +
+                                'Unable to parse_file_hdu. ' +
                                 'rows: {}'.format(rows))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_header. ' +
+                self.logger.error('Unable to parse_file_hdu. ' +
                                   'header: {}'.format(header))
 
     def set_row_data(self,row=None):

@@ -48,11 +48,11 @@ class Intro:
 
     def parse_file(self):
         '''Parse the HTML of the given BeautifulSoup object.'''
-        self.intro_heading_orders = list()
+        self.intro_positions = list()
         self.intro_heading_levels = list()
         self.intro_heading_titles = list()
         self.intro_descriptions   = list()
-        self.section_hdu_names    = dict()
+        self.section_hdu_titles    = dict()
         if self.ready:
             if self.body:
                 # process different intro types
@@ -71,7 +71,7 @@ class Intro:
                                           'in parse_file.')
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_data. ' +
+                self.logger.error('Unable to parse_file_hdu_info. ' +
                                   'self.body: {}'.format(self.body))
 
     def parse_file_div(self):
@@ -104,7 +104,7 @@ class Intro:
                                             .format(self.intro_div))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_data. ' +
+                self.logger.error('Unable to parse_file_hdu_info. ' +
                                   'self.body: {}'.format(self.body))
 
     def parse_file_h1_h4_p_div(self):
@@ -113,7 +113,7 @@ class Intro:
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h1_h4_p_div()
             if self.intro_div and assumptions:
-                heading_order = -1
+                position = -1
                 for child in [child for child in self.intro_div.children
                               if not self.util.get_string(node=child).isspace()]:
                     string = self.util.get_string(node=child)
@@ -121,15 +121,15 @@ class Intro:
                     if self.ready:
                         # file page name
                         if child.name == 'h1':
-                            heading_order += 1
-                            self.intro_heading_orders.append(heading_order)
+                            position += 1
+                            self.intro_positions.append(position)
                             self.intro_heading_levels.append(1)
                             self.intro_heading_titles.append(string)
                             self.intro_descriptions.append('')
                         # file heading_titles
                         elif child.name == 'h4':
-                            heading_order += 1
-                            self.intro_heading_orders.append(heading_order)
+                            position += 1
+                            self.intro_positions.append(position)
                             self.intro_heading_levels.append(4)
                             self.intro_heading_titles.append(string)
                         # file heading descriptions
@@ -219,7 +219,7 @@ class Intro:
                 self.intro_heading_titles.extend(titles)
                 self.intro_descriptions.extend(descriptions)
                 number_headings = len(self.intro_heading_titles)
-                self.intro_heading_orders = list(range(number_headings))
+                self.intro_positions = list(range(number_headings))
                 self.intro_heading_levels = [1]
                 self.intro_heading_levels.extend([4] * (number_headings - 1))
             else:
@@ -304,15 +304,15 @@ class Intro:
                         hdu = split[0].strip() if split else None
                         hdu_number = (int(hdu.lower().replace('hdu',''))
                                       if hdu else None)
-                        hdu_name   = split[1].strip() if split else None
-                        if hdu_number is not None and hdu_name:
-                            self.section_hdu_names[hdu_number] = hdu_name
+                        hdu_title   = split[1].strip() if split else None
+                        if hdu_number is not None and hdu_title:
+                            self.section_hdu_titles[hdu_number] = hdu_title
                         else:
                             self.ready = False
                             self.logger.error(
-                                    'Unable to set_section_hdu_names.' +
+                                    'Unable to set_section_hdu_titles.' +
                                     'hdu_number: {}'.format(hdu_number) +
-                                    'hdu_name: {}'.format(hdu_name))
+                                    'hdu_title: {}'.format(hdu_title))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_section_h4_ul.' +
@@ -376,13 +376,13 @@ class Intro:
         if self.ready:
             assumptions = self.verify_assumptions_parse_section_ul(node=node)
             if node and assumptions:
-                hdu_hdu_names = list()
+                hdu_hdu_titles = list()
                 for li in [li for li in node.find_all('li')
                            if not self.util.get_string(node=li).isspace()]:
                     section_name = li.contents[1].replace(':','').strip()
-                    hdu_hdu_names.append(section_name)
-                hdu_numbers = list(range(len(hdu_hdu_names)))
-                self.section_hdu_names = dict(zip(hdu_numbers,hdu_hdu_names))
+                    hdu_hdu_titles.append(section_name)
+                hdu_numbers = list(range(len(hdu_hdu_titles)))
+                self.section_hdu_titles = dict(zip(hdu_numbers,hdu_hdu_titles))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_section_ul.' +
@@ -420,7 +420,7 @@ class Intro:
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h1_p_h3_ul_pre()
             if self.body and assumptions:
-                heading_order = -1
+                position = -1
                 found_format_notes = False
                 append_discussions = False
 
@@ -437,8 +437,8 @@ class Intro:
                     # intro heading tags
                     elif child_name in self.heading_tags:
                         # page title
-                        heading_order += 1
-                        self.intro_heading_orders.append(heading_order)
+                        position += 1
+                        self.intro_positions.append(position)
                         level = int(child_name.replace('h',''))
                         self.intro_heading_levels.append(level)
                         title = self.util.get_string(node=child)
@@ -458,10 +458,10 @@ class Intro:
                         for content in [content for content in contents if content != '\n']:
                             # heading content
                             if content.name in self.bold_tags:
-                                heading_order += 1
+                                position += 1
                                 title = (self.util.get_string(node=content)
                                             .replace(':',''))
-                                self.intro_heading_orders.append(heading_order)
+                                self.intro_positions.append(position)
                                 self.intro_heading_levels.append(3)
                                 self.intro_heading_titles.append(title)
                             # descriptions

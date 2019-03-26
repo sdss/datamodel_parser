@@ -71,7 +71,7 @@ CREATE TABLE sdss.section (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     hdu_number INT2,
-    hdu_name VARCHAR(32),
+    hdu_title VARCHAR(32),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -79,9 +79,9 @@ CREATE TABLE sdss.section (
 CREATE TABLE sdss.hdu (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
+    is_image BOOLEAN NOT NULL DEFAULT FALSE,
     number INT2 NOT NULL,
     title VARCHAR(32) NOT NULL,
-    datatype VARCHAR(64),
     size VARCHAR(32),
     description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE sdss.keyword (
     position INT2 NOT NULL,
     keyword VARCHAR(64) NOT NULL,
     value VARCHAR(256),
-    type VARCHAR(80),
+    datatype VARCHAR(80),
     comment VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()

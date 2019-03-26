@@ -53,8 +53,8 @@ class File2:
         if self.ready:
             if self.divs:
                 # define these lists here so they're not overwritten in for loop
-                self.file_hdu_data    = list()
-                self.file_hdu_headers = list()
+                self.file_hdu_info    = list()
+                self.file_hdu_tables = list()
                 for div in self.divs:
                     div_id = str(div['id'])
                     if div_id == 'intro':   self.parse_file_intro(intro=div)
@@ -110,7 +110,7 @@ class File2:
                                          if number_descendants > 1 else '')
                         sections      = (sections
                                          if number_descendants > 1 else list())
-                        self.set_section_hdu_names(section_title = section_title,
+                        self.set_section_hdu_titles(section_title = section_title,
                                                sections      = sections)
                 else:
                     self.ready = False
@@ -129,7 +129,7 @@ class File2:
 
     def set_intro_table_information(self,headings=None,descriptions=None):
         '''Set file introduction headings and descriptions.'''
-        self.intro_heading_orders = list()
+        self.intro_positions = list()
         self.intro_heading_levels = list() # Not used for this template
         self.intro_heading_titles = list()
         self.intro_descriptions   = list()
@@ -149,7 +149,7 @@ class File2:
                         else: break
                     if self.ready:
                         number_headings = len(headings)
-                        self.intro_heading_orders = list(range(number_headings))
+                        self.intro_positions = list(range(number_headings))
                         self.intro_heading_levels = [1]
                         self.intro_heading_levels.extend([4] * (number_headings - 1))
                 else:
@@ -167,13 +167,13 @@ class File2:
                             'headings: {}'.format(headings) +
                             'descriptions: {}'.format(descriptions))
 
-    def set_section_hdu_names(self,section_title=None,sections=None):
+    def set_section_hdu_titles(self,section_title=None,sections=None):
         '''Get the hdu names from the intro Section.'''
-        self.section_hdu_names = dict() # if no section this stays empty
+        self.section_hdu_titles = dict() # if no section this stays empty
         if self.ready:
             if section_title and sections:
                 hdu_numbers = list()
-                hdu_hdu_names = list()
+                hdu_hdu_titles = list()
                 section_title = str(section_title.string)
                 sections = sections.find_next('ul').find_all('li')
                 for section in sections:
@@ -186,33 +186,33 @@ class File2:
                             hdu_numbers.append(hdu_number)
                         elif string.strip()[0] == ':':
                             name = string.split(':')[1].strip()
-                            hdu_hdu_names.append(name)
-                    if (hdu_numbers and hdu_hdu_names and
-                        len(hdu_numbers)==len(hdu_hdu_names)):
-                        self.section_hdu_names = dict(zip(hdu_numbers,
-                                                          hdu_hdu_names))
+                            hdu_hdu_titles.append(name)
+                    if (hdu_numbers and hdu_hdu_titles and
+                        len(hdu_numbers)==len(hdu_hdu_titles)):
+                        self.section_hdu_titles = dict(zip(hdu_numbers,
+                                                          hdu_hdu_titles))
                     else:
                         self.ready = False
                         self.logger.error(
-                                'Unable to set_section_hdu_names.'      +
+                                'Unable to set_section_hdu_titles.'      +
                                 'hdu_numbers: {}'
                                     .format(hdu_numbers)      +
-                                'section_hdu_names: {}'
-                                    .format(section_hdu_names)          +
+                                'section_hdu_titles: {}'
+                                    .format(section_hdu_titles)          +
                                 'len(hdu_numbers): {}'
                                     .format(len(hdu_numbers)) +
-                                'len(section_hdu_names): {}'
-                                    .format(len(section_hdu_names)))
+                                'len(section_hdu_titles): {}'
+                                    .format(len(section_hdu_titles)))
             else: pass # Do nothing, it is possible to not have a section list
 
 
     def parse_file_hdu(self,div=None):
         '''Parse file hdu content from given division tag.'''
         if self.ready:
-            self.parse_file_hdu_data(div=div)
-            self.parse_file_hdu_header(div=div)
+            self.parse_file_hdu_info(div=div)
+            self.parse_file_hdu(div=div)
 
-    def parse_file_hdu_data(self,div=None):
+    def parse_file_hdu_info(self,div=None):
         '''Parse file description content from given division tag.'''
         if self.ready:
             if div:
@@ -223,7 +223,7 @@ class File2:
                     split = heading.split(':') if heading else None
                     if split:
                         hdu_number   = int(split[0].lower().replace('hdu',''))
-                        header_title = split[1].lower().strip()
+                        hdu_title = split[1].lower().strip()
                     else:
                         self.ready = False
                         self.logger.error("Expected ':' in heading." +
@@ -233,25 +233,25 @@ class File2:
                     rows = header.split('\n') if header else list()
                     rows = [row for row in rows
                             if row and 'XTENSION' in row and 'IMAGE' in row]
-                    data_is_image = bool(rows)
-                    hdu_data = dict()
-                    hdu_data['hdu_number']         = hdu_number
-                    hdu_data['header_title']       = header_title
-                    hdu_data['data_is_image']      = data_is_image
-                    hdu_data['column_datatype']    = None
-                    hdu_data['column_size']        = None
-                    hdu_data['column_description'] = None
-                    self.file_hdu_data.append(hdu_data)
-                    self.hdu_count = len(self.file_hdu_data)
+                    is_image = bool(rows)
+                    hdu_info = dict()
+                    hdu_info['hdu_number']         = hdu_number
+                    hdu_info['hdu_title']       = hdu_title
+                    hdu_info['is_image']           = is_image
+                    hdu_info['column_datatype']    = None
+                    hdu_info['column_size']        = None
+                    hdu_info['column_description'] = None
+                    self.file_hdu_info.append(hdu_info)
+                    self.hdu_count = len(self.file_hdu_info)
 
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_data. ' +
+                self.logger.error('Unable to parse_file_hdu_info. ' +
                                   'div: {}'.format(div))
 
-    def parse_file_hdu_header(self,div=None):
+    def parse_file_hdu(self,div=None):
         '''Parse file description content from given division tag.'''
-        hdu_header = dict()
+        hdu = dict()
         if self.ready:
             if div:
                 self.check_valid_assumptions(div=div)
@@ -270,18 +270,18 @@ class File2:
                             self.set_row_data(row=row)
                             table_rows[row_order] = (self.row_data
                                                      if self.row_data else None)
-                        hdu_header['table_caption']  = table_caption
-                        hdu_header['table_keywords'] = table_keywords
-                        hdu_header['table_rows']     = table_rows
-                        self.file_hdu_headers.append(hdu_header)
+                        hdu['table_caption']  = table_caption
+                        hdu['table_keywords'] = table_keywords
+                        hdu['table_rows']     = table_rows
+                        self.file_hdu_tables.append(hdu)
                     else:
                         self.ready = False
                         self.logger.error(
-                                    'Unable to parse_file_hdu_header. ' +
+                                    'Unable to parse_file_hdu. ' +
                                     'rows: {}'.format(rows))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_header. ' +
+                self.logger.error('Unable to parse_file_hdu. ' +
                                   'header: {}'.format(header))
 
     def check_valid_assumptions(self,div=None):

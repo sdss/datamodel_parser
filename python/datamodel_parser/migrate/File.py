@@ -235,46 +235,46 @@ class File:
         self.intro.parse_file()
         self.hdu.parse_file()
         self.ready = self.ready and self.intro.ready and self.hdu.ready
-        self.intro_heading_orders    = self.intro.intro_heading_orders
-        self.intro_heading_levels    = self.intro.intro_heading_levels
-        self.intro_heading_titles    = self.intro.intro_heading_titles
-        self.intro_descriptions      = self.intro.intro_descriptions
-        self.section_hdu_names       = self.intro.section_hdu_names
-        self.hdu_count         = self.hdu.hdu_count
-        self.file_hdu_data     = self.hdu.file_hdu_data
-        self.file_hdu_headers  = self.hdu.file_hdu_headers
+        self.intro_positions      = self.intro.intro_positions
+        self.intro_heading_levels = self.intro.intro_heading_levels
+        self.intro_heading_titles = self.intro.intro_heading_titles
+        self.intro_descriptions   = self.intro.intro_descriptions
+        self.section_hdu_titles   = self.intro.section_hdu_titles
+        self.hdu_count            = self.hdu.hdu_count
+        self.file_hdu_info        = self.hdu.file_hdu_info
+        self.file_hdu_tables            = self.hdu.file_hdu_tables
 
 #        print('HI File.parse_file()')
-#        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
+#        print('self.intro_positions: {}'.format(self.intro_positions))
 #        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
 #        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 #        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
-#        print('self.section_hdu_names: {}'.format(self.section_hdu_names))
+#        print('self.section_hdu_titles: {}'.format(self.section_hdu_titles))
 #        print('self.hdu_count: {}'.format(self.hdu_count))
-#        print('self.file_hdu_data: \n' + dumps(self.file_hdu_data,indent=1))
-#        print('self.file_hdu_headers: {}'.format(self.file_hdu_headers))
+#        print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
+#        print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
 #        input('pause')
 
 #    def parse_file(self):
 #        '''Parse the given file using the determined File instance.'''
 #        self.file.parse_file()
-#        self.intro_heading_orders    = self.file.intro_heading_orders
+#        self.intro_positions    = self.file.intro_positions
 #        self.intro_heading_levels    = self.file.intro_heading_levels
 #        self.intro_heading_titles    = self.file.intro_heading_titles
 #        self.intro_descriptions      = self.file.intro_descriptions
-#        self.section_hdu_names       = self.file.section_hdu_names
+#        self.section_hdu_titles       = self.file.section_hdu_titles
 #        self.hdu_count         = self.file.hdu_count
-#        self.file_hdu_data     = self.file.file_hdu_data
-#        self.file_hdu_headers  = self.file.file_hdu_headers
+#        self.file_hdu_info     = self.file.file_hdu_info
+#        self.file_hdu_tables  = self.file.file_hdu_tables
 #
-##        print('self.intro_heading_orders: {}'.format(self.intro_heading_orders))
+##        print('self.intro_positions: {}'.format(self.intro_positions))
 ##        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
 ##        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 ##        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
-##        print('self.section_hdu_names: {}'.format(self.section_hdu_names))
+##        print('self.section_hdu_titles: {}'.format(self.section_hdu_titles))
 ##        print('self.hdu_count: {}'.format(self.hdu_count))
-##        print('self.file_hdu_data: \n' + dumps(self.file_hdu_data,indent=1))
-##        print('self.file_hdu_headers: {}'.format(self.file_hdu_headers))
+##        print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
+##        print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
 ##        input('pause')
 
 

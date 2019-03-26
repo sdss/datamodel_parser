@@ -245,8 +245,8 @@ class Migrate:
                     self.populate_intro_table()
                     self.populate_section_table()
                     self.populate_hdu_table()
-                    self.populate_data_table()
-                    self.populate_column_table()
+#                    self.populate_data_table()
+#                    self.populate_column_table()
                     self.populate_header_table()
                     self.populate_keyword_table()
             else:
@@ -428,7 +428,7 @@ class Migrate:
                 self.location_path             and
                 self.file_name                 and
                 self.file                      and
-                self.file.intro_heading_orders and
+                self.file.intro_positions and
                 self.file.intro_heading_levels and
                 self.file.intro_heading_titles and
                 self.file.intro_descriptions
@@ -437,22 +437,22 @@ class Migrate:
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
-                heading_orders = self.file.intro_heading_orders
+                positions = self.file.intro_positions
                 heading_levels = self.file.intro_heading_levels
                 heading_titles = self.file.intro_heading_titles
                 descriptions   = self.file.intro_descriptions
 
-                for (heading_order,
+                for (position,
                      heading_level,
                      heading_title,
                      description) in list(zip(
-                     heading_orders,
+                     positions,
                      heading_levels,
                      heading_titles,
                      descriptions)):
                     if self.ready:
                         self.database.set_intro_columns(
-                                                heading_order = heading_order,
+                                                position = position,
                                                 heading_level = heading_level,
                                                 heading_title = heading_title,
                                                 description   = description)
@@ -466,8 +466,8 @@ class Migrate:
                     'self.env_variable: {}, ' .format(self.env_variable)  +
                     'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
-                    'self.file.intro_heading_orders: {}, '
-                    .format(self.file.intro_heading_orders)                +
+                    'self.file.intro_positions: {}, '
+                    .format(self.file.intro_positions)                +
                     'self.file.intro_heading_levels: {}, '
                     .format(self.file.intro_heading_levels)                +
                     'self.file.intro_heading_titles: {}, '
@@ -484,24 +484,24 @@ class Migrate:
                 self.location_path                and
                 self.file_name                    and
                 self.file                         and
-                self.file.section_hdu_names is not None
+                self.file.section_hdu_titles is not None
                 ):
                 self.database.set_file_id(tree_edition  = self.tree_edition,
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
-                section_hdu_names = self.file.section_hdu_names
-                if section_hdu_names:
-                    for (hdu_number,hdu_name) in section_hdu_names.items():
+                section_hdu_titles = self.file.section_hdu_titles
+                if section_hdu_titles:
+                    for (hdu_number,hdu_title) in section_hdu_titles.items():
                         if self.ready:
                             self.database.set_section_columns(
                                                 hdu_number = int(hdu_number),
-                                                hdu_name   = hdu_name)
+                                                hdu_title   = hdu_title)
                             self.database.populate_section_table()
                             self.ready = self.database.ready
                 else: # the file does not have a section list
                     self.database.set_section_columns(hdu_number = None,
-                                                      hdu_name   = None)
+                                                      hdu_title   = None)
                     self.database.populate_section_table()
                     self.ready = self.database.ready
 
@@ -514,8 +514,8 @@ class Migrate:
                     'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {},'          .format(self.file)          +
-                    'self.file.section_hdu_names: {}.'
-                    .format(self.file.section_hdu_names))
+                    'self.file.section_hdu_titles: {}.'
+                    .format(self.file.section_hdu_titles))
 
     def populate_hdu_table(self):
         '''Populate the hdu table.'''
@@ -525,17 +525,28 @@ class Migrate:
                 self.location_path              and
                 self.file_name                  and
                 self.file                       and
-                self.file.file_hdu_data
+                self.file.file_hdu_info
                 ):
                 self.database.set_file_id(tree_edition  = self.tree_edition,
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
-                for hdu_data in self.file.file_hdu_data:
-                    hdu_number = hdu_data['hdu_number']
-                    self.database.set_hdu_columns(hdu_number=hdu_number)
-                    self.database.populate_hdu_table()
-                    self.ready = self.database.ready
+                for hdu_info in self.file.file_hdu_info:
+                    if self.ready:
+                        is_image     = hdu_info['is_image']
+                        hdu_number   = hdu_info['hdu_number']
+                        hdu_title = hdu_info['hdu_title']
+                        size         = hdu_info['column_size']
+                        description  = hdu_info['column_description']
+                        self.database.set_hdu_columns(
+                                                    is_image     = is_image,
+                                                    number       = hdu_number,
+                                                    title        = hdu_title,
+                                                    size         = size,
+                                                    description  = description,
+                                                      )
+                        self.database.populate_hdu_table()
+                        self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
@@ -545,8 +556,8 @@ class Migrate:
                     'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}'           .format(self.file)          +
-                    'self.file.file_hdu_data: {}'
-                    .format(self.file.file_hdu_data)
+                    'self.file.file_hdu_info: {}'
+                    .format(self.file.file_hdu_info)
                     )
 
     def populate_data_table(self):
@@ -557,21 +568,22 @@ class Migrate:
                 self.location_path              and
                 self.file_name                  and
                 self.file                       and
-                self.file.file_hdu_data
+                self.file.file_hdu_info
                 ):
-                for hdu_data in self.file.file_hdu_data:
+                for hdu_info in self.file.file_hdu_info:
                     if self.ready:
-                        hdu_number = hdu_data['hdu_number']
-                        is_image   = hdu_data['data_is_image']
-                        self.database.set_hdu_id(
+                        hdu_number = hdu_info['hdu_number']
+                        is_image   = hdu_info['is_image']
+                        if not is_image:
+                            self.database.set_hdu_id(
                                             tree_edition  = self.tree_edition,
                                             env_variable  = self.env_variable,
                                             location_path = self.location_path,
                                             file_name     = self.file_name,
                                             hdu_number    = hdu_number)
-                        self.database.set_data_columns(is_image=is_image)
-                        self.database.populate_data_table()
-                        self.ready = self.database.ready
+                            self.database.set_data_columns(is_image=is_image)
+                            self.database.populate_data_table()
+                            self.ready = self.database.ready
             else:
                 self.ready = False
                 self.logger.error(
@@ -581,8 +593,8 @@ class Migrate:
                     'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}'           .format(self.file)          +
-                    'self.file.file_hdu_data: {}'
-                    .format(self.file.file_hdu_data)
+                    'self.file.file_hdu_info: {}'
+                    .format(self.file.file_hdu_info)
                     )
 
     def populate_column_table(self):
@@ -593,15 +605,15 @@ class Migrate:
                 self.location_path              and
                 self.file_name                  and
                 self.file                       and
-                self.file.file_hdu_data
+                self.file.file_hdu_info
                 ):
-                for hdu_data in self.file.file_hdu_data:
+                for hdu_info in self.file.file_hdu_info:
                     if self.ready:
-                        hdu_number   = hdu_data['hdu_number']
-                        header_title = hdu_data['header_title']
-                        datatype     = hdu_data['column_datatype']
-                        size         = hdu_data['column_size']
-                        description  = hdu_data['column_description']
+                        hdu_number   = hdu_info['hdu_number']
+                        hdu_title = hdu_info['hdu_title']
+                        datatype     = hdu_info['column_datatype']
+                        size         = hdu_info['column_size']
+                        description  = hdu_info['column_description']
                         self.database.set_data_id(
                                             tree_edition  = self.tree_edition,
                                             env_variable  = self.env_variable,
@@ -609,7 +621,7 @@ class Migrate:
                                             file_name     = self.file_name,
                                             hdu_number    = hdu_number)
                         self.database.set_column_columns(
-                                                    header_title = header_title,
+                                                    hdu_title = hdu_title,
                                                     datatype     = datatype,
                                                     size         = size,
                                                     description  = description)
@@ -624,49 +636,53 @@ class Migrate:
                     'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}'           .format(self.file)          +
-                    'self.file.file_hdu_data: {}'
-                    .format(self.file.file_hdu_data)
+                    'self.file.file_hdu_info: {}'
+                    .format(self.file.file_hdu_info)
                     )
 
     def populate_header_table(self):
         '''Populate the header table.'''
         if self.ready:
-            if (self.tree_edition                   and
-                self.env_variable                   and
-                self.location_path                  and
-                self.file_name                      and
-                self.file                           and
-                self.file.file_hdu_data       and
-                self.file.file_hdu_headers
+            if (self.tree_edition           and
+                self.env_variable           and
+                self.location_path          and
+                self.file_name              and
+                self.file                   and
+                self.file.file_hdu_info     and
+                self.file.file_hdu_tables
                 ):
-                data    = self.file.file_hdu_data
-                headers = self.file.file_hdu_headers
+                hdu_info = self.file.file_hdu_info
+                hdu_tables = self.file.file_hdu_tables
 
-                if len(data) == len(headers):
-                    for (hdu_data,hdu_header) in list(zip(data,headers)):
+                if len(hdu_info) == len(hdu_tables):
+                    for (hdu_info,hdu_tables) in list(zip(hdu_info,hdu_tables)):
                         if self.ready:
-                            hdu_number    = hdu_data['hdu_number']
-                            header_title  = hdu_data['header_title']
-                            table_caption = hdu_header['table_caption']
-                            self.database.set_hdu_id(
-                                            tree_edition  = self.tree_edition,
-                                            env_variable  = self.env_variable,
-                                            location_path = self.location_path,
-                                            file_name     = self.file_name,
-                                            hdu_number    = hdu_number)
-                            self.database.set_header_columns(
-                                                hdu_number    = hdu_number,
-                                                title         = header_title,
-                                                table_caption = table_caption)
-                            self.database.populate_header_table()
-                            self.ready = self.database.ready
+                            if len(hdu_tables) == 1: hdu_table = hdu_tables[0]
+                            else:
+                                for hdu_table in hdu_tables:
+                                    if hdu_table['is_header']: break
+                            if hdu_table['is_header']:
+                                hdu_number = hdu_info['hdu_number']
+                                hdu_title  = hdu_info['hdu_title']
+                                table_caption = hdu_table['table_caption']
+                                self.database.set_hdu_id(
+                                                tree_edition  = self.tree_edition,
+                                                env_variable  = self.env_variable,
+                                                location_path = self.location_path,
+                                                file_name     = self.file_name,
+                                                hdu_number    = hdu_number)
+                                self.database.set_header_columns(
+                                                    hdu_number    = hdu_number,
+                                                    table_caption = table_caption)
+                                self.database.populate_header_table()
+                                self.ready = self.database.ready
                 else:
                     self.ready = None
                     self.logger.error(
                             'Unable to populate_header_table. ' +
                             'Data and header lists have unequal length. ' +
-                            'len(data): {}, '.format(len(data)) +
-                            'len(headers): {}, '.format(len(headers)))
+                            'len(hdu_info): {}, '.format(len(hdu_info)) +
+                            'len(hdu_tables): {}, '.format(len(hdu_tables)))
                             
             else:
                 self.ready = False
@@ -677,51 +693,57 @@ class Migrate:
                     'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}'           .format(self.file)          +
-                    'self.file.file_hdu_data: {}'
-                    .format(self.file.file_hdu_data)                 +
-                    'self.file.file_hdu_headers: {}'
-                    .format(self.file.file_hdu_headers)
+                    'self.file.file_hdu_info: {}'
+                    .format(self.file.file_hdu_info)                 +
+                    'self.file.file_hdu_tables: {}'
+                    .format(self.file.file_hdu_tables)
                     )
 
     def populate_keyword_table(self):
         '''Populate the keyword table.'''
         if self.ready:
-            if (self.tree_edition                   and
-                self.env_variable                   and
-                self.location_path                  and
-                self.file_name                      and
-                self.file                           and
-                self.file.file_hdu_data       and
-                self.file.file_hdu_headers
+            if (self.tree_edition           and
+                self.env_variable           and
+                self.location_path          and
+                self.file_name              and
+                self.file                   and
+                self.file.file_hdu_info     and
+                self.file.file_hdu_tables
                 ):
-                data    = self.file.file_hdu_data
-                headers = self.file.file_hdu_headers
-                if len(data) == len(headers):
-                    for (hdu_data,hdu_header) in list(zip(data,headers)):
+                hdu_info = self.file.file_hdu_info
+                hdu_tables = self.file.file_hdu_tables
+
+                if len(hdu_info) == len(hdu_tables):
+                    for (hdu_info,hdu_tables) in list(zip(hdu_info,hdu_tables)):
                         if self.ready:
-                            hdu_number     = hdu_data['hdu_number']
-                            self.database.set_header_id(
-                                            tree_edition  = self.tree_edition,
-                                            env_variable  = self.env_variable,
-                                            location_path = self.location_path,
-                                            file_name     = self.file_name,
-                                            hdu_number    = hdu_number)
-                            table_keywords = hdu_header['table_keywords']
-                            table_rows   = hdu_header['table_rows']
-                            for position in table_rows.keys():
-                                if self.ready:
-                                    self.database.set_keyword_columns(
-                                        position = position,
-                                        table_row     = table_rows[position])
-                                    self.database.populate_keyword_table()
-                                    self.ready = self.database.ready
+                            if len(hdu_tables) == 1: hdu_table = hdu_tables[0]
+                            else:
+                                for hdu_table in hdu_tables:
+                                    if hdu_table['is_header']: break
+                            if hdu_table['is_header']:
+                                hdu_number = hdu_info['hdu_number']
+                                self.database.set_header_id(
+                                                tree_edition  = self.tree_edition,
+                                                env_variable  = self.env_variable,
+                                                location_path = self.location_path,
+                                                file_name     = self.file_name,
+                                                hdu_number    = hdu_number)
+                                table_keywords = hdu_table['table_keywords']
+                                table_rows     = hdu_table['table_rows']
+                                for position in table_rows.keys():
+                                    if self.ready:
+                                        self.database.set_keyword_columns(
+                                            position  = position,
+                                            table_row = table_rows[position])
+                                        self.database.populate_keyword_table()
+                                        self.ready = self.database.ready
                 else:
                     self.ready = None
                     self.logger.error(
                             'Unable to populate_keyword_table. ' +
                             'Data and header lists have unequal length. ' +
-                            'len(data): {}, '.format(len(data)) +
-                            'len(headers): {}, '.format(len(headers)))
+                            'len(hdu_info): {}, '.format(len(hdu_info)) +
+                            'len(hdu_tables): {}, '.format(len(hdu_tables)))
                 
             else:
                 self.ready = False
@@ -732,10 +754,10 @@ class Migrate:
                     'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}'           .format(self.file)          +
-                    'self.file.file_hdu_data: {}'
-                    .format(self.file.file_hdu_data)                 +
-                    'self.file.file_hdu_headers: {}'
-                    .format(self.file.file_hdu_headers)
+                    'self.file.file_hdu_info: {}'
+                    .format(self.file.file_hdu_info)                 +
+                    'self.file.file_hdu_tables: {}'
+                    .format(self.file.file_hdu_tables)
                     )
 
     def exit(self):
