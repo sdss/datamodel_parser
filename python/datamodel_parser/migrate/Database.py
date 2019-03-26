@@ -1115,33 +1115,36 @@ class Database:
                 self.logger.error('Unable to create_hdu_row. ' +
                                   'columns: {}.'.format(columns))
 
-    def set_data_columns(self,is_image=None):
+    def set_data_columns(self,hdu_number=None,table_caption=None):
         '''Set columns of the data table.'''
         self.data_columns = dict()
         if self.ready:
             hdu_id = self.hdu_id if self.hdu_id else None
-            if hdu_id: # is_image can be None:
+            if hdu_id and hdu_number is not None:
                 self.data_columns = {
-                    'hdu_id' : hdu_id
-                                        if hdu_id         else None,
-                    'is_image'     : is_image
-                                        if is_image is not None else None,
+                    'hdu_id'  : hdu_id  if hdu_id
+                                                    else None,
+                    'hdu_number'    : hdu_number    if hdu_number is not None
+                                                    else None,
+                    'table_caption' : table_caption if table_caption is not None
+                                                    else None,
                     }
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to set_data_columns. ' +
                     'hdu_id: {}, '.format(hdu_id) +
-                    'is_image: {}, '.format(is_image))
+                    'hdu_number: {}, '.format(hdu_number) +
+                    'table_caption: {}, '.format(table_caption))
 
     def populate_data_table(self):
         '''Update/Create data table row.'''
         if self.ready:
             self.set_data()
             if self.data: self.update_data_row()
-            else:         self.create_data_row()
+            else:           self.create_data_row()
 
-    def set_data(self,hdu_id=None):
+    def set_data(self,hdu_id=None,hdu_number=None):
         '''Load row from data table.'''
         self.data = None
         if self.ready:
@@ -1149,9 +1152,13 @@ class Database:
                 else self.data_columns['hdu_id']
                 if self.data_columns and 'hdu_id' in self.data_columns
                 else None)
-            if hdu_id:
+            hdu_number = (hdu_number if hdu_number is not None
+                else self.data_columns['hdu_number']
+                if self.data_columns and 'hdu_number' in self.data_columns
+                else None)
+            if hdu_id and hdu_number is not None:
                 self.data = (Data.load(hdu_id=hdu_id)
-                             if hdu_id else None)
+                               if hdu_id else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_data. ' +
@@ -1167,12 +1174,13 @@ class Database:
                                                    dumps(columns,indent=1))
                 skip_keys = []
                 self.data.update_if_needed(columns=columns,
-                                                skip_keys=skip_keys)
+                                             skip_keys=skip_keys)
                 if self.data.updated:
                     self.logger.info(
                         'Updated Data[id={}], '.format(self.data.id) +
                         'hdu_id: {}, '.format(self.data.hdu_id) +
-                        'is_image: {}.'.format(self.data.is_image))
+                        'hdu_number: {}.'.format(self.data.hdu_number) +
+                        'table_caption: {}.'.format(self.data.table_caption))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_data_row. ' +
@@ -1189,8 +1197,10 @@ class Database:
                 data = Data(
                     hdu_id = columns['hdu_id']
                         if columns and 'hdu_id' in columns else None,
-                    is_image = columns['is_image']
-                        if columns and 'is_image' in columns else None,
+                    hdu_number = columns['hdu_number']
+                        if columns and 'hdu_number' in columns else None,
+                    table_caption = columns['table_caption']
+                        if columns and 'table_caption' in columns else None,
                                   )
                 if data:
                     data.add()
@@ -1198,7 +1208,7 @@ class Database:
                     self.logger.info(
                         'Added Data[id={}], '.format(data.id) +
                         'hdu_id: {}, '.format(data.hdu_id) +
-                        'is_image: {}.'.format(data.is_image))
+                        'hdu_number: {}.'.format(data.hdu_number))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_data_row. ' +
