@@ -28,5 +28,8 @@ File Type 2)
         
 File Type 3)
     parse_html --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html -l debug -v
+
+File Type 4)
+    parse_html --path datamodel/files/MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html -l debug -v
 '''
 

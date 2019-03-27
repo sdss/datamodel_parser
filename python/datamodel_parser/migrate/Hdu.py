@@ -103,7 +103,7 @@ class Hdu:
                 else:
                     self.ready = False
                     self.logger.error('Unexpected child_names encountered ' +
-                                      'in parse_file_hdu_div.')
+                                      'in Hdu.parse_file_hdu_div().')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_div. ' +
@@ -197,24 +197,12 @@ class Hdu:
         if div:
             assumptions = True
             child_names = self.util.get_child_names(node=div)
-            # Assume child_names.count('h2') == 1
-            if child_names.count('h2') != 1:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('h2') == 1")
-            # Assume child_names.count('p') == 1
-            if child_names.count('p') != 1:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('p') == 1")
-            # Assume child_names.count('dl') == 1
-            if child_names.count('dl') != 1:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('dl') == 1")
-            # Assume child_names.count('table') == 1 or child_names.count('table') == 2
-            if not (child_names.count('table') == 1 or child_names.count('table') == 2):
+            if not (child_names == ['h2','p','dl','table'] or
+                    child_names == ['h2','p','dl','table','table']):
                 assumptions = False
                 self.logger.error("Invalid assumption: " +
-                    "child_names.count('table') == 1 or " +
-                    "child_names.count('table') == 2")
+                                  "child_names == ['h2','p','dl','table'] or " +
+                                  "child_names == ['h2','p','dl','table','table']")
             # h2 tag assumptions
             # Assume 'HDUn: HduTitle' is the h2 heading for some digit n
             h2 = div.find_next('h2')
@@ -230,14 +218,10 @@ class Hdu:
             # dl tag assumptions
             dl = div.find_next('dl')
             child_names = self.util.get_child_names(node=dl)
-            # Assume child_names.count('dt') == 2
-            if child_names.count('dt') != 2:
+            if not child_names == ['dt','dd','dt','dd']:
                 assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('dt') == 2")
-            # Assume child_names.count('dd') == 2
-            if child_names.count('dd') != 2:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('dd') == 2")
+                self.logger.error("Invalid assumption: " +
+                                  "child_names == ['dt','dd','dt','dd']")
             # dt tags assumptions
             dts = dl.find_all('dt')
             dts_strings = list()
@@ -255,25 +239,16 @@ class Hdu:
             # table tag assumptions
             table = div.find_next('table')
             child_names = self.util.get_child_names(node=table)
-            # Assume child_names.count('caption') == 1
-            if child_names.count('caption') != 1:
+            if not child_names == ['caption','thead','tbody']:
                 assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('caption') == 1")
-            # Assume child_names.count('thead') == 1
-            if child_names.count('thead') != 1:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('thead') == 1")
-            # Assume child_names.count('tbody') == 1
-            if child_names.count('tbody') != 1:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('tbody') == 1")
+                self.logger.error("Invalid assumption: " +
+                                  "child_names == ['caption','thead','tbody']")
             # thead tag assumptions
             thead = table.find_next('thead')
             child_names = self.util.get_child_names(node=thead)
-            # Assume child_names.count('tr') == 1
-            if child_names.count('tr') != 1:
+            if not child_names == ['tr']:
                 assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('tr') == 1")
+                self.logger.error("Invalid assumption: child_names == ['tr']")
             # Asume all children of the <ul> tag are <th> tags
             tr = thead.find_next('tr')
             if not self.util.children_all_one_tag_type(node=tr,tag_name='th'):
