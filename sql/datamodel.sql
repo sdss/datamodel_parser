@@ -79,7 +79,7 @@ CREATE TABLE sdss.section (
 CREATE TABLE sdss.hdu (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
-    is_image BOOLEAN NOT NULL DEFAULT FALSE,
+    is_image BOOLEAN,
     number INT2 NOT NULL,
     title VARCHAR(32) NOT NULL,
     size VARCHAR(32),

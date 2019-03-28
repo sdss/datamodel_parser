@@ -274,10 +274,10 @@ class File1:
                     self.ready = False
                     self.logger.error("Expected ':' in heading")
                 
-                # column.description
-                column_description = div.find_next('p').string
+                # hdu.description
+                hdu_description = div.find_next('p').string
 
-                # data.is_image, column.datatype, column.size
+                # data.is_image, hdu.datatype, hdu.size
                 data = div.find_next('dl')
                 dt = data.find_all('dt')
                 dd = data.find_all('dd')
@@ -288,17 +288,16 @@ class File1:
                 for description in dd:
                     descriptions.append(description.string.lower())
                 for (definition,description) in list(zip(definitions,descriptions)):
-                    if 'type' in definition: column_datatype = description
-                    if 'size' in definition: column_size     = description
+                    if 'type' in definition: datatype = description
+                    if 'size' in definition: hdu_size     = description
                 is_image = bool('image' in descriptions)
                 
                 hdu_info = dict()
-                hdu_info['hdu_number']         = hdu_number
+                hdu_info['hdu_number']      = hdu_number
                 hdu_info['hdu_title']       = hdu_title
-                hdu_info['is_image']           = is_image
-                hdu_info['column_datatype']    = column_datatype
-                hdu_info['column_size']        = column_size
-                hdu_info['column_description'] = column_description
+                hdu_info['is_image']        = is_image
+                hdu_info['hdu_size']        = hdu_size
+                hdu_info['hdu_description'] = hdu_description
                 self.file_hdu_info.append(hdu_info)
                 self.hdu_count = len(self.file_hdu_info)
             else:

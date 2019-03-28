@@ -145,8 +145,7 @@ class Util:
 
     def get_hdu_number_and_hdu_title(self,node=None,header_tag_name=None):
         '''Get hdu.hdu_number and header.title from BeautifulSoup node.'''
-        hdu_number = None
-        hdu_title = None
+        (hdu_number,hdu_title) = (None,None)
         if self.ready:
             if node and header_tag_name:
                 header_tag = node.find_next(header_tag_name)

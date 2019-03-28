@@ -88,9 +88,10 @@ class Database:
                                                hdu.title if hdu else None)
                     hdu_info_dict[hdu.number]['hdu_description'] = (
                                                hdu.description if hdu else None)
-                    hdu_info_dict[hdu.number]['hdu_type'] = (
-                                                'IMAGE' if hdu.is_image
-                                                        else 'BINARY TABLE')
+                    hdu_info_dict[hdu.number]['hdu_datatype'] = (
+                                'IMAGE' if hdu.is_image else
+                                'BINARY TABLE' if hdu.is_image is not None
+                                else None)
                     hdu_info_dict[hdu.number]['hdu_size'] = (
                                                hdu.size if hdu else None)
                     # header and data tables
@@ -1017,13 +1018,13 @@ class Database:
         self.hdu_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            if file_id and is_image is not None and number is not None and title:
+            if file_id and number is not None and title:
                 # size and description can be null
                 self.hdu_columns = {
                     'file_id'      : file_id
                                         if file_id              else None,
                     'is_image'     : is_image
-                                        if is_image is not None else None,
+                                        if is_image             else None,
                     'number'       : number
                                         if number   is not None else None,
                     'title'        : title

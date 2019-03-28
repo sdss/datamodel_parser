@@ -406,7 +406,7 @@ class Hdu(db.Model):
     file_id = db.Column(db.Integer,
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
-    is_image = db.Column(db.Boolean, nullable = False, default = False)
+    is_image = db.Column(db.Boolean)
     number = db.Column(db.Integer, nullable = False)
     title = db.Column(db.String(32), nullable = False)
     size = db.Column(db.String(32))

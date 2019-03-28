@@ -14,9 +14,9 @@
 {% for hdu_number in hdu_info_dict.keys() -%}
 ## HDU{{hdu_number}}: {{hdu_info_dict[hdu_number]['hdu_title'].upper()}}
 {{hdu_info_dict[hdu_number]['hdu_description'] or ''}}
-{% if hdu_info_dict[hdu_number]['hdu_type'] %}
+{% if hdu_info_dict[hdu_number]['hdu_datatype'] %}
 ### HDU Type
-{{hdu_info_dict[hdu_number]['hdu_type']}}
+{{hdu_info_dict[hdu_number]['hdu_datatype']}}
 {% endif %}
 {% if hdu_info_dict[hdu_number]['hdu_size'] %}
 ### HDU Size
@@ -37,7 +37,7 @@
 | **Name** | **Type** | **Unit** | **Description** |
 | :--- | :----- | :---- | :------- |
 {% for column in hdu_info_dict[hdu_number]['data_table']['columns'] -%}
-| **{{column.name or '\t\t'}}** | {{column.datatype or '\t\t'}} | {{column.units or '\t\t'}} | {{column.description or '\t\t'}} |
+| **{{column.name or '\t\t'}}** | {{hdu.datatype or '\t\t'}} | {{column.units or '\t\t'}} | {{column.description or '\t\t'}} |
 {% endfor %}
 {% endif %}
 {% endfor %}

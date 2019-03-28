@@ -52,7 +52,7 @@ class Intro:
         self.intro_heading_levels = list()
         self.intro_heading_titles = list()
         self.intro_descriptions   = list()
-        self.section_hdu_titles    = dict()
+        self.section_hdu_titles   = dict()
         if self.ready:
             if self.body:
                 # process different intro types
@@ -184,11 +184,12 @@ class Intro:
                 # page intro
                 dl = self.intro_div.find_next('dl')
                 (titles,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
+                # extract section list if present
                 for dd in dl.find_all('dd'): pass # get last dd in dl
                 child_names = self.util.get_child_names(node=dd)
-                if child_names == ['ul']: # Section list in last dd
-                    titles.pop()
-                    descriptions.pop()
+                if child_names == ['ul']: # section list in last dd
+                    titles.pop()       # remove section title
+                    descriptions.pop() # remove section list
                     self.parse_section(node=dd)
                 self.intro_heading_titles.extend(titles)
                 self.intro_descriptions.extend(descriptions)
@@ -375,6 +376,7 @@ class Intro:
                         "Invalid assumption: " +
                         "children_all_one_tag_type(node=ul,tag_name='li') == True")
             # li assumptions
+            # Assume the only child of each <li> tag is an <a> tag
             lis = ul.find_all('li')
             for li in lis:
                 child_names = self.util.get_child_names(node=li)

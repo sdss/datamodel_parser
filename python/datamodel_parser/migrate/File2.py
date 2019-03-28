@@ -235,12 +235,11 @@ class File2:
                             if row and 'XTENSION' in row and 'IMAGE' in row]
                     is_image = bool(rows)
                     hdu_info = dict()
-                    hdu_info['hdu_number']         = hdu_number
+                    hdu_info['hdu_number']      = hdu_number
                     hdu_info['hdu_title']       = hdu_title
-                    hdu_info['is_image']           = is_image
-                    hdu_info['column_datatype']    = None
-                    hdu_info['column_size']        = None
-                    hdu_info['column_description'] = None
+                    hdu_info['is_image']        = is_image
+                    hdu_info['hdu_size']        = None
+                    hdu_info['hdu_description'] = None
                     self.file_hdu_info.append(hdu_info)
                     self.hdu_count = len(self.file_hdu_info)
 

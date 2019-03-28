@@ -69,6 +69,15 @@ class Hdu:
                         self.ready = False
                         self.logger.error('Unexpected intro type encountered ' +
                                           'in parse_file.')
+                if len(self.file_hdu_info) == len(self.file_hdu_tables):
+                    self.hdu_count = len(self.file_hdu_info)
+                else:
+                    self.ready = False
+                    self.logger.error(
+                        'Unable to parse_file. ' +
+                        'len(self.file_hdu_info) != len(self.file_hdu_tables). ' +
+                        'len(self.file_hdu_info): {}, '.format(len(self.file_hdu_info)) +
+                        'len(self.file_hdu_tables): {}.'.format(len(self.file_hdu_tables)))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. ' +
@@ -115,31 +124,28 @@ class Hdu:
             assumptions = self.verify_assumptions_parse_file_h2_p_dl_table(div=div)
             if div and assumptions:
                 # hdu.hdu_number and header.title
-                (hdu_number,hdu_title) = (
-                    self.util.get_hdu_number_and_hdu_title(
-                                                        node=div,
-                                                        header_tag_name='h2'))
-                # column.description
+                (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
+                                            node=div,header_tag_name='h2'))
+                # hdu.description
                 p = div.find_next('p')
-                column_description = self.util.get_string(node=p)
+                hdu_description = self.util.get_string(node=p)
                 
-                # data.is_image, column.datatype, column.size
+                # data.is_image and hdu.size
                 dl = div.find_next('dl')
                 (definitions,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
                 for (definition,description) in list(zip(definitions,descriptions)):
-                    if 'hdu type' in definition.lower(): column_datatype = description
-                    if 'hdu size' in definition.lower(): column_size     = description
-                is_image = bool('image' in [x.lower() for x in descriptions])
+                    if 'hdu type' in definition.lower(): datatype = description
+                    if 'hdu size' in definition.lower(): hdu_size = description
+                is_image = bool('image' == datatype.lower())
 
+                # put it all together
                 hdu_info = dict()
-                hdu_info['is_image']           = is_image
-                hdu_info['hdu_number']         = hdu_number
-                hdu_info['hdu_title']          = hdu_title
-                hdu_info['column_size']        = column_size
-                hdu_info['column_description'] = column_description
-                hdu_info['column_datatype']    = column_datatype
+                hdu_info['is_image']        = is_image
+                hdu_info['hdu_number']      = hdu_number
+                hdu_info['hdu_title']       = hdu_title
+                hdu_info['hdu_size']        = hdu_size
+                hdu_info['hdu_description'] = hdu_description
                 self.file_hdu_info.append(hdu_info)
-                self.hdu_count = len(self.file_hdu_info)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_h2_p_dl_table. ' +
@@ -155,36 +161,46 @@ class Hdu:
             assumptions = self.verify_assumptions_parse_file_h2_p_dl_table(div=div)
             if div and assumptions:
                 tables = div.find_all('table')
-                for table in tables:
-                    hdu_table = dict()
-                    # table caption
-                    caption = table.find_next('caption')
-                    table_caption = self.util.get_string(node=caption)
-                    # table_column_names
-                    ths = table.find_next('thead').find_next('tr').find_all('th')
-                    table_column_names = list()
-                    for th in [th for th in ths
-                               if not self.util.get_string(node=th).isspace()]:
-                        column_name = self.util.get_string(node=th)
-                        table_column_names.append(column_name)
-                    # table keyword/values
-                    trs = table.find_next('tbody').find_all('tr')
-                    table_rows = dict()
-                    for (position,tr) in enumerate(trs):
-                        table_row = list()
-                        for td in tr.find_all('td'):
-                            string = self.util.get_string(node=td)
-                            table_row.append(string)
-                        table_rows[position]  = table_row
-                    # Put it all together
-                    s = set([x.lower() for x in table_column_names])
-                    is_header = (s == {'key','value','type','comment'})
-                    hdu_table['is_header']          = is_header
-                    hdu_table['table_caption']      = table_caption
-                    hdu_table['table_column_names'] = table_column_names
-                    hdu_table['table_rows']         = table_rows
-                    hdu_tables.append(hdu_table)
-                self.file_hdu_tables.append(hdu_tables)
+                # double check is_image consistentcy
+                (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
+                                            node=div,header_tag_name='h2'))
+                is_image = self.file_hdu_info[hdu_number]['is_image']
+                if (is_image and len(tables) == 2):
+                    self.ready = False
+                    self.logger.error('Inconsistent is_image.')
+                # parse table(s)
+                else:
+                    for table in tables:
+                        hdu_table = dict()
+                        # table caption
+                        caption = table.find_next('caption')
+                        table_caption = self.util.get_string(node=caption)
+                        # table_column_names
+                        ths = table.find_next('thead').find_next('tr').find_all('th')
+                        table_column_names = list()
+                        for th in [th for th in ths
+                                   if not self.util.get_string(node=th).isspace()]:
+                            column_name = self.util.get_string(node=th)
+                            table_column_names.append(column_name)
+                        # is_header
+                        s = set([x.lower() for x in table_column_names])
+                        is_header = (s == {'key','value','type','comment'})
+                        # table keyword/values
+                        trs = table.find_next('tbody').find_all('tr')
+                        table_rows = dict()
+                        for (position,tr) in enumerate(trs):
+                            table_row = list()
+                            for td in tr.find_all('td'):
+                                string = self.util.get_string(node=td)
+                                table_row.append(string)
+                            table_rows[position]  = table_row
+                        # put it all together
+                        hdu_table['is_header']          = is_header
+                        hdu_table['table_caption']      = table_caption
+                        hdu_table['table_column_names'] = table_column_names
+                        hdu_table['table_rows']         = table_rows
+                        hdu_tables.append(hdu_table)
+                    self.file_hdu_tables.append(hdu_tables)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_tables_h2_p_dl_table. ' +
@@ -192,7 +208,8 @@ class Hdu:
                                   'assumptions: {}.'.format(assumptions))
 
     def verify_assumptions_parse_file_h2_p_dl_table(self,div=None):
-        '''Verify assumptions made in parse_file_hdu_intro_h2_p_dl_table.'''
+        '''Verify assumptions made in parse_file_hdu_intro_h2_p_dl_table
+            and parse_file_hdu_tables_h2_p_dl_table.'''
         assumptions = None
         if div:
             assumptions = True
@@ -288,27 +305,24 @@ class Hdu:
             assumptions = self.verify_assumptions_parse_file_h2_pre(div=div)
             if div and assumptions:
                 # hdu.hdu_number and header.title
-                (hdu_number,hdu_title) = (
-                    self.util.get_hdu_number_and_hdu_title(
-                                                        node=div,
-                                                        header_tag_name='h2'))
+                (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
+                                            node=div,header_tag_name='h2'))
                 # data.is_image
-                header = div.find_next('pre').string
-                rows = header.split('\n') if header else list()
+                pre_string = div.find_next('pre').string
+                rows = pre_string.split('\n') if pre_string else list()
                 image_row = [row for row in rows
-                        if row and 'XTENSION' in row and 'IMAGE' in row]
+                             if row and 'XTENSION' in row and 'IMAGE' in row]
                 is_image = bool(image_row)
-                # combine in a dict
+                is_image = None if not is_image and hdu_number == 0 else is_image
+                
+                # put it all together
                 hdu_info = dict()
-                hdu_info['is_image']           = is_image
-                hdu_info['hdu_number']         = hdu_number
+                hdu_info['is_image']        = is_image
+                hdu_info['hdu_number']      = hdu_number
                 hdu_info['hdu_title']       = hdu_title
-                # This template type has no data
-                hdu_info['column_size']        = None
-                hdu_info['column_description'] = None
-                hdu_info['column_datatype']    = None
+                hdu_info['hdu_size']        = None
+                hdu_info['hdu_description'] = None
                 self.file_hdu_info.append(hdu_info)
-                self.hdu_count = len(self.file_hdu_info)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_h2_pre. ' +
@@ -317,26 +331,30 @@ class Hdu:
 
     def parse_file_hdu_tables_h2_pre(self,div=None):
         '''Parse file hdu data content from given division tag.'''
-        hdu = dict()
-        
+        hdu_tables = list()
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h2_pre(div=div)
             if div and assumptions:
+                hdu_table = dict() # haven't encountered a datatable yet for this template type
                 # table caption
                 table_caption = None
-                # table column headers
+                # table_column_names
                 table_column_names = ['Key','Value','Type','Comment']
-                # table values
+                # is_header
+                is_header = True # haven't encountered a datatable yet for this template type
+                # table keyword/values
                 pre = div.find_next('pre')
                 rows = self.util.get_string(node=pre).split('\n')
                 table_rows = dict()
                 for (position,row) in enumerate(rows):
                     table_rows[position] = self.get_row_data_h2_pre(row=row)
-                # Put it all together
-                hdu['table_caption']  = table_caption
-                hdu['table_column_names'] = table_column_names
-                hdu['table_rows']     = table_rows
-                self.file_hdu_tables.append(hdu)
+                # put it all together
+                hdu_table['is_header']          = is_header
+                hdu_table['table_caption']      = table_caption
+                hdu_table['table_column_names'] = table_column_names
+                hdu_table['table_rows']         = table_rows
+                hdu_tables.append(hdu_table)
+                self.file_hdu_tables.append(hdu_tables)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_tables_h2_pre. ' +
@@ -396,7 +414,8 @@ class Hdu:
         return row_data
 
     def verify_assumptions_parse_file_h2_pre(self,div=None):
-        '''Verify assumptions made in parse_file_hdu_intro_h2_p_dl_table.'''
+        '''Verify assumptions made in parse_file_hdu_intro_h2_pre
+            and parse_file_hdu_tables_h2_pre.'''
         assumptions = None
         if div:
             assumptions = True
@@ -574,13 +593,13 @@ class Hdu:
                     rows = [row for row in rows
                             if row and 'XTENSION' in row and 'IMAGE' in row]
                     is_image = bool(rows)
+                    is_image = None if not is_image and hdu_number == 0 else is_image
                     hdu_info = dict()
-                    hdu_info['is_image']           = is_image
-                    hdu_info['hdu_number']         = hdu_number
+                    hdu_info['is_image']        = is_image
+                    hdu_info['hdu_number']      = hdu_number
                     hdu_info['hdu_title']       = hdu_title
-                    hdu_info['column_size']        = None
-                    hdu_info['column_description'] = None
-                    hdu_info['column_datatype']    = None
+                    hdu_info['hdu_size']        = None
+                    hdu_info['hdu_description'] = None
                     self.file_hdu_info.append(hdu_info)
                     self.hdu_count = len(self.file_hdu_info)
             else:
@@ -607,9 +626,9 @@ class Hdu:
                         self.set_row_data(row=row)
                         table_rows[position] = (self.row_data
                                                  if self.row_data else None)
-                    hdu['table_caption']  = table_caption
+                    hdu['table_caption']      = table_caption
                     hdu['table_column_names'] = table_column_names
-                    hdu['table_rows']     = table_rows
+                    hdu['table_rows']         = table_rows
                     self.file_hdu_tables.append(hdu)
                 else:
                     self.ready = False

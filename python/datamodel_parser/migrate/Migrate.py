@@ -244,8 +244,6 @@ class Migrate:
                     self.populate_intro_table()
                     self.populate_section_table()
                     self.populate_hdu_table()
-#                    self.populate_data_table()
-#                    self.populate_column_table()
                     self.populate_header_and_data_tables()
                     self.populate_keyword_and_column_tables()
             else:
@@ -534,9 +532,9 @@ class Migrate:
                     if self.ready:
                         is_image     = hdu_info['is_image']
                         hdu_number   = hdu_info['hdu_number']
-                        hdu_title = hdu_info['hdu_title']
-                        size         = hdu_info['column_size']
-                        description  = hdu_info['column_description']
+                        hdu_title    = hdu_info['hdu_title']
+                        size         = hdu_info['hdu_size']
+                        description  = hdu_info['hdu_description']
                         self.database.set_hdu_columns(
                                                     is_image     = is_image,
                                                     number       = hdu_number,
@@ -550,86 +548,6 @@ class Migrate:
                 self.ready = False
                 self.logger.error(
                     'Unable to populate_hdu_table. '                 +
-                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
-                    'self.file_name: {}, '    .format(self.file_name)     +
-                    'self.file: {}'           .format(self.file)          +
-                    'self.file.file_hdu_info: {}'
-                    .format(self.file.file_hdu_info)
-                    )
-
-    def populate_data_table(self):
-        '''Populate the data table.'''
-        if self.ready:
-            if (self.tree_edition               and
-                self.env_variable               and
-                self.location_path              and
-                self.file_name                  and
-                self.file                       and
-                self.file.file_hdu_info
-                ):
-                for hdu_info in self.file.file_hdu_info:
-                    if self.ready:
-                        hdu_number = hdu_info['hdu_number']
-                        is_image   = hdu_info['is_image']
-                        if not is_image:
-                            self.database.set_hdu_id(
-                                            tree_edition  = self.tree_edition,
-                                            env_variable  = self.env_variable,
-                                            location_path = self.location_path,
-                                            file_name     = self.file_name,
-                                            hdu_number    = hdu_number)
-                            self.database.set_data_columns(is_image=is_image)
-                            self.database.populate_data_table()
-                            self.ready = self.database.ready
-            else:
-                self.ready = False
-                self.logger.error(
-                    'Unable to populate_data_table. '                 +
-                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
-                    'self.file_name: {}, '    .format(self.file_name)     +
-                    'self.file: {}'           .format(self.file)          +
-                    'self.file.file_hdu_info: {}'
-                    .format(self.file.file_hdu_info)
-                    )
-
-    def populate_column_table(self):
-        '''Populate the column table.'''
-        if self.ready:
-            if (self.tree_edition               and
-                self.env_variable               and
-                self.location_path              and
-                self.file_name                  and
-                self.file                       and
-                self.file.file_hdu_info
-                ):
-                for hdu_info in self.file.file_hdu_info:
-                    if self.ready:
-                        hdu_number   = hdu_info['hdu_number']
-                        hdu_title    = hdu_info['hdu_title']
-                        datatype     = hdu_info['column_datatype']
-                        size         = hdu_info['column_size']
-                        description  = hdu_info['column_description']
-                        self.database.set_data_id(
-                                            tree_edition  = self.tree_edition,
-                                            env_variable  = self.env_variable,
-                                            location_path = self.location_path,
-                                            file_name     = self.file_name,
-                                            hdu_number    = hdu_number)
-                        self.database.set_column_columns(
-                                                    hdu_title = hdu_title,
-                                                    datatype     = datatype,
-                                                    size         = size,
-                                                    description  = description)
-                        self.database.populate_column_table()
-                        self.ready = self.database.ready
-            else:
-                self.ready = False
-                self.logger.error(
-                    'Unable to populate_column_table. '                 +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
                     'self.location_path: {}, '.format(self.location_path) +
