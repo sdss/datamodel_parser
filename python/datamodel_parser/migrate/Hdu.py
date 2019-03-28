@@ -121,10 +121,16 @@ class Hdu:
                 self.logger.error('Unable to parse_file_hdu_div. ' +
                                   'div: {}.'.format(div))
 
-    def parse_file_hdu_intro_h2_p_dl_table(self,div=None):
+    def parse_file_hdu_intro_h2_p_dl_table(self,
+                                           div=None,
+                                           assumptions=None,
+                                           skip_dl=None):
         '''Parse file hdu data content from given division tag.'''
         if self.ready:
-            assumptions = self.verify_assumptions_parse_file_h2_p_dl_table(div=div)
+            assumptions = (
+                assumptions if assumptions is not None
+                else self.verify_assumptions_parse_file_h2_p_dl_table(div=div))
+            skip_dl = skip_dl if skip_dl else False
             if div and assumptions:
                 # hdu.hdu_number and header.title
                 (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
@@ -134,12 +140,18 @@ class Hdu:
                 hdu_description = self.util.get_string(node=p)
                 
                 # data.is_image and hdu.size
-                dl = div.find_next('dl')
-                (definitions,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
-                for (definition,description) in list(zip(definitions,descriptions)):
-                    if 'hdu type' in definition.lower(): datatype = description
-                    if 'hdu size' in definition.lower(): hdu_size = description
-                is_image = bool('image' == datatype.lower())
+                (datatype,hdu_size)=(None,None)
+                if not skip_dl:
+                    dl = div.find_next('dl')
+                    (definitions,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
+                    for (definition,description) in list(zip(definitions,descriptions)):
+                        if 'hdu type' in definition.lower(): datatype = description
+                        if 'hdu size' in definition.lower(): hdu_size = description
+            
+                tables = div.find_all('table')
+                is_image = (     True  if len(tables) == 1
+                            else False if len(tables) == 2
+                            else None)
 
                 # put it all together
                 hdu_info = dict()
@@ -478,7 +490,11 @@ class Hdu:
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h2_p_table(div=div)
             if div and assumptions:
-                pass
+                self.parse_file_hdu_intro_h2_p_dl_table(div=div,
+                                                        assumptions=assumptions,
+                                                        skip_dl=True)
+                print('\nself.file_hdu_info: %r' % self.file_hdu_info)
+                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_h2_p_table. ' +
@@ -492,15 +508,19 @@ class Hdu:
         if div:
             assumptions = True
             child_names = self.util.get_child_names(node=div)
-            if not (child_names == ['h2','p']             or
-                    child_names == ['h2','p'] + ['table'] or
-                    child_names == ['h2','p'] + ['table']*2
-                    ):
+#            print('child_names: %r' % child_names)
+#            input('pause')
+            if not (child_names == ['h2','p']         or
+                    child_names == ['h2','p','table'] or
+                    child_names == ['h2','p','table','table']):
                 assumptions = False
-                self.logger.error("Invalid assumption: child_names == ['h2','pre']")
-            print('child_names: %r'% child_names)
-            print('assumptions: %r'% assumptions)
-            input('pause')
+                self.logger.error("Invalid assumption: " +
+                                "child_names == ['h2','p'] or " +
+                                "child_names == ['h2','p','table'] or " +
+                                "child_names == ['h2','p','table','table']")
+#            print('child_names: %r'% child_names)
+#            print('assumptions: %r'% assumptions)
+#            input('pause')
         else:
             self.ready = False
             self.logger.error(
