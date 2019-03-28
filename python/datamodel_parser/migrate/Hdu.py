@@ -109,6 +109,9 @@ class Hdu:
                 elif child_names == {'h2','pre'}:
                     self.parse_file_hdu_intro_h2_pre(div=div)
                     self.parse_file_hdu_tables_h2_pre(div=div)
+                elif child_names == {'h2','p'} or child_names == {'h2','p','table'}:
+                    self.parse_file_hdu_intro_h2_p_table(div=div)
+#                    self.parse_file_hdu_tables_h2_p_table(div=div)
                 else:
                     self.ready = False
                     self.logger.error('Unexpected child_names encountered ' +
@@ -232,13 +235,18 @@ class Hdu:
                         "Invalid assumption: " +
                         "div.find_next('h2') = 'HDUn: HduTitle', " +
                         "where n is a digit")
-            # dl tag assumptions
+            # dl assumptions
             dl = div.find_next('dl')
             child_names = self.util.get_child_names(node=dl)
-            if not child_names == ['dt','dd','dt','dd']:
+            repeated_dt_dd = False
+            for n in range(1,100):
+                if child_names == ['dt','dd']*n:
+                    repeated_dt_dd = True
+                    break
+            if not repeated_dt_dd:
                 assumptions = False
-                self.logger.error("Invalid assumption: " +
-                                  "child_names == ['dt','dd','dt','dd']")
+                self.logger.error("Invalid assumption: "
+                                  "repeated_dt_dd")
             # dt tags assumptions
             dts = dl.find_all('dt')
             dts_strings = list()
@@ -294,7 +302,7 @@ class Hdu:
             self.logger.error(
                 'Unable to verify_assumptions_parse_file_h2_p_dl_table. ' +
                 'div: {}.'.format(div))
-#        print(assumptions)
+#        print('assumptions: %r' % assumptions)
 #        input('pause')
         if not assumptions: self.ready = False
         return assumptions
@@ -418,14 +426,9 @@ class Hdu:
         if div:
             assumptions = True
             child_names = self.util.get_child_names(node=div)
-            # Assume child_names.count('h2') == 1
-            if child_names.count('h2') != 1:
+            if not child_names == ['h2','pre']:
                 assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('h2') == 1")
-            # Assume child_names.count('pre') == 1
-            if child_names.count('pre') != 1:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names.count('pre') == 1")
+                self.logger.error("Invalid assumption: child_names == ['h2','pre']")
             # h2 tag assumptions
             # Assume 'HDUn: HduTitle' is the h2 heading for some digit n
             h2 = div.find_next('h2')
@@ -465,10 +468,50 @@ class Hdu:
             self.logger.error(
                 'Unable to verify_assumptions_parse_file_h2_pre. ' +
                 'div: {}.'.format(div))
-#        print(assumptions)
+#        print('assumptions: %r' % assumptions)
 #        input('pause')
         if not assumptions: self.ready = False
         return assumptions
+
+    def parse_file_hdu_intro_h2_p_table(self,div=None):
+        '''Parse file hdu data content from given division tag.'''
+        if self.ready:
+            assumptions = self.verify_assumptions_parse_file_h2_p_table(div=div)
+            if div and assumptions:
+                pass
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_hdu_intro_h2_p_table. ' +
+                                  'div: {}, '.format(div) +
+                                  'assumptions: {}.'.format(assumptions))
+
+    def verify_assumptions_parse_file_h2_p_table(self,div=None):
+        '''Verify assumptions made in parse_file_hdu_intro_h2_pre
+            and parse_file_hdu_tables_h2_pre.'''
+        assumptions = None
+        if div:
+            assumptions = True
+            child_names = self.util.get_child_names(node=div)
+            if not (child_names == ['h2','p']             or
+                    child_names == ['h2','p'] + ['table'] or
+                    child_names == ['h2','p'] + ['table']*2
+                    ):
+                assumptions = False
+                self.logger.error("Invalid assumption: child_names == ['h2','pre']")
+            print('child_names: %r'% child_names)
+            print('assumptions: %r'% assumptions)
+            input('pause')
+        else:
+            self.ready = False
+            self.logger.error(
+                'Unable to verify_assumptions_parse_file_h2_p_table. ' +
+                'div: {}.'.format(div))
+#        print('assumptions: %r' % assumptions)
+#        input('pause')
+        if not assumptions: self.ready = False
+        return assumptions
+
+
 
     def parse_file_h1_p_h3_ul_pre(self):
         '''Parse the HTML of the given BeautifulSoup div tag object with

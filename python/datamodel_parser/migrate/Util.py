@@ -76,10 +76,9 @@ class Util:
 
     def get_child_names(self,node=None):
         '''Set a list of child for the given BeautifulSoup node.'''
-        child_names = None
+        child_names = list()
         if self.ready:
             if node:
-                child_names = list()
                 for child in node.children:
                     if child.name: child_names.append(str(child.name))
             else:
