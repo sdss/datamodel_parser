@@ -505,9 +505,6 @@ IMAGE
 ## HDU11: OBSINFO
 Table detailing exposures combined to create this file
 
-### HDU Type
-BINARY TABLE
-
 
 ### HDU Size
 2 KB

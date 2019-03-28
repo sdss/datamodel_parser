@@ -23,7 +23,7 @@
 {{hdu_info_dict[hdu_number]['hdu_size']}}
 {% endif %}
 {% if hdu_info_dict[hdu_number]['header_table']['keywords'] %}
-            {{hdu_info_dict[hdu_number]['header_table']['caption'] or ''}}
+{{'\t\t'}}{{hdu_info_dict[hdu_number]['header_table']['caption'] or ''}}
 {{'\n'}}
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
@@ -32,12 +32,12 @@
 {% endfor %}
 {% endif %}
 {% if hdu_info_dict[hdu_number]['data_table']['columns'] %}
-            {{hdu_info_dict[hdu_number]['data_table']['caption'] or ''}}
+{{'\t\t'}}{{hdu_info_dict[hdu_number]['data_table']['caption'] or ''}}
 {{'\n'}}
 | **Name** | **Type** | **Unit** | **Description** |
 | :--- | :----- | :---- | :------- |
 {% for column in hdu_info_dict[hdu_number]['data_table']['columns'] -%}
-| **{{column.name or '\t\t'}}** | {{hdu.datatype or '\t\t'}} | {{column.units or '\t\t'}} | {{column.description or '\t\t'}} |
+| **{{column.name or '\t\t'}}** | {{column.datatype or '\t\t'}} | {{column.units or '\t\t'}} | {{column.description or '\t\t'}} |
 {% endfor %}
 {% endif %}
 {% endfor %}

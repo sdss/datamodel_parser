@@ -28,6 +28,10 @@ FITS
 
 
 
+
+		
+
+
 | **Key** | **Value** | **Type** | **Comment** |
 | :--- | :----- | :---- | :------- |
 | **SIMPLE** |                     T | 		 | Primary Header created by MWRFITS v1.11 | 
@@ -35,8 +39,9 @@ FITS
 | **NAXIS** |                     2 | 		 | 		 | 
 | **NAXIS1** |                  2048 | 		 | 		 | 
 | **NAXIS2** |                  2048 | 		 | 		 | 
-| **END** | 		 | 		 | EXT  =                    T /Extensions may be present | 
 | **EXTEND** | 		 | 		 |                     T /Extensions may be present | 
 | **END** | 		 | 		 | 		 | 
+
+
 
 

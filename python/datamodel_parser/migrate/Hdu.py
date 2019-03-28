@@ -347,7 +347,7 @@ class Hdu:
                 rows = self.util.get_string(node=pre).split('\n')
                 table_rows = dict()
                 for (position,row) in enumerate(rows):
-                    table_rows[position] = self.get_row_data_h2_pre(row=row)
+                    table_rows[position] = self.get_table_row_h2_pre(row=row)
                 # put it all together
                 hdu_table['is_header']          = is_header
                 hdu_table['table_caption']      = table_caption
@@ -361,14 +361,14 @@ class Hdu:
                                   'div: {}, '.format(div) +
                                   'assumptions: {}'.format(assumptions))
 
-    def get_row_data_h2_pre(self,row=None):
+    def get_table_row_h2_pre(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
-        row_data = dict()
+        table_row = list()
         if self.ready:
             if row:
                 keyword = None
                 value = None
-                type = None # This is not used in this template type
+                datatype = None # This is not used in this template datatype
                 comment = None
                 value_comment = None
                 # determine keyword
@@ -385,7 +385,7 @@ class Hdu:
                 else:
                     self.ready = False
                     self.logger.error(
-                            'Unable to set_row_data_h2_pre. ' +
+                            'Unable to set_table_row_h2_pre. ' +
                             "The strings 'HISTORY', 'END' and '=' " +
                             'not found in row. ' +
                             'row: {}'.format(row))
@@ -400,18 +400,16 @@ class Hdu:
                         elif '/ '   in value_comment: split_char = '/ '
                         elif '/'    in value_comment: split_char = '/'
                         else:                         split_char = None
-                        split = value_comment.split(split_char) if split_char else None
+                        split   = (value_comment.split(split_char)
+                                   if split_char else None)
                         value   = split[0]         if split else None
                         comment = split[1].strip() if split else None
-                row_data['keyword'] = keyword if keyword else None
-                row_data['value']   = value   if value   else None
-                row_data['type']    = type    if type    else None
-                row_data['comment'] = comment if comment else None
+                table_row = [keyword,value,datatype,comment]
             else:
                 self.ready = False
-                self.logger.error('Unable to get_row_data_h2_pre. ' +
+                self.logger.error('Unable to get_table_row_h2_pre. ' +
                                   'row: {}'.format(row))
-        return row_data
+        return table_row
 
     def verify_assumptions_parse_file_h2_pre(self,div=None):
         '''Verify assumptions made in parse_file_hdu_intro_h2_pre

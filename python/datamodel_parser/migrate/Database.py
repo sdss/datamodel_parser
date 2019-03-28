@@ -77,9 +77,13 @@ class Database:
         if self.ready:
             headers = Header.load_all(hdus=hdus) if hdus else None
             datas   = Data.load_all(hdus=hdus)   if hdus else None
-            if hdus and headers and datas:
+#            print('\nhdus: %r'% hdus)
+#            print('\nheaders: %r'% headers)
+#            print('\ndatas: %r'% datas)
+#            input('pause')
+            if hdus and headers:
                 hdu_info_dict = dict()
-                for hdu in hdus:
+                for hdu in hdus: # datas can be empth
                     hdu_info_dict[hdu.number] = dict()
                     # hdu table information
                     hdu_info_dict[hdu.number]['hdu_number'] = (
@@ -122,9 +126,10 @@ class Database:
 
             else:
                 self.ready = False
-                self.logger.error('Unable to get_hdu_info_dict.' +
-                                  'headers: {}, '.format(headers) +
-                                  'datas: {}.'.format(datas))
+                self.logger.error('Unable to get_hdu_info_dict. ' +
+                                  '\nhdus: {}, '.format(hdus) +
+                                  '\nheaders: {}, '.format(headers) +
+                                  '\ndatas: {}.'.format(datas))
         return hdu_info_dict
 
     def set_tree_id(self,tree_edition=None):
