@@ -77,10 +77,6 @@ class Database:
         if self.ready:
             headers = Header.load_all(hdus=hdus) if hdus else None
             datas   = Data.load_all(hdus=hdus)   if hdus else None
-#            print('\nhdus: %r'% hdus)
-#            print('\nheaders: %r'% headers)
-#            print('\ndatas: %r'% datas)
-#            input('pause')
             if hdus and headers:
                 hdu_info_dict = dict()
                 for hdu in hdus: # datas can be empth
@@ -115,15 +111,6 @@ class Database:
                                     data.table_caption if data else None)
                     hdu_info_dict[hdu.number]['data_table']['columns'] = (
                                     columns if columns else None)
-#
-#                    print('\n hdu.number: %r' % hdu.number)
-#                    print('\n header: \n%r' % header)
-#                    print('\n data: \n%r' % data)
-#                    print('\n keywords: \n%r' % keywords)
-#                    print('\n columns: \n%r' % columns)
-#                    print('\n hdu.number: %r' % hdu.number)
-#                    input('pause')
-
             else:
                 self.ready = False
                 self.logger.error('Unable to get_hdu_info_dict. ' +

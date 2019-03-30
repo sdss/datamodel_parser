@@ -111,7 +111,7 @@ class Hdu:
                     self.parse_file_hdu_tables_h2_pre(div=div)
                 elif child_names == {'h2','p'} or child_names == {'h2','p','table'}:
                     self.parse_file_hdu_intro_h2_p_table(div=div)
-#                    self.parse_file_hdu_tables_h2_p_table(div=div)
+                    self.parse_file_hdu_tables_h2_p_table(div=div)
                 else:
                     self.ready = False
                     self.logger.error('Unexpected child_names encountered ' +
@@ -191,12 +191,8 @@ class Hdu:
                         caption = table.find_next('caption')
                         table_caption = self.util.get_string(node=caption)
                         # table_column_names
-                        ths = table.find_next('thead').find_next('tr').find_all('th')
-                        table_column_names = list()
-                        for th in [th for th in ths
-                                   if not self.util.get_string(node=th).isspace()]:
-                            column_name = self.util.get_string(node=th)
-                            table_column_names.append(column_name)
+                        table_column_names = list(table.find_next('thead')
+                                                       .find_next('tr').strings)
                         # is_header
                         s = set([x.lower() for x in table_column_names])
                         is_header = (s == {'key','value','type','comment'})
@@ -209,6 +205,7 @@ class Hdu:
                                 string = self.util.get_string(node=td)
                                 table_row.append(string)
                             table_rows[position]  = table_row
+                            
                         # put it all together
                         hdu_table['is_header']          = is_header
                         hdu_table['table_caption']      = table_caption
@@ -251,7 +248,7 @@ class Hdu:
             dl = div.find_next('dl')
             child_names = self.util.get_child_names(node=dl)
             repeated_dt_dd = False
-            for n in range(1,100):
+            for n in range(1,20):
                 if child_names == ['dt','dd']*n:
                     repeated_dt_dd = True
                     break
@@ -493,13 +490,72 @@ class Hdu:
                 self.parse_file_hdu_intro_h2_p_dl_table(div=div,
                                                         assumptions=assumptions,
                                                         skip_dl=True)
-                print('\nself.file_hdu_info: %r' % self.file_hdu_info)
-                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_h2_p_table. ' +
                                   'div: {}, '.format(div) +
                                   'assumptions: {}.'.format(assumptions))
+
+    def parse_file_hdu_tables_h2_p_table(self,div=None):
+        '''Parse file hdu keyword/value/type/comment content
+        from given division tag.'''
+        hdu_tables = list()
+        if self.ready:
+            assumptions = self.verify_assumptions_parse_file_h2_p_table(div=div)
+            if div and assumptions:
+                tables = div.find_all('table')
+                # double check is_image consistentcy
+                (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
+                                            node=div,header_tag_name='h2'))
+                is_image = self.file_hdu_info[hdu_number]['is_image']
+                if (is_image and len(tables) == 2):
+                    self.ready = False
+                    self.logger.error('Inconsistent is_image.')
+                # parse table(s)
+                else:
+                    for table in tables:
+                        hdu_table = dict()
+                        # table caption
+                        caption = table.find_next('caption')
+                        table_caption = self.util.get_string(node=caption)
+                        # parse table
+                        trs = [tr for tr in table.find_all('tr')
+                               if not self.util.get_string(node=tr).isspace()]
+                        table_rows = dict()
+                        first_tr = True
+                        for (position,tr) in enumerate(trs):
+                           # table_column_names
+                            if first_tr:
+                                first_tr = False
+                                table_column_names = list(tr.strings)
+                                # is_header
+                                s = set([x.lower() for x in table_column_names])
+                                is_header = (s == {'key','value','type','comment'})
+                            else:
+                                # table keyword/values
+                                table_row = list()
+                                print('tr: %r' % tr)
+                                for td in tr.find_all('td'):
+                                    string = self.util.get_string(node=td)
+                                    table_row.append(string)
+                                table_rows[position - 1]  = table_row
+                                
+                                print('\ntable_row: %r' % table_row)
+                                input('pause')
+
+                                # put it all together
+                                hdu_table['is_header']          = is_header
+                                hdu_table['table_caption']      = table_caption
+                                hdu_table['table_column_names'] = table_column_names
+                                hdu_table['table_rows']         = table_rows
+                                hdu_tables.append(hdu_table)
+                    self.file_hdu_tables.append(hdu_tables)
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_hdu_tables_h2_p_table. ' +
+                                  'div: {}, '.format(div) +
+                                  'assumptions: {}.'.format(assumptions))
+
 
     def verify_assumptions_parse_file_h2_p_table(self,div=None):
         '''Verify assumptions made in parse_file_hdu_intro_h2_pre
@@ -508,8 +564,6 @@ class Hdu:
         if div:
             assumptions = True
             child_names = self.util.get_child_names(node=div)
-#            print('child_names: %r' % child_names)
-#            input('pause')
             if not (child_names == ['h2','p']         or
                     child_names == ['h2','p','table'] or
                     child_names == ['h2','p','table','table']):
@@ -518,9 +572,19 @@ class Hdu:
                                 "child_names == ['h2','p'] or " +
                                 "child_names == ['h2','p','table'] or " +
                                 "child_names == ['h2','p','table','table']")
-#            print('child_names: %r'% child_names)
-#            print('assumptions: %r'% assumptions)
-#            input('pause')
+            if 'table' in child_names:
+                # table tag assumptions
+                table = div.find_next('table')
+                child_names = self.util.get_child_names(node=table)
+                repeated_tr = False
+                for n in range(1,20):
+                    if child_names == ['caption'] + ['tr']*n:
+                        repeated_tr = True
+                        break
+                if not repeated_tr:
+                    assumptions = False
+                    self.logger.error("Invalid assumption: "
+                                      "repeated_tr")
         else:
             self.ready = False
             self.logger.error(

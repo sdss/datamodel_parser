@@ -244,16 +244,16 @@ class File:
         self.file_hdu_info        = self.hdu.file_hdu_info
         self.file_hdu_tables            = self.hdu.file_hdu_tables
 
-        print('HI File.parse_file()')
-        print('self.intro_positions: {}'.format(self.intro_positions))
-        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
-        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
-        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
-        print('self.section_hdu_titles: {}'.format(self.section_hdu_titles))
+#        print('HI File.parse_file()')
+#        print('self.intro_positions: {}'.format(self.intro_positions))
+#        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
+#        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
+#        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
+#        print('self.section_hdu_titles: {}'.format(self.section_hdu_titles))
 #        print('self.hdu_count: {}'.format(self.hdu_count))
 #        print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
 #        print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
-        input('pause')
+#        input('pause')
 
 #    def parse_file(self):
 #        '''Parse the given file using the determined File instance.'''

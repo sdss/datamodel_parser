@@ -157,7 +157,7 @@ class Intro:
             assumptions = True
             child_names = self.util.get_child_names(node=self.intro_div)
             repeated_h4_p = False
-            for n in range(1,100):
+            for n in range(1,20):
                 if child_names == ['h1'] + ['h4','p']*n + ['div']:
                     repeated_dt_dd = True
                     break
@@ -223,7 +223,7 @@ class Intro:
             dl = self.intro_div.find_next('dl')
             child_names = self.util.get_child_names(node=dl)
             repeated_dt_dd = False
-            for n in range(1,100):
+            for n in range(1,20):
                 if child_names == ['dt','dd']*n:
                     repeated_dt_dd = True
                     break
