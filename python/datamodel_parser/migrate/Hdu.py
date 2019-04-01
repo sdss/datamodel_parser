@@ -534,15 +534,14 @@ class Hdu:
                             else:
                                 # table keyword/values
                                 table_row = list()
-                                print('tr: %r' % tr)
+#                                print('tr: %r' % tr)
                                 for td in tr.find_all('td'):
                                     string = self.util.get_string(node=td)
                                     table_row.append(string)
+#                                    print('string: %r' % string)
+#                                    input('pause')
                                 table_rows[position - 1]  = table_row
                                 
-                                print('\ntable_row: %r' % table_row)
-                                input('pause')
-
                                 # put it all together
                                 hdu_table['is_header']          = is_header
                                 hdu_table['table_caption']      = table_caption

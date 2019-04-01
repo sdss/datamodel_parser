@@ -673,7 +673,7 @@ class Column(db.Model):
     position = db.Column(db.Integer, nullable = False)
     name = db.Column(db.String(64), nullable = False)
     datatype = db.Column(db.String(64))
-    units = db.Column(db.String(32))
+    units = db.Column(db.String(64))
     description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
