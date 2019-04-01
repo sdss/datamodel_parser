@@ -35,8 +35,8 @@ mangatarget
 
 
 ## Page Contents
-* [HDU0: THE PRIMARY HEADER](#hdu0-the primary header)
-* [HDU1: MANGA TARGETS DATA TABLE](#hdu1-manga targets data table)
+* [HDU0: THE PRIMARY HEADER](#hdu0-the-primary-header)
+* [HDU1: MANGA TARGETS DATA TABLE](#hdu1-manga-targets-data-table)
 
 ## HDU0: THE PRIMARY HEADER
 This empty HDU has no non-standard required keywords.
@@ -87,6 +87,59 @@ Each row corresponds to a MaNGA target.
 | **NSA_SERSIC_ABSMAG** | float32[7] | mag | Absolute magnitude in the rest-frame GALEX/SDSS FNugriz, from Sersic fluxes (NSA) |
 | **NSA_SERSIC_AMIVAR** | float32[7] | <td>mag<sup>-2</sup> </td> | Inverse variance in SERSIC_ABSMAG (NSA) |
 | **NSA_SERSIC_FLUX** | float32[7] | nanomaggies | Two-dimensional, single-component Sersic fit flux (fit using r-band structural parameters) (NSA) |
+| **NSA_SERSIC_FLUX_IVAR** | float32[7] | <td>nanomaggies<sup>-2</sup> </td> | Inverse variance of SERSICFLUX (NSA) |
+| **NSA_SERSIC_TH50** | float32[1] | arcsec | 50% light radius of two-dimensional, single-component Sersic fit to r-band (NSA) |
+| **NSA_SERSIC_PHI** | float32[1] | deg | Angle (E of N) of major axis in two-dimensional, single-component Sersic fit in r-band (NSA) |
+| **NSA_SERSIC_BA** | float32[1] | 		 | Axis ratio b/a from two-dimensional, single-component Sersic fit in r-band (NSA) |
+| **NSA_SERSIC_N** | float32[1] | 		 | Sersic index from two-dimensional, single-component Sersic fit in r-band (NSA) |
+| **NSA_PETRO_FLUX** | float32[7] | nanomaggies | Azimuthally-averaged SDSS-style Petrosian flux in GALEX/SDSS FNugriz (using r-band aperture) (NSA) |
+| **NSA_PETRO_FLUX_IVAR** | float32[7] | <td>nanomaggies<sup>-2</sup> </td> | Inverse variance of PETROFLUX (NSA) |
+| **NSA_PETRO_FLUX_IVAR** | float32[1] | arcsec | Azimuthally averaged SDSS-style Petrosian 50% light radius (derived from r band) (NSA) |
+| **NSA_EXTINCTION** | float32[7] | mag | Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in GALEX/SDSS FNugriz (NSA) |
+| **NSA_IAUNAME** | char[19] | 		 | IAU-style designation based on RA/Dec (NSA) |
+| **NSA_SUBDIR** | char[27] | 		 | Subdirectory for images in the NSA 'detect' directory (NSA) |
+| **NSA_PID** | int16[1] | 		 | Parent id within mosaic for this object (NSA) |
+| **NSA_NSAID** | int32[1] | 		 | Unique ID within NSA v1 catalog (NSA) |
+| **CATIND** | int32[1] | 		 | Zero-indexed row within the input NSA v1 catalog (NSA) |
+| **MANGA_TARGET1** | int32[1] | 		 | Targeting bitmask for main sample targets |
+| **MANGAID** | char[8] | 		 | Targeting bitmask for main sample targets |
+| **ZMIN** | float32[1] | 		 | The minimum redshift at which the galaxy could still have been included in the Primary sample |
+| **ZMAX** | float32[1] | 		 | The maximum redshift at which the galaxy could still have been included in the Primary sample |
+| **SZMIN** | float32[1] | 		 | The minimum redshift at which the galaxy could still have been included in the Primary sample |
+| **SZMAX** | float32[1] | 		 | The maximum redshift at which the galaxy could still have been included in the Secondary sample |
+| **EZMIN** | float32[1] | 		 | The minimum redshift at which the galaxy could still have been included in the Primary+ sample |
+| **EZMAX** | float32[1] | 		 | The maximum redshift at which the galaxy could still have been included in the Primary+ sample |
+| **PROBS** | float32[1] | 		 | The probability that a Secondary sample galaxy is included after down-sampling. For galaxies not in the Secondary sample PROBS is set to the mean down-sampling probability |
+| **PWEIGHT** | float32[1] | 		 | The volume weight for the Primary sample. Corrects the MaNGA selection to a volume limited sample. |
+| **SWEIGHT** | float32[1] | 		 | The volume weight for the full Secondary sample. Corrects the MaNGA selection to a volume limited sample. |
+| **SRWEIGHT** | float32[1] | 		 | The volume weight for the down-sampled Secondary sample. Corrects the MaNGA selection to a volume limited sample. |
+| **EWEIGHT** | float32[1] | 		 | The volume weight for the Primary+ sample. Corrects the MaNGA selection to a volume limited sample. |
+| **PSRWEIGHT** | float32[1] | 		 | The volume weight for the combined Primary and down-sampled Secondary samples. Corrects the MaNGA selection to a volume limited sample. |
+| **ESRWEIGHT** | float32[1] | 		 | The volume weight for the combined Primary+ and down-sampled Secondary samples. Corrects the MaNGA selection to a volume limited sample. |
+| **PSWEIGHT** | float32[1] | 		 | The volume weight for the combined Primary and full Secondary samples. Corrects the MaNGA selection to a volume limited sample. |
+| **ESWEIGHT** | float32[1] | 		 | The volume weight for the combined Primary+ and full Secondary samples. Corrects the MaNGA selection to a volume limited sample. |
+| **RANFLAG** | bool[1] | 		 | Set to 1 if a target is to be included after random sampling to produce the correct proportions of each sample, otherwise 0 |
+| **MANGA_TILEIDS** | int32[30] | 		 | IDs of all tiles that overlap a galaxy's position |
+| **MANGA_TILEID** | int32[1] | 		 | The ID of the tile to which this object has been allocated |
+| **TILERA** | float64[1] | deg | The Right Ascension (J2000) of the tile to which this object has been allocated |
+| **TILEDEC** | float64[1] | deg | The Declination (J2000) of the tile to which this object has been allocated |
+| **IFUTARGETSIZE** | int16[1] | fibers | The ideal IFU size for this object. The intended IFU size is equal to IFUTargetSize except if IFUTargetSize > 127 when it is 127, or < 19 when it is 19 |
+| **IFUDESIGNSIZE** | int16[1] | fibers | The allocated IFU size (0 = "unallocated") |
+| **IFUDESIGNWRONGSIZE** | int16[1] | fibers | The allocated IFU size if the intended IFU size was not available |
+| **IFU_RA** | float64[1] | deg | The Right Ascension (J2000) of the IFU center |
+| **IFU_DEC** | float64[1] | deg | The Right Declination (J2000) of the IFU center |
+| **BADPHOTFLAG** | bool[1] | 		 | Set to 1 if target has been visually inspected to have bad photometry and should not be observed |
+| **STARFLAG** | bool[1] | 		 | Set to 1 if target lies close to a bright star should not be observed |
+| **OBJECT_RA** | float64[1] | deg | The best estimate of the Right Ascension (J2000) of the center of the object. Normally the same as CATALOG_RA but can be modified particularly as a result of visual inspection |
+| **OBJECT_DEC** | float64[1] | deg | The best estimate of the Declination (J2000) of the center of the object. Normally the same as CATALOG_RA but can be modified particularly as a result of visual inspection |
+| **OBSFLAG** | bool[1] | 		 | Set to 1 if the target has already been included on a plate set to be observed at the time the IFU allocation was made, otherwise 0 |
+| **CATINDANC** | int32[1] | 		 | Zero-indexed row within the applicable ancillary catalog |
+| **IFUDESIGNSIZEMAIN** | int16[1] | fibers | The allocated IFU size prior to the addition of the ancillary samples (0 = "unallocated") |
+| **IFUMINSIZEANC** | int16[1] | fibers | The minimum acceptable IFU size for the ancillary program |
+| **IFUTARGSIZEANC** | int16[1] | fibers | The ideal IFU size for the ancillary program |
+| **MANGA_TARGET3** | int32[1] | 		 | Targeting bitmask for the ancillary samples |
+| **PRIORITYANC** | int32[1] | 		 | The ancillary program's priority for this object |
+| **UNALLOC** | int16[1] | 		 | Set to 1 if an ancillary target has been allocated an IFU that was not allocated to a main sample galaxy, otherwise 0 |
 
 
 

@@ -9,7 +9,7 @@
 {% endfor %}
 ## Page Contents
 {% for hdu_number in hdu_info_dict.keys() -%}
-* [HDU{{hdu_number}}: {{hdu_info_dict[hdu_number]['hdu_title'].upper()}}](#hdu{{hdu_number}}-{{hdu_info_dict[hdu_number]['hdu_title'].lower()}})
+* [HDU{{hdu_number}}: {{hdu_info_dict[hdu_number]['hdu_title'].upper()}}](#hdu{{hdu_number}}-{{hdu_info_dict[hdu_number]['hdu_title'].lower().replace(' ','-')}})
 {% endfor %}
 {% for hdu_number in hdu_info_dict.keys() -%}
 ## HDU{{hdu_number}}: {{hdu_info_dict[hdu_number]['hdu_title'].upper()}}
