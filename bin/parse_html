@@ -13,20 +13,23 @@ if not ready:
     print('Fail! ready: {}'.format(ready))
     exit(1)
 else:
+    migrate.set_tree_edition()
+    migrate.set_html_text()
+    migrate.set_database()
     migrate.populate_database()
     migrate.exit()
 
 '''
 Examples:
 File Type 1)
-    Fail!
     parse_html --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html -l debug -v
 
 File Type 2)
-    parse_html --path datamodel/files/APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap2D.html -l debug -v
-    parse_html --path datamodel/files/APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap2Dmodel.html -l debug -v
+    parse_html --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html -l debug -v
+    parse_html --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html -l debug -v
         
 File Type 3)
+    Fail!
     parse_html --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html -l debug -v
 
 File Type 4)

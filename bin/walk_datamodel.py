@@ -17,7 +17,9 @@ if not ready:
     exit(1)
 else:
     migrate.set_datamodel_dir()
-    
+    print('migrate.datamodel_dir: %r'% migrate.datamodel_dir)
+    input('pause')
+
 
 #    migrate.populate_database()
 #    migrate.exit()

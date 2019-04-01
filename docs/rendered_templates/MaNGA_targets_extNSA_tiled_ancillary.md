@@ -73,27 +73,27 @@ Each row corresponds to a MaNGA target.
 | **CATALOG_RA** | float64[1] | deg | Right Ascension of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries) |
 | **CATALOG_DEC** | float64[1] | deg | Declination of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries) |
 | **NSA_Z** | float32[1] | 		 | Heliocentric redshift (NSA) |
-| **NSA_ZDIST** | float32[1] | 		 | <td>Distance estimate using peculiar velocity model of Willick et al. (1997), expressed as a redshift equivalent; multiply by <var>c/H<sub>0</sub></var> for Mpc (NSA) </td> |
+| **NSA_ZDIST** | float32[1] | 		 | Distance estimate using peculiar velocity model of Willick et al. (1997), expressed as a redshift equivalent; multiply by <var>c/H<sub>0</sub></var> for Mpc (NSA) |
 | **NSA_ELPETRO_MASS** | float32[1] | solar masses | Stellar mass from K-correction fit (use with caution) for elliptical Petrosian fluxes (NSA) |
 | **NSA_ELPETRO_ABSMAG** | float32[7] | mag | Absolute magnitude in the rest-frame GALEX/SDSS FNugriz from elliptical Petrosian fluxes (NSA) |
-| **NSA_ELPETRO_AMIVAR** | float32[7] | <td>mag<sup>-2</sup> </td> | Inverse variance of PETRO_ABSMAG_EL (NSA) |
+| **NSA_ELPETRO_AMIVAR** | float32[7] | mag<sup>-2</sup> | Inverse variance of PETRO_ABSMAG_EL (NSA) |
 | **NSA_ELPETRO_FLUX** | float32[7] | nanomaggies | Elliptical SDSS-style Petrosian flux in GALEX/SDSS FNugriz (using r-band aperture) (NSA) |
-| **NSA_ELPETRO_FLUX_IVAR** | float32[7] | <td>nanomaggies<sup>-2</sup> </td> | Inverse variance of PETROFLUX_EL (NSA) |
+| **NSA_ELPETRO_FLUX_IVAR** | float32[7] | nanomaggies<sup>-2</sup> | Inverse variance of PETROFLUX_EL (NSA) |
 | **NSA_ELPETRO_TH50_R** | float32[1] | arcsec | Elliptical Petrosian 50% light radius in SDSS r-band (NSA) |
 | **NSA_ELPETRO_TH50** | float32[7] | arcsec | Elliptical Petrosian 50% light radius in GALEX/SDSS FNugriz (NSA) |
 | **NSA_ELPETRO_PHI** | float32[1] | deg | Position angle (east of north) used for elliptical apertures (for this version, same as ba90) (NSA) |
 | **NSA_ELPETRO_BA** | float32[1] | 		 | Axis ratio used for elliptical apertures (for this version, same as ba90) (NSA) |
 | **NSA_SERSIC_MASS** | float32[1] | solar masses | Stellar mass from K-correction fit (use with caution) for Sersic fluxes (NSA) |
 | **NSA_SERSIC_ABSMAG** | float32[7] | mag | Absolute magnitude in the rest-frame GALEX/SDSS FNugriz, from Sersic fluxes (NSA) |
-| **NSA_SERSIC_AMIVAR** | float32[7] | <td>mag<sup>-2</sup> </td> | Inverse variance in SERSIC_ABSMAG (NSA) |
+| **NSA_SERSIC_AMIVAR** | float32[7] | mag<sup>-2</sup> | Inverse variance in SERSIC_ABSMAG (NSA) |
 | **NSA_SERSIC_FLUX** | float32[7] | nanomaggies | Two-dimensional, single-component Sersic fit flux (fit using r-band structural parameters) (NSA) |
-| **NSA_SERSIC_FLUX_IVAR** | float32[7] | <td>nanomaggies<sup>-2</sup> </td> | Inverse variance of SERSICFLUX (NSA) |
+| **NSA_SERSIC_FLUX_IVAR** | float32[7] | nanomaggies<sup>-2</sup> | Inverse variance of SERSICFLUX (NSA) |
 | **NSA_SERSIC_TH50** | float32[1] | arcsec | 50% light radius of two-dimensional, single-component Sersic fit to r-band (NSA) |
 | **NSA_SERSIC_PHI** | float32[1] | deg | Angle (E of N) of major axis in two-dimensional, single-component Sersic fit in r-band (NSA) |
 | **NSA_SERSIC_BA** | float32[1] | 		 | Axis ratio b/a from two-dimensional, single-component Sersic fit in r-band (NSA) |
 | **NSA_SERSIC_N** | float32[1] | 		 | Sersic index from two-dimensional, single-component Sersic fit in r-band (NSA) |
 | **NSA_PETRO_FLUX** | float32[7] | nanomaggies | Azimuthally-averaged SDSS-style Petrosian flux in GALEX/SDSS FNugriz (using r-band aperture) (NSA) |
-| **NSA_PETRO_FLUX_IVAR** | float32[7] | <td>nanomaggies<sup>-2</sup> </td> | Inverse variance of PETROFLUX (NSA) |
+| **NSA_PETRO_FLUX_IVAR** | float32[7] | nanomaggies<sup>-2</sup> | Inverse variance of PETROFLUX (NSA) |
 | **NSA_PETRO_FLUX_IVAR** | float32[1] | arcsec | Azimuthally averaged SDSS-style Petrosian 50% light radius (derived from r band) (NSA) |
 | **NSA_EXTINCTION** | float32[7] | mag | Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in GALEX/SDSS FNugriz (NSA) |
 | **NSA_IAUNAME** | char[19] | 		 | IAU-style designation based on RA/Dec (NSA) |

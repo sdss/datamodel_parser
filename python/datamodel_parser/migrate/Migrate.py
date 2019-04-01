@@ -77,9 +77,6 @@ class Migrate:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
             self.path    = self.options.path    if self.options else None
-            self.set_tree_edition()
-            self.set_html_text()
-            self.set_database()
 
     def set_tree_edition(self):
         '''Set the datamodel edition.'''

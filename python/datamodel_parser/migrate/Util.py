@@ -48,7 +48,9 @@ class Util:
                 else:
                     n = self.get_number_descendants(node=node)
                     if n > 1:
-                        string = str(node).strip()
+                        node_contents = [str(x) for x in node.contents]
+                        string = ''.join(node_contents).strip()
+#                        string_old = str(node).strip()
                     elif (n == 1 and bool(node.string)):
                         string = str(node.string).strip()
                     else:
