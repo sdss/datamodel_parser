@@ -1,8 +1,8 @@
 from datamodel_parser.migrate import File
 from datamodel_parser.migrate import Database
 from bs4 import BeautifulSoup
-from os import environ
-from os.path import join, exists
+from os import environ, walk
+from os.path import join, exists, basename
 import logging
 from flask import render_template
 from datamodel_parser import app, logger
@@ -67,6 +67,12 @@ class Migrate:
             self.options = options if options else None
             if not self.options: self.logger.error('Unable to set_options.')
 
+    def set_path(self, path=None):
+        self.path = None
+        if self.ready:
+            self.path = path if path else None
+            if not self.path: self.logger.error('Unable to set_path.')
+
     def set_ready(self):
         '''Set error indicator.'''
         self.ready = bool(self.logger and
@@ -76,20 +82,7 @@ class Migrate:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.path    = self.options.path    if self.options else None
-
-    def set_tree_edition(self):
-        '''Set the datamodel edition.'''
-        if self.ready:
-            self.set_datamodel_dir()
-            if self.datamodel_dir:
-                self.tree_edition = (self.datamodel_dir[-4:]
-                                if self.datamodel_dir else None)
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_tree_edition. ' +
-                                  'self.datamodel_dir: {}'
-                                  .format(self.datamodel_dir))
+            self.datamodel_dir = None
 
     def set_datamodel_dir(self):
         '''Set the DATAMODEL_DIR file path on cypher.'''
@@ -102,6 +95,71 @@ class Migrate:
                     'Unable to populate_tree_table from the ' +
                     'environmental variable DATAMODEL_DIR. ' +
                     'Try loading a datamodel module file.')
+
+    def set_tree_edition(self):
+        '''Set the datamodel edition.'''
+        if self.ready:
+            if self.datamodel_dir:
+                self.tree_edition = (self.datamodel_dir.split('/')[-1]
+                                     if self.datamodel_dir else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_tree_edition. ' +
+                                  'self.datamodel_dir: {}'
+                                  .format(self.datamodel_dir))
+
+    def parse_path(self,path=None):
+        '''Extract information from the given file path.'''
+        self.env_variable     = None
+        self.file_name        = None
+        self.location_path    = None
+        self.directory_names  = None
+        self.directory_depths = None
+        if self.ready:
+            path = path if path else self.path
+            if path:
+                path = path.replace('datamodel/files/','')
+                split = path.split('/')
+                self.env_variable  = split[0]              if split else None
+                self.file_name     = split[-1]             if split else None
+                self.location_path = '/'.join(split[1:-1]) if split else None
+                self.directory_names  = list()
+                self.directory_depths = list()
+                for name in split[1:-1]:
+                    self.directory_names.append(name)
+                    self.directory_depths.append(
+                        self.directory_names.index(name))
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_path. ' +
+                                  'path: {}'.format(path))
+
+    def get_file_paths(self):
+        '''Set a list of all files for the current tree edition.'''
+        file_paths = list()
+        if self.ready:
+            if self.datamodel_dir:
+                root_dir = join(self.datamodel_dir,'datamodel/files/')
+                for (dirpath, dirnames, filenames) in walk(root_dir):
+                    if filenames:
+                        for filename in filenames:
+                            if '.html' in filename:
+                                file = join(dirpath,filename)
+                                if exists(file):
+                                    file_path = file.replace(
+                                                    self.datamodel_dir + '/','')
+                                    file_paths.append(file_path)
+                                else:
+                                    self.ready = False
+                                    self.logger.error('File does not exist: '
+                                                      'file: {}'.format(file))
+                    else: pass # it's okay to have empty filenames
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to get_file_paths. ' +
+                    'self.datamodel_dir: {}'.format(self.datamodel_dir))
+        return file_paths
 
     def set_html_text(self):
         '''Set the HTML text for the given URL.'''
@@ -153,9 +211,8 @@ class Migrate:
     def render_template(self,template=None):
         '''Use database information to render the given template.'''
         if self.ready:
-            if template:
-                self.parse_path() # set env_variable, location_path, and file_name
-                self.set_tree_edition()
+            self.set_database()
+            if template and self.database:
                 self.database.set_file_id(tree_edition  = self.tree_edition,
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
@@ -179,7 +236,9 @@ class Migrate:
             else:
                 self.ready = False
                 self.logger.error('Unable to render_template.' +
-                                  'template: {}'.format(template))
+                                  'template: {}'.format(template) +
+                                  'self.database: {}'.format(self.database)
+                                  )
 
     def process_rendered_template(self,result=None,template=None):
         '''Process the result of the rendered Jinja2 template.'''
@@ -222,7 +281,6 @@ class Migrate:
     def populate_file_path_tables(self):
         '''Populate tables comprised of file path information.'''
         if self.ready:
-            self.parse_path()
             self.populate_tree_table()
             self.populate_env_table()
             self.populate_location_table()
@@ -248,31 +306,6 @@ class Migrate:
                 self.logger.error('Unable to populate_html_text_tables. ' +
                                   'self.file: {}, '.format(self.file) +
                                   'self.file.ready: {}.'.format(self.file.ready))
-
-    def parse_path(self):
-        '''Extract information from the given file path.'''
-        self.env_variable     = None
-        self.file_name        = None
-        self.location_path    = None
-        self.directory_names  = None
-        self.directory_depths = None
-        if self.ready:
-            if self.path:
-                path = self.path.replace('datamodel/files/','')
-                split = path.split('/')
-                self.env_variable  = split[0]              if split else None
-                self.file_name     = split[-1]             if split else None
-                self.location_path = '/'.join(split[1:-1]) if split else None
-                self.directory_names  = list()
-                self.directory_depths = list()
-                for name in split[1:-1]:
-                    self.directory_names.append(name)
-                    self.directory_depths.append(
-                        self.directory_names.index(name))
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_path. ' +
-                                  'self.path: {}'.format(self.path))
 
     def set_soup(self):
         '''Set a class BeautifulSoup instance
@@ -700,4 +733,32 @@ class Migrate:
         else:
             if self.verbose: print('Fail!\n')
             exit(1)
+
+    def populate_history_table(self,status=None):
+        '''Populate the history table.'''
+        if self.ready:
+            if (self.tree_edition  and
+                self.env_variable  and
+                self.location_path and
+                self.file_name     and
+                status
+                ):
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
+                self.database.set_history_columns(status=status)
+                self.database.populate_section_table()
+                self.ready = self.database.ready
+
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to populate_history_table. '                   +
+                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.location_path: {}, '.format(self.location_path) +
+                    'self.file_name: {}, '    .format(self.file_name)     +
+                    'status: {},'             .format(status)
+                    )
 

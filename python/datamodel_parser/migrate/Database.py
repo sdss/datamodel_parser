@@ -10,6 +10,7 @@ from datamodel_parser.models.datamodel import Data
 from datamodel_parser.models.datamodel import Column
 from datamodel_parser.models.datamodel import Header
 from datamodel_parser.models.datamodel import Keyword
+from datamodel_parser.models.datamodel import History
 from json import dumps
 
 class Database:
@@ -1578,5 +1579,94 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to create_keyword_row. ' +
+                                  'columns: {}.'.format(columns))
+
+    def set_history_columns(self,status=None):
+        '''Set columns of the history table.'''
+        self.history_columns = dict()
+        if self.ready:
+            file_id = self.file_id if self.file_id else None
+            if file_id:
+                self.history_columns = {
+                    'file_id' : file_id if file_id else None,
+                    'status'  : status  if status  else None,
+                    }
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_history_columns. ' +
+                                  'file_id: {}, '.format(file_id) +
+                                  'status: {}.'.format(status))
+
+    def populate_history_table(self):
+        '''Update/Create history table row.'''
+        if self.ready:
+            self.set_history()
+            if self.history: self.update_history_row()
+            else:            self.create_history_row()
+
+    def set_history(self,file_id=None,status=None):
+        '''Load row from history table.'''
+        self.history = None
+        if self.ready:
+            file_id = (file_id if file_id
+                else self.history_columns['file_id']
+                if self.history_columns and 'file_id' in self.history_columns
+                else None)
+            status = (status if status
+                else self.history_columns['status']
+                if self.history_columns and 'status' in self.history_columns
+                else None)
+            if file_id:
+                self.history = History.load(file_id=file_id)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_history. ' +
+                                  'file_id: {}, '.format(file_id))
+
+    def update_history_row(self):
+        '''Update row in history table.'''
+        if self.ready:
+            columns = self.history_columns if self.history_columns else None
+            if columns:
+                self.logger.debug('Updating row in history table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                skip_keys = []
+                self.history.update_if_needed(columns=columns,skip_keys=skip_keys)
+                if self.history.updated:
+                    self.logger.info(
+                        'Updated History[id={}], '.format(self.history.id) +
+                        'status: {}'.format(self.history.status))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_history_row. ' +
+                                  'columns: {}.'.format(columns))
+
+    def create_history_row(self):
+        '''Create row in history table.'''
+        if self.ready:
+            columns = self.history_columns if self.history_columns else None
+            if columns:
+                self.logger.debug('Adding new row to history table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                history = History(
+                    file_id = columns['file_id']
+                        if columns and 'file_id' in columns else None,
+                    status = columns['status']
+                        if columns and 'status' in columns else None,
+                                  )
+                if history:
+                    history.add()
+                    history.commit()
+                    self.logger.info('Added History[id={}], '.format(history.id) +
+                                     'status: {}'.format(history.status))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_history_row. ' +
+                                      'history = \n{}.'.format(history))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_history_row. ' +
                                   'columns: {}.'.format(columns))
 

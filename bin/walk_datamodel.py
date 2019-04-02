@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import os
-from os.path import join, getsize
+from os import walk
+from os.path import join, exists
 
 from datamodel_parser.application import Argument
 from datamodel_parser.migrate import Migrate
@@ -16,11 +16,13 @@ if not ready:
     print('Fail! ready: {}'.format(ready))
     exit(1)
 else:
+    migrate.set_database()
     migrate.set_datamodel_dir()
-    print('migrate.datamodel_dir: %r'% migrate.datamodel_dir)
-    input('pause')
-
-
-#    migrate.populate_database()
-#    migrate.exit()
+    migrate.set_tree_edition()
+    for path in migrate.get_file_paths():
+#        print('path: %r' % path)
+        migrate.set_path(path=path)
+        migrate.parse_path()
+        migrate.populate_history_table(status='pending')
+    migrate.exit()
 

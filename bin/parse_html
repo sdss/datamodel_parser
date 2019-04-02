@@ -13,7 +13,10 @@ if not ready:
     print('Fail! ready: {}'.format(ready))
     exit(1)
 else:
+    migrate.set_datamodel_dir()
     migrate.set_tree_edition()
+    migrate.set_path(path=options.path)
+    migrate.parse_path()
     migrate.set_html_text()
     migrate.set_database()
     migrate.populate_database()

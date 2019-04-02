@@ -50,7 +50,7 @@ class Util:
                     if n > 1:
                         node_contents = [str(x) for x in node.contents]
                         string = ''.join(node_contents).strip()
-#                        string_old = str(node).strip()
+#                        string = str(node).strip() # depricated way
                     elif (n == 1 and bool(node.string)):
                         string = str(node.string).strip()
                     else:
