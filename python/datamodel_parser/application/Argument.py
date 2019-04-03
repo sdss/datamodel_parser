@@ -24,9 +24,15 @@ def datamodel_template():
     parser.add_argument("-v", "--verbose", help="set verbose logging", action="store_true")
     return parser.parse_args()
 
-def walk_datamodel():
+def parse_paths():
     parser = ArgumentParser()
-    parser.add_argument("-p", "--path", help="file path", metavar="PATH")
+    parser.add_argument("-l", "--level", help="set logging level", metavar="LEVEL", choices=['debug','info','warning','error','critical'], default='info')
+    parser.add_argument("-n", "--nolog", help="set nolog variable", action="store_true")
+    parser.add_argument("-v", "--verbose", help="set verbose logging", action="store_true")
+    return parser.parse_args()
+
+def percent_complete():
+    parser = ArgumentParser()
     parser.add_argument("-l", "--level", help="set logging level", metavar="LEVEL", choices=['debug','info','warning','error','critical'], default='info')
     parser.add_argument("-n", "--nolog", help="set nolog variable", action="store_true")
     parser.add_argument("-v", "--verbose", help="set verbose logging", action="store_true")

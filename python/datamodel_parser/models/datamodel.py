@@ -106,7 +106,7 @@ class Location(db.Model):
     env_id = db.Column(db.Integer,
                        db.ForeignKey('sdss.env.id'),
                        nullable = False)
-    path = db.Column(db.String(64), nullable = False)
+    path = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -114,17 +114,13 @@ class Location(db.Model):
 
     @staticmethod
     def load(env_id=None,path=None):
-        if env_id and path:
+        if env_id:
             try: location = (Location.query
                                     .filter(Location.env_id==env_id)
                                     .filter(Location.path==path)
                                     .one())
-            except: location = None
-        if env_id:
-            try: location = (Location.query
-                                    .filter(Location.env_id==env_id)
-                                    .one())
-            except: location = None
+            except:
+                location = None
         else:
             location = None
         return location
@@ -232,8 +228,8 @@ class File(db.Model):
     location_id = db.Column(db.Integer,
                             db.ForeignKey('sdss.location.id'),
                             nullable = False)
-    name = db.Column(db.String(64), nullable = False, unique = True)
-    hdu_count = db.Column(db.Integer, nullable = False)
+    name = db.Column(db.String(64), nullable = False)
+    status = db.Column(db.String(16), nullable = False,default='pending')
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -241,8 +237,11 @@ class File(db.Model):
 
     @staticmethod
     def load(location_id=None,name=None):
-        if name:
-            try: file = File.query.filter(File.name==name).one()
+        if location_id and name:
+            try: file = (File.query
+                            .filter(File.location_id==location_id)
+                            .filter(File.name==name)
+                            .one())
             except: file = None
         else:
             file = None
@@ -311,65 +310,6 @@ class Intro(db.Model):
         else:
             intros = None
         return intros
-    
-    def update_if_needed(self, columns = None, skip_keys = []):
-        self.updated = False
-        for key,column in columns.items():
-            if key not in skip_keys:
-                if getattr(self,key) != column:
-                    setattr(self,key,column)
-                    if not self.updated: self.updated = True
-        if self.updated: self.commit()
-
-    def add(self):
-        try: db.session.add(self)
-        except Exception as e:
-            print("{0} ADD> {1}".format(self.__tablename__, e))
-    
-    def commit(self):
-        try: db.session.commit()
-        except Exception as e:
-            print("{0} COMMIT> {1}".format(self.__tablename__, e))
-    
-    def __repr__(self): # representation (pretty print)
-        return "\n".join(["{0}: {1}".format(
-                                        column.key,
-                                        getattr(self,column.key))
-                                        for column in self.__table__.columns])
-
-class History(db.Model):
-    __tablename__ = 'history'
-    __table_args__ = {'schema':'sdss'}
-    id = db.Column(db.Integer, primary_key = True)
-    file_id = db.Column(db.Integer,
-                        db.ForeignKey('sdss.file.id'),
-                        nullable = False)
-    status = db.Column(db.String(32))
-    created = db.Column(db.DateTime, default=datetime.now)
-    modified = db.Column(db.DateTime,
-                         default=datetime.now,
-                         onupdate=datetime.now)
-
-    @staticmethod
-    def load(file_id=None):
-        if file_id:
-            try: history = (History.query.filter(History.file_id==file_id).one())
-            except: history = None
-        else:
-            history = None
-        return history
-    
-    @staticmethod
-    def load_all(file_id=None):
-        if file_id:
-            try: historys = (History.query
-                                  .filter(History.file_id==file_id)
-                                  .order_by(History.file_id)
-                                  .all())
-            except: historys = None
-        else:
-            historys = None
-        return historys
     
     def update_if_needed(self, columns = None, skip_keys = []):
         self.updated = False

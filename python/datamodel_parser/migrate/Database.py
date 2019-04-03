@@ -10,7 +10,6 @@ from datamodel_parser.models.datamodel import Data
 from datamodel_parser.models.datamodel import Column
 from datamodel_parser.models.datamodel import Header
 from datamodel_parser.models.datamodel import Keyword
-from datamodel_parser.models.datamodel import History
 from json import dumps
 
 class Database:
@@ -46,6 +45,28 @@ class Database:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
             self.tree_columns = None
+
+    def get_file_percent_complete(self):
+        '''Get the percentage of all file table rows with status='complete.'
+        '''
+        numerator = File.query.filter(File.status=='completed').count()
+        denominator = File.query.count()
+        percent_complete = 100*numerator/denominator
+        return percent_complete
+
+    def update_file_status(self,ready=None):
+        '''Update the status of the file table.'''
+        if self.file_columns and ready is not None:
+            status = 'completed' if ready else 'failed'
+            self.file_columns['status'] = status
+#            print('self.file_columns: %r' % self.file_columns)
+#            print('status: %r' % status)
+#            input('pause')
+            self.update_file_row()
+        else:
+            self.ready = False
+            self.logger.error('Unable to update_file_status.' +
+                              'self.file_columns: {}.'.format(self.file_columns))
 
     def get_intros_sections_hdus(self):
         '''
@@ -145,9 +166,10 @@ class Database:
                 self.set_env(tree_id=self.tree_id,variable=env_variable)
                 self.env_id = self.env.id if self.env else None
                 if not self.env_id:
-                    self.ready = False
-                    self.logger.error('Unable to set_env_id. '+
-                                      'self.env_id: {}.'.format(self.env_id))
+                    pass # env_id doesn't have to be unique
+#                    self.ready = False
+#                    self.logger.error('Unable to set_env_id. '+
+#                                      'self.env_id: {}.'.format(self.env_id))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_env_id. '
@@ -163,23 +185,25 @@ class Database:
         '''Get location_id.'''
         self.location_id = None
         if self.ready:
-            if tree_edition and env_variable and location_path:
+            if tree_edition and env_variable: # location_path can be None
                 self.set_env_id(tree_edition=tree_edition,
                                 env_variable=env_variable)
                 self.set_location(env_id=self.env_id,path=location_path)
                 self.location_id = self.location.id if self.location else None
                 if not self.location_id:
-                    self.ready = False
-                    self.logger.error(
-                            'Unable to set_location_id. ' +
-                            'self.location_id: {}.'.format(self.location_id))
+                    pass # location_id doesn't have to be unique
+#                    self.ready = False
+#                    self.logger.error(
+#                            'Unable to set_location_id. ' +
+#                            'tree_edition: {}, '.format(tree_edition) +
+#                            'env_variable: {}, '.format(env_variable) +
+#                            'self.location_id: {}, '.format(self.location_id) +
+#                            'self.env_id: {}.'.format(self.env_id))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_location_id. '
                                   'tree_edition: {}, '.format(tree_edition) +
-                                  'env_variable: {}, '.format(env_variable) +
-                                  'location_path: {}.'.format(location_path)
-                                  )
+                                  'env_variable: {}, '.format(env_variable))
 
     def set_file_id(self,
                     tree_edition  = None,
@@ -190,7 +214,8 @@ class Database:
         '''Get file_id.'''
         self.file_id = None
         if self.ready:
-            if tree_edition and env_variable and location_path and file_name:
+            if tree_edition and env_variable and file_name:
+                # location_path can be None
                 self.set_location_id(tree_edition  = tree_edition,
                                      env_variable  = env_variable,
                                      location_path = location_path)
@@ -206,7 +231,6 @@ class Database:
                 self.logger.error('Unable to set_file_id. '
                                   'tree_edition: {}, '.format(tree_edition) +
                                   'env_variable: {}, '.format(env_variable) +
-                                  'location_path: {}, '.format(location_path) +
                                   'file_name: {}.'.format(file_name)
                                   )
 
@@ -222,7 +246,7 @@ class Database:
         if self.ready:
             if (tree_edition  and
                 env_variable  and
-                location_path and
+#               location_path # can be None
                 file_name     and
                 hdu_number is not None
                 ):
@@ -243,7 +267,6 @@ class Database:
                 self.logger.error('Unable to set_hdu_id. '
                                   'tree_edition: {}, '.format(tree_edition) +
                                   'env_variable: {}, '.format(env_variable) +
-                                  'location_path: {}, '.format(location_path) +
                                   'file_name: {}, '.format(file_name)         +
                                   'hdu_number: {}.'.format(hdu_number)
                                   )
@@ -260,7 +283,7 @@ class Database:
         if self.ready:
             if (tree_edition           and
                 env_variable           and
-                location_path          and
+#               location_path # can be None
                 file_name              and
                 hdu_number is not None
                 ):
@@ -281,7 +304,6 @@ class Database:
                 self.logger.error('Unable to set_header_id. ' +
                                   'tree_edition: {}, '.format(tree_edition) +
                                   'env_variable: {}, '.format(env_variable) +
-                                  'location_path: {}, '.format(location_path) +
                                   'file_name: {}, '.format(file_name) +
                                   'hdu_number: {}.'.format(hdu_number)
                                   )
@@ -298,7 +320,7 @@ class Database:
         if self.ready:
             if (tree_edition  and
                 env_variable  and
-                location_path and
+#               location_path # can be None
                 file_name     and
                 hdu_number is not None
                 ):
@@ -319,7 +341,6 @@ class Database:
                 self.logger.error('Unable to set_data_id. '
                                   'tree_edition: {}, '.format(tree_edition) +
                                   'env_variable: {}, '.format(env_variable) +
-                                  'location_path: {}, '.format(location_path) +
                                   'file_name: {}, '.format(file_name) +
                                   'hdu_number: {}.'.format(hdu_number)
                                   )
@@ -495,7 +516,7 @@ class Database:
         self.location_columns = dict()
         if self.ready:
             env_id = self.env_id if self.env_id else None
-            if env_id and path:
+            if env_id: # location.path can be None
                 self.location_columns = {
                     'env_id' : env_id  if env_id  else None,
                     'path'   : path    if path    else None,
@@ -503,8 +524,7 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_location_columns.' +
-                                  'env_id: {}, '.format(env_id) +
-                                  'path: {}.'.format(path))
+                                  'env_id: {}, '.format(env_id) )
 
     def populate_location_table(self):
         '''Update/Create location table row.'''
@@ -525,14 +545,13 @@ class Database:
                     else self.location_columns['path']
                     if self.location_columns and 'path' in self.location_columns
                     else None)
-            if env_id and path:
+            if env_id: # location.path can be None
                 self.location = (Location.load(env_id=env_id,path=path)
-                                 if env_id and path else None)
+                                 if env_id else None) # path can be None
             else:
                 self.ready = False
                 self.logger.error('Unable to set_location. ' +
-                                  'env_id: {}, '.format(env_id) +
-                                  'path: {}.'.format(path))
+                                  'env_id: {}, '.format(env_id))
 
     def update_location_row(self):
         '''Update row in location table.'''
@@ -679,27 +698,24 @@ class Database:
                 self.logger.error('Unable to create_directory_row. ' +
                                   'columns: {}.'.format(columns))
 
-    def set_file_columns(self,name=None,hdu_count=None):
+    def set_file_columns(self,name=None):
         '''Set columns of the file table.'''
         self.file_columns = dict()
         if self.ready:
             location_id = self.location_id if self.location_id else None
-            if location_id and name and hdu_count:
+            if location_id and name:
                 self.file_columns = {
                     'location_id'     :
                         location_id     if location_id     else None,
                     'name'            :
                         name            if name            else None,
-                    'hdu_count' :
-                        hdu_count if hdu_count else None,
                     }
             else:
                 self.ready = False
                 self.logger.error(
                                 'Unable to set_file_columns.' +
                                 'location_id: {}, '.format(location_id) +
-                                'name: {}, '.format(name) +
-                                'hdu_count: {}.'.format(hdu_count))
+                                'name: {}, '.format(name))
 
     def populate_file_table(self):
         '''Update/Create file table row.'''
@@ -760,8 +776,6 @@ class Database:
                         if columns and 'location_id' in columns else None,
                     name = columns['name']
                         if columns and 'name' in columns else None,
-                    hdu_count = columns['hdu_count']
-                        if columns and 'hdu_count' in columns else None,
                                   )
                 if file:
                     file.add()
@@ -1580,93 +1594,3 @@ class Database:
                 self.ready = False
                 self.logger.error('Unable to create_keyword_row. ' +
                                   'columns: {}.'.format(columns))
-
-    def set_history_columns(self,status=None):
-        '''Set columns of the history table.'''
-        self.history_columns = dict()
-        if self.ready:
-            file_id = self.file_id if self.file_id else None
-            if file_id:
-                self.history_columns = {
-                    'file_id' : file_id if file_id else None,
-                    'status'  : status  if status  else None,
-                    }
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_history_columns. ' +
-                                  'file_id: {}, '.format(file_id) +
-                                  'status: {}.'.format(status))
-
-    def populate_history_table(self):
-        '''Update/Create history table row.'''
-        if self.ready:
-            self.set_history()
-            if self.history: self.update_history_row()
-            else:            self.create_history_row()
-
-    def set_history(self,file_id=None,status=None):
-        '''Load row from history table.'''
-        self.history = None
-        if self.ready:
-            file_id = (file_id if file_id
-                else self.history_columns['file_id']
-                if self.history_columns and 'file_id' in self.history_columns
-                else None)
-            status = (status if status
-                else self.history_columns['status']
-                if self.history_columns and 'status' in self.history_columns
-                else None)
-            if file_id:
-                self.history = History.load(file_id=file_id)
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_history. ' +
-                                  'file_id: {}, '.format(file_id))
-
-    def update_history_row(self):
-        '''Update row in history table.'''
-        if self.ready:
-            columns = self.history_columns if self.history_columns else None
-            if columns:
-                self.logger.debug('Updating row in history table.')
-                if self.verbose: self.logger.debug('columns:\n' +
-                                                   dumps(columns,indent=1))
-                skip_keys = []
-                self.history.update_if_needed(columns=columns,skip_keys=skip_keys)
-                if self.history.updated:
-                    self.logger.info(
-                        'Updated History[id={}], '.format(self.history.id) +
-                        'status: {}'.format(self.history.status))
-            else:
-                self.ready = False
-                self.logger.error('Unable to update_history_row. ' +
-                                  'columns: {}.'.format(columns))
-
-    def create_history_row(self):
-        '''Create row in history table.'''
-        if self.ready:
-            columns = self.history_columns if self.history_columns else None
-            if columns:
-                self.logger.debug('Adding new row to history table.')
-                if self.verbose: self.logger.debug('columns:\n' +
-                                                   dumps(columns,indent=1))
-                history = History(
-                    file_id = columns['file_id']
-                        if columns and 'file_id' in columns else None,
-                    status = columns['status']
-                        if columns and 'status' in columns else None,
-                                  )
-                if history:
-                    history.add()
-                    history.commit()
-                    self.logger.info('Added History[id={}], '.format(history.id) +
-                                     'status: {}'.format(history.status))
-                else:
-                    self.ready = False
-                    self.logger.error('Unable to create_history_row. ' +
-                                      'history = \n{}.'.format(history))
-            else:
-                self.ready = False
-                self.logger.error('Unable to create_history_row. ' +
-                                  'columns: {}.'.format(columns))
-

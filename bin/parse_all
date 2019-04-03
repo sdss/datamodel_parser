@@ -3,13 +3,101 @@
 # $Id: parse_all 2019-03-14 n.benjamin.murphy $
 #
 
-parse_html --path datamodel/files/APOGEE_ASPCAP/APRED_VERS/ASPCAP_VERS/TELESCOPE/FIELD/aspcapField.html -l error -v
-#parse_html --path datamodel/files/APOGEE_ASPCAP/APRED_VERS/ASPCAP_VERS/TELESCOPE/FIELD/aspcapStar.html -l error -v
-
-# Finished!
-#parse_html --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html -l error -v
 
 
-
-
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platelist.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platequality.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAlldat.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAllLine.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAll.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcorr.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlan.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spArc.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxdistort.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFlat.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcalib.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFrame.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spXYthrucorr.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spSN2d.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/spAll-SUBSET.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/specfiles.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/lite/PLATE4/spec.html
+#parse_html -v --path datamodel/files/BOSS_SPECTRO_REDUX/images/RUN2D/RUN1D/PLATE4-MJD/spec-image-PLATE4-MJD-FIBER4.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
+parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/dapall.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/manga-MAPS-DAPTYPE.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/manga-LOGCUBE-DAPTYPE.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELMKEY.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-SIKEY.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-ELMKEY.html
+#parse_html -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-BINKEY.html
+parse_html -v --path datamodel/files/MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cat.fits.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apCframe.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlan.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlate.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apVisit.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/flux/apFlux.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/bpm/apBPM.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/detector/apDetector.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/darkcorr/apDark.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/flatcorr/apFlat.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/wave/apWave.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/lsf/apLSF.html
+parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
+parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
+parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allVisit.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allPlates.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar_DR10.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonModel.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/allStarCannon.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonTrainingSet.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/LOCATION_ID/cannonStar.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/LOCATION_ID/cannonField.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/LOCATION_ID/aspcapField.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/LOCATION_ID/aspcapStar.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.mdl.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.ipf.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.err.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.wav.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.spm.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.frd.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.err.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.wav.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.ipf.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.frd.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.spm.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.mdl.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apStarLSF.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apFieldVisits.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apStar.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apField.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.dat.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.unf.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.hdr.html
+#parse_html -v --path datamodel/files/APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/aXXXcXXXnXXXvXXX.html"
 

@@ -18,7 +18,7 @@ else:
     migrate.set_datamodel_dir()
     migrate.set_tree_edition()
     migrate.set_path(path=options.path)
-    migrate.parse_path()
+    migrate.split_path()
     migrate.render_template(template=template)
     migrate.exit()
 

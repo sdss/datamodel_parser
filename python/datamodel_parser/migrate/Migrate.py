@@ -67,16 +67,16 @@ class Migrate:
             self.options = options if options else None
             if not self.options: self.logger.error('Unable to set_options.')
 
+    def set_ready(self):
+        '''Set error indicator.'''
+        self.ready = bool(self.logger and
+                          self.options)
+
     def set_path(self, path=None):
         self.path = None
         if self.ready:
             self.path = path if path else None
             if not self.path: self.logger.error('Unable to set_path.')
-
-    def set_ready(self):
-        '''Set error indicator.'''
-        self.ready = bool(self.logger and
-                          self.options)
 
     def set_attributes(self):
         '''Set class attributes.'''
@@ -108,7 +108,7 @@ class Migrate:
                                   'self.datamodel_dir: {}'
                                   .format(self.datamodel_dir))
 
-    def parse_path(self,path=None):
+    def split_path(self,path=None):
         '''Extract information from the given file path.'''
         self.env_variable     = None
         self.file_name        = None
@@ -131,7 +131,7 @@ class Migrate:
                         self.directory_names.index(name))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_path. ' +
+                self.logger.error('Unable to split_path. ' +
                                   'path: {}'.format(path))
 
     def get_file_paths(self):
@@ -143,7 +143,9 @@ class Migrate:
                 for (dirpath, dirnames, filenames) in walk(root_dir):
                     if filenames:
                         for filename in filenames:
-                            if '.html' in filename:
+                            if (filename.endswith('.html') and
+                                'readme' not in filename.lower()
+                                ):
                                 file = join(dirpath,filename)
                                 if exists(file):
                                     file_path = file.replace(
@@ -277,6 +279,10 @@ class Migrate:
         if self.ready:
             self.populate_file_path_tables()
             self.populate_html_text_tables()
+            self.ready = (self.ready          and
+                          self.database.ready and
+                          self.file.ready     )
+            self.database.update_file_status(ready=self.ready)
 
     def populate_file_path_tables(self):
         '''Populate tables comprised of file path information.'''
@@ -285,6 +291,7 @@ class Migrate:
             self.populate_env_table()
             self.populate_location_table()
             self.populate_directory_table()
+            self.populate_file_table()
 
     def populate_html_text_tables(self):
         '''Populate tables comprised of file HTML text information.'''
@@ -295,7 +302,6 @@ class Migrate:
                 self.file.parse_file()
                 self.ready = self.file and self.file.ready
                 if self.ready:
-                    self.populate_file_table()
                     self.populate_intro_table()
                     self.populate_section_table()
                     self.populate_hdu_table()
@@ -366,8 +372,8 @@ class Migrate:
         if self.ready:
             if (self.database     and
                 self.tree_edition and
-                self.env_variable and
-                self.location_path
+                self.env_variable
+#               self.location_path # can be None
                 ):
                 self.database.set_env_id(tree_edition = self.tree_edition,
                                          env_variable = self.env_variable)
@@ -379,25 +385,24 @@ class Migrate:
                 self.logger.error(
                     'Unable to populate_location_table. '                +
                     'self.tree_edition: {}, '.format(self.tree_edition) +
-                    'self.env_variable: {}, '.format(self.env_variable) +
-                    'self.location_path: {}.'.format(self.location_path)
+                    'self.env_variable: {}, '.format(self.env_variable)
                     )
 
     def populate_directory_table(self):
         '''Populate the directory table.'''
         if self.ready:
             if (self.tree_edition     and
-                self.env_variable     and
-                self.location_path    and
-                self.directory_names  and
-                self.directory_depths
+                self.env_variable     
+#               self.location_path    # can be None
+#               self.directory_names  # can be None
+#               self.directory_depths # can be None
                 ):
                 self.database.set_location_id(
                                             tree_edition = self.tree_edition,
                                             env_variable = self.env_variable,
                                             location_path = self.location_path)
-                names         = self.directory_names
-                depths        = self.directory_depths
+                names  = (self.directory_names  if self.directory_names  else list())
+                depths = (self.directory_depths if self.directory_depths else list())
                 for (name,depth) in list(zip(names,depths)):
                     if self.ready:
                         self.database.set_directory_columns(name=name,
@@ -409,30 +414,22 @@ class Migrate:
                 self.logger.error(
                     'Unable to populate_directory_table. '                     +
                     'self.tree_edition: {}, '   .format(self.tree_edition)    +
-                    'self.env_variable: {}, '   .format(self.env_variable)    +
-                    'self.location_path: {}, '  .format(self.location_path)   +
-                    'self.directory_names: {}, '.format(self.directory_names) +
-                    'self.directory_depths: {}.'.format(self.directory_depths))
+                    'self.env_variable: {}, '   .format(self.env_variable)
+                    )
 
     def populate_file_table(self):
         '''Populate the file table.'''
         if self.ready:
             if (self.tree_edition         and
                 self.env_variable         and
-                self.location_path        and
-                self.file_name            and
-                self.file                 and
-                self.file.hdu_count
+#               self.location_path # can be None
+                self.file_name
                 ):
                 self.database.set_location_id(
                                             tree_edition = self.tree_edition,
                                             env_variable = self.env_variable,
                                             location_path = self.location_path)
-                name=self.file_name
-                hdu_count=self.file.hdu_count
-                self.database.set_file_columns(
-                                            name            = name,
-                                            hdu_count = hdu_count)
+                self.database.set_file_columns(name=self.file_name)
                 self.database.populate_file_table()
                 self.ready = self.database.ready
             else:
@@ -441,7 +438,6 @@ class Migrate:
                     'Unable to populate_file_table. '                      +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}, '         .format(self.file)          +
                     'self.file.hdu_count: {}.'
@@ -452,7 +448,7 @@ class Migrate:
         if self.ready:
             if (self.tree_edition              and
                 self.env_variable              and
-                self.location_path             and
+#               self.location_path # can be None
                 self.file_name                 and
                 self.file                      and
                 self.file.intro_positions and
@@ -491,7 +487,6 @@ class Migrate:
                     'Unable to populate_intro_table. '                     +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file.intro_positions: {}, '
                     .format(self.file.intro_positions)                +
@@ -508,7 +503,7 @@ class Migrate:
         if self.ready:
             if (self.tree_edition                 and
                 self.env_variable                 and
-                self.location_path                and
+#               self.location_path # can be None
                 self.file_name                    and
                 self.file                         and
                 self.file.section_hdu_titles is not None
@@ -538,7 +533,6 @@ class Migrate:
                     'Unable to populate_section_table. '                   +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {},'          .format(self.file)          +
                     'self.file.section_hdu_titles: {}.'
@@ -549,7 +543,7 @@ class Migrate:
         if self.ready:
             if (self.tree_edition               and
                 self.env_variable               and
-                self.location_path              and
+#               self.location_path # can be None
                 self.file_name                  and
                 self.file                       and
                 self.file.file_hdu_info
@@ -580,7 +574,6 @@ class Migrate:
                     'Unable to populate_hdu_table. '                 +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}'           .format(self.file)          +
                     'self.file.file_hdu_info: {}'
@@ -592,7 +585,7 @@ class Migrate:
         if self.ready:
             if (self.tree_edition           and
                 self.env_variable           and
-                self.location_path          and
+#               self.location_path # can be None
                 self.file_name              and
                 self.file                   and
                 self.file.file_hdu_info     and
@@ -640,7 +633,6 @@ class Migrate:
                     'Unable to populate_header_and_data_tables. '                 +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}'           .format(self.file)          +
                     'self.file.file_hdu_info: {}'
@@ -654,7 +646,7 @@ class Migrate:
         if self.ready:
             if (self.tree_edition           and
                 self.env_variable           and
-                self.location_path          and
+#               self.location_path # can be None
                 self.file_name              and
                 self.file                   and
                 self.file.file_hdu_info     and
@@ -716,7 +708,6 @@ class Migrate:
                     'Unable to populate_keyword_and_column_tables. '                 +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
                     'self.file_name: {}, '    .format(self.file_name)     +
                     'self.file: {}'           .format(self.file)          +
                     'self.file.file_hdu_info: {}'
@@ -733,32 +724,3 @@ class Migrate:
         else:
             if self.verbose: print('Fail!\n')
             exit(1)
-
-    def populate_history_table(self,status=None):
-        '''Populate the history table.'''
-        if self.ready:
-            if (self.tree_edition  and
-                self.env_variable  and
-                self.location_path and
-                self.file_name     and
-                status
-                ):
-                self.database.set_file_id(tree_edition  = self.tree_edition,
-                                          env_variable  = self.env_variable,
-                                          location_path = self.location_path,
-                                          file_name     = self.file_name)
-                self.database.set_history_columns(status=status)
-                self.database.populate_section_table()
-                self.ready = self.database.ready
-
-            else:
-                self.ready = False
-                self.logger.error(
-                    'Unable to populate_history_table. '                   +
-                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.location_path: {}, '.format(self.location_path) +
-                    'self.file_name: {}, '    .format(self.file_name)     +
-                    'status: {},'             .format(status)
-                    )
-

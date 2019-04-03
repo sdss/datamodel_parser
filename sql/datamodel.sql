@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS sdss.data;
 DROP TABLE IF EXISTS sdss.keyword;
 DROP TABLE IF EXISTS sdss.header;
 DROP TABLE IF EXISTS sdss.hdu;
-DROP TABLE IF EXISTS sdss.history;
 DROP TABLE IF EXISTS sdss.section;
 DROP TABLE IF EXISTS sdss.intro;
 DROP TABLE IF EXISTS sdss.file;
@@ -34,7 +33,7 @@ CREATE TABLE sdss.env (
 CREATE TABLE sdss.location (
     id SERIAL NOT NULL PRIMARY KEY,
     env_id INT4 REFERENCES sdss.env(id) NOT NULL,
-    path VARCHAR(64) NOT NULL,
+    path VARCHAR(128),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -51,8 +50,8 @@ CREATE TABLE sdss.directory (
 CREATE TABLE sdss.file (
     id SERIAL NOT NULL PRIMARY KEY,
     location_id INT4 REFERENCES sdss.location(id) NOT NULL,
-    name VARCHAR(64) NOT NULL UNIQUE,
-    hdu_count INT2,
+    name VARCHAR(64) NOT NULL,
+    status VARCHAR(16),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -64,14 +63,6 @@ CREATE TABLE sdss.intro (
     heading_level INT2,
     heading_title VARCHAR(64) NOT NULL,
     description VARCHAR(1024),
-    created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
-    modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
-CREATE TABLE sdss.history (
-    id SERIAL NOT NULL PRIMARY KEY,
-    file_id INT4 REFERENCES sdss.file(id) NOT NULL,
-    status VARCHAR(16),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
