@@ -1,6 +1,6 @@
 from bs4 import Tag, NavigableString
-from datamodel_parser.migrate import Util
-from datamodel_parser.migrate import Intro
+from datamodel_parser.application import Util
+from datamodel_parser.application import Intro
 
 from json import dumps
 

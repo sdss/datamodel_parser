@@ -1,12 +1,10 @@
 from json import dumps
 from bs4 import Tag, NavigableString
-from datamodel_parser.migrate import Util
+from datamodel_parser.application import Util
 
 
 class Intro:
-    '''
-        
-    '''
+    '''Parse intro of file HTML.'''
 
     def __init__(self,logger=None,options=None,body=None):
         self.initialize(logger=logger,options=options)
@@ -57,6 +55,8 @@ class Intro:
             if self.body:
                 # process different intro types
                 # self.body all div tags
+#                print('self.body: %r'% self.body)
+#                input('pause')
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
                     self.parse_file_div()

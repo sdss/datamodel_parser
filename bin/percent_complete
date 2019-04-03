@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 from datamodel_parser.application import Argument
-from datamodel_parser.migrate import Migrate
+from datamodel_parser.application import Store
 
 print('Percent Complete:')
 arg = Argument('parse_html')
 options = arg.options if arg else None
-migrate = Migrate(options=options) if options else None
-logger = migrate.logger if migrate else None
-ready = options and migrate and logger
-ready = ready and migrate.ready
+store = Store(options=options) if options else None
+logger = store.logger if store else None
+ready = options and store and logger
+ready = ready and store.ready
 if not ready:
     print('Fail! ready: {}'.format(ready))
     exit(1)
 else:
-    migrate.set_database()
-    print(migrate.database.get_file_percent_complete())
-    migrate.exit()
+    store.set_database()
+    print(store.database.get_file_percent_complete())
+    store.exit()

@@ -27,8 +27,9 @@ class Util:
 
     def set_ready(self):
         '''Set error indicator.'''
-        self.ready = bool(self.logger  and
-                          self.options)
+        self.ready = bool(self.logger       and
+                          self.options      
+                          )
 
     def set_attributes(self):
         '''Set class attributes.'''
