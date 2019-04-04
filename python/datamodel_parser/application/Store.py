@@ -202,7 +202,7 @@ class Store:
             self.ready = (self.ready          and
                           self.database.ready and
                           self.file.ready     )
-            self.database.update_file_status(ready=self.ready)
+            self.database.update_file_table_status(ready=self.ready)
 
     def populate_file_path_tables(self):
         '''Populate tables comprised of file path information.'''

@@ -55,10 +55,7 @@ class Intro:
             if self.body:
                 # process different intro types
                 # self.body all div tags
-                child_names = self.util.get_child_names(node=self.body)
-#                print('self.body: %r'% self.body)
-#                print('child_names: %r'% child_names)
-#                input('pause')
+                child_names = set(self.util.get_child_names(node=self.body))
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
                     self.parse_file_div()
@@ -115,69 +112,44 @@ class Intro:
         '''Parse the HTML of the given BeautifulSoup div tag object with
             children: h1, h4 and p.'''
         if self.ready:
-            assumptions = self.verify_assumptions_parse_file_h1_h4_p_div()
-            if self.intro_div and assumptions:
+            if self.intro_div:
                 position = -1
+                description = str()
                 for child in [child for child in self.intro_div.children
                               if not self.util.get_string(node=child).isspace()]:
                     string = self.util.get_string(node=child)
-                    self.ready = self.ready and self.util.ready
-                    if self.ready:
-                        # file page name
-                        if child.name == 'h1':
-                            position += 1
-                            self.intro_positions.append(position)
-                            self.intro_heading_levels.append(1)
-                            self.intro_heading_titles.append(string)
-                            self.intro_descriptions.append('')
-                        # file heading_titles
-                        elif child.name == 'h4':
-                            position += 1
-                            self.intro_positions.append(position)
-                            self.intro_heading_levels.append(4)
-                            self.intro_heading_titles.append(string)
-                        # file heading descriptions
-                        elif child.name == 'p':
-                            self.intro_descriptions.append(string)
-                        # file table of contents
-                        elif child.name == 'div':
-                            self.parse_section(node=child)
+                    # file page name
+                    if child.name in self.heading_tags:
+                        position += 1
+                        digit = self.util.get_digit_in_string(string=child.name)
+                        heading_level = digit if digit else 4
+                        self.intro_positions.append(position)
+                        self.intro_heading_levels.append(heading_level)
+                        self.intro_heading_titles.append(string)
+                        if child.name == 'h1': self.intro_descriptions.append('')
+                    # file heading descriptions
+                    elif child.name == 'p':
+                        description += string
+                        next_sibling = self.util.get_sibling_names(node=child)[0]
+                        if next_sibling not in self.paragraph_tags:
+                            self.intro_descriptions.append(description)
+                            description = str()
                         else:
-                            self.ready = False
-                            self.logger.error(
-                                    'Unexpected tag name. ' +
-                                    'child.name: {} '.format(child.name) +
-                                    "must be in {'h1','h4','p','div'}")
+                            description += '\n'
+                    # file table of contents
+                    elif child.name == 'div':
+                        pass # don't do this anymore
+#                        self.parse_section(node=child)
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                                'Unexpected tag name. ' +
+                                'child.name: {} '.format(child.name) +
+                                "must be in {'h1','h4','p','div'}")
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_h1_h4_p_div. ' +
-                                  'self.intro_div: {}'.format(self.intro_div) +
-                                  'assumptions: {}'.format(assumptions))
-
-    def verify_assumptions_parse_file_h1_h4_p_div(self):
-        '''Verify assumptions made in parse_file_h1_h4_p_div.'''
-        assumptions = None
-        if self.intro_div:
-            assumptions = True
-            child_names = self.util.get_child_names(node=self.intro_div)
-            repeated_h4_p = False
-            for n in range(1,20):
-                if child_names == ['h1'] + ['h4','p']*n + ['div']:
-                    repeated_dt_dd = True
-                    break
-            if not repeated_dt_dd:
-                assumptions = False
-                self.logger.error("Invalid assumption: " +
-                    "child_names == ['h1'] + ['h4','p']*n + ['div'] for some n")
-        else:
-            self.ready = False
-            self.logger.error(
-                'Unable to verify_assumptions_parse_file_h1_h4_p_div. ' +
-                'self.intro_div: {}.'.format(self.intro_div))
-#        print('assumptions: %r' % assumptions)
-#        input('pause')
-        if not assumptions: self.ready = False
-        return assumptions
+                                  'self.intro_div: {}'.format(self.intro_div))
 
     def parse_file_h1_dl(self):
         '''Parse the HTML of the given BeautifulSoup div tag object with

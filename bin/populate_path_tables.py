@@ -21,7 +21,7 @@ else:
     store.set_tree_edition()
     store.set_database()
     file_paths = store.get_file_paths() # DEBUG
-    flagships = list()
+    file_list = list()
     for path in store.get_file_paths():
         if store.ready:
             if ('BOSS_SPECTRO_REDUX'     in path or
@@ -30,10 +30,11 @@ else:
                 'MANGA_TARGET'           in path or
                 'APOGEE_REDUX'           in path
                 ):
-                flagships.append(path)
+                file_list.append(path)
+#            file_list.append(path)
             store.set_path(path=path)
             store.split_path()
             store.populate_file_path_tables()
-    print('flagships: \n' + dumps(flagships,indent=1))
+#    print('file_list: \n' + dumps(file_list,indent=1))
     store.exit()
 

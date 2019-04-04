@@ -161,11 +161,6 @@ class File:
 #                print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
 #                print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
 #                input('pause')
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file. ' +
-                                  'self.intro: {}, '.format(self.intro) +
-                                  'self.hdu: {}, '.format(self.hdu))
 
     def set_intro_and_hdu(self):
         '''Set file intro tags and hdu tags.'''
@@ -328,18 +323,10 @@ class File:
                 ):
                 hdu_info = self.file_hdu_info
                 hdu_tables = self.file_hdu_tables
-#                print('hdu_info: %r' % hdu_info)
-#                print('hdu_tables: %r' % hdu_tables)
-#                print('type(hdu_tables): %r' % type(hdu_tables))
-#                print('len(hdu_tables): %r' % len(hdu_tables))
-#                input('pause')
-
                 if len(hdu_info) == len(hdu_tables):
                     for (hdu_info,hdu_tables) in list(zip(self.file_hdu_info,self.file_hdu_tables)):
                         if self.ready:
                             for hdu_table in hdu_tables:
-#                                print('hdu_table: %r' % hdu_table)
-#                                input('pause')
                                 hdu_number = hdu_info['hdu_number']
                                 hdu_title  = hdu_info['hdu_title']
                                 table_caption = hdu_table['table_caption']

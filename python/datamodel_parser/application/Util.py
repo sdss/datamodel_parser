@@ -82,8 +82,8 @@ class Util:
         child_names = list()
         if self.ready:
             if node:
-                for child in node.children:
-                    if child.name: child_names.append(str(child.name))
+                for child in [child for child in node.children if child.name]:
+                    child_names.append(str(child.name))
             else:
                 self.ready = None
                 self.logger.error('Unable to get_child_names. ' +
@@ -107,6 +107,20 @@ class Util:
                                   'tag_name: {}'.format(tag_name)
                                   )
         return all_one_tag_type
+
+    def get_sibling_names(self,node=None):
+        '''Set a list of child for the given BeautifulSoup node.'''
+        sibling_names = list()
+        if self.ready:
+            if node:
+                for sibling in [sibling for sibling in node.next_siblings if sibling.name]:
+                    sibling_names.append(str(sibling.name))
+            else:
+                self.ready = None
+                self.logger.error('Unable to get_sibling_names. ' +
+                                  'node: {0}'.format(node))
+        return sibling_names
+
 
     def get_parent_names(self,node=None):
         '''Set a list of parents for the given BeautifulSoup node.'''
@@ -170,3 +184,15 @@ class Util:
                 hdu_titles.append('hdu ' + str(n))
         return hdu_titles
 
+    def get_digit_in_string(self,string=None):
+        '''Get single digit from the given string.'''
+        digit = None
+        if self.ready:
+            if string:
+                digits = list(filter(str.isdigit, string))
+                digit = int(digits[0]) if len(digits) == 1 else None
+            else:
+                self.ready = None
+                self.logger.error('Unable to get_digit_in_string. ' +
+                                  'string: {0}'.format(string))
+        return digit

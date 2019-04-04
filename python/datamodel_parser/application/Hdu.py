@@ -63,6 +63,8 @@ class Hdu:
                 else:
                     # self.body not all div tags
                     child_names = set(self.util.get_child_names(node=self.body))
+#                    print('child_names: %r'% child_names)
+#                    input('pause')
                     if child_names == {'h1','p','h3','ul','pre'}:
                         self.parse_file_h1_p_h3_ul_pre()
                     else:
@@ -537,10 +539,6 @@ class Hdu:
                                 for td in tr.find_all('td'):
                                     string = self.util.get_string(node=td)
                                     table_row.append(string)
-#                                    if 'Distance estimate using' in string:
-#                                        print('\ntr: %r' % tr)
-#                                        print('string: %r' % string)
-#                                        input('pause')
                                 table_rows[position - 1]  = table_row
                                 
                                 # put it all together
