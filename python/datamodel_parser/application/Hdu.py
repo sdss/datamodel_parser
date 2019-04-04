@@ -613,23 +613,21 @@ class Hdu:
                                                           self.hdu_pres)):
                         hdu_title = (self.util.get_string(node=heading_tag)
                                             .replace(':',''))
-                        self.ready = self.ready and self.util.ready
-                        if self.ready:
-                            header = list()
-                            for pre_tag in pre_tags:
-                                string = self.util.get_string(node=pre_tag)
-                                self.ready = self.ready and self.util.ready
-                                if self.ready: header.append(string)
-                                else: break
-                            header = '\n' + '\n'.join(header)
-                            self.parse_file_hdu_tables(header=header)
-                            self.parse_file_hdu_info(hdu_title = hdu_title,
-                                                     header       = header)
-                        else: break
+                        table_info = list()
+                        for pre_tag in pre_tags:
+                            string = self.util.get_string(node=pre_tag)
+                            table_info.append(string)
+                        table_info = '\n' + '\n'.join(table_info)
+                        # put it all together
+                        self.parse_file_hdu_info_h1_p_h3_ul_pre(
+                                                        hdu_title  = hdu_title,
+                                                        table_info = table_info)
+                        self.parse_file_hdu_tables_h1_p_h3_ul_pre(table_info=table_info)
                 else:
                     self.ready = False
                     self.logger.error(
-                        'Unable to parse_file_hdu_tables. ' +
+                        'Unable to parse_file_h1_p_h3_ul_pre. ' +
+                        'Possible unequal list lenghts. ' +
                         'self.hdu_headings: {}'
                             .format(self.hdu_headings) +
                         'self.hdu_pres: {}'
@@ -651,18 +649,14 @@ class Hdu:
             if self.body and self.body.children:
                 previous_child = None
                 found_hdu_tags = False
-                for child in self.body.children:
-                    child_name = child.name if child else None
-                    if child_name and child_name in self.heading_tags:
+                for child in [child for child in self.body.children if child.name]:
+                    if child.name in self.heading_tags:
                         string = self.util.get_string(node=child)
-                        self.ready = self.ready and self.util.ready
-                        if self.ready:
-                            if string and 'HDU' in string:
-                                found_hdu_tags = True
-                                self.hdu_tags = (previous_child.next_siblings
-                                                       if previous_child else None)
-                                break
-                        else: break
+                        if string and 'HDU' in string:
+                            found_hdu_tags = True
+                            self.hdu_tags = (previous_child.next_siblings
+                                             if previous_child else None)
+                            break
                     if not found_hdu_tags:
                         previous_child = child if child else None
             else:
@@ -680,24 +674,19 @@ class Hdu:
                 self.hdu_headings = list()
                 self.hdu_pres = list()
                 pres = list()
-                for tag in self.hdu_tags:
-                    name = tag.name
-                    if name:
-                        string = self.util.get_string(node=tag)
-                        self.ready = self.ready and self.util.ready
-                        if self.ready:
-                            if name in self.heading_tags and 'HDU' in string:
-                                self.hdu_headings.append(tag)
-                                if first_hdu:
-                                    first_hdu = False
-                                else:
-                                    self.hdu_pres.append(pres)
-                                    pres = list()
-                            elif name == 'pre':
-                                pres.append(tag)
-                            else: # Do nothing; only processing heading and pre tags
-                                pass
-                        else: break
+                for tag in [tag for tag in self.hdu_tags if tag.name]:
+                    string = self.util.get_string(node=tag)
+                    if tag.name in self.heading_tags and 'HDU' in string:
+                        self.hdu_headings.append(tag)
+                        if first_hdu:
+                            first_hdu = False
+                        else:
+                            self.hdu_pres.append(pres)
+                            pres = list()
+                    elif tag.name == 'pre':
+                        pres.append(tag)
+                    else: # Do nothing; only processing heading and pre tags
+                        pass
                 self.hdu_pres.append(pres)
             else:
                 self.ready = None
@@ -705,16 +694,16 @@ class Hdu:
                                   'self.hdu_tags: {}'
                                   .format(self.hdu_tags))
 
-    def parse_file_hdu_info(self,hdu_title=None,header=None):
+    def parse_file_hdu_info_h1_p_h3_ul_pre(self,hdu_title=None,table_info=None):
         '''Parse file description content from given hdu_titleision tag.'''
         if self.ready:
-            if hdu_title and header:
+            if hdu_title and table_info:
                 if self.ready:
-                    # hdu.hdu_number and header.title
+                    # hdu.hdu_number and table_info.title
                     hdu_number = (
                         [int(s) for s in list(hdu_title) if s.isdigit()][0])
                     # data.is_image
-                    rows = header.split('\n') if header else list()
+                    rows = table_info.split('\n') if table_info else list()
                     rows = [row for row in rows
                             if row and 'XTENSION' in row and 'IMAGE' in row]
                     is_image = bool(rows)
@@ -729,49 +718,49 @@ class Hdu:
                     self.hdu_count = len(self.file_hdu_info)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_info. ' +
+                self.logger.error('Unable to parse_file_hdu_info_h1_p_h3_ul_pre. ' +
                                   'hdu_title: {}'.format(hdu_title) +
-                                  'header: {}'.format(header))
+                                  'table_info: {}'.format(table_info))
 
-    def parse_file_hdu_tables(self,header=None):
-        '''Parse file description content from given headerision tag.'''
+    def parse_file_hdu_tables_h1_p_h3_ul_pre(self,table_info=None):
+        '''Parse file description content from given table_infoision tag.'''
         hdu_table = dict()
+        hdu_tables = list()
         if self.ready:
-            if header:
+            if table_info:
                 # table caption
                 table_caption = None
-                # table column headers
+                # table column table_infos
                 table_column_names = ['key','value','type','comment']
                 # table values
                 table_rows = dict()
-                rows = header.split('\n') if header else list()
+                rows = table_info.split('\n') if table_info else list()
                 rows = [row for row in rows if row]
                 if rows:
                     for (position,row) in enumerate(rows):
                         self.set_row_data(row=row)
                         table_rows[position] = (self.row_data
                                                  if self.row_data else None)
+                    
                     hdu_table['is_header']          = True #DEBUG
                     hdu_table['table_caption']      = table_caption
                     hdu_table['table_column_names'] = table_column_names
                     hdu_table['table_rows']         = table_rows
-#                    print('hdu_table: %r' % hdu_table)
-#                    input('pause')
-
-                    self.file_hdu_tables.append(hdu_table)
+                    hdu_tables.append(hdu_table)
+                    self.file_hdu_tables.append(hdu_tables)
                 else:
                     self.ready = False
                     self.logger.error(
-                                'Unable to parse_file_hdu_tables. ' +
+                                'Unable to parse_file_hdu_tables_h1_p_h3_ul_pre. ' +
                                 'rows: {}'.format(rows))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_tables. ' +
+                self.logger.error('Unable to parse_file_hdu_tables_h1_p_h3_ul_pre. ' +
                                   'header: {}'.format(header))
 
     def set_row_data(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
-        self.row_data = dict()
+        self.row_data = list()
         if self.ready:
             if row:
                 keyword = None
@@ -785,7 +774,7 @@ class Hdu:
                 elif '=' in row:
                     split = row.split('=')
                     keyword       = split[0].strip() if split else None
-                    value_comment = split[1]         if split else None
+                    value_comment = split[1].strip() if split else None
                 elif 'END' in row:
                     keyword = 'END'
                     value_comment = row.replace('END','')
@@ -798,15 +787,12 @@ class Hdu:
                             'row: {}'.format(row))
                 if value_comment and '/' in value_comment:
                     split = value_comment.split('/')
-                    value   = split[0]         if split else None
+                    value   = split[0].strip() if split else None
                     comment = split[1].strip() if split else None
                 else:
-                    value = value_comment
+                    value = value_comment.strip()
                     comment = None
-                self.row_data['keyword'] = keyword if keyword else None
-                self.row_data['value']   = value   if value   else None
-                self.row_data['type']    = type    if type    else None
-                self.row_data['comment'] = comment if comment else None
+                self.row_data = [keyword,value,type,comment]
             else:
                 self.ready = False
                 self.logger.error('Unable to set_row_data. ' +

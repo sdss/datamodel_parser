@@ -151,16 +151,16 @@ class File:
                     self.file_hdu_info        = self.hdu.file_hdu_info
                     self.file_hdu_tables      = self.hdu.file_hdu_tables
 
-                print('HI File.parse_file()')
-                print('self.intro_positions: {}'.format(self.intro_positions))
-                print('self.intro_heading_levels: %r' % self.intro_heading_levels)
-                print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
-                print('self.intro_descriptions: {}'.format(self.intro_descriptions))
-                print('self.section_hdu_titles: {}'.format(self.section_hdu_titles))
-                print('self.hdu_count: {}'.format(self.hdu_count))
-                print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
-                print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
-                input('pause')
+#                print('HI File.parse_file()')
+#                print('self.intro_positions: {}'.format(self.intro_positions))
+#                print('self.intro_heading_levels: %r' % self.intro_heading_levels)
+#                print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
+#                print('self.intro_descriptions: {}'.format(self.intro_descriptions))
+#                print('self.section_hdu_titles: {}'.format(self.section_hdu_titles))
+#                print('self.hdu_count: {}'.format(self.hdu_count))
+#                print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
+#                print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
+#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. ' +
@@ -328,13 +328,18 @@ class File:
                 ):
                 hdu_info = self.file_hdu_info
                 hdu_tables = self.file_hdu_tables
-                
+#                print('hdu_info: %r' % hdu_info)
+#                print('hdu_tables: %r' % hdu_tables)
+#                print('type(hdu_tables): %r' % type(hdu_tables))
+#                print('len(hdu_tables): %r' % len(hdu_tables))
+#                input('pause')
+
                 if len(hdu_info) == len(hdu_tables):
-                    for (hdu_info,hdu_tables) in list(zip(hdu_info,hdu_tables)):
+                    for (hdu_info,hdu_tables) in list(zip(self.file_hdu_info,self.file_hdu_tables)):
                         if self.ready:
                             for hdu_table in hdu_tables:
-                                print('hdu_table: %r' % hdu_table)
-                                input('pause')
+#                                print('hdu_table: %r' % hdu_table)
+#                                input('pause')
                                 hdu_number = hdu_info['hdu_number']
                                 hdu_title  = hdu_info['hdu_title']
                                 table_caption = hdu_table['table_caption']
