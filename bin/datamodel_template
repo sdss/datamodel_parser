@@ -20,7 +20,7 @@ else:
     store.split_path()
     store.set_html_text()
     store.set_file()
-    store.file.render_template(template=template)
+    store.render_template(template=template)
     store.exit()
 
 '''

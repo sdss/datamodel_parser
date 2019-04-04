@@ -137,7 +137,7 @@ class Util:
                     definitions.append(string)
                 for dd in dds:
                     contents = [self.get_string(node=x) for x in dd.contents]
-                    string = ' '.join(contents) if len(contents) > 1 else contents[0]
+                    string = ''.join(contents) if len(contents) > 1 else contents[0]
                     descriptions.append(string)
             else:
                 self.ready = None
@@ -161,4 +161,12 @@ class Util:
                                   'node: {0}'.format(node) +
                                   'header_tag_name: {0}'.format(header_tag_name))
         return (hdu_number,hdu_title)
+
+    def get_all_possible_hdu_titles(self):
+        '''Generate a list of hdu n where n is an integer.'''
+        hdu_titles = list()
+        if self.ready:
+            for n in range(100):
+                hdu_titles.append('hdu ' + str(n))
+        return hdu_titles
 

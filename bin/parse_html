@@ -31,6 +31,8 @@ File Type 2)
 File Type 3)
     Fail!
     parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
+    Fail!
+    parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
 
 File Type 4)
     parse_html -l debug -v --path datamodel/files/MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html 

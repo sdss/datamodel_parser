@@ -2,6 +2,12 @@ from datamodel_parser.application import File
 from datamodel_parser.application import Database
 from os import environ, walk
 from os.path import join, exists, basename
+
+from flask import render_template
+from datamodel_parser import app
+from os import environ
+from os.path import join
+
 import logging
 
 from json import dumps
@@ -360,8 +366,9 @@ class Store:
                                   else None)
                 self.file = (File(logger         = self.logger,
                                   options        = self.options,
+                                  file_path_info = file_path_info,
                                   html_text      = self.html_text,
-                                  file_path_info = file_path_info)
+                                  )
                              if self.logger       and
                                 self.options      and
                                 self.html_text    and
@@ -372,6 +379,71 @@ class Store:
                 self.ready = False
                 self.logger.error('Unable to set_file. ' +
                                   'self.html_text: {}, '.format(self.html_text))
+
+    def render_template(self,template=None):
+        '''Use database information to render the given template.'''
+        if self.ready:
+            self.set_database()
+            if template and self.database:
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
+                (intros,hdu_info_dict) = (self.database.get_intros_sections_hdus()
+                                          if self.ready and self.database.ready
+                                          else None)
+                self.ready = self.ready and self.database.ready
+                if self.ready:
+                    result = None
+                    with app.app_context():
+                        result = render_template(template,
+                                                 intros        = intros,
+                                                 hdu_info_dict = hdu_info_dict,
+                                                 )
+                    self.process_rendered_template(result   = result,
+                                                   template = template)
+                else:
+                    print('Fail! \nTry running parse_html for the file: %r'
+                            % self.options.path)
+            else:
+                self.ready = False
+                self.logger.error('Unable to render_template.' +
+                                  'template: {}'.format(template) +
+                                  'self.database: {}'.format(self.database)
+                                  )
+
+    def process_rendered_template(self,result=None,template=None):
+        '''Process the result of the rendered Jinja2 template.'''
+        if self.ready:
+            if result and template:
+                self.set_datamodel_parser_rendered_dir()
+                file_hdu = template.split('.')[0].split('_')[1]
+                dir_name = (self.datamodel_parser_rendered_dir
+                            if self.datamodel_parser_rendered_dir else None)
+                file_name = self.file_name.split('.')[0] + '.' + file_hdu
+                file = join(dir_name,file_name)
+                self.logger.info('writing rendered template to file: %r' % file)
+                with open(file, 'w+') as text_file:
+                    text_file.write(result)
+            else:
+                self.ready = False
+                self.logger.error('Unable to process_rendered_template. ' +
+                                  'result: {}, '.format(result) +
+                                  'template: {}, '.format(template))
+
+    def set_datamodel_parser_rendered_dir(self):
+        '''Set the DATAMODEL_DIR file path on cypher.'''
+        self.datamodel_parser_rendered_dir = None
+        if self.ready:
+            try: self.datamodel_parser_rendered_dir = (
+                    environ['DATAMODEL_PARSER_RENDERED_TEMPLATES_DIR'])
+            except:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_datamodel_parser_rendered_dir from the ' +
+                    'environmental variable DATAMODEL_PARSER_RENDERED_TEMPLATES_DIR. ' +
+                    'Try loading a datamodel_parser module file.')
+
 
 
     def exit(self):

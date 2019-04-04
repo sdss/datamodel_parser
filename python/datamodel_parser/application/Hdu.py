@@ -67,8 +67,8 @@ class Hdu:
                         self.parse_file_h1_p_h3_ul_pre()
                     else:
                         self.ready = False
-                        self.logger.error('Unexpected intro type encountered ' +
-                                          'in parse_file.')
+                        self.logger.error('Unexpected HTML body type encountered ' +
+                                          'in Hdu.parse_file.')
                 if len(self.file_hdu_info) == len(self.file_hdu_tables):
                     self.hdu_count = len(self.file_hdu_info)
                 else:
@@ -735,7 +735,7 @@ class Hdu:
 
     def parse_file_hdu_tables(self,header=None):
         '''Parse file description content from given headerision tag.'''
-        hdu = dict()
+        hdu_table = dict()
         if self.ready:
             if header:
                 # table caption
@@ -751,10 +751,14 @@ class Hdu:
                         self.set_row_data(row=row)
                         table_rows[position] = (self.row_data
                                                  if self.row_data else None)
-                    hdu['table_caption']      = table_caption
-                    hdu['table_column_names'] = table_column_names
-                    hdu['table_rows']         = table_rows
-                    self.file_hdu_tables.append(hdu)
+                    hdu_table['is_header']          = True #DEBUG
+                    hdu_table['table_caption']      = table_caption
+                    hdu_table['table_column_names'] = table_column_names
+                    hdu_table['table_rows']         = table_rows
+#                    print('hdu_table: %r' % hdu_table)
+#                    input('pause')
+
+                    self.file_hdu_tables.append(hdu_table)
                 else:
                     self.ready = False
                     self.logger.error(

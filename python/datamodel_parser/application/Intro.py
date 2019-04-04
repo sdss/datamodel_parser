@@ -55,7 +55,9 @@ class Intro:
             if self.body:
                 # process different intro types
                 # self.body all div tags
+                child_names = self.util.get_child_names(node=self.body)
 #                print('self.body: %r'% self.body)
+#                print('child_names: %r'% child_names)
 #                input('pause')
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
@@ -65,10 +67,12 @@ class Intro:
                     child_names = set(self.util.get_child_names(node=self.body))
                     if child_names == {'h1','p','h3','ul','pre'}:
                         self.parse_file_h1_p_h3_ul_pre()
+                    elif child_names == {'h1','p','h2','table','h3','pre'}:
+                        self.parse_file_h1_p_h2_table_h3_pre()
                     else:
                         self.ready = False
-                        self.logger.error('Unexpected intro type encountered ' +
-                                          'in parse_file.')
+                        self.logger.error('Unexpected HTML body type encountered ' +
+                                          'in Intro.parse_file.')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_info. ' +
@@ -392,7 +396,7 @@ class Intro:
 
     def parse_file_h1_p_h3_ul_pre(self):
         '''Parse the HTML of the given BeautifulSoup div tag object with
-            children: h1, h4 and p.'''
+            children: h1, p, h3, ul, and pre.'''
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h1_p_h3_ul_pre()
             if self.body and assumptions:
@@ -484,3 +488,27 @@ class Intro:
         if not assumptions: self.ready = False
         return assumptions
 
+    def parse_file_h1_p_h2_table_h3_pre(self):
+        '''Parse the HTML of the given BeautifulSoup div tag object with
+            children: h1, p, h3, ul, and pre.'''
+        if self.ready:
+#            assumptions = self.verify_assumptions_parse_file_h1_p_h3_ul_pre()
+            if self.body:# and assumptions:
+                child_names = self.util.get_child_names(node=self.body)
+                print('child_names: %r' % child_names)
+
+                for child in child_names:
+                    self.body.find_next(child)
+                    if child in self.util.heading_tags:
+                        hdu_titles = self.util.get_all_possible_hdu_titles()
+                        print('hdu_titles: %r'% hdu_titles)
+                        input('pause')
+
+                    print('child: %r' % child)
+                    input('pause')
+
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_h1_p_h3_ul_pre. ' +
+                                  'self.body: {}'.format(self.body) +
+                                  'assumptions: {}'.format(assumptions))
