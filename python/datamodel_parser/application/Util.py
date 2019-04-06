@@ -35,10 +35,12 @@ class Util:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.heading_tags = ['h1','h2','h3','h4','h5','h6']
-            self.paragraph_tags = ['p']
-            self.bold_tags = ['b']
-            self.unordered_list_tags = ['ul']
+            self.heading_tags = {'h1','h2','h3','h4','h5','h6'}
+            self.paragraph_tags = {'p'}
+            self.bold_tags = {'b'}
+            self.unordered_list_tags = {'ul'}
+            self.description_list_tags ={'dl'}
+            self.table_tags = {'table'}
 
     def get_string(self,node=None):
         string = None
@@ -140,31 +142,31 @@ class Util:
         '''From the given HTML description list <dl> Beautiful soup object,
         get Python lists for the associated definition tags <dt> and
         description tags <dd>.'''
-        definitions  = list()
-        descriptions = list()
+        dts  = list()
+        dds = list()
         if self.ready:
             if dl:
-                dts = dl.find_all('dt')
-                dds = dl.find_all('dd')
-                for dt in dts:
+                dt_tags = dl.find_all('dt')
+                dd_tags = dl.find_all('dd')
+                for dt in dt_tags:
                     string = self.get_string(node=dt)
-                    definitions.append(string)
-                for dd in dds:
+                    dts.append(string)
+                for dd in dd_tags:
                     contents = [self.get_string(node=x) for x in dd.contents]
                     string = ''.join(contents) if len(contents) > 1 else contents[0]
-                    descriptions.append(string)
+                    dds.append(string)
             else:
                 self.ready = None
                 self.logger.error('Unable to get_dts_and_dds_from_dl. ' +
                                   'dl: {0}'.format(dl))
-        return (definitions,descriptions)
+        return (dts,dds)
 
-    def get_hdu_number_and_hdu_title(self,node=None,header_tag_name=None):
+    def get_hdu_number_and_hdu_title(self,node=None,heading_tag_name=None):
         '''Get hdu.hdu_number and header.title from BeautifulSoup node.'''
         (hdu_number,hdu_title) = (None,None)
         if self.ready:
-            if node and header_tag_name:
-                header_tag = node.find_next(header_tag_name)
+            if node and heading_tag_name:
+                header_tag = node.find_next(heading_tag_name)
                 heading = self.get_string(node=header_tag)
                 split = heading.split(':')
                 hdu_number = int(split[0].lower().replace('hdu',''))
@@ -173,7 +175,7 @@ class Util:
                 self.ready = None
                 self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
                                   'node: {0}'.format(node) +
-                                  'header_tag_name: {0}'.format(header_tag_name))
+                                  'heading_tag_name: {0}'.format(heading_tag_name))
         return (hdu_number,hdu_title)
 
     def get_all_possible_hdu_titles(self):
@@ -196,3 +198,42 @@ class Util:
                 self.logger.error('Unable to get_digit_in_string. ' +
                                   'string: {0}'.format(string))
         return digit
+
+    def get_hdu_divs(self,node=None):
+        '''Get a list of divs with id containing 'hdu', from the given node.'''
+        hdu_divs = list()
+        if self.ready:
+            if node:
+                divs = node.find_all('div')
+                for div in [div for div in divs
+                            if not self.get_string(node=div).isspace()]:
+                    if 'hdu' in div['id']:
+                        hdu_divs.append(div)
+            else:
+                self.ready = None
+                self.logger.error('Unable to get_hdu_divs. ' +
+                                  'node: {0}'.format(node))
+        return hdu_divs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

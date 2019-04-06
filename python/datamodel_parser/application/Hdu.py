@@ -63,8 +63,6 @@ class Hdu:
                 else:
                     # self.body not all div tags
                     child_names = set(self.util.get_child_names(node=self.body))
-#                    print('child_names: %r'% child_names)
-#                    input('pause')
                     if child_names == {'h1','p','h3','ul','pre'}:
                         self.parse_file_h1_p_h3_ul_pre()
                     else:
@@ -89,11 +87,9 @@ class Hdu:
         '''Parse the HTML of the given BeautifulSoup div tag object.'''
         if self.ready:
             if self.body:
-                # Find hdu div
-                for div in [div for div in self.body
-                            if not self.util.get_string(node=div).isspace()]:
-                    # Found hdu div
-                    if 'hdu' in div['id']: self.parse_file_hdu_div(div=div)
+                divs = self.util.get_hdu_divs(node=self.body)
+                for div in divs:
+                    self.parse_file_hdu_div(div=div)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_div. ' +
@@ -104,10 +100,24 @@ class Hdu:
         if self.ready:
             if div:
                 child_names = set(self.util.get_child_names(node=div))
+                hdu_type = self.get_Hdu_type(node=div)
+#                print('child_names: %r'% child_names)
+#                print('hdu_type: %r'% hdu_type)
+#                input('pause')
+
                 # process different div hdu types
-                if child_names == {'h2','p','dl','table'}:
-                    self.parse_file_hdu_intro_h2_p_dl_table(div=div)
-                    self.parse_file_hdu_tables_h2_p_dl_table(div=div)
+                if hdu_type == 1:
+#                    print('HI parse_file_hdu_div  hdu_type == 1')
+#                    input('pause')
+                    self.parse_file_hdu_intro_type_1(div=div)
+                    self.parse_file_hdu_tables_type_1(div=div)
+
+                elif hdu_type == 2:
+#                    print('HI parse_file_hdu_div  hdu_type == 2')
+#                    input('pause')
+
+                    self.parse_file_hdu_intro_type_1(div=div,skip_dl=True)
+                    self.parse_file_hdu_tables_type_1(div=div)
                 elif child_names == {'h2','pre'}:
                     self.parse_file_hdu_intro_h2_pre(div=div)
                     self.parse_file_hdu_tables_h2_pre(div=div)
@@ -123,20 +133,146 @@ class Hdu:
                 self.logger.error('Unable to parse_file_hdu_div. ' +
                                   'div: {}.'.format(div))
 
-    def parse_file_hdu_intro_h2_p_dl_table(self,
-                                           div=None,
-                                           assumptions=None,
-                                           skip_dl=None):
+    def get_Hdu_type(self,node=None):
+        '''Determine class Hdu template type from the given BeautifulSoup node.'''
+        hdu_type = None
+        if self.ready:
+            if node:
+                if   self.check_Hdu_type_1(node=node): hdu_type = 1
+                elif self.check_Hdu_type_2(node=node): hdu_type = 2
+#                else:
+#                    self.ready = False
+#                    self.logger.error('Unable to get_Hdu_type. '
+#                                      'Unexpected child_names encountered ' +
+#                                      'in Hdu.parse_file_hdu_div(). ')
+        return hdu_type
+
+    def check_Hdu_type_1(self,node=None):
+        '''Determine class Hdu template type from the given BeautifulSoup node.'''
+        correct_type = None
+        if self.ready:
+            if node:
+                correct_type = True
+                self.logger.debug("Inconsistencies for check_Hdu_type_1:")
+                tag_names = set(self.util.get_child_names(node=node))
+                # check tag_names = {h,p,ul,table}
+                if not (tag_names.issubset(self.util.heading_tags
+                                           | {'p'} | {'dl'} | {'table'})
+                                            and tag_names & {'dl'}):
+                    correct_type = False
+                    self.logger.debug("tag_names = {h,p,ul,table}")
+                # <dl> tag assumptions
+                if not 'dl' in tag_names:
+                    self.logger.debug("'dl' in tag_names")
+                    correct_type = False
+                else:
+                    # check children of <dl> are <dt> and <dd>
+                    dl = node.find_next('dl')
+                    child_names = set(self.util.get_child_names(node=dl))
+                    if not child_names == {'dt','dd'}:
+                        correct_type = False
+                        self.logger.debug("children of dl are dt and dd")
+                    else:
+                        # check certain strings are in the list elements of dts
+                        (dts,dds) = self.util.get_dts_and_dds_from_dl(dl=dl)
+                        in_dt = lambda s: bool([x for x in dts if s in x.lower()])
+                        if not (in_dt('hdu') and in_dt('type') and in_dt('size')):
+                            correct_type = False
+                            self.logger.debug("dts list elements")
+                if correct_type:
+                    # check the tag properties common to type_1 and type_2
+                    correct_type = self.check_Hdu_type_common_1_2(node=node)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_Hdu_type. ' +
+                                  'node: {}.'.format(node))
+        return correct_type
+
+    def check_Hdu_type_2(self,node=None):
+        '''Determine class Hdu template type from the given BeautifulSoup node.'''
+        correct_type = None
+        if self.ready:
+            if node:
+                correct_type = True
+                self.logger.debug("Inconsistencies for check_Hdu_type_2:")
+                tag_names = set(self.util.get_child_names(node=node))
+                # check tag_names = {h,p,ul,table}
+                if not (tag_names.issubset(self.util.heading_tags
+                                           | {'p'} | {'dl'} | {'table'})):
+                    correct_type = False
+                    self.logger.debug("tag_names = {h,p,table}")
+                if correct_type:
+                    # check the tag properties common to type_1 and type_2
+                    correct_type = self.check_Hdu_type_common_1_2(node=node)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_Hdu_type. ' +
+                                  'node: {}.'.format(node))
+        return correct_type
+
+    def check_Hdu_type_common_1_2(self,node=None):
+        '''Determine class Hdu template type from the given BeautifulSoup node.'''
+        correct_type = None
+        if self.ready:
+            if node:
+                correct_type = True
+                self.logger.debug("Inconsistencies for check_Hdu_type_2:")
+                tag_names = set(self.util.get_child_names(node=node))
+                # <table> tag assumptions
+                if not 'table' in tag_names:
+                    correct_type = False
+                    self.logger.debug("'table' in tag_names")
+                else:
+                    table = node.find_next('table')
+                    child_names = set(self.util.get_child_names(node=table))
+                    if not child_names == {'caption','thead','tbody'}:
+                        correct_type = False
+                        self.logger.debug("table.children == {caption,thead,tbody}")
+                    else:
+                        # <thead> tag assumptions
+                        thead = table.find_next('thead')
+                        child_names = self.util.get_child_names(node=thead)
+                        if not child_names == ['tr']:
+                            correct_type = False
+                            self.logger.debug("child_names == ['tr']")
+                        else:
+                            # Asume all children of the <tr> tag are <th> tags
+                            tr = thead.find_next('tr')
+                            if not self.util.children_all_one_tag_type(node=tr,tag_name='th'):
+                                correct_type = False
+                                self.logger.debug("All children of the tr tag are th tags")
+                        # tbody tag assumptions
+                        # Asume all children of the <tbody> tag are <tr> tags
+                        tbody = table.find_next('tbody')
+                        if not self.util.children_all_one_tag_type(node=tbody,tag_name='tr'):
+                            correct_type = False
+                            self.logger.debug("All children of the <tbody> tag are <tr> tags")
+                        # Asume all children of the <tbody> child <tr> tags are <td> tags
+                        for tr in [tr for tr in tbody.children
+                                   if not self.util.get_string(node=tr).isspace()]:
+                            if not self.util.children_all_one_tag_type(node=tr,tag_name='td'):
+                                correct_type = False
+                                self.logger.debug("all children of the <tbody> " +
+                                                  "child <tr> tags are <td> tags")
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_Hdu_type. ' +
+                                  'node: {}.'.format(node))
+        return correct_type
+
+
+    def parse_file_hdu_intro_type_1(self,div=None, skip_dl=None):
         '''Parse file hdu data content from given division tag.'''
         if self.ready:
-            assumptions = (
-                assumptions if assumptions is not None
-                else self.verify_assumptions_parse_file_h2_p_dl_table(div=div))
             skip_dl = skip_dl if skip_dl else False
-            if div and assumptions:
+            if div:
+                child_names = set(self.util.get_child_names(node=div))
+                heading_tag_name = child_names & set(self.util.heading_tags)
                 # hdu.hdu_number and header.title
-                (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
-                                            node=div,header_tag_name='h2'))
+                (hdu_number,hdu_title) = (
+                    self.util.get_hdu_number_and_hdu_title(
+                                            node=div,
+                                            heading_tag_name=heading_tag_name))
                 # hdu.description
                 p = div.find_next('p')
                 hdu_description = self.util.get_string(node=p)
@@ -166,21 +302,22 @@ class Hdu:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_h2_p_dl_table. ' +
-                                  'div: {}, '.format(div) +
-                                  'assumptions: {}'.format(assumptions)
-                                  )
+                                  'div: {}, '.format(div))
 
-    def parse_file_hdu_tables_h2_p_dl_table(self,div=None):
+    def parse_file_hdu_tables_type_1(self,div=None):
         '''Parse file hdu keyword/value/type/comment content
         from given division tag.'''
         hdu_tables = list()
         if self.ready:
-            assumptions = self.verify_assumptions_parse_file_h2_p_dl_table(div=div)
-            if div and assumptions:
+            if div:
                 tables = div.find_all('table')
                 # double check is_image consistentcy
-                (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
-                                            node=div,header_tag_name='h2'))
+                child_names = set(self.util.get_child_names(node=div))
+                heading_tag_name = child_names & set(self.util.heading_tags)
+                (hdu_number,hdu_title) = (
+                    self.util.get_hdu_number_and_hdu_title(
+                                            node=div,
+                                            heading_tag_name=heading_tag_name))
                 is_image = self.file_hdu_info[hdu_number]['is_image']
                 if (is_image and len(tables) == 2):
                     self.ready = False
@@ -217,106 +354,8 @@ class Hdu:
                     self.file_hdu_tables.append(hdu_tables)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_tables_h2_p_dl_table. ' +
-                                  'div: {}, '.format(div) +
-                                  'assumptions: {}.'.format(assumptions))
-
-    def verify_assumptions_parse_file_h2_p_dl_table(self,div=None):
-        '''Verify assumptions made in parse_file_hdu_intro_h2_p_dl_table
-            and parse_file_hdu_tables_h2_p_dl_table.'''
-        assumptions = None
-        if div:
-            assumptions = True
-            child_names = self.util.get_child_names(node=div)
-            if not (child_names == ['h2','p','dl','table'] or
-                    child_names == ['h2','p','dl','table','table']):
-                assumptions = False
-                self.logger.error("Invalid assumption: " +
-                                  "child_names == ['h2','p','dl','table'] or " +
-                                  "child_names == ['h2','p','dl','table','table']")
-            # h2 tag assumptions
-            # Assume 'HDUn: HduTitle' is the h2 heading for some digit n
-            h2 = div.find_next('h2')
-            string = self.util.get_string(node=h2).lower()
-            if not ('hdu' in string and
-                    ':' in string   and
-                    string.split(':')[0].lower().replace('hdu','').isdigit()):
-                assumptions = False
-                self.logger.error(
-                        "Invalid assumption: " +
-                        "div.find_next('h2') = 'HDUn: HduTitle', " +
-                        "where n is a digit")
-            # dl assumptions
-            dl = div.find_next('dl')
-            child_names = self.util.get_child_names(node=dl)
-            repeated_dt_dd = False
-            for n in range(1,20):
-                if child_names == ['dt','dd']*n:
-                    repeated_dt_dd = True
-                    break
-            if not repeated_dt_dd:
-                assumptions = False
-                self.logger.error("Invalid assumption: "
-                                  "repeated_dt_dd")
-            # dt tags assumptions
-            dts = dl.find_all('dt')
-            dts_strings = list()
-            for dt in dts:
-                string = self.util.get_string(node=dt).lower()
-                dts_strings.append(string)
-            # Assume 'HDU Type' in dts_strings
-            if 'hdu type' not in dts_strings:
-                assumptions = False
-                self.logger.error("Invalid assumption: 'HDU Type' in dts_strings")
-            # Assume 'HDU Size' in dts_strings
-            if 'hdu size' not in dts_strings:
-                assumptions = False
-                self.logger.error("Invalid assumption: 'HDU Size' in dts_strings")
-            # table tag assumptions
-            table = div.find_next('table')
-            child_names = self.util.get_child_names(node=table)
-            if not child_names == ['caption','thead','tbody']:
-                assumptions = False
-                self.logger.error("Invalid assumption: " +
-                                  "child_names == ['caption','thead','tbody']")
-            # thead tag assumptions
-            thead = table.find_next('thead')
-            child_names = self.util.get_child_names(node=thead)
-            if not child_names == ['tr']:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names == ['tr']")
-            # Asume all children of the <ul> tag are <th> tags
-            tr = thead.find_next('tr')
-            if not self.util.children_all_one_tag_type(node=tr,tag_name='th'):
-                assumptions = False
-                self.logger.error(
-                        "Invalid assumption: " +
-                        "children_all_one_tag_type(node=tr,tag_name='th') == True")
-            # tbody tag assumptions
-            # Asume all children of the <tbody> tag are <tr> tags
-            tbody = table.find_next('tbody')
-            if not self.util.children_all_one_tag_type(node=tbody,tag_name='tr'):
-                assumptions = False
-                self.logger.error(
-                        "Invalid assumption: " +
-                        "children_all_one_tag_type(node=tbody,tag_name='tr') == True")
-            # Asume all children of the <tbody> child <tr> tags are <td> tags
-            for tr in [tr for tr in tbody.children
-                       if not self.util.get_string(node=tr).isspace()]:
-                if not self.util.children_all_one_tag_type(node=tr,tag_name='td'):
-                    assumptions = False
-                    self.logger.error(
-                            "Invalid assumption: " +
-                            "children_all_one_tag_type(node=tr,tag_name='td')")
-        else:
-            self.ready = False
-            self.logger.error(
-                'Unable to verify_assumptions_parse_file_h2_p_dl_table. ' +
-                'div: {}.'.format(div))
-#        print('assumptions: %r' % assumptions)
-#        input('pause')
-        if not assumptions: self.ready = False
-        return assumptions
+                self.logger.error('Unable to parse_file_hdu_tables_type_1. ' +
+                                  'div: {}, '.format(div))
 
     def parse_file_hdu_intro_h2_pre(self,div=None):
         '''Parse file hdu data content from given division tag.'''
@@ -325,7 +364,7 @@ class Hdu:
             if div and assumptions:
                 # hdu.hdu_number and header.title
                 (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
-                                            node=div,header_tag_name='h2'))
+                                            node=div,heading_tag_name='h2'))
                 # data.is_image
                 pre_string = div.find_next('pre').string
                 rows = pre_string.split('\n') if pre_string else list()
@@ -489,9 +528,11 @@ class Hdu:
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h2_p_table(div=div)
             if div and assumptions:
-                self.parse_file_hdu_intro_h2_p_dl_table(div=div,
-                                                        assumptions=assumptions,
-                                                        skip_dl=True)
+                self.parse_file_hdu_intro_type_1(div=div,skip_dl=True)
+
+#                self.parse_file_hdu_intro_h2_p_dl_table(div=div,
+#                                                        assumptions=assumptions,
+#                                                        skip_dl=True)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_h2_p_table. ' +
@@ -508,7 +549,7 @@ class Hdu:
                 tables = div.find_all('table')
                 # double check is_image consistentcy
                 (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
-                                            node=div,header_tag_name='h2'))
+                                            node=div,heading_tag_name='h2'))
                 is_image = self.file_hdu_info[hdu_number]['is_image']
                 if (is_image and len(tables) == 2):
                     self.ready = False

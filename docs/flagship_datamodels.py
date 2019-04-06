@@ -28,10 +28,10 @@
 #datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
 datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
 datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
-#datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
-#datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
-#datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
-#datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
+datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
+datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
+datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
+datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
 #datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
 datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
 #datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html

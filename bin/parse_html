@@ -22,20 +22,26 @@ else:
 '''
 Examples:
 File Type 1)
-    parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
-parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
-parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
-parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
-parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
+Finished!
+parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
+parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
+parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
+parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
+parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
+parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
+parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
+
+Fail!
 parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
 parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
 parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
 
 
 File Type 2)
-    parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
-    parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
-    parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
+Finished!
+parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
+parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
+parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
         
 File Type 3)
     parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
@@ -46,6 +52,7 @@ File Type 4)
     parse_html -l debug -v --path datamodel/files/MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html
 
 File Type 5)
+    Fail!
     parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
     parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
     parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
