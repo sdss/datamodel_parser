@@ -69,15 +69,16 @@ class Hdu:
                         self.ready = False
                         self.logger.error('Unexpected HTML body type encountered ' +
                                           'in Hdu.parse_file.')
-                if len(self.file_hdu_info) == len(self.file_hdu_tables):
-                    self.hdu_count = len(self.file_hdu_info)
-                else:
-                    self.ready = False
-                    self.logger.error(
-                        'Unable to parse_file. ' +
-                        'len(self.file_hdu_info) != len(self.file_hdu_tables). ' +
-                        'len(self.file_hdu_info): {}, '.format(len(self.file_hdu_info)) +
-                        'len(self.file_hdu_tables): {}.'.format(len(self.file_hdu_tables)))
+                if self.ready:
+                    if len(self.file_hdu_info) == len(self.file_hdu_tables):
+                        self.hdu_count = len(self.file_hdu_info)
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                            'Unable to parse_file. ' +
+                            'len(self.file_hdu_info) != len(self.file_hdu_tables). ' +
+                            'len(self.file_hdu_info): {}, '.format(len(self.file_hdu_info)) +
+                            'len(self.file_hdu_tables): {}.'.format(len(self.file_hdu_tables)))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. ' +
@@ -89,7 +90,8 @@ class Hdu:
             if self.body:
                 divs = self.util.get_hdu_divs(node=self.body)
                 for div in divs:
-                    self.parse_file_hdu_div(div=div)
+                    if self.ready:
+                        self.parse_file_hdu_div(div=div)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_div. ' +
@@ -322,8 +324,17 @@ class Hdu:
                 if (is_image and len(tables) == 2):
                     self.ready = False
                     self.logger.error('Inconsistent is_image.')
+                # check that HDU0 has only one table
+                if hdu_number == 0 and len(tables) > 1:
+                    if self.options.force:
+                        tables = [tables[0]]
+                        self.file_hdu_info[hdu_number]['is_image'] = True
+                    else:
+                        self.ready = False
+                        self.logger.error('HDU0 only allowed one table. ' +
+                                          'len(tables): {}'.format(len(tables)))
                 # parse table(s)
-                else:
+                if self.ready:
                     for table in tables:
                         hdu_table = dict()
                         # table caption
@@ -344,7 +355,7 @@ class Hdu:
                                 string = self.util.get_string(node=td)
                                 table_row.append(string)
                             table_rows[position]  = table_row
-                            
+                        
                         # put it all together
                         hdu_table['is_header']          = is_header
                         hdu_table['table_caption']      = table_caption

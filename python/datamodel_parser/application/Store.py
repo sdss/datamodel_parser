@@ -196,13 +196,10 @@ class Store:
 
     def populate_database(self):
         '''Populate the database with file information.'''
-        if self.ready:
-            self.populate_file_path_tables()
-            self.populate_file_html_tables()
-            self.ready = (self.ready          and
-                          self.database.ready and
-                          self.file.ready     )
-            self.database.update_file_table_status(ready=self.ready)
+        if self.ready: self.populate_file_path_tables()
+        if self.ready: self.populate_file_html_tables()
+        self.ready = self.ready and self.database.ready and self.file.ready 
+        if self.ready: self.database.update_file_table_status(ready=self.ready)
 
     def populate_file_path_tables(self):
         '''Populate tables comprised of file path information.'''
