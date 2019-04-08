@@ -1,6 +1,7 @@
 from bs4 import Tag, NavigableString
 from datamodel_parser.application import Util
 from datamodel_parser.application import Intro
+from datamodel_parser.application.Type import Hdu_type
 
 from json import dumps
 
@@ -59,7 +60,8 @@ class Hdu:
                 # self.body all div tags
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
-                    self.parse_file_div()
+                    for div in self.util.get_hdu_divs(node=self.body):
+                        if self.ready: self.parse_file_hdu_div(div=div)
                 else:
                     # self.body not all div tags
                     child_names = set(self.util.get_child_names(node=self.body))
@@ -84,28 +86,13 @@ class Hdu:
                 self.logger.error('Unable to parse_file. ' +
                                   'self.body: {}.'.format(self.body))
 
-    def parse_file_div(self):
-        '''Parse the HTML of the given BeautifulSoup div tag object.'''
-        if self.ready:
-            if self.body:
-                divs = self.util.get_hdu_divs(node=self.body)
-                for div in divs:
-                    if self.ready:
-                        self.parse_file_hdu_div(div=div)
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_div. ' +
-                                  'self.body: {}.'.format(self.body))
-
     def parse_file_hdu_div(self,div=None):
         '''Parse file hdu content from given division tag.'''
         if self.ready:
             if div:
-                child_names = set(self.util.get_child_names(node=div))
-                hdu_type = self.get_Hdu_type(node=div)
-#                print('child_names: %r'% child_names)
-#                print('hdu_type: %r'% hdu_type)
-#                input('pause')
+                child_names = set(self.util.get_child_names(node=div)) # REMOVE
+                type = Hdu_type(logger=self.logger,options=self.options,node=div)
+                hdu_type = type.get_Hdu_type()
 
                 # process different div hdu types
                 if hdu_type == 1:
@@ -134,133 +121,6 @@ class Hdu:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_div. ' +
                                   'div: {}.'.format(div))
-
-    def get_Hdu_type(self,node=None):
-        '''Determine class Hdu template type from the given BeautifulSoup node.'''
-        hdu_type = None
-        if self.ready:
-            if node:
-                if   self.check_Hdu_type_1(node=node): hdu_type = 1
-                elif self.check_Hdu_type_2(node=node): hdu_type = 2
-#                else:
-#                    self.ready = False
-#                    self.logger.error('Unable to get_Hdu_type. '
-#                                      'Unexpected child_names encountered ' +
-#                                      'in Hdu.parse_file_hdu_div(). ')
-        return hdu_type
-
-    def check_Hdu_type_1(self,node=None):
-        '''Determine class Hdu template type from the given BeautifulSoup node.'''
-        correct_type = None
-        if self.ready:
-            if node:
-                correct_type = True
-                self.logger.debug("Inconsistencies for check_Hdu_type_1:")
-                tag_names = set(self.util.get_child_names(node=node))
-                # check tag_names = {h,p,ul,table}
-                if not (tag_names.issubset(self.util.heading_tags
-                                           | {'p'} | {'dl'} | {'table'})
-                                            and tag_names & {'dl'}):
-                    correct_type = False
-                    self.logger.debug("tag_names = {h,p,ul,table}")
-                # <dl> tag assumptions
-                if not 'dl' in tag_names:
-                    self.logger.debug("'dl' in tag_names")
-                    correct_type = False
-                else:
-                    # check children of <dl> are <dt> and <dd>
-                    dl = node.find_next('dl')
-                    child_names = set(self.util.get_child_names(node=dl))
-                    if not child_names == {'dt','dd'}:
-                        correct_type = False
-                        self.logger.debug("children of dl are dt and dd")
-                    else:
-                        # check certain strings are in the list elements of dts
-                        (dts,dds) = self.util.get_dts_and_dds_from_dl(dl=dl)
-                        in_dt = lambda s: bool([x for x in dts if s in x.lower()])
-                        if not (in_dt('hdu') and in_dt('type') and in_dt('size')):
-                            correct_type = False
-                            self.logger.debug("dts list elements")
-                if correct_type:
-                    # check the tag properties common to type_1 and type_2
-                    correct_type = self.check_Hdu_type_common_1_2(node=node)
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_Hdu_type. ' +
-                                  'node: {}.'.format(node))
-        return correct_type
-
-    def check_Hdu_type_2(self,node=None):
-        '''Determine class Hdu template type from the given BeautifulSoup node.'''
-        correct_type = None
-        if self.ready:
-            if node:
-                correct_type = True
-                self.logger.debug("Inconsistencies for check_Hdu_type_2:")
-                tag_names = set(self.util.get_child_names(node=node))
-                # check tag_names = {h,p,ul,table}
-                if not (tag_names.issubset(self.util.heading_tags
-                                           | {'p'} | {'dl'} | {'table'})):
-                    correct_type = False
-                    self.logger.debug("tag_names = {h,p,table}")
-                if correct_type:
-                    # check the tag properties common to type_1 and type_2
-                    correct_type = self.check_Hdu_type_common_1_2(node=node)
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_Hdu_type. ' +
-                                  'node: {}.'.format(node))
-        return correct_type
-
-    def check_Hdu_type_common_1_2(self,node=None):
-        '''Determine class Hdu template type from the given BeautifulSoup node.'''
-        correct_type = None
-        if self.ready:
-            if node:
-                correct_type = True
-                self.logger.debug("Inconsistencies for check_Hdu_type_2:")
-                tag_names = set(self.util.get_child_names(node=node))
-                # <table> tag assumptions
-                if not 'table' in tag_names:
-                    correct_type = False
-                    self.logger.debug("'table' in tag_names")
-                else:
-                    table = node.find_next('table')
-                    child_names = set(self.util.get_child_names(node=table))
-                    if not child_names == {'caption','thead','tbody'}:
-                        correct_type = False
-                        self.logger.debug("table.children == {caption,thead,tbody}")
-                    else:
-                        # <thead> tag assumptions
-                        thead = table.find_next('thead')
-                        child_names = self.util.get_child_names(node=thead)
-                        if not child_names == ['tr']:
-                            correct_type = False
-                            self.logger.debug("child_names == ['tr']")
-                        else:
-                            # Asume all children of the <tr> tag are <th> tags
-                            tr = thead.find_next('tr')
-                            if not self.util.children_all_one_tag_type(node=tr,tag_name='th'):
-                                correct_type = False
-                                self.logger.debug("All children of the tr tag are th tags")
-                        # tbody tag assumptions
-                        # Asume all children of the <tbody> tag are <tr> tags
-                        tbody = table.find_next('tbody')
-                        if not self.util.children_all_one_tag_type(node=tbody,tag_name='tr'):
-                            correct_type = False
-                            self.logger.debug("All children of the <tbody> tag are <tr> tags")
-                        # Asume all children of the <tbody> child <tr> tags are <td> tags
-                        for tr in [tr for tr in tbody.children
-                                   if not self.util.get_string(node=tr).isspace()]:
-                            if not self.util.children_all_one_tag_type(node=tr,tag_name='td'):
-                                correct_type = False
-                                self.logger.debug("all children of the <tbody> " +
-                                                  "child <tr> tags are <td> tags")
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_Hdu_type. ' +
-                                  'node: {}.'.format(node))
-        return correct_type
 
 
     def parse_file_hdu_intro_type_1(self,div=None, skip_dl=None):

@@ -138,7 +138,7 @@
  #parse_html -l error -v --path datamodel/files/SEGUE2_TARGET_ALL/RERUN/RUN/seguetsCasObj.html
  #parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastar-goodspec-DRPVER-MPROCVER.html
  #parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastarall-DRPVER-MPROCVER.html
- #parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html

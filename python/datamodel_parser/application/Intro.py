@@ -1,6 +1,7 @@
 from json import dumps
 from bs4 import Tag, NavigableString
 from datamodel_parser.application import Util
+from datamodel_parser.application.Type import Intro_type
 
 
 class Intro:

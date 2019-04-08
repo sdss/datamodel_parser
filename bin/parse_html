@@ -13,6 +13,7 @@ if not ready:
     print('Fail! ready: {}'.format(ready))
     exit(1)
 else:
+    print('path: {}'.format(options.path))
     store.set_tree_edition()
     store.set_path(path=options.path)
     store.split_path()
@@ -31,10 +32,10 @@ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
 parse_html -f -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
+parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
 
 Fail!
 parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
-parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
 
 
 File Type 2)

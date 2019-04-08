@@ -412,7 +412,7 @@ class Hdu(db.Model):
                         nullable = False)
     is_image = db.Column(db.Boolean)
     number = db.Column(db.Integer, nullable = False)
-    title = db.Column(db.String(32), nullable = False)
+    title = db.Column(db.String(64), nullable = False)
     size = db.Column(db.String(32))
     description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
