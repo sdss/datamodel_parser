@@ -215,7 +215,31 @@ class Util:
                                   'node: {0}'.format(node))
         return hdu_divs
 
+    def get_heading_tag_siblings(self,node=None):
+        '''Get a list of heading tags, which are siblings of the given node.'''
+        heading_tags = list()
+        if self.ready:
+            if node:
+                siblings = set(self.get_sibling_names(node=node))
+                heading_tags = list(set(self.heading_tags) & siblings)
+            else:
+                self.ready = None
+                self.logger.error('Unable to get_heading_tag_siblings. ' +
+                                  'node: {0}'.format(node))
+        return heading_tags
 
+    def get_heading_tag_children(self,node=None):
+        '''Get a list of heading tags, which are children of the given node.'''
+        heading_tags = list()
+        if self.ready:
+            if node:
+                children = set(self.get_child_names(node=node))
+                heading_tags = list(set(self.heading_tags) & children)
+            else:
+                self.ready = None
+                self.logger.error('Unable to get_heading_tag_children. ' +
+                                  'node: {0}'.format(node))
+        return heading_tags
 
 
 

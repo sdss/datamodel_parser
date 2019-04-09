@@ -66,6 +66,7 @@ class Hdu_type(Type):
             if node:
                 if   self.check_Hdu_type_1(node=node): hdu_type = 1
                 elif self.check_Hdu_type_2(node=node): hdu_type = 2
+                elif self.check_Hdu_type_3(node=node): hdu_type = 3
 #                else:
 #                    self.ready = False
 #                    self.logger.error('Unable to get_Hdu_type. '
@@ -180,6 +181,41 @@ class Hdu_type(Type):
                                 correct_type = False
                                 self.logger.debug("all children of the <tbody> " +
                                                   "child <tr> tags are <td> tags")
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_Hdu_type. ' +
+                                  'node: {}.'.format(node))
+        return correct_type
+
+    def check_Hdu_type_3(self,node=None):
+        '''Determine class Hdu template type from the given BeautifulSoup node.'''
+        correct_type = None
+        if self.ready:
+            if node:
+                correct_type = True
+                self.logger.debug("Inconsistencies for check_Hdu_type_2:")
+                tag_names = set(self.util.get_child_names(node=node))
+                # check tag_names = {h,pre}
+                if not (tag_names.issubset(self.util.heading_tags | {'pre'} )):
+                    correct_type = False
+                    self.logger.debug("tag_names = {h,pre}")
+                # heading tag assumptions
+                h = self.util.get_heading_tag_children(node=node)
+                if not len(h) == 1:
+                    correct_type = False
+                    self.logger.debug("Only one heading tag")
+                else:
+                    h = h[0]
+                    string = self.util.get_string(node=h).lower()
+                    if not ('hdu' in string and
+                            ':' in string   and
+                            string.split(':')[0].lower().replace('hdu','').isdigit()):
+                        correct_type = False
+                        self.logger.error("heading = 'HDUn: HduTitle', where n is a digit")
+
+                print('h: %r'% h)
+                print('correct_type: %r'% correct_type)
+                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to get_Hdu_type. ' +

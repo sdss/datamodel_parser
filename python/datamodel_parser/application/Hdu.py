@@ -93,6 +93,8 @@ class Hdu:
                 child_names = set(self.util.get_child_names(node=div)) # REMOVE
                 type = Hdu_type(logger=self.logger,options=self.options,node=div)
                 hdu_type = type.get_Hdu_type()
+                print('hdu_type: %r' % hdu_type)
+                input('pause')
 
                 # process different div hdu types
                 if hdu_type == 1:
@@ -104,12 +106,17 @@ class Hdu:
                 elif hdu_type == 2:
 #                    print('HI parse_file_hdu_div  hdu_type == 2')
 #                    input('pause')
-
                     self.parse_file_hdu_intro_type_1(div=div,skip_dl=True)
                     self.parse_file_hdu_tables_type_1(div=div)
+                elif hdu_type == 3:
+                    self.parse_file_hdu_intro_h2_pre(div=div)
+                    self.parse_file_hdu_tables_h2_pre(div=div)
+
                 elif child_names == {'h2','pre'}:
                     self.parse_file_hdu_intro_h2_pre(div=div)
                     self.parse_file_hdu_tables_h2_pre(div=div)
+                    input("Hello child_names == {'h2','pre'}")
+                    input('pause')
                 elif child_names == {'h2','p'} or child_names == {'h2','p','table'}:
                     self.parse_file_hdu_intro_h2_p_table(div=div)
                     self.parse_file_hdu_tables_h2_p_table(div=div)
