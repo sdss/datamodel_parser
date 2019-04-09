@@ -193,29 +193,43 @@ class Hdu_type(Type):
         if self.ready:
             if node:
                 correct_type = True
-                self.logger.debug("Inconsistencies for check_Hdu_type_2:")
+                self.logger.debug("Inconsistencies for check_Hdu_type_3:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,pre}
                 if not (tag_names.issubset(self.util.heading_tags | {'pre'} )):
                     correct_type = False
                     self.logger.debug("tag_names = {h,pre}")
                 # heading tag assumptions
-                h = self.util.get_heading_tag_children(node=node)
-                if not len(h) == 1:
+                heading_tag_names = self.util.get_heading_tag_children(node=node)
+                if not len(heading_tag_names) == 1:
                     correct_type = False
                     self.logger.debug("Only one heading tag")
                 else:
-                    h = h[0]
+                    h = node.find_next(heading_tag_names[0])
                     string = self.util.get_string(node=h).lower()
                     if not ('hdu' in string and
                             ':' in string   and
                             string.split(':')[0].lower().replace('hdu','').isdigit()):
                         correct_type = False
                         self.logger.error("heading = 'HDUn: HduTitle', where n is a digit")
-
-                print('h: %r'% h)
-                print('correct_type: %r'% correct_type)
-                input('pause')
+                # pre tag assumptions
+                pre = node.find_next('pre')
+                rows = self.util.get_string(node=pre).split('\n')
+                # Assume the pre tag is a string with rows separated by '\n'
+                if not rows:
+                    correct_type = False
+                    self.logger.error("pre tag is a string with rows separated by '\n'")
+                # Assume none of the list entries of rows are empty
+                rows1 = [row for row in rows if row]
+                if len(rows) != len(rows1):
+                    correct_type = False
+                    self.logger.error("none of the list entries of rows are empty")
+                # Assume the rows contain either '=' for data or 'HISTORY' or 'END'
+                for row in rows:
+                    if not ('=' in row or 'HISTORY' in row or 'END' in row):
+                        correct_type = False
+                        self.logger.error("the rows contain either '=' " +
+                                          "for data or 'HISTORY' or 'END'")
             else:
                 self.ready = False
                 self.logger.error('Unable to get_Hdu_type. ' +
