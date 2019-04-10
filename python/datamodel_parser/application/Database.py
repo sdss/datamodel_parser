@@ -1247,9 +1247,6 @@ class Database:
         if self.ready:
             data_id = self.data_id if self.data_id else None
             if data_id and position is not None and table_row:
-                if len(table_row)<4:
-                    print('table_row: %r' % table_row)
-                    input('pause')
                 name        = table_row[0] if table_row else None
                 datatype    = table_row[1] if table_row else None
                 units       = table_row[2] if table_row else None

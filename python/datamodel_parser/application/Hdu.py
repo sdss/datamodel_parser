@@ -93,8 +93,8 @@ class Hdu:
                 child_names = set(self.util.get_child_names(node=div)) # REMOVE
                 type = Hdu_type(logger=self.logger,options=self.options,node=div)
                 hdu_type = type.get_Hdu_type()
-                print('hdu_type: %r' % hdu_type)
-                input('pause')
+#                print('hdu_type: %r' % hdu_type)
+#                input('pause')
 
                 # process different div hdu types
                 if hdu_type == 1:
@@ -109,10 +109,13 @@ class Hdu:
                     self.parse_file_hdu_intro_type_1(div=div,skip_dl=True)
                     self.parse_file_hdu_tables_type_1(div=div)
                 elif hdu_type == 3:
-                    print('HI parse_file_hdu_div  hdu_type == 3')
-                    input('pause')
-                    self.parse_file_hdu_intro_h2_pre(div=div)
-                    self.parse_file_hdu_tables_h2_pre(div=div)
+#                    print('HI parse_file_hdu_div  hdu_type == 3')
+#                    input('pause')
+                    self.parse_file_hdu_intro_type_3(div=div)
+                    self.parse_file_hdu_tables_type_3(div=div)
+                elif hdu_type == 3:
+                    self.parse_file_hdu_intro_h2_p_table(div=div)
+                    self.parse_file_hdu_tables_h2_p_table(div=div)
                 elif child_names == {'h2','p'} or child_names == {'h2','p','table'}:
                     self.parse_file_hdu_intro_h2_p_table(div=div)
                     self.parse_file_hdu_tables_h2_p_table(div=div)
@@ -231,42 +234,50 @@ class Hdu:
                 self.logger.error('Unable to parse_file_hdu_tables_type_1. ' +
                                   'div: {}, '.format(div))
 
-    def parse_file_hdu_intro_h2_pre(self,div=None):
+    def parse_file_hdu_intro_type_3(self,div=None):
         '''Parse file hdu data content from given division tag.'''
         if self.ready:
-            assumptions = self.verify_assumptions_parse_file_h2_pre(div=div)
-            if div and assumptions:
+            if div:
                 # hdu.hdu_number and header.title
-                (hdu_number,hdu_title) = (self.util.get_hdu_number_and_hdu_title(
-                                            node=div,heading_tag_name='h2'))
-                # data.is_image
-                pre_string = div.find_next('pre').string
-                rows = pre_string.split('\n') if pre_string else list()
-                image_row = [row for row in rows
-                             if row and 'XTENSION' in row and 'IMAGE' in row]
-                is_image = bool(image_row)
-                is_image = None if not is_image and hdu_number == 0 else is_image
-                
-                # put it all together
-                hdu_info = dict()
-                hdu_info['is_image']        = is_image
-                hdu_info['hdu_number']      = hdu_number
-                hdu_info['hdu_title']       = hdu_title
-                hdu_info['hdu_size']        = None
-                hdu_info['hdu_description'] = None
-                self.file_hdu_info.append(hdu_info)
+                heading_tag_names = self.util.get_heading_tag_children(node=div)
+                if len(heading_tag_names) == 1:
+                    (hdu_number,hdu_title) = (
+                        self.util.get_hdu_number_and_hdu_title(
+                            node=div,
+                            heading_tag_name=heading_tag_names[0]))
+                    # data.is_image
+                    pre_string = div.find_next('pre').string
+                    rows = pre_string.split('\n') if pre_string else list()
+                    image_row = [row for row in rows
+                                 if row and 'XTENSION' in row and 'IMAGE' in row]
+                    is_image = bool(image_row)
+                    is_image = None if not is_image and hdu_number == 0 else is_image
+                    
+                    # put it all together
+                    hdu_info = dict()
+                    hdu_info['is_image']        = is_image
+                    hdu_info['hdu_number']      = hdu_number
+                    hdu_info['hdu_title']       = hdu_title
+                    hdu_info['hdu_size']        = None
+                    hdu_info['hdu_description'] = None
+                    self.file_hdu_info.append(hdu_info)
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to parse_file_hdu_intro_type_3. ' +
+                                      'len(heading_tag_names) != 1. ' +
+                                      'heading_tag_names: {}, '
+                                        .format(heading_tag_names) )
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_intro_h2_pre. ' +
+                self.logger.error('Unable to parse_file_hdu_intro_type_3. ' +
                                   'div: {}, '.format(div) +
                                   'assumptions: {}.'.format(assumptions))
 
-    def parse_file_hdu_tables_h2_pre(self,div=None):
+    def parse_file_hdu_tables_type_3(self,div=None):
         '''Parse file hdu data content from given division tag.'''
         hdu_tables = list()
         if self.ready:
-            assumptions = self.verify_assumptions_parse_file_h2_pre(div=div)
-            if div and assumptions:
+            if div:
                 hdu_table = dict() # haven't encountered a datatable yet for this template type
                 # table caption
                 table_caption = None
@@ -279,7 +290,7 @@ class Hdu:
                 rows = self.util.get_string(node=pre).split('\n')
                 table_rows = dict()
                 for (position,row) in enumerate(rows):
-                    table_rows[position] = self.get_table_row_h2_pre(row=row)
+                    table_rows[position] = self.get_pre_table_row(row=row)
                 # put it all together
                 hdu_table['is_header']          = is_header
                 hdu_table['table_caption']      = table_caption
@@ -289,11 +300,11 @@ class Hdu:
                 self.file_hdu_tables.append(hdu_tables)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_tables_h2_pre. ' +
+                self.logger.error('Unable to parse_file_hdu_tables_type_3. ' +
                                   'div: {}, '.format(div) +
                                   'assumptions: {}'.format(assumptions))
 
-    def get_table_row_h2_pre(self,row=None):
+    def get_pre_table_row(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
         table_row = list()
         if self.ready:
@@ -339,63 +350,9 @@ class Hdu:
                 table_row = [keyword,value,datatype,comment]
             else:
                 self.ready = False
-                self.logger.error('Unable to get_table_row_h2_pre. ' +
+                self.logger.error('Unable to get_pre_table_row. ' +
                                   'row: {}'.format(row))
         return table_row
-
-    def verify_assumptions_parse_file_h2_pre(self,div=None):
-        '''Verify assumptions made in parse_file_hdu_intro_h2_pre
-            and parse_file_hdu_tables_h2_pre.'''
-        assumptions = None
-        if div:
-            assumptions = True
-            child_names = self.util.get_child_names(node=div)
-            if not child_names == ['h2','pre']:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names == ['h2','pre']")
-            # h2 tag assumptions
-            # Assume 'HDUn: HduTitle' is the h2 heading for some digit n
-            h2 = div.find_next('h2')
-            string = self.util.get_string(node=h2).lower()
-            if not ('hdu' in string and
-                    ':' in string   and
-                    string.split(':')[0].lower().replace('hdu','').isdigit()):
-                assumptions = False
-                self.logger.error(
-                        "Invalid assumption: " +
-                        "div.find_next('h2') = 'HDUn: HduTitle', " +
-                        "where n is a digit")
-            # pre tag assumptions
-            pre = div.find_next('pre')
-            rows = self.util.get_string(node=pre).split('\n')
-            # Assume the pre tag is a string with rows separated by '\n'
-            if not rows:
-                assumptions = False
-                self.logger.error(
-                              "Invalid assumption: " +
-                              "pre tag is a string with rows separated by '\n'")
-            # Assume none of the list entries of rows are empty
-            rows1 = [row for row in rows if row]
-            if len(rows) != len(rows1):
-                assumptions = False
-                self.logger.error("Invalid assumption: " +
-                                  "none of the list entries of rows are empty")
-            # Assume the rows contain either '=' for data or 'HISTORY' or 'END'
-            for row in rows:
-                if not ('=' in row or 'HISTORY' in row or 'END' in row):
-                    assumptions = False
-                    self.logger.error(
-                        "Invalid assumption: " +
-                        "the rows contain either '=' for data or 'HISTORY' or 'END'")
-        else:
-            self.ready = False
-            self.logger.error(
-                'Unable to verify_assumptions_parse_file_h2_pre. ' +
-                'div: {}.'.format(div))
-#        print('assumptions: %r' % assumptions)
-#        input('pause')
-        if not assumptions: self.ready = False
-        return assumptions
 
     def parse_file_hdu_intro_h2_p_table(self,div=None):
         '''Parse file hdu data content from given division tag.'''
@@ -471,8 +428,8 @@ class Hdu:
 
 
     def verify_assumptions_parse_file_h2_p_table(self,div=None):
-        '''Verify assumptions made in parse_file_hdu_intro_h2_pre
-            and parse_file_hdu_tables_h2_pre.'''
+        '''Verify assumptions made in parse_file_hdu_intro_type_3
+            and parse_file_hdu_tables_type_3.'''
         assumptions = None
         if div:
             assumptions = True

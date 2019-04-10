@@ -158,7 +158,7 @@ class Util:
             else:
                 self.ready = None
                 self.logger.error('Unable to get_dts_and_dds_from_dl. ' +
-                                  'dl: {0}'.format(dl))
+                                  'dl: {}'.format(dl))
         return (dts,dds)
 
     def get_hdu_number_and_hdu_title(self,node=None,heading_tag_name=None):
@@ -187,12 +187,19 @@ class Util:
         return hdu_titles
 
     def get_digit_in_string(self,string=None):
-        '''Get single digit from the given string.'''
+        '''Get single digit 0-9 from the given string.'''
         digit = None
         if self.ready:
             if string:
                 digits = list(filter(str.isdigit, string))
-                digit = int(digits[0]) if len(digits) == 1 else None
+                if len(digits) == 1:
+                    digit = int(digits[0])
+                else:
+                    self.ready = None
+                    self.logger.error('Unable to get_digit_in_string. ' +
+                                      'len(digits) > 1. ' +
+                                      'digits: {}, '.format(digits) +
+                                      'string: {}'.format(string))
             else:
                 self.ready = None
                 self.logger.error('Unable to get_digit_in_string. ' +
