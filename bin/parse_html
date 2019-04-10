@@ -22,13 +22,14 @@ else:
 
 '''
 Examples:
-File Type 1)
+hdu_type = 1:
 Finished!
-parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
+parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
-parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
+
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
+parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
 parse_html -f -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html

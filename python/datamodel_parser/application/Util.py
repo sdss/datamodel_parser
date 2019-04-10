@@ -59,7 +59,7 @@ class Util:
                     else:
                         string = ''
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_string. ' +
                                   'node: {0}'.format(node))
         return string
@@ -87,7 +87,7 @@ class Util:
                 for child in [child for child in node.children if child.name]:
                     child_names.append(str(child.name))
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_child_names. ' +
                                   'node: {0}'.format(node))
         return child_names
@@ -118,7 +118,7 @@ class Util:
                 for sibling in [sibling for sibling in node.next_siblings if sibling.name]:
                     sibling_names.append(str(sibling.name))
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_sibling_names. ' +
                                   'node: {0}'.format(node))
         return sibling_names
@@ -133,7 +133,7 @@ class Util:
                 for parent in node.parents:
                     if parent.name: parent_names.append(parent.name)
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to set_parent_names. ' +
                                   'node: {0}'.format(node))
         return parent_names
@@ -156,7 +156,7 @@ class Util:
                     string = ''.join(contents) if len(contents) > 1 else contents[0]
                     dds.append(string)
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_dts_and_dds_from_dl. ' +
                                   'dl: {}'.format(dl))
         return (dts,dds)
@@ -172,7 +172,7 @@ class Util:
                 hdu_number = int(split[0].lower().replace('hdu',''))
                 hdu_title = split[1].strip()
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
                                   'node: {0}'.format(node) +
                                   'heading_tag_name: {0}'.format(heading_tag_name))
@@ -195,13 +195,13 @@ class Util:
                 if len(digits) == 1:
                     digit = int(digits[0])
                 else:
-                    self.ready = None
+                    self.ready = False
                     self.logger.error('Unable to get_digit_in_string. ' +
                                       'len(digits) > 1. ' +
                                       'digits: {}, '.format(digits) +
                                       'string: {}'.format(string))
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_digit_in_string. ' +
                                   'string: {0}'.format(string))
         return digit
@@ -217,10 +217,40 @@ class Util:
                     if 'hdu' in div['id']:
                         hdu_divs.append(div)
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_hdu_divs. ' +
-                                  'node: {0}'.format(node))
+                                  'node: {}'.format(node))
         return hdu_divs
+
+    def get_intro_div(self,node=None):
+        '''Get a list of divs with id containing 'intro', from the given node.'''
+        intro_divs = list()
+        if self.ready:
+            if node:
+                # create intro_divs list
+                divs = node.find_all('div')
+                for div in [div for div in divs
+                            if not self.get_string(node=div).isspace()]:
+                    if 'intro' in div['id']:
+                        intro_divs.append(div)
+                # check one and only one intro div
+                if not intro_divs:
+                    self.ready = False
+                    self.logger.error("Unable to get_intro_divs. " +
+                                      "Not found: 'intro' in div['id']. " +
+                                      "intro_divs: {}".format(intro_divs)
+                                      )
+                if len(intro_divs) > 1:
+                    self.ready = False
+                    self.logger.error("Unable to get_intro_divs. " +
+                                      "len(intro_divs) > 1. " +
+                                      "intro_divs: {}".format(intro_divs)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intro_div. ' +
+                                  'node: {}'.format(node))
+        return intro_divs[0] if self.ready else None
 
     def get_heading_tag_siblings(self,node=None):
         '''Get a list of heading tags, which are siblings of the given node.'''
@@ -230,7 +260,7 @@ class Util:
                 siblings = set(self.get_sibling_names(node=node))
                 heading_tags = list(set(self.heading_tags) & siblings)
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_heading_tag_siblings. ' +
                                   'node: {0}'.format(node))
         return heading_tags
@@ -243,7 +273,7 @@ class Util:
                 children = set(self.get_child_names(node=node))
                 heading_tags = list(set(self.heading_tags) & children)
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to get_heading_tag_children. ' +
                                   'node: {0}'.format(node))
         return heading_tags

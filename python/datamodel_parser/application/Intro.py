@@ -53,13 +53,13 @@ class Intro:
         self.intro_descriptions   = list()
         self.section_hdu_titles   = dict()
         if self.ready:
+            # process different intro types
             if self.body:
-                # process different intro types
                 # self.body all div tags
-                child_names = set(self.util.get_child_names(node=self.body))
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
-                    self.parse_file_div()
+                    div = self.util.get_intro_div(node=self.body)
+                    self.parse_file_intro_div(div=div)
                 else:
                     # self.body not all div tags
                     child_names = set(self.util.get_child_names(node=self.body))
@@ -76,47 +76,37 @@ class Intro:
                 self.logger.error('Unable to parse_file_hdu_info. ' +
                                   'self.body: {}'.format(self.body))
 
-    def parse_file_div(self):
-        '''Parse the HTML of the given BeautifulSoup div tag object.'''
+    def parse_file_intro_div(self,div=None):
+        '''Parse file intro content from given division tag.'''
         if self.ready:
-            if self.body:
-                # Find intro div
-                for div in [div for div in self.body
-                            if not self.util.get_string(node=div).isspace()]:
-                    # Found intro div
-                    self.intro_div = None
-                    if div['id'] == 'intro':
-                        self.intro_div = div
-                        child_names = set(self.util.get_child_names(node=div))
-                        # process different div intro types
-                        if child_names == {'h1','h4','p','div'}:
-                            self.parse_file_h1_h4_p_div()
-                        elif child_names == {'h1','dl'}:
-                            self.parse_file_h1_dl()
-                        else:
-                            self.ready = False
-                            self.logger.error(
-                                'Unexpected child_names encountered ' +
-                                'in Intro.parse_file_div().')
-                        break
-                    if not self.intro_div:
-                        self.ready = False
-                        self.logger.error('Intro div tag not found.' +
-                                          'self.intro_div: {}'
-                                            .format(self.intro_div))
+            if div:
+                child_names = set(self.util.get_child_names(node=div))
+                type = Intro_type(logger=self.logger,options=self.options,node=div)
+                intro_type = type.get_intro_type()
+
+                # process different div intro types
+                if intro_type == 1:
+                    self.parse_file_type_1(div=div)
+                elif child_names == {'h1','dl'}:
+                    self.parse_file_h1_dl()
+                else:
+                    self.ready = False
+                    self.logger.error(
+                        'Unexpected child_names encountered ' +
+                        'in Intro.parse_file_intro_div().')
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_info. ' +
-                                  'self.body: {}'.format(self.body))
+                self.logger.error('Unable to parse_file_intro_div. ' +
+                                  'div: {}.'.format(div))
 
-    def parse_file_h1_h4_p_div(self):
+    def parse_file_type_1(self,div=None):
         '''Parse the HTML of the given BeautifulSoup div tag object with
             children: h1, h4 and p.'''
         if self.ready:
-            if self.intro_div:
+            if div:
                 position = -1
                 description = str()
-                for child in [child for child in self.intro_div.children
+                for child in [child for child in div.children
                               if not self.util.get_string(node=child).isspace()]:
                     string = self.util.get_string(node=child)
                     # file page name
@@ -149,8 +139,8 @@ class Intro:
                                 "must be in {'h1','h4','p','div'}")
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_h1_h4_p_div. ' +
-                                  'self.intro_div: {}'.format(self.intro_div))
+                self.logger.error('Unable to parse_file_type_1. ' +
+                                  'div: {}'.format(div))
 
     def parse_file_h1_dl(self):
         '''Parse the HTML of the given BeautifulSoup div tag object with
@@ -183,7 +173,7 @@ class Intro:
                 self.intro_heading_levels.extend([4] * (number_headings - 1))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_h1_h4_p_div. ' +
+                self.logger.error('Unable to parse_file_h1_dl. ' +
                                   'self.intro_div: {}'.format(self.intro_div) +
                                   'assumptions: {}'.format(assumptions))
 
@@ -241,7 +231,7 @@ class Intro:
                 else:
                     self.ready = False
                     self.logger.error('Unexpected child_names encountered ' +
-                                      'Intro.in parse_file_div().')
+                                      'in Intro.parse_section().')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_section.' +
@@ -274,7 +264,7 @@ class Intro:
                                   'assumptions: {}'.format(assumptions))
 
     def verify_assumptions_parse_section_h4_ul(self,node=None):
-        '''Verify assumptions made in parse_file_h1_h4_p_div.'''
+        '''Verify assumptions made in parse_section_h4_ul.'''
         assumptions = None
         if node:
             assumptions = True
@@ -333,7 +323,7 @@ class Intro:
                                   'assumptions: {}'.format(assumptions))
 
     def verify_assumptions_parse_section_ul(self,node=None):
-        '''Verify assumptions made in parse_file_h1_h4_p_div.'''
+        '''Verify assumptions made in parse_section_ul.'''
         assumptions = None
         if node:
             assumptions = True
@@ -439,7 +429,7 @@ class Intro:
                                   'assumptions: {}'.format(assumptions))
 
     def verify_assumptions_parse_file_h1_p_h3_ul_pre(self,body=None):
-        '''Verify assumptions made in parse_file_h1_h4_p_div.'''
+        '''Verify assumptions made in parse_file_h1_p_h3_ul_pre.'''
         assumptions = None
         body = body if body else self.body
         if body:

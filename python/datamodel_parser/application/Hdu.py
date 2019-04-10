@@ -55,8 +55,8 @@ class Hdu:
         self.file_hdu_info = list()
         self.file_hdu_tables = list()
         if self.ready:
+            # process different hdu types
             if self.body:
-                # process different hdu types
                 # self.body all div tags
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
@@ -92,7 +92,7 @@ class Hdu:
             if div:
                 child_names = set(self.util.get_child_names(node=div)) # REMOVE
                 type = Hdu_type(logger=self.logger,options=self.options,node=div)
-                hdu_type = type.get_Hdu_type()
+                hdu_type = type.get_hdu_type()
 #                print('hdu_type: %r' % hdu_type)
 #                input('pause')
 
@@ -530,7 +530,7 @@ class Hdu:
                     if not found_hdu_tags:
                         previous_child = child if child else None
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to set_hdu_tags. ' +
                                   'self.body: {}'.format(self.body) +
                                   'self.body.children: {}'
@@ -559,7 +559,7 @@ class Hdu:
                         pass
                 self.hdu_pres.append(pres)
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to set_hdu_headings_and_pres. ' +
                                   'self.hdu_tags: {}'
                                   .format(self.hdu_tags))
@@ -677,7 +677,7 @@ class Hdu:
                     if name and name in self.heading_tags:
                         self.heading_tag_names.append(str(name))
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to set_heading_tag_names. ' +
                                   'child_names: {}'.format(child_names))
 

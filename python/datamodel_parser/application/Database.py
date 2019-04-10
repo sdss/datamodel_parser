@@ -476,7 +476,7 @@ class Database:
                     self.logger.info('Updated Env[id={0}], variable: {1}.'
                         .format(self.env.id, self.env.variable))
             else:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to update_env_row. ' +
                                   'columns: {}.'.format(columns))
 

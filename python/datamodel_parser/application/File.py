@@ -84,7 +84,7 @@ class File:
                     if self.html_text else None)
             self.body = soup.body if soup else None
             if not self.body:
-                self.ready = None
+                self.ready = False
                 self.logger.error('Unable to set_body. ' +
                                   'self.html_text: {}'.format(self.html_text))
 
@@ -349,7 +349,7 @@ class File:
 
                                 self.ready = self.database.ready
                 else:
-                    self.ready = None
+                    self.ready = False
                     self.logger.error(
                             'Unable to populate_header_and_data_tables. ' +
                             'Data and header lists have unequal length. ' +
@@ -422,7 +422,7 @@ class File:
                                             self.database.populate_column_table()
                                             self.ready = self.database.ready
                 else:
-                    self.ready = None
+                    self.ready = False
                     self.logger.error(
                         'Unable to populate_keyword_and_column_tables. ' +
                         'hdu_info and hdu_tables lists have unequal length. ' +
