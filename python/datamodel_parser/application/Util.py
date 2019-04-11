@@ -84,8 +84,8 @@ class Util:
         child_names = list()
         if self.ready:
             if node:
-                for child in [child for child in node.children if child.name]:
-                    child_names.append(str(child.name))
+                for child in self.get_children(node=node):
+                    if child.name: child_names.append(str(child.name))
             else:
                 self.ready = False
                 self.logger.error('Unable to get_child_names. ' +
@@ -98,8 +98,7 @@ class Util:
         if self.ready:
             if node and tag_name:
                 all_one_tag_type = True
-                for child in [child for child in node.children
-                              if not self.get_string(node=child).isspace()]:
+                for child in self.get_children(node=node):
                     if child.name and child.name != tag_name:
                         all_one_tag_type = False
             else:
@@ -161,16 +160,25 @@ class Util:
                                   'dl: {}'.format(dl))
         return (dts,dds)
 
-    def get_hdu_number_and_hdu_title(self,node=None,heading_tag_name=None):
+    def get_hdu_number_and_hdu_title(self,node=None):
         '''Get hdu.hdu_number and header.title from BeautifulSoup node.'''
         (hdu_number,hdu_title) = (None,None)
         if self.ready:
-            if node and heading_tag_name:
-                header_tag = node.find_next(heading_tag_name)
-                heading = self.get_string(node=header_tag)
-                split = heading.split(':')
-                hdu_number = int(split[0].lower().replace('hdu',''))
-                hdu_title = split[1].strip()
+            if node:
+                child_names = set(self.get_child_names(node=node))
+                heading_tag_name = child_names & set(self.heading_tags)
+                # Error if more than one heading tag
+                if len(heading_tag_name) == 1:
+                    header_tag = node.find_next(heading_tag_name)
+                    heading = self.get_string(node=header_tag)
+                    split = heading.split(':')
+                    hdu_number = int(split[0].lower().replace('hdu',''))
+                    hdu_title = split[1].strip()
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
+                                      'len(heading_tag_name) != 1. ' +
+                                      'heading_tag_name: {0}'.format(heading_tag_name))
             else:
                 self.ready = False
                 self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
@@ -186,7 +194,7 @@ class Util:
                 hdu_titles.append('hdu ' + str(n))
         return hdu_titles
 
-    def get_digit_in_string(self,string=None):
+    def get_single_digit(self,string=None):
         '''Get single digit 0-9 from the given string.'''
         digit = None
         if self.ready:
@@ -196,13 +204,13 @@ class Util:
                     digit = int(digits[0])
                 else:
                     self.ready = False
-                    self.logger.error('Unable to get_digit_in_string. ' +
+                    self.logger.error('Unable to get_single_digit. ' +
                                       'len(digits) > 1. ' +
                                       'digits: {}, '.format(digits) +
                                       'string: {}'.format(string))
             else:
                 self.ready = False
-                self.logger.error('Unable to get_digit_in_string. ' +
+                self.logger.error('Unable to get_single_digit. ' +
                                   'string: {0}'.format(string))
         return digit
 
@@ -278,18 +286,96 @@ class Util:
                                   'node: {0}'.format(node))
         return heading_tags
 
-    def get_all_strings(self,tag=None):
-        '''Get all strings from the given tag.'''
+    def get_all_strings(self,node=None):
+        '''Get all strings from the given BeautifulSoup node.'''
         all_strings = list()
         if self.ready:
-            if tag:
-                for string in tag.strings:
-                    all_strings.append(string)
+            if node:
+                for string in [str(s) for s in node.strings if not s.isspace()]:
+                    all_strings.append(str(string))
             else:
                 self.ready = False
                 self.logger.error('Unable to get_all_strings. ' +
-                                  'tag: {0}'.format(tag))
+                                  'node: {0}'.format(node))
         return all_strings
+
+    def get_datatype_and_hdu_size(self,node=None):
+        '''Get datatype and hdu_size from the given BeautifulSoup node.'''
+        (datatype,hdu_size)=(None,None)
+        if self.ready:
+            if node:
+                all_strings = self.get_all_strings(node=node)
+                if 'hdu type' in all_strings[0].lower(): datatype = all_strings[1]
+                if 'hdu size' in all_strings[2].lower(): hdu_size = all_strings[3]
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_datatype_and_hdu_size. ' +
+                                  'node: {0}'.format(node))
+        return (datatype,hdu_size)
+
+    def get_datatype_and_hdu_size_from_dl(self,dl=None):
+        '''Get datatype and hdu_size from the given BeautifulSoup dl tag.'''
+        (datatype,hdu_size)=(None,None)
+        if self.ready:
+            if dl:
+                (definitions,descriptions) = self.get_dts_and_dds_from_dl(dl=dl)
+                for (definition,description) in list(zip(definitions,descriptions)):
+                    if 'hdu type' in definition.lower(): datatype = description
+                    if 'hdu size' in definition.lower(): hdu_size = description
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_datatype_and_hdu_size_from_dl. ' +
+                                  'dl: {0}'.format(dl))
+        return (datatype,hdu_size)
+
+    def get_children(self,node=None):
+        '''Get the children from the BeautifulSoup node, excluding line endings.'''
+        children = None
+        if self.ready:
+            if node:
+#                children = [child for child in node.children
+#                              if not self.get_string(node=child).isspace()]
+                children = [child for child in node.children if child.name]
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_children. ' +
+                                  'node: {0}'.format(node))
+        return children
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

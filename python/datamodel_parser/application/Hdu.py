@@ -134,26 +134,19 @@ class Hdu:
         if self.ready:
             skip_dl = skip_dl if skip_dl else False
             if div:
-                child_names = set(self.util.get_child_names(node=div))
-                heading_tag_name = child_names & set(self.util.heading_tags)
-                # hdu.hdu_number and header.title
+                # Get hdu_number and header_title from (the only) heading tag
                 (hdu_number,hdu_title) = (
-                    self.util.get_hdu_number_and_hdu_title(
-                                            node=div,
-                                            heading_tag_name=heading_tag_name))
+                    self.util.get_hdu_number_and_hdu_title(node=div))
+
                 # hdu.description
                 p = div.find_next('p')
                 hdu_description = self.util.get_string(node=p)
                 
-                # data.is_image and hdu.size
-                (datatype,hdu_size)=(None,None)
-                if not skip_dl:
-                    dl = div.find_next('dl')
-                    (definitions,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
-                    for (definition,description) in list(zip(definitions,descriptions)):
-                        if 'hdu type' in definition.lower(): datatype = description
-                        if 'hdu size' in definition.lower(): hdu_size = description
-            
+                # datatype and hdu_size
+                dl = div.find_next('dl')
+                (datatype,hdu_size) = self.util.get_datatype_and_hdu_size(node=dl)
+
+                # is_image
                 tables = div.find_all('table')
                 is_image = (     True  if len(tables) == 1
                             else False if len(tables) == 2
@@ -180,12 +173,8 @@ class Hdu:
             if div:
                 tables = div.find_all('table')
                 # double check is_image consistentcy
-                child_names = set(self.util.get_child_names(node=div))
-                heading_tag_name = child_names & set(self.util.heading_tags)
                 (hdu_number,hdu_title) = (
-                    self.util.get_hdu_number_and_hdu_title(
-                                            node=div,
-                                            heading_tag_name=heading_tag_name))
+                    self.util.get_hdu_number_and_hdu_title(node=div))
                 is_image = self.file_hdu_info[hdu_number]['is_image']
                 if (is_image and len(tables) == 2):
                     self.ready = False
@@ -519,7 +508,7 @@ class Hdu:
             if self.body and self.body.children:
                 previous_child = None
                 found_hdu_tags = False
-                for child in [child for child in self.body.children if child.name]:
+                for child in self.util.get_children(node=self.body):
                     if child.name in self.heading_tags:
                         string = self.util.get_string(node=child)
                         if string and 'HDU' in string:
