@@ -278,6 +278,19 @@ class Util:
                                   'node: {0}'.format(node))
         return heading_tags
 
+    def get_all_strings(self,tag=None):
+        '''Get all strings from the given tag.'''
+        all_strings = list()
+        if self.ready:
+            if tag:
+                for string in tag.strings:
+                    all_strings.append(string)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_all_strings. ' +
+                                  'tag: {0}'.format(tag))
+        return all_strings
+
 
 
 
