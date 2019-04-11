@@ -105,7 +105,6 @@ class Intro:
         if self.ready:
             if div:
                 first_heading = True
-                description = str()
                 for child in self.util.get_children(node=div):
                     string = self.util.get_string(node=child)
                     # self.intro_heading_levels,
@@ -120,13 +119,9 @@ class Intro:
                             self.intro_descriptions.append('')
                     # self.intro_descriptions
                     elif child.name == 'p':
-                        description += string
                         next_sibling = self.util.get_sibling_names(node=child)[0]
                         if next_sibling not in self.paragraph_tags:
-                            self.intro_descriptions.append(description)
-                            description = str()
-                        else:
-                            description += '\n'
+                            self.intro_descriptions.append(string)
                     # file table of contents
                     elif child.name == 'div':
                         pass # don't do this anymore

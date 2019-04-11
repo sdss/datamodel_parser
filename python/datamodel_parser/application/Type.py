@@ -94,13 +94,13 @@ class Intro_type(Type):
 #                elif self.check_intro_type_2(node=node): intro_type = 2
 #                elif self.check_intro_type_3(node=node): intro_type = 3
 #                elif self.check_intro_type_4(node=node): intro_type = 4
-                print('intro_type: %r' % intro_type )
-#                input('pause')
 #                else:
 #                    self.ready = False
 #                    self.logger.error('Unable to get_Hdu_type. '
 #                                      'Unexpected child_names encountered ' +
 #                                      'in Hdu.parse_file_hdu_div(). ')
+                if self.verbose: print('intro_type: %r' % intro_type )
+#                input('pause')
         return intro_type
 
     def check_intro_type_1(self,node=None):
@@ -112,7 +112,7 @@ class Intro_type(Type):
                 self.logger.debug("First inconsistency for check_intro_type_1:")
                 tag_names = self.util.get_child_names(node=node)
                 
-                # check tag_names = {h,p,ul,table}
+                # check tag_names = {h,p,div}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
                     if not (set_tag_names == (set_tag_names & self.util.heading_tags)
@@ -134,6 +134,9 @@ class Intro_type(Type):
                                             tag_names=['p']):
                         self.correct_type = False
                         self.logger.debug("not p tags have only text content")
+                        
+                ###### need to update to allow for [h,p] and [h,p,p]
+                        
                 # check first tag is heading tag
                 if self.correct_type:
                     if not tag_names[0] in self.util.heading_tags:
@@ -176,13 +179,13 @@ class Hdu_type(Type):
                 elif self.check_hdu_type_2(node=node): hdu_type = 2
                 elif self.check_hdu_type_3(node=node): hdu_type = 3
                 elif self.check_hdu_type_4(node=node): hdu_type = 4
-                print('hdu_type: %r' % hdu_type )
-#                input('pause')
 #                else:
 #                    self.ready = False
 #                    self.logger.error('Unable to get_Hdu_type. '
 #                                      'Unexpected child_names encountered ' +
 #                                      'in Hdu.parse_file_hdu_div(). ')
+                if self.verbose: print('hdu_type: %r' % hdu_type )
+#                input('pause')
         return hdu_type
 
     def check_hdu_type_1(self,node=None):
@@ -226,8 +229,6 @@ class Hdu_type(Type):
                     self.logger.debug("not tag_names = {h,p,table}")
                 self.check_heading_tag_assumptions_type_1(node=node)
                 self.check_p_tag_assumptions_type_2(node=node)
-                print('self.correct_type: %r' % self.correct_type)
-                input('pause')
                 self.check_table_tag_assumptions_type_1(node=node)
             else:
                 self.ready = False
@@ -323,12 +324,23 @@ class Hdu_type(Type):
         '''Check heading tag assumptions.'''
         if self.ready:
             if node:
-                # check node has only one heading tag
+                # check node has either one or three heading tags
                 if self.correct_type:
                     heading_tag_names = self.util.get_heading_tag_children(node=node)
-                    if not len(heading_tag_names) == 1:
+                    l = len(heading_tag_names)
+                    if not ( l == 1 or l == 3):
                         self.correct_type = False
-                        self.logger.debug("not only one heading tag")
+                        self.logger.debug("not node has either one or three heading tags")
+                # check additional headings indicate header and binary table
+                if self.correct_type:
+                    if l == 3:
+                        heading_nodes = node.find_all(heading_tag_names)
+                        heading_strings = [self.util.get_string(heading_node)
+                                           for heading_node in heading_nodes]
+                        if not (heading_strings[1].lower() == 'header' and
+                                heading_strings[2].lower() == 'binary table'):
+                            self.correct_type = False
+                            self.logger.debug("not additional headings indicate header and binary table")
                 # check heading = 'HDUn: HduTitle', where n is a digit
                 if self.correct_type:
                     h = node.find_next(heading_tag_names[0])
@@ -507,21 +519,22 @@ class Hdu_type(Type):
                     if not child_names.count('p') == 2:
                         self.correct_type = False
                         self.logger.debug("not node has only one <p> tag")
-                # check node has only two <p> tags
+                # check each <p> tag has text content
                 if self.correct_type:
                     if not self.check_tags_have_only_text_content(
                                                             node=node,
                                                             tag_names = ['p']):
-                        self.correct_type
+                        self.correct_type = False
                         self.logger.debug("not p tag has text content")
-                # check node has only two <p> tags
+                # check second <p> tag has hdu table information
                 if self.correct_type:
                     for p in node.find_all('p'): pass  # get second p tag
                     strings = self.util.get_all_strings(node=p)
-                
-                print('strings: %r' % strings)
-                print('self.correct_type: %r' % self.correct_type)
-                input('pause')
+                    if not ('hdu type' in strings[0].lower() and
+                            'hdu size' in strings[2].lower()
+                            ):
+                        self.correct_type = False
+                        self.logger.debug("not second <p> tag has hdu table information")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_p_tag_assumptions_type_1. ' +

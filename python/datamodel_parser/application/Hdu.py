@@ -106,7 +106,7 @@ class Hdu:
                 elif hdu_type == 2:
 #                    print('HI parse_file_hdu_div  hdu_type == 2')
 #                    input('pause')
-                    self.parse_file_hdu_intro_type_1(div=div,skip_dl=True)
+                    self.parse_file_hdu_intro_type_2(div=div)
                     self.parse_file_hdu_tables_type_1(div=div)
                 elif hdu_type == 3:
 #                    print('HI parse_file_hdu_div  hdu_type == 3')
@@ -129,10 +129,9 @@ class Hdu:
                                   'div: {}.'.format(div))
 
 
-    def parse_file_hdu_intro_type_1(self,div=None, skip_dl=None):
+    def parse_file_hdu_intro_type_1(self,div=None):
         '''Parse file hdu data content from given division tag.'''
         if self.ready:
-            skip_dl = skip_dl if skip_dl else False
             if div:
                 # Get hdu_number and header_title from (the only) heading tag
                 (hdu_number,hdu_title) = (
@@ -145,6 +144,41 @@ class Hdu:
                 # datatype and hdu_size
                 dl = div.find_next('dl')
                 (datatype,hdu_size) = self.util.get_datatype_and_hdu_size(node=dl)
+
+                # is_image
+                tables = div.find_all('table')
+                is_image = (     True  if len(tables) == 1
+                            else False if len(tables) == 2
+                            else None)
+
+                # put it all together
+                hdu_info = dict()
+                hdu_info['is_image']        = is_image
+                hdu_info['hdu_number']      = hdu_number
+                hdu_info['hdu_title']       = hdu_title
+                hdu_info['hdu_size']        = hdu_size
+                hdu_info['hdu_description'] = hdu_description
+                self.file_hdu_info.append(hdu_info)
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_hdu_intro_h2_p_dl_table. ' +
+                                  'div: {}, '.format(div))
+
+    def parse_file_hdu_intro_type_2(self,div=None):
+        '''Parse file hdu data content from given division tag.'''
+        if self.ready:
+            if div:
+                # Get hdu_number and header_title from (the first) heading tag
+                (hdu_number,hdu_title) = (
+                    self.util.get_hdu_number_and_hdu_title(node=div))
+
+                # hdu.description
+                p = div.find_next('p')
+                hdu_description = self.util.get_string(node=p)
+                
+                # datatype and hdu_size
+                for p in div.find_all('p'): pass # get last p tag
+                (datatype,hdu_size) = self.util.get_datatype_and_hdu_size(node=p)
 
                 # is_image
                 tables = div.find_all('table')
@@ -348,11 +382,7 @@ class Hdu:
         if self.ready:
             assumptions = self.verify_assumptions_parse_file_h2_p_table(div=div)
             if div and assumptions:
-                self.parse_file_hdu_intro_type_1(div=div,skip_dl=True)
-
-#                self.parse_file_hdu_intro_h2_p_dl_table(div=div,
-#                                                        assumptions=assumptions,
-#                                                        skip_dl=True)
+                self.parse_file_hdu_intro_type_1(div=div)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_h2_p_table. ' +

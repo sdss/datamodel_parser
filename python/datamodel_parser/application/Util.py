@@ -161,29 +161,19 @@ class Util:
         return (dts,dds)
 
     def get_hdu_number_and_hdu_title(self,node=None):
-        '''Get hdu.hdu_number and header.title from BeautifulSoup node.'''
+        '''Get hdu_number and hdu_title from first heading tag in BeautifulSoup node.'''
         (hdu_number,hdu_title) = (None,None)
         if self.ready:
             if node:
-                child_names = set(self.get_child_names(node=node))
-                heading_tag_name = child_names & set(self.heading_tags)
-                # Error if more than one heading tag
-                if len(heading_tag_name) == 1:
-                    header_tag = node.find_next(heading_tag_name)
-                    heading = self.get_string(node=header_tag)
-                    split = heading.split(':')
-                    hdu_number = int(split[0].lower().replace('hdu',''))
-                    hdu_title = split[1].strip()
-                else:
-                    self.ready = False
-                    self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
-                                      'len(heading_tag_name) != 1. ' +
-                                      'heading_tag_name: {0}'.format(heading_tag_name))
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
-                                  'node: {0}'.format(node) +
-                                  'heading_tag_name: {0}'.format(heading_tag_name))
+                child_names = self.get_child_names(node=node)
+                heading_tag_names = [name for name in child_names
+                                    if name in self.heading_tags]
+                heading_tag_name = heading_tag_names[0]
+                header_tag = node.find_next(heading_tag_name)
+                heading = self.get_string(node=header_tag)
+                split = heading.split(':')
+                hdu_number = int(split[0].lower().replace('hdu',''))
+                hdu_title = split[1].strip()
         return (hdu_number,hdu_title)
 
     def get_all_possible_hdu_titles(self):
@@ -278,8 +268,9 @@ class Util:
         heading_tags = list()
         if self.ready:
             if node:
-                children = set(self.get_child_names(node=node))
-                heading_tags = list(set(self.heading_tags) & children)
+                children = self.get_child_names(node=node)
+                heading_tags = [child for child in children
+                                if child in self.heading_tags]
             else:
                 self.ready = False
                 self.logger.error('Unable to get_heading_tag_children. ' +
