@@ -135,28 +135,15 @@ class Intro_type(Type):
                         self.correct_type = False
                         self.logger.debug("not p tags have only text content")
                         
-                ###### need to update to allow for [h,p] and [h,p,p]
-                        
-                # check first tag is heading tag
+                # check middle tags {h,p}, allowing for [h,p], [h,p,p], etc.
                 if self.correct_type:
-                    if not tag_names[0] in self.util.heading_tags:
+                    middle_tags = set(tag_names[1:-1])
+                    if not (middle_tags == (middle_tags & self.util.heading_tags)
+                                            | {'p'}
+                            ):
                         self.correct_type = False
-                        self.logger.debug("not first tag is heading tag")
-                # check last tag is div tag
-                if self.correct_type:
-                    if not tag_names[-1] == 'div':
-                        self.correct_type = False
-                        self.logger.debug("not last tag is div tag")
-                # check middle tags are [h,p]*n
-                if self.correct_type:
-                    middle_tags = tag_names[1:-1]
-                    h = middle_tags[0]
-                    l = len(middle_tags)
-                    l_is_even = not l % 2
-                    n = l//2 if l_is_even else None
-                    if not (n and middle_tags == [h,'p']*n):
-                        self.correct_type = False
-                        self.logger.debug("not middle tags are [h,p]*n")
+                        self.logger.debug("not middle tags {h,p}, " +
+                                          "allowing for [h,p], [h,p,p], etc.")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_intro_type_1. ' +
@@ -518,7 +505,7 @@ class Hdu_type(Type):
                     child_names = self.util.get_child_names(node=node)
                     if not child_names.count('p') == 2:
                         self.correct_type = False
-                        self.logger.debug("not node has only one <p> tag")
+                        self.logger.debug("not node has only two <p> tags")
                 # check each <p> tag has text content
                 if self.correct_type:
                     if not self.check_tags_have_only_text_content(
