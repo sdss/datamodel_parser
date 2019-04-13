@@ -113,7 +113,7 @@ class Hdu:
 #                    input('pause')
                     self.parse_file_hdu_intro_type_3(div=div)
                     self.parse_file_hdu_tables_type_3(div=div)
-                elif hdu_type == 3:
+                elif hdu_type == 4:
                     self.parse_file_hdu_intro_h2_p_table(div=div)
                     self.parse_file_hdu_tables_h2_p_table(div=div)
                 elif child_names == {'h2','p'} or child_names == {'h2','p','table'}:
@@ -263,35 +263,26 @@ class Hdu:
         '''Parse file hdu data content from given division tag.'''
         if self.ready:
             if div:
-                # hdu.hdu_number and header.title
-                heading_tag_names = self.util.get_heading_tag_children(node=div)
-                if len(heading_tag_names) == 1:
-                    (hdu_number,hdu_title) = (
-                        self.util.get_hdu_number_and_hdu_title(
-                            node=div,
-                            heading_tag_name=heading_tag_names[0]))
-                    # data.is_image
-                    pre_string = div.find_next('pre').string
-                    rows = pre_string.split('\n') if pre_string else list()
-                    image_row = [row for row in rows
-                                 if row and 'XTENSION' in row and 'IMAGE' in row]
-                    is_image = bool(image_row)
-                    is_image = None if not is_image and hdu_number == 0 else is_image
-                    
-                    # put it all together
-                    hdu_info = dict()
-                    hdu_info['is_image']        = is_image
-                    hdu_info['hdu_number']      = hdu_number
-                    hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
-                    hdu_info['hdu_size']        = None
-                    hdu_info['hdu_description'] = None
-                    self.file_hdu_info.append(hdu_info)
-                else:
-                    self.ready = False
-                    self.logger.error('Unable to parse_file_hdu_intro_type_3. ' +
-                                      'len(heading_tag_names) != 1. ' +
-                                      'heading_tag_names: {}, '
-                                        .format(heading_tag_names) )
+                # Get hdu_number and header_title from (the first) heading tag
+                (hdu_number,hdu_title) = (
+                    self.util.get_hdu_number_and_hdu_title(node=div))
+
+                # data.is_image
+                pre_string = div.find_next('pre').string
+                rows = pre_string.split('\n') if pre_string else list()
+                image_row = [row for row in rows
+                             if row and 'XTENSION' in row and 'IMAGE' in row]
+                is_image = bool(image_row)
+                is_image = None if not is_image and hdu_number == 0 else is_image
+                
+                # put it all together
+                hdu_info = dict()
+                hdu_info['is_image']        = is_image
+                hdu_info['hdu_number']      = hdu_number
+                hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
+                hdu_info['hdu_size']        = None
+                hdu_info['hdu_description'] = None
+                self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_type_3. ' +

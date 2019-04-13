@@ -295,8 +295,8 @@ class Hdu_type(Type):
                 elif self.check_hdu_type_2(node=node): hdu_type = 2
 
 
-                elif self.check_hdu_type_4(node=node): hdu_type = 3
-                elif self.check_hdu_type_5(node=node): hdu_type = 4
+                elif self.check_hdu_type_3(node=node): hdu_type = 3
+                elif self.check_hdu_type_5(node=node): hdu_type = 5
 #                else:
 #                    self.ready = False
 #                    self.logger.error('Unable to get_Hdu_type. '
@@ -355,44 +355,45 @@ class Hdu_type(Type):
                                   'node: {}.'.format(node))
         return self.correct_type
 
-    def check_hdu_type_4(self,node=None):
+    def check_hdu_type_3(self,node=None):
         '''Determine class Hdu template type from the given BeautifulSoup node.'''
         self.correct_type = None
         if self.ready:
             if node:
                 self.correct_type = True
-                self.logger.debug("Inconsistencies for check_hdu_type_4:")
+                self.logger.debug("Inconsistencies for check_hdu_type_3:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,pre}
                 if not (tag_names.issubset(self.util.heading_tags | {'pre'} )):
                     self.correct_type = False
                     self.logger.debug("tag_names = {h,pre}")
-                else:
-                    # heading tag assumptions
-                    if self.check_heading_tag_assumptions_type_1(node=node):
-                        # pre tag assumptions
-                        pre = node.find_next('pre')
-                        rows = self.util.get_string(node=pre).split('\n')
-                        # Assume the pre tag is a string with rows separated by '\n'
-                        if not rows:
+                self.check_heading_tag_assumptions_type_1(node=node)
+
+                # check node has only one heading tag
+                if self.correct_type:
+                    # pre tag assumptions
+                    pre = node.find_next('pre')
+                    rows = self.util.get_string(node=pre).split('\n')
+                    # Assume the pre tag is a string with rows separated by '\n'
+                    if not rows:
+                        self.correct_type = False
+                        self.logger.error("pre tag is a string with rows separated by '\n'")
+                    else:
+                        # Assume none of the list entries of rows are empty
+                        rows1 = [row for row in rows if row]
+                        if len(rows) != len(rows1):
                             self.correct_type = False
-                            self.logger.error("pre tag is a string with rows separated by '\n'")
+                            self.logger.error("none of the list entries of rows are empty")
                         else:
-                            # Assume none of the list entries of rows are empty
-                            rows1 = [row for row in rows if row]
-                            if len(rows) != len(rows1):
-                                self.correct_type = False
-                                self.logger.error("none of the list entries of rows are empty")
-                            else:
-                                # Assume the rows contain either '=' for data or 'HISTORY' or 'END'
-                                for row in rows:
-                                    if not ('=' in row or 'HISTORY' in row or 'END' in row):
-                                        self.correct_type = False
-                                        self.logger.error("the rows contain either '=' " +
-                                                          "for data or 'HISTORY' or 'END'")
+                            # Assume the rows contain either '=' for data or 'HISTORY' or 'END'
+                            for row in rows:
+                                if not ('=' in row or 'HISTORY' in row or 'END' in row):
+                                    self.correct_type = False
+                                    self.logger.error("the rows contain either '=' " +
+                                                      "for data or 'HISTORY' or 'END'")
             else:
                 self.ready = False
-                self.logger.error('Unable to check_hdu_type_4. ' +
+                self.logger.error('Unable to check_hdu_type_3. ' +
                                   'node: {}.'.format(node))
 #        print('self.correct_type: %r' % self.correct_type)
 #        input('pause')

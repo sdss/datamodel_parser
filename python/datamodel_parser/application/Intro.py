@@ -190,7 +190,9 @@ class Intro:
                 # page intro
                 dl = div.find_next('dl')
                 (titles,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
-                if titles[-1].lower() == 'sections':
+                if (titles[-1].lower() == 'sections' or
+                    titles[-1].lower() == 'file contents'
+                    ):
                     titles.pop()          # remove section title
                     descriptions.pop()    # remove section list
                 assert(len(titles)==len(descriptions))

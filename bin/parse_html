@@ -29,7 +29,7 @@ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
 
 
-intro_type = 1 hdu_type = 2:
+intro_type = 1, hdu_type = 2:
 Finished!
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
@@ -43,14 +43,15 @@ parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/
 
 
 intro_type = 3, hdu_type = 1:
+Finished! for datamodel/work
 parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
 
 
-File Type 2)
+intro_type = 3, hdu_type = 3:
 Finished!
-parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
-parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
-parse_html -l debug -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
+parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
+parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
+parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
         
 File Type 3)
     parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
