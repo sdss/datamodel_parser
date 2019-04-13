@@ -155,7 +155,7 @@ class Hdu:
                 hdu_info = dict()
                 hdu_info['is_image']        = is_image
                 hdu_info['hdu_number']      = hdu_number
-                hdu_info['hdu_title']       = hdu_title
+                hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = hdu_size
                 hdu_info['hdu_description'] = hdu_description
                 self.file_hdu_info.append(hdu_info)
@@ -173,8 +173,10 @@ class Hdu:
                     self.util.get_hdu_number_and_hdu_title(node=div))
 
                 # hdu.description
-                p = div.find_next('p')
-                hdu_description = self.util.get_string(node=p)
+                ps = list()
+                for p in div.find_all('p'): ps.append(p)
+                ps.pop() # remove last p tag containing datatype and hdu_size
+                hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
                 
                 # datatype and hdu_size
                 for p in div.find_all('p'): pass # get last p tag
@@ -190,7 +192,7 @@ class Hdu:
                 hdu_info = dict()
                 hdu_info['is_image']        = is_image
                 hdu_info['hdu_number']      = hdu_number
-                hdu_info['hdu_title']       = hdu_title
+                hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = hdu_size
                 hdu_info['hdu_description'] = hdu_description
                 self.file_hdu_info.append(hdu_info)
@@ -280,7 +282,7 @@ class Hdu:
                     hdu_info = dict()
                     hdu_info['is_image']        = is_image
                     hdu_info['hdu_number']      = hdu_number
-                    hdu_info['hdu_title']       = hdu_title
+                    hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                     hdu_info['hdu_size']        = None
                     hdu_info['hdu_description'] = None
                     self.file_hdu_info.append(hdu_info)
@@ -600,7 +602,7 @@ class Hdu:
                     hdu_info = dict()
                     hdu_info['is_image']        = is_image
                     hdu_info['hdu_number']      = hdu_number
-                    hdu_info['hdu_title']       = hdu_title
+                    hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                     hdu_info['hdu_size']        = None
                     hdu_info['hdu_description'] = None
                     self.file_hdu_info.append(hdu_info)

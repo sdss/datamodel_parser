@@ -85,11 +85,9 @@ class Intro:
                 intro_type = type.get_intro_type()
 #                print('intro_type: %r'% intro_type)
 #                input('pause')
-                # process different div intro types
-                if intro_type == 1:
-                    self.parse_file_type_1(div=div)
-                elif child_names == {'h1','dl'}:
-                    self.parse_file_h1_dl()
+                if   intro_type == 1: self.parse_file_type_1(div=div)
+                elif intro_type == 2: self.parse_file_type_2(div=div)
+                elif intro_type == 3: self.parse_file_type_3(div=div)
                 else:
                     self.ready = False
                     self.logger.error(
@@ -108,7 +106,7 @@ class Intro:
                 description = str()
                 for child in self.util.get_children(node=div):
                     string = self.util.get_string(node=child)
-                    # self.intro_heading_levels,
+                    # self.intro_heading_levels
                     # self.intro_heading_titles
                     if child.name in self.heading_tags:
                         digit = self.util.get_single_digit(string=child.name)
@@ -117,7 +115,8 @@ class Intro:
                         self.intro_heading_titles.append(string)
                         if first_heading:
                             first_heading = False
-                            self.intro_descriptions.append('')
+                            description = str() # no description for page title
+                            self.intro_descriptions.append(description)
                     # self.intro_descriptions
                     elif child.name == 'p':
                         description += string
@@ -142,29 +141,29 @@ class Intro:
                 self.logger.error('Unable to parse_file_type_1. ' +
                                   'div: {}'.format(div))
 
-    def parse_file_h1_dl(self):
-        '''Parse the HTML of the given BeautifulSoup div tag object with
-            children: h1, h4 and p.'''
+    def parse_file_type_2(self,div=None):
+        '''Parse the HTML of the given BeautifulSoup div tag.'''
         if self.ready:
-            assumptions = self.verify_assumptions_parse_file_h1_dl()
-            if self.intro_div and assumptions:
+            if div:
                 # page title
-                h1 = self.intro_div.find_next('h1')
-                title = self.util.get_string(node=h1)
-                description = '' # no description for page title
+                heading_tag_name = self.util.get_heading_tag_children(node=div)[0]
+                h = div.find_next(heading_tag_name)
+                title = self.util.get_string(node=h)
+                description = str() # no description for page title
                 self.intro_heading_titles.append(title)
                 self.intro_descriptions.append(description)
                 
                 # page intro
-                dl = self.intro_div.find_next('dl')
+                dl = div.find_next('dl')
                 (titles,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
+                if titles[-1].lower() == 'sections': titles.pop()
+                assert(len(titles)==len(descriptions))
+                
                 # extract section list if present
-                for dd in dl.find_all('dd'): pass # get last dd in dl
-                child_names = self.util.get_child_names(node=dd)
-                if child_names == ['ul']: # section list in last dd
-                    titles.pop()          # remove section title
-                    descriptions.pop()    # remove section list
-                    self.parse_section(node=dd)
+#                ul = div.find_next('ul')
+#                self.parse_section(node=dd) # don't do anymore
+
+                # put it all together
                 self.intro_heading_titles.extend(titles)
                 self.intro_descriptions.extend(descriptions)
                 number_headings = len(self.intro_heading_titles)
@@ -173,51 +172,39 @@ class Intro:
                 self.intro_heading_levels.extend([4] * (number_headings - 1))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_h1_dl. ' +
-                                  'self.intro_div: {}'.format(self.intro_div) +
-                                  'assumptions: {}'.format(assumptions))
+                self.logger.error('Unable to parse_file_type_2. ' +
+                                  'div: {}'.format(div) )
 
-    def verify_assumptions_parse_file_h1_dl(self):
-        '''Verify assumptions made in parse_file_h1_dl.'''
-        assumptions = None
-        if self.intro_div:
-            assumptions = True
-            child_names = self.util.get_child_names(node=self.intro_div)
-            if not child_names == ['h1','dl']:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names == ['h1','dl']")
-            # dl assumptions
-            dl = self.intro_div.find_next('dl')
-            child_names = self.util.get_child_names(node=dl)
-            repeated_dt_dd = False
-            for n in range(1,20):
-                if child_names == ['dt','dd']*n:
-                    repeated_dt_dd = True
-                    break
-            if not repeated_dt_dd:
-                assumptions = False
-                self.logger.error("Invalid assumption: "
-                                  "repeated_dt_dd")
-            for dd in dl.find_all('dd'): pass # get last dd
-            child_names = self.util.get_child_names(node=dd)
-            # Assume child_names == ['ul']
-            if child_names == ['ul']:
-                # Asume all children of the <ul> tag are <li> tags
-                ul = dd.find_next('ul')
-                if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
-                    assumptions = False
-                    self.logger.error(
-                        "Invalid assumption: " +
-                        "children_all_one_tag_type(node=ul,tag_name='li') == True")
-        else:
-            self.ready = False
-            self.logger.error(
-                'Unable to verify_assumptions_parse_file_h1_dl. ' +
-                'self.intro_div: {}.'.format(self.intro_div))
-#        print('assumptions: %r' % assumptions)
-#        input('pause')
-        if not assumptions: self.ready = False
-        return assumptions
+    def parse_file_type_3(self,div=None):
+        '''Parse the HTML of the given BeautifulSoup div tag.'''
+        if self.ready:
+            if div:
+                # page title
+                heading_tag_name = self.util.get_heading_tag_children(node=div)[0]
+                h = div.find_next(heading_tag_name)
+                title = self.util.get_string(node=h)
+                description = str() # no description for page title
+                self.intro_heading_titles.append(title)
+                self.intro_descriptions.append(description)
+                
+                # page intro
+                dl = div.find_next('dl')
+                (titles,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
+                if titles[-1].lower() == 'sections':
+                    titles.pop()          # remove section title
+                    descriptions.pop()    # remove section list
+                assert(len(titles)==len(descriptions))
+
+                self.intro_heading_titles.extend(titles)
+                self.intro_descriptions.extend(descriptions)
+                number_headings = len(self.intro_heading_titles)
+                self.intro_positions = list(range(number_headings))
+                self.intro_heading_levels = [1]
+                self.intro_heading_levels.extend([4] * (number_headings - 1))
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_type_3. ' +
+                                  'div: {}'.format(div) )
 
     def parse_section(self,node=None):
         '''Get hdu names from the intro Section.'''

@@ -282,7 +282,7 @@ class Intro(db.Model):
                         nullable = False)
     position = db.Column(db.Integer, nullable = False)
     heading_level = db.Column(db.Integer)
-    heading_title = db.Column(db.String(64), nullable = False)
+    heading_title = db.Column(db.String(64))
     description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
@@ -295,6 +295,9 @@ class Intro(db.Model):
             try: intro = (Intro.query.filter(Intro.file_id==file_id)
                                      .filter(Intro.heading_title==heading_title)
                                      .one())
+            except: intro = None
+        elif file_id:
+            try: intro = (Intro.query.filter(Intro.file_id==file_id).one())
             except: intro = None
         else:
             intro = None
@@ -412,7 +415,7 @@ class Hdu(db.Model):
                         nullable = False)
     is_image = db.Column(db.Boolean)
     number = db.Column(db.Integer, nullable = False)
-    title = db.Column(db.String(64), nullable = False)
+    title = db.Column(db.String(64))
     size = db.Column(db.String(32))
     description = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)

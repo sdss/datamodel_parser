@@ -61,7 +61,7 @@ CREATE TABLE sdss.intro (
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     position INT2 NOT NULL,
     heading_level INT2,
-    heading_title VARCHAR(64) NOT NULL,
+    heading_title VARCHAR(64),
     description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -81,7 +81,7 @@ CREATE TABLE sdss.hdu (
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     is_image BOOLEAN,
     number INT2 NOT NULL,
-    title VARCHAR(64) NOT NULL,
+    title VARCHAR(64),
     size VARCHAR(32),
     description VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,

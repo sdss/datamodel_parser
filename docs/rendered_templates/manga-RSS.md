@@ -25,20 +25,20 @@ gzipped multi-extension FITS
 
 
 ## Page Contents
-* [HDU0: PRIMARY](#hdu0-primary)
-* [HDU1: FLUX](#hdu1-flux)
-* [HDU2: IVAR](#hdu2-ivar)
-* [HDU3: MASK](#hdu3-mask)
-* [HDU4: DISP](#hdu4-disp)
-* [HDU5: PREDISP](#hdu5-predisp)
-* [HDU6: WAVE](#hdu6-wave)
-* [HDU7: SPECRES](#hdu7-specres)
-* [HDU8: SPECRESD](#hdu8-specresd)
-* [HDU9: PRESPECRES](#hdu9-prespecres)
-* [HDU10: PRESPECRESD](#hdu10-prespecresd)
-* [HDU11: OBSINFO](#hdu11-obsinfo)
-* [HDU12: XPOS](#hdu12-xpos)
-* [HDU13: YPOS](#hdu13-ypos)
+* [HDU0: PRIMARY](#hdu0-PRIMARY)
+* [HDU1: FLUX](#hdu1-FLUX)
+* [HDU2: IVAR](#hdu2-IVAR)
+* [HDU3: MASK](#hdu3-MASK)
+* [HDU4: DISP](#hdu4-DISP)
+* [HDU5: PREDISP](#hdu5-PREDISP)
+* [HDU6: WAVE](#hdu6-WAVE)
+* [HDU7: SPECRES](#hdu7-SPECRES)
+* [HDU8: SPECRESD](#hdu8-SPECRESD)
+* [HDU9: PRESPECRES](#hdu9-PRESPECRES)
+* [HDU10: PRESPECRESD](#hdu10-PRESPECRESD)
+* [HDU11: OBSINFO](#hdu11-OBSINFO)
+* [HDU12: XPOS](#hdu12-XPOS)
+* [HDU13: YPOS](#hdu13-YPOS)
 
 ## HDU0: PRIMARY
 Empty except for global header

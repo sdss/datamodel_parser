@@ -59,6 +59,7 @@ class Database:
         if self.file_columns and ready is not None:
             status = 'completed' if ready else 'failed'
             self.file_columns['status'] = status
+            self.set_file()
             self.update_file_row()
         else:
             self.ready = False
@@ -1022,8 +1023,8 @@ class Database:
         self.hdu_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            if file_id and number is not None and title:
-                # size and description can be null
+            if file_id and number is not None:
+                # title, size and description can be null
                 self.hdu_columns = {
                     'file_id'      : file_id
                                         if file_id              else None,
@@ -1044,9 +1045,7 @@ class Database:
                 self.logger.error(
                     'Unable to set_hdu_columns. ' +
                     'file_id: {}, '.format(file_id) +
-                    'is_image: {}, '.format(is_image) +
-                    'number: {}, '.format(number) +
-                    'title: {}.'.format(title))
+                    'number: {}, '.format(number) )
 
     def populate_hdu_table(self):
         '''Update/Create hdu table row.'''

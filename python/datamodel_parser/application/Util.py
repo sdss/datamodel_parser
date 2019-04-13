@@ -148,11 +148,13 @@ class Util:
                 dt_tags = dl.find_all('dt')
                 dd_tags = dl.find_all('dd')
                 for dt in dt_tags:
-                    string = self.get_string(node=dt)
+                    string = self.get_string(node=dt).strip()
                     dts.append(string)
                 for dd in dd_tags:
-                    contents = [self.get_string(node=x) for x in dd.contents]
-                    string = ''.join(contents) if len(contents) > 1 else contents[0]
+                    string = self.get_string(node=dd).strip()
+                    # this way kills <code> and <a> tags
+#                    contents = [self.get_string(node=x).strip() for x in dd.contents]
+#                    string = ''.join(contents) if len(contents) > 1 else contents[0]
                     dds.append(string)
             else:
                 self.ready = False
@@ -212,7 +214,7 @@ class Util:
                 divs = node.find_all('div')
                 for div in [div for div in divs
                             if not self.get_string(node=div).isspace()]:
-                    if 'hdu' in div['id']:
+                    if div['id'].startswith('hdu'):
                         hdu_divs.append(div)
             else:
                 self.ready = False
