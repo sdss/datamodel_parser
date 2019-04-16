@@ -161,12 +161,11 @@ class Intro_type(Type):
                 if   self.check_intro_type_1(node=node): intro_type = 1
                 elif self.check_intro_type_2(node=node): intro_type = 2
                 elif self.check_intro_type_3(node=node): intro_type = 3
-#                elif self.check_intro_type_4(node=node): intro_type = 4
-#                else:
-#                    self.ready = False
-#                    self.logger.error('Unable to get_Hdu_type. '
-#                                      'Unexpected child_names encountered ' +
-#                                      'in Hdu.parse_file_hdu_div(). ')
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_Hdu_type. '
+                                      'Unexpected child_names encountered ' +
+                                      'in Hdu.parse_file_hdu_div(). ')
                 if self.verbose: print('intro_type: %r' % intro_type )
 #                input('pause')
         return intro_type
@@ -297,11 +296,11 @@ class Hdu_type(Type):
 
                 elif self.check_hdu_type_3(node=node): hdu_type = 3
                 elif self.check_hdu_type_5(node=node): hdu_type = 5
-#                else:
-#                    self.ready = False
-#                    self.logger.error('Unable to get_Hdu_type. '
-#                                      'Unexpected child_names encountered ' +
-#                                      'in Hdu.parse_file_hdu_div(). ')
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_Hdu_type. '
+                                      'Unexpected child_names encountered ' +
+                                      'in Hdu.parse_file_hdu_div(). ')
                 if self.verbose: print('hdu_type: %r' % hdu_type )
 #                input('pause')
         return hdu_type

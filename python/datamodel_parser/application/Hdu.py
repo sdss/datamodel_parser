@@ -128,7 +128,6 @@ class Hdu:
                 self.logger.error('Unable to parse_file_hdu_div. ' +
                                   'div: {}.'.format(div))
 
-
     def parse_file_hdu_intro_type_1(self,div=None):
         '''Parse file hdu data content from given division tag.'''
         if self.ready:

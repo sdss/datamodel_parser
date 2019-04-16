@@ -2,16 +2,10 @@ from datamodel_parser.application import File
 from datamodel_parser.application import Database
 from os import environ, walk
 from os.path import join, exists, basename
-
 from flask import render_template
 from datamodel_parser import app
-from os import environ
-from os.path import join
-
 import logging
-
 from json import dumps
-from datamodel_parser.application import Database
 
 class Store:
 
@@ -105,7 +99,6 @@ class Store:
             self.directory_names  = None
             self.directory_depths = None
 
-
     def set_tree_edition(self):
         '''Set the datamodel edition.'''
         self.tree_edition = None
@@ -193,6 +186,7 @@ class Store:
                     'Unable to get_file_paths. ' +
                     'self.datamodel_dir: {}'.format(self.datamodel_dir))
         return file_paths
+
 
     def populate_database(self):
         '''Populate the database with file information.'''
@@ -318,14 +312,64 @@ class Store:
     def populate_file_html_tables(self):
         '''Populate tables comprised of file HTML text information.'''
         if self.ready:
+            self.set_file_path_info()
             self.set_html_text()
             self.set_file()
-            if self.file:
-                self.file.populate_file_html_tables()
+            if self.file_path_info and self.html_text and self.file:
+                self.file.set_file_path_info(file_path_info=self.file_path_info)
+                self.file.set_html_text(html_text=self.html_text)
+                self.file.set_body()
+                self.file.set_intro_and_hdu()
+                self.file.parse_file()
+                self.file.populate_file_hdu_info_tables()
             else:
                 self.ready = False
-                self.logger.error('Unable to populate_file_html_tables. ' +
-                                  'self.file: {}, '.format(self.file))
+                self.logger.error(
+                            'Unable to populate_file_html_tables. ' +
+                            'self.file_path_info: {}, '.format(self.file_path_info) +
+                            'self.html_text: {}, '.format(self.html_text) +
+                            'self.file: {}.'.format(self.file) )
+
+    def populate_fits_tables(self,fits_dict=None):
+        '''Populate tables comprised of fits file information.'''
+        if self.ready:
+            self.set_file_path_info()
+            self.set_file()
+            if fits_dict and self.file_path_info and self.file:
+                self.file.set_file_path_info(file_path_info=self.file_path_info)
+                self.file.parse_fits(fits_dict=fits_dict)
+                self.file.populate_file_hdu_info_tables()
+                self.file.populate_file_hdu_info_tables()
+            else:
+                self.ready = False
+                self.logger.error(
+                            'Unable to populate_file_html_tables. ' +
+                            'fits_dict: {}, '.format(fits_dict) +
+                            'self.file_path_info: {}, '.format(self.file_path_info) +
+                            'self.file: {}.'.format(self.file) )
+
+
+    def set_file_path_info(self):
+        '''Set the html file file_path_info.'''
+        self.file_path_info = None
+        if self.ready:
+            if (self.tree_edition  and
+                self.env_variable  and
+                self.file_name     and
+                self.location_path):
+                self.file_path_info = {'tree_edition'  : self.tree_edition,
+                                       'env_variable'  : self.env_variable,
+                                       'file_name'     : self.file_name,
+                                       'location_path' : self.location_path,
+                                        }
+            else:
+                self.ready = False
+                self.logger.error('Unable to render_template.' +
+                                  'self.tree_edition: {}, '.format(self.tree_edition) +
+                                  'self.env_variable: {}, '.format(self.env_variable) +
+                                  'self.file_name: {}, '.format(self.file_name) +
+                                  'self.location_path: {}.'.format(self.location_path)
+                                  )
 
     def set_html_text(self):
         '''Set the HTML text for the given URL.'''
@@ -350,32 +394,8 @@ class Store:
         ''' Set class File instance.'''
         self.file = None
         if self.ready:
-            if self.html_text:
-                file_path_info = ({'tree_edition'  : self.tree_edition,
-                                   'env_variable'  : self.env_variable,
-                                   'file_name'     : self.file_name,
-                                   'location_path' : self.location_path,
-                                  }
-                                  if self.tree_edition  and
-                                     self.env_variable  and
-                                     self.file_name     and
-                                     self.location_path
-                                  else None)
-                self.file = (File(logger         = self.logger,
-                                  options        = self.options,
-                                  file_path_info = file_path_info,
-                                  html_text      = self.html_text,
-                                  )
-                             if self.logger       and
-                                self.options      and
-                                self.html_text    and
-                                file_path_info
-                             else None)
-                self.ready = self.file.ready if self.file else False
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_file. ' +
-                                  'self.html_text: {}, '.format(self.html_text))
+                self.file = (File(logger=self.logger,options=self.options)
+                             if self.logger and self.options else None)
 
     def render_template(self,template=None):
         '''Use database information to render the given template.'''

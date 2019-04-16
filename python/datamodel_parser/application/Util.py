@@ -41,6 +41,7 @@ class Util:
             self.unordered_list_tags = {'ul'}
             self.description_list_tags ={'dl'}
             self.table_tags = {'table'}
+            self.sections_strings = {'sections','file contents'}
 
     def get_string(self,node=None):
         string = None

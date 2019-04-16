@@ -2,6 +2,7 @@ from .Argument import Argument
 from .Util import Util
 from .Type import Type
 from .Intro import Intro
+from .Stub import Stub
 from .Hdu import Hdu
 from .Database import Database
 from .File import File

@@ -2,6 +2,8 @@ from datamodel_parser.application import Util
 from datamodel_parser.application import Intro
 from datamodel_parser.application import Hdu
 from datamodel_parser.application import Database
+from datamodel_parser.application import Stub
+
 from bs4 import BeautifulSoup
 from flask import render_template
 from datamodel_parser import app
@@ -12,21 +14,39 @@ from json import dumps
 
 class File:
 
-    def __init__(self,logger=None,options=None,file_path_info=None,html_text=None):
+    def __init__(self,logger=None,options=None):
         self.initialize(logger=logger,options=options)
-        self.set_file_path_info(file_path_info=file_path_info)
-        self.set_html_text(html_text=html_text)
-        self.set_body()
         self.set_database()
         self.set_ready()
         self.set_attributes()
-        self.set_intro_and_hdu()
 
     def initialize(self,logger=None,options=None,tree_edition=None):
         self.util = Util(logger=logger,options=options)
         self.logger  = self.util.logger  if self.util.logger  else None
         self.options = self.util.options if self.util.options else None
         self.ready   = self.util.ready   if self.util.ready   else None
+    
+    def set_database(self):
+        '''Set class Database instance.'''
+        self.database = None
+        if self.ready:
+            self.database = (Database(logger=self.logger,options=self.options)
+                             if self.logger and self.options else None)
+            self.ready = bool(self.database and self.database.ready)
+            if not self.ready:
+                self.logger.error(
+                    'Unable to set_database. ' +
+                    'self.database: {}'.format(self.database) +
+                    'self.database.ready: {}'.format(self.database.ready))
+
+    def set_ready(self):
+        '''Set error indicator.'''
+        self.ready = bool(self.ready        and
+                          self.util         and
+                          self.logger       and
+                          self.options      and
+                          self.database
+                          )
 
     def set_file_path_info(self,file_path_info=None):
         '''Set the html file file_path_info.'''
@@ -88,49 +108,19 @@ class File:
                 self.logger.error('Unable to set_body. ' +
                                   'self.html_text: {}'.format(self.html_text))
 
-    def set_database(self):
-        '''Set class Database instance.'''
-        self.database = None
-        if self.ready:
-            self.database = (Database(logger=self.logger,options=self.options)
-                             if self.logger and self.options else None)
-            self.ready = bool(self.database and self.database.ready)
-            if not self.ready:
-                self.logger.error(
-                    'Unable to set_database. ' +
-                    'self.database: {}'.format(self.database) +
-                    'self.database.ready: {}'.format(self.database.ready))
-
-    def set_ready(self):
-        '''Set error indicator.'''
-        self.ready = bool(self.ready        and
-                          self.util         and
-                          self.logger       and
-                          self.options      and
-                          self.html_text    and
-                          self.tree_edition and
-                          self.env_variable and
-                          self.file_name    and
-                          self.body         and
-                          self.database
-                          )
-
     def set_attributes(self):
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
 
-    def populate_file_html_tables(self):
+    def populate_file_hdu_info_tables(self):
         '''Populate tables comprised of file HTML text information.'''
         if self.ready:
-            self.parse_file()
-            if self.ready:
-                self.logger.info('Populating HTML Text Tables')
-                self.populate_intro_table()
-                self.populate_section_table()
-                self.populate_hdu_table()
-                self.populate_header_and_data_tables()
-                self.populate_keyword_and_column_tables()
+            self.populate_intro_table()
+#            self.populate_section_table() # Deprecated
+            self.populate_hdu_table()
+            self.populate_header_and_data_tables()
+            self.populate_keyword_and_column_tables()
 
     def parse_file(self):
         '''Parse the given file using the determined File instance.'''
@@ -178,6 +168,113 @@ class File:
                 self.logger.error('Unable to set_intro_and_hdu. ' +
                                   'self.intro: {}, '.format(self.intro) +
                                   'self.hdu: {}, '.format(self.hdu))
+
+    def parse_fits(self,fits_dict=None):
+        '''From the given dictionary, creat data structures needed for the method
+            populate_file_hdu_info_tables().
+        '''
+        if self.ready:
+            if fits_dict:
+                stub = Stub()
+                self.hdu_count = len(fits_dict['hdus'])
+                # intro database table
+                self.intro_heading_titles = ['Data Model: ' + fits_dict['name'],
+                                        'General Description',
+                                        'Naming Convention',
+                                        'Approximate Size',
+                                        'File Type',
+                                        'Generated by Product',
+                                        ]
+                self.intro_descriptions = ['',
+                                      '',
+                                      '',
+                                      fits_dict['filesize'],
+                                      fits_dict['filetype'],
+                                      '',
+                                      ]
+                number_headings = len(self.intro_heading_titles)
+                self.intro_positions = list(range(number_headings))
+                self.intro_heading_levels = [1]
+                self.intro_heading_levels.extend([4] * (number_headings - 1))
+                self.section_hdu_titles   = dict() # Deprecated
+
+#                print('self.intro_positions: %r' % self.intro_positions)
+#                print('self.intro_heading_levels: %r' % self.intro_heading_levels)
+#                print('self.intro_heading_titles: %r' % self.intro_heading_titles)
+#                print('self.intro_descriptions: %r' % self.intro_descriptions)
+                #input('pause')
+
+                #print("fits_dict['filename']: %r" % fits_dict['filename'])
+
+                # file hdu's
+                self.file_hdu_info = list()
+                self.file_hdu_tables = list()
+                for (hdu_number,hdu) in enumerate(fits_dict['hdus']):
+
+                    # hdu database table
+                    hdu_info = dict()
+                    hdu_info['is_image']        = hdu.is_image
+                    hdu_info['hdu_number']      = hdu_number
+                    hdu_info['hdu_title']       = hdu.name if hdu.name else ' '
+                    hdu_info['hdu_size']        = stub.formatBytes(hdu.size)
+                    hdu_info['hdu_description'] = ''
+                    self.file_hdu_info.append(hdu_info)
+                    
+                    # header and binary-data HDU tables
+                    hdu_tables = list()
+                    
+                    # header and keyword database tables
+                    hdu_table  = dict()
+                    table_rows = dict()
+                    table_row  = list()
+                    position = 0
+                    type = ''
+                    hdr = hdu.header
+                    for (key,value) in hdr.items():
+                        if stub.isKeyAColumn(key):
+                            table_row = [key,value,type,hdr.comments[key]]
+                            table_rows[position]  = table_row
+                            position += 1
+                    # put it all together
+                    hdu_table['is_header']          = True
+                    hdu_table['table_caption']      = ''
+                    hdu_table['table_column_names'] = ['Key','Value','Type','Comment']
+                    hdu_table['table_rows']         = table_rows
+                    hdu_tables.append(hdu_table)
+
+#                    print('hdu_info: \n' + dumps( hdu_info,indent=1))
+#                    print('hdu_table: \n' + dumps( hdu_table,indent=1))
+#                    input('pause')
+
+                    # data and column database tables
+                    unit = ''
+                    description = ''
+                    if not hdu.is_image:
+                        hdu_table  = dict()
+                        table_rows = dict()
+                        table_row  = list()
+                        hdr = hdu.header
+                        position = 0
+                        for row in hdu.columns:
+                            if stub.isKeyAColumn(key):
+                                table_row = [row.name.upper(),
+                                             stub.getType(row.format),
+                                             unit,
+                                             description
+                                             ]
+                                table_rows[position]  = table_row
+                                position += 1
+                        # put it all together
+                        hdu_table['is_header']          = False
+                        hdu_table['table_caption']      = ''
+                        hdu_table['table_column_names'] = ['Name','Type','Unit','Description']
+                        hdu_table['table_rows']         = table_rows
+                        hdu_tables.append(hdu_table)
+
+#                        print('hdu_info: \n' + dumps( hdu_info,indent=1))
+#                        print('hdu_table: \n' + dumps( hdu_table,indent=1))
+#                        input('pause')
+                    self.file_hdu_tables.append(hdu_tables)
 
     def populate_intro_table(self):
         '''Populate the intro table.'''

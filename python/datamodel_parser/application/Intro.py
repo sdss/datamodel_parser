@@ -61,8 +61,12 @@ class Intro:
                     div = self.util.get_intro_div(node=self.body)
                     self.parse_file_intro_div(div=div)
                 else:
+                    self.set_intro_tags()
                     # self.body not all div tags
                     child_names = set(self.util.get_child_names(node=self.body))
+#                    print('HI Intro.parse_file')
+#                    print('child_names: %r' % child_names)
+#                    input('pause')
                     if child_names == {'h1','p','h3','ul','pre'}:
                         self.parse_file_h1_p_h3_ul_pre()
                     elif child_names == {'h1','p','h2','table','h3','pre'}:
@@ -97,6 +101,40 @@ class Intro:
                 self.ready = False
                 self.logger.error('Unable to parse_file_intro_div. ' +
                                   'div: {}.'.format(div))
+
+    def set_intro_tags(self):
+        '''Parse the HTML of the given BeautifulSoup div tag.'''
+        self.intro_tags = None
+        if self.ready:
+            if self.body:
+                child_names = self.util.get_child_names(node=self.body)
+                heading_tags = self.util.get_heading_tag_children(node=self.body)
+                previous_h = None
+                for heading_tag in heading_tags:
+                    h = self.body.find_next(heading_tag)
+                    string = h.string
+                    if string.lower().replace(':','') in self.util.sections_strings:
+                        self.intro_tags = h.previous_siblings
+                        break
+                    elif string.lower().startswith('hdu'):
+                        self.intro_tags = h.previous_siblings
+                        break
+                    else:
+                        previous_h = h
+
+
+                reversed_tags = list()
+                for sibling in self.intro_tags:
+                    print('sibling: %r' % sibling)
+                input('pause')
+                
+                input('pause')
+
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_intro_tags. ' +
+                                  'self.body: {}'.format(self.body))
+
 
     def parse_file_type_1(self,div=None):
         '''Parse the HTML of the given BeautifulSoup div tag.'''
@@ -448,11 +486,11 @@ class Intro:
                     self.body.find_next(child)
                     if child in self.util.heading_tags:
                         hdu_titles = self.util.get_all_possible_hdu_titles()
-                        print('hdu_titles: %r'% hdu_titles)
-                        input('pause')
+#                        print('hdu_titles: %r'% hdu_titles)
+#                        input('pause')
 
-                    print('child: %r' % child)
-                    input('pause')
+#                    print('child: %r' % child)
+#                    input('pause')
 
             else:
                 self.ready = False
