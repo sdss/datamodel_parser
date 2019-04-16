@@ -91,8 +91,8 @@ class Hdu:
         if self.ready:
             if div:
                 child_names = set(self.util.get_child_names(node=div)) # REMOVE
-                type = Hdu_type(logger=self.logger,options=self.options,node=div)
-                hdu_type = type.get_hdu_type()
+                type = Hdu_type(logger=self.logger,options=self.options)
+                hdu_type = type.get_hdu_type(node=div)
 #                print('hdu_type: %r' % hdu_type)
 #                input('pause')
 

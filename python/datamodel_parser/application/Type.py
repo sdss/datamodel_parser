@@ -6,10 +6,9 @@ from json import dumps
 class Type(object):
     '''Parse intro of file HTML.'''
 
-    def __init__(self,logger=None,options=None,node=None):
+    def __init__(self,logger=None,options=None):
 #        self.calling_class = inspect.stack()[1][0].f_locals["self"].__class__.__name__
         self.initialize(logger=logger,options=options)
-        self.set_node(node=node)
         self.set_ready()
         self.set_attributes()
 
@@ -19,22 +18,12 @@ class Type(object):
         self.options = self.util.options if self.util.options else None
         self.ready   = self.util and self.util.ready if self.util else None
 
-    def set_node(self, node=None):
-        '''Set the node class attribute.'''
-        self.node = None
-        if self.ready:
-            self.node = node if node else None
-            if not self.node:
-                self.ready = False
-                self.logger.error('Unable to set_node.')
-
     def set_ready(self):
         '''Set error indicator.'''
         self.ready = bool(self.ready   and
                           self.util    and
                           self.logger  and
-                          self.options and
-                          self.node)
+                          self.options)
 
     def set_attributes(self):
         '''Set class attributes.'''
@@ -50,7 +39,7 @@ class Type(object):
         tag_has_text_content = False
         if tag:
             child_names = self.util.get_child_names(node=tag)
-            if not child_names or set(child_names).issubset({'a','b','code'}):
+            if not child_names or set(child_names).issubset({'a','b','code','i'}):
                 tag_has_text_content = True
             else:
                 tag_has_text_content = False
@@ -93,6 +82,31 @@ class Type(object):
                 self.ready = False
                 self.logger.error('Unable to check_heading_tags_have_only_text_content. ' +
                                   'node: {}.'.format(node))
+
+    def check_tag_type_of_first_child_tag(self,
+                                          node=None,
+                                          tag_name=None,
+                                          child_tag_type=None):
+        '''Check all the tags of the node with the given tag_name have
+            first child tag of the given child_tag_type.'''
+        if self.ready:
+            if node and tag_name and child_tag_type:
+                if self.correct_type:
+                    for tag in node.find_all(tag_name):
+                        if self.correct_type:
+                            child_names = self.util.get_child_names(node=tag)
+                            if not child_names[0] in child_tag_type:
+                                self.correct_type = False
+                                self.logger.debug(
+                                    "not all the tags of the given node with " +
+                                    "tag_name: {} have first child tag".format(tag_name) +
+                                    "of child_tag_type.: {}.".format(child_tag_type))
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_tag_type_of_first_child_tag. ' +
+                                  'node: {}.'.format(node) +
+                                  'tag_name: {}.'.format(tag_name) +
+                                  'child_tag_type: {}.'.format(child_tag_type) )
 
     def check_p_tags_have_only_text_content(self,node=None):
         '''Check p tags have only text content,
@@ -150,17 +164,17 @@ class Type(object):
 class Intro_type(Type):
     '''Determine the class Intro type of the given node.'''
     def __init__(self,logger=None,options=None,node=None):
-        Type.__init__(self,logger=logger,options=options,node=node)
+        Type.__init__(self,logger=logger,options=options)
 
     def get_intro_type(self,node=None):
         '''Determine class Hdu template type from the given BeautifulSoup node.'''
         intro_type = None
         if self.ready:
-            node = node if node else self.node
             if node:
                 if   self.check_intro_type_1(node=node): intro_type = 1
                 elif self.check_intro_type_2(node=node): intro_type = 2
                 elif self.check_intro_type_3(node=node): intro_type = 3
+                elif self.check_intro_type_4(node=node): intro_type = 4
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_Hdu_type. '
@@ -279,16 +293,45 @@ class Intro_type(Type):
                 self.logger.error('Unable to check_p_tags_have_only_text_content. ' +
                                   'node: {}.'.format(node))
 
+    def check_intro_type_4(self,node=None):
+        '''Determine class Intro_type template from the given BeautifulSoup node.'''
+        self.correct_type = False
+        if self.ready:
+            if node:
+                self.correct_type = True
+                self.logger.debug("First inconsistency for check_intro_type_4:")
+                tag_names = self.util.get_child_names(node=node)
+                
+                # check tag_names = {h,p}
+                if self.correct_type:
+                    set_tag_names = set(tag_names)
+                    if not (set_tag_names == (set_tag_names & self.util.heading_tags)
+                                              | {'p'}
+                            ):
+                        self.correct_type = False
+                        self.logger.debug("not tag_names = {h,p}")
+                self.check_heading_tags_have_only_text_content(node=node)
+                self.check_p_tags_have_only_text_content(node=node)
+                self.check_tag_type_of_first_child_tag(
+                                                node=node,
+                                                tag_name='p',
+                                                child_tag_type=['b'])
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_intro_type_4. ' +
+                                  'node: {}.'.format(node))
+        return self.correct_type
+
+
 class Hdu_type(Type):
     '''Determine the class Hdu_type of the given node.'''
     def __init__(self,logger=None,options=None,node=None):
-        Type.__init__(self,logger=logger,options=options,node=node)
+        Type.__init__(self,logger=logger,options=options)
 
     def get_hdu_type(self,node=None):
         '''Determine class Hdu template type from the given BeautifulSoup node.'''
         hdu_type = None
         if self.ready:
-            node = node if node else self.node
             if node:
                 if   self.check_hdu_type_1(node=node): hdu_type = 1
                 elif self.check_hdu_type_2(node=node): hdu_type = 2

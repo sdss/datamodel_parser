@@ -1,4 +1,4 @@
-from bs4 import Tag, NavigableString
+from bs4 import BeautifulSoup, Tag, NavigableString
 from json import dumps
 
 
@@ -335,33 +335,43 @@ class Util:
                                   'node: {0}'.format(node))
         return children
 
-    def get_intro_tags(self,node=None):
-        '''Get a list of intro tags from the given BeautifulSoup node.'''
-        intro_tags = list()
+    def get_intro(self,node=None):
+        '''Get a new BeautifulSoup object comprised of the intro tags
+            of the given BeautifulSoup node.'''
+        intro = None
         if self.ready:
             if node:
+                # get previous_siblings of the end of intro heading tag
+                previous_siblings = None
                 heading_tags = self.get_heading_tag_children(node=node)
-                # get intro_tags in reverse order
                 for heading_tag in heading_tags:
                     h = node.find_next(heading_tag)
                     string = h.string.lower()
+                    # find the end of the intro (the file contents or first hdu)
                     if (string.replace(':','') in self.sections_strings or
                         string.startswith('hdu')
                         ):
-                        reversed_intro_tags = h.previous_siblings
+                        previous_siblings = h.previous_siblings
                         break
-                # get intro_tags in correct order
-                tags = list()
-                for sibling in [s for s in reversed_intro_tags if s.name]:
-                    tags.append(sibling)
-                tags.reverse()
-        
-        
+                # reverse the order of the previous_siblings
+                if previous_siblings:
+                    intro_tags = list()
+                    for sibling in [s for s in previous_siblings if s.name]:
+                        intro_tags.append(sibling)
+                    intro_tags.reverse()
+                    
+                    # create new BeautifulSoup object out of the intro_tags text
+                    tag_text = '\n'.join([str(tag) for tag in intro_tags])
+                    intro = BeautifulSoup(tag_text, 'html.parser')
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_intro. ' +
+                                      'previous_siblings: {}'.format(previous_siblings))
             else:
                 self.ready = False
-                self.logger.error('Unable to get_intro_tags. ' +
+                self.logger.error('Unable to get_intro. ' +
                                   'node: {}'.format(node))
-        return tags
+        return intro
 
     def get_tag_names(self,tag_list=None):
         '''Get a list of tag names from the given BeautifulSoup tag_list.'''
