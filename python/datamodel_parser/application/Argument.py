@@ -19,6 +19,7 @@ def parse_html():
 
 def parse_stub():
     parser = ArgumentParser()
+    parser.add_argument("-b", "--basename", help="file path basename", metavar="BASE")
     parser.add_argument("-p", "--path", help="file path", metavar="PATH")
     parser.add_argument("-l", "--level", help="set logging level", metavar="LEVEL", choices=['debug','info','warning','error','critical'], default='info')
     parser.add_argument("-f", "--force", help="skip caveats", action="store_true")

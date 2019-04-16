@@ -53,12 +53,12 @@ class Util:
                     n = self.get_number_descendants(node=node)
                     if n > 1:
                         node_contents = [str(x) for x in node.contents]
-                        string = ''.join(node_contents).strip()
+                        string = str().join(node_contents).strip()
 #                        string = str(node).strip() # depricated way
                     elif (n == 1 and bool(node.string)):
                         string = str(node.string).strip()
                     else:
-                        string = ''
+                        string = str()
             else:
                 self.ready = False
                 self.logger.error('Unable to get_string. ' +
@@ -123,7 +123,6 @@ class Util:
                                   'node: {0}'.format(node))
         return sibling_names
 
-
     def get_parent_names(self,node=None):
         '''Set a list of parents for the given BeautifulSoup node.'''
         parent_names = None
@@ -155,7 +154,7 @@ class Util:
                     string = self.get_string(node=dd).strip()
                     # this way kills <code> and <a> tags
 #                    contents = [self.get_string(node=x).strip() for x in dd.contents]
-#                    string = ''.join(contents) if len(contents) > 1 else contents[0]
+#                    string = str().join(contents) if len(contents) > 1 else contents[0]
                     dds.append(string)
             else:
                 self.ready = False
@@ -175,7 +174,7 @@ class Util:
                 header_tag = node.find_next(heading_tag_name)
                 heading = self.get_string(node=header_tag)
                 split = heading.split(':')
-                hdu_number = int(split[0].lower().replace('hdu',''))
+                hdu_number = int(split[0].lower().replace('hdu',str()))
                 hdu_title = split[1].strip()
         return (hdu_number,hdu_title)
 
@@ -335,6 +334,47 @@ class Util:
                 self.logger.error('Unable to get_children. ' +
                                   'node: {0}'.format(node))
         return children
+
+    def get_intro_tags(self,node=None):
+        '''Get a list of intro tags from the given BeautifulSoup node.'''
+        intro_tags = list()
+        if self.ready:
+            if node:
+                heading_tags = self.get_heading_tag_children(node=node)
+                # get intro_tags in reverse order
+                for heading_tag in heading_tags:
+                    h = node.find_next(heading_tag)
+                    string = h.string.lower()
+                    if (string.replace(':','') in self.sections_strings or
+                        string.startswith('hdu')
+                        ):
+                        reversed_intro_tags = h.previous_siblings
+                        break
+                # get intro_tags in correct order
+                tags = list()
+                for sibling in [s for s in reversed_intro_tags if s.name]:
+                    tags.append(sibling)
+                tags.reverse()
+        
+        
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intro_tags. ' +
+                                  'node: {}'.format(node))
+        return tags
+
+    def get_tag_names(self,tag_list=None):
+        '''Get a list of tag names from the given BeautifulSoup tag_list.'''
+        tag_names = list()
+        if self.ready:
+            if tag_list:
+                for tag in tag_list:
+                    tag_names.append(tag.name)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_tag_names. ' +
+                                  'tag_list: {}'.format(tag_list))
+        return tag_names
 
 
 

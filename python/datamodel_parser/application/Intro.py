@@ -61,24 +61,35 @@ class Intro:
                     div = self.util.get_intro_div(node=self.body)
                     self.parse_file_intro_div(div=div)
                 else:
-                    self.set_intro_tags()
-                    # self.body not all div tags
-                    child_names = set(self.util.get_child_names(node=self.body))
-#                    print('HI Intro.parse_file')
-#                    print('child_names: %r' % child_names)
-#                    input('pause')
-                    if child_names == {'h1','p','h3','ul','pre'}:
-                        self.parse_file_h1_p_h3_ul_pre()
-                    elif child_names == {'h1','p','h2','table','h3','pre'}:
-                        self.parse_file_h1_p_h2_table_h3_pre()
-                    else:
-                        self.ready = False
-                        self.logger.error('Unexpected HTML body type encountered ' +
-                                          'in Intro.parse_file.')
+                    intro = self.util.get_intro_tags(node=self.body)
+                    self.parse_file_intro(intro=intro)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_info. ' +
                                   'self.body: {}'.format(self.body))
+
+    def parse_file_intro(self,intro=None):
+        '''Parse file intro content from given division tag.'''
+        if self.ready:
+            if intro:
+                tag_names = self.util.get_tag_names(tag_list=intro)
+                print('HI Intro.parse_file')
+                print('tag_names: %r' % child_names)
+                input('pause')
+                if child_names == {'h1','p','h3','ul','pre'}:
+                    self.parse_file_h1_p_h3_ul_pre()
+                elif child_names == {'h1','p','h2','table','h3','pre'}:
+                    self.parse_file_h1_p_h2_table_h3_pre()
+                else:
+                    self.ready = False
+                    self.logger.error('Unexpected HTML body type encountered ' +
+                                      'in Intro.parse_file.')
+
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_intro. ' +
+                                  'intro: {}.'.format(intro))
+
 
     def parse_file_intro_div(self,div=None):
         '''Parse file intro content from given division tag.'''
@@ -101,39 +112,6 @@ class Intro:
                 self.ready = False
                 self.logger.error('Unable to parse_file_intro_div. ' +
                                   'div: {}.'.format(div))
-
-    def set_intro_tags(self):
-        '''Parse the HTML of the given BeautifulSoup div tag.'''
-        self.intro_tags = None
-        if self.ready:
-            if self.body:
-                child_names = self.util.get_child_names(node=self.body)
-                heading_tags = self.util.get_heading_tag_children(node=self.body)
-                previous_h = None
-                for heading_tag in heading_tags:
-                    h = self.body.find_next(heading_tag)
-                    string = h.string
-                    if string.lower().replace(':','') in self.util.sections_strings:
-                        self.intro_tags = h.previous_siblings
-                        break
-                    elif string.lower().startswith('hdu'):
-                        self.intro_tags = h.previous_siblings
-                        break
-                    else:
-                        previous_h = h
-
-
-                reversed_tags = list()
-                for sibling in self.intro_tags:
-                    print('sibling: %r' % sibling)
-                input('pause')
-                
-                input('pause')
-
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_intro_tags. ' +
-                                  'self.body: {}'.format(self.body))
 
 
     def parse_file_type_1(self,div=None):
@@ -338,7 +316,7 @@ class Intro:
                 hdu_hdu_titles = list()
                 for li in [li for li in node.find_all('li')
                            if not self.util.get_string(node=li).isspace()]:
-                    section_name = li.contents[1].replace(':','').strip()
+                    section_name = li.contents[1].replace(':',str()).strip()
                     hdu_hdu_titles.append(section_name)
                 hdu_numbers = list(range(len(hdu_hdu_titles)))
                 self.section_hdu_titles = dict(zip(hdu_numbers,hdu_hdu_titles))
@@ -404,16 +382,16 @@ class Intro:
                         # page title
                         position += 1
                         self.intro_positions.append(position)
-                        level = int(child_name.replace('h',''))
+                        level = int(child_name.replace('h',str()))
                         self.intro_heading_levels.append(level)
                         title = self.util.get_string(node=child)
                         # page title
                         if child_name == 'h1':
-                            self.intro_descriptions.append('')
+                            self.intro_descriptions.append(str())
                         # multiple non-nested tags
                         if 'Format notes' in title:
                             found_format_notes = True
-                            title = title.replace(':','')
+                            title = title.replace(':',str())
                         self.intro_heading_titles.append(title)
                     # intro non-heading tags containing headings and descriptions
                     elif (child_name in self.paragraph_tags or
@@ -425,7 +403,7 @@ class Intro:
                             if content.name in self.bold_tags:
                                 position += 1
                                 title = (self.util.get_string(node=content)
-                                            .replace(':',''))
+                                            .replace(':',str()))
                                 self.intro_positions.append(position)
                                 self.intro_heading_levels.append(3)
                                 self.intro_heading_titles.append(title)

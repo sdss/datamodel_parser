@@ -469,7 +469,7 @@ class Hdu_type(Type):
                             ':' in string   and
                             string.split(':')[0]
                                   .lower()
-                                  .replace('hdu','')
+                                  .replace('hdu',str())
                                   .strip()
                                   .isdigit()):
                         self.correct_type = False

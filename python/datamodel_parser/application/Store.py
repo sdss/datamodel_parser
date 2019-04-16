@@ -141,7 +141,7 @@ class Store:
         if self.ready:
             path = path if path else self.path
             if path:
-                path = path.replace('datamodel/files/','')
+                path = path.replace('datamodel/files/',str())
                 split = path.split('/')
                 self.env_variable  = split[0]              if split else None
                 self.file_name     = split[-1]             if split else None
@@ -173,7 +173,7 @@ class Store:
                                 file = join(dirpath,filename)
                                 if exists(file):
                                     file_path = file.replace(
-                                                    self.datamodel_dir + '/','')
+                                                    self.datamodel_dir + '/',str())
                                     file_paths.append(file_path)
                                 else:
                                     self.ready = False
@@ -460,8 +460,6 @@ class Store:
                     'Unable to set_datamodel_parser_rendered_dir from the ' +
                     'environmental variable DATAMODEL_PARSER_RENDERED_TEMPLATES_DIR. ' +
                     'Try loading a datamodel_parser module file.')
-
-
 
     def exit(self):
         '''Report the presense/lack of errors.'''

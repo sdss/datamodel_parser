@@ -493,7 +493,7 @@ class Hdu:
                     for (heading_tag,pre_tags) in list(zip(self.hdu_headings,
                                                           self.hdu_pres)):
                         hdu_title = (self.util.get_string(node=heading_tag)
-                                            .replace(':',''))
+                                            .replace(':',str()))
                         table_info = list()
                         for pre_tag in pre_tags:
                             string = self.util.get_string(node=pre_tag)
@@ -651,14 +651,14 @@ class Hdu:
                 value_comment = None
                 if 'HISTORY' in row:
                     keyword = 'HISTORY'
-                    value_comment = row.replace('HISTORY','')
+                    value_comment = row.replace('HISTORY',str())
                 elif '=' in row:
                     split = row.split('=')
                     keyword       = split[0].strip() if split else None
                     value_comment = split[1].strip() if split else None
                 elif 'END' in row:
                     keyword = 'END'
-                    value_comment = row.replace('END','')
+                    value_comment = row.replace('END',str())
                 else:
                     self.ready = False
                     self.logger.error(
