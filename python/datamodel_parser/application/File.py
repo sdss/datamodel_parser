@@ -116,7 +116,6 @@ class File:
         '''Populate tables comprised of file HTML text information.'''
         if self.ready:
             self.populate_intro_table()
-#            self.populate_section_table() # Deprecated
             self.populate_hdu_table()
             self.populate_header_and_data_tables()
             self.populate_keyword_and_column_tables()
@@ -135,7 +134,6 @@ class File:
                     self.intro_heading_levels = self.intro.intro_heading_levels
                     self.intro_heading_titles = self.intro.intro_heading_titles
                     self.intro_descriptions   = self.intro.intro_descriptions
-                    self.section_hdu_titles   = self.intro.section_hdu_titles
                     self.hdu_count            = self.hdu.hdu_count
                     self.file_hdu_info        = self.hdu.file_hdu_info
                     self.file_hdu_tables      = self.hdu.file_hdu_tables
@@ -145,7 +143,6 @@ class File:
 #                    print('self.intro_heading_levels: %r' % self.intro_heading_levels)
 #                    print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 #                    print('self.intro_descriptions: {}'.format(self.intro_descriptions))
-#                    print('self.section_hdu_titles: {}'.format(self.section_hdu_titles))
 #                    print('self.hdu_count: {}'.format(self.hdu_count))
 #                    print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
 #                    print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
@@ -195,7 +192,6 @@ class File:
                 self.intro_positions = list(range(number_headings))
                 self.intro_heading_levels = [1]
                 self.intro_heading_levels.extend([4] * (number_headings - 1))
-                self.section_hdu_titles = dict() # Deprecated
 #                filename = fits_dict['filename']
 
                 # file hdu's
@@ -316,44 +312,6 @@ class File:
                     'self.intro_descriptions: {}.'
                     .format(self.intro_descriptions)
                     )
-
-    def populate_section_table(self):
-        '''Populate the section table.'''
-        if self.ready:
-            if (self.tree_edition                 and
-                self.env_variable                 and
-#               self.location_path # can be None
-                self.file_name                    and
-                self.section_hdu_titles is not None
-                ):
-                self.database.set_file_id(tree_edition  = self.tree_edition,
-                                          env_variable  = self.env_variable,
-                                          location_path = self.location_path,
-                                          file_name     = self.file_name)
-                section_hdu_titles = self.section_hdu_titles
-                if section_hdu_titles:
-                    for (hdu_number,hdu_title) in section_hdu_titles.items():
-                        if self.ready:
-                            self.database.set_section_columns(
-                                                hdu_number = int(hdu_number),
-                                                hdu_title   = hdu_title)
-                            self.database.populate_section_table()
-                            self.ready = self.database.ready
-                else: # the file does not have a section list
-                    self.database.set_section_columns(hdu_number = None,
-                                                      hdu_title   = None)
-                    self.database.populate_section_table()
-                    self.ready = self.database.ready
-
-            else:
-                self.ready = False
-                self.logger.error(
-                    'Unable to populate_section_table. '                   +
-                    'self.tree_edition: {}, ' .format(self.tree_edition)  +
-                    'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.file_name: {}, '    .format(self.file_name)     +
-                    'self.section_hdu_titles: {}.'
-                    .format(self.section_hdu_titles))
 
     def populate_hdu_table(self):
         '''Populate the hdu table.'''

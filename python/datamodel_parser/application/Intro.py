@@ -51,7 +51,6 @@ class Intro:
         self.intro_heading_levels = list()
         self.intro_heading_titles = list()
         self.intro_descriptions   = list()
-        self.section_hdu_titles   = dict()
         if self.ready:
             # process different intro types
             if self.body:
@@ -63,6 +62,12 @@ class Intro:
                 else:
                     intro = self.util.get_intro(node=self.body)
                     self.parse_file_intro(node=intro)
+#                print('self.intro_positions: %r'% self.intro_positions)
+#                print('self.intro_heading_levels: %r'% self.intro_heading_levels)
+#                print('self.intro_heading_titles: %r'% self.intro_heading_titles)
+#                print('self.intro_descriptions: %r'% self.intro_descriptions)
+#                input('pause')
+
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_info. ' +
@@ -255,143 +260,6 @@ class Intro:
                 self.ready = False
                 self.logger.error('Unable to parse_file_type_4. ' +
                                   'node: {}'.format(node) )
-
-    def parse_section(self,node=None):
-        '''Get hdu names from the intro Section.'''
-        if self.ready:
-            if node:
-                child_names = set(self.util.get_child_names(node=node))
-                if child_names == {'h4','ul'}:
-                    self.parse_section_h4_ul(node=node)
-                elif child_names == {'ul'}:
-                    self.parse_section_ul(node=node)
-                else:
-                    self.ready = False
-                    self.logger.error('Unexpected child_names encountered ' +
-                                      'in Intro.parse_section().')
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_section.' +
-                                  'node: {}'.format(node))
-
-    def parse_section_h4_ul(self,node=None):
-        '''Get hdu names from the intro Section.'''
-        if self.ready:
-            assumptions = self.verify_assumptions_parse_section_h4_ul(node=node)
-            if node and assumptions:
-                for string in [item for item in node.strings if item != '\n']:
-                    if 'HDU' in string:
-                        split = string.split(':')
-                        hdu = split[0].strip() if split else None
-                        hdu_number = (int(hdu.lower().replace('hdu',''))
-                                      if hdu else None)
-                        hdu_title   = split[1].strip() if split else None
-                        if hdu_number is not None and hdu_title:
-                            self.section_hdu_titles[hdu_number] = hdu_title
-                        else:
-                            self.ready = False
-                            self.logger.error(
-                                    'Unable to set_section_hdu_titles.' +
-                                    'hdu_number: {}'.format(hdu_number) +
-                                    'hdu_title: {}'.format(hdu_title))
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_section_h4_ul.' +
-                                  'node: {}'.format(node) +
-                                  'assumptions: {}'.format(assumptions))
-
-    def verify_assumptions_parse_section_h4_ul(self,node=None):
-        '''Verify assumptions made in parse_section_h4_ul.'''
-        assumptions = None
-        if node:
-            assumptions = True
-            child_names = self.util.get_child_names(node=node)
-            if not child_names == ['h4','ul']:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names == ['h4','ul']")
-            # Asume all children of the <ul> tag are <li> tags
-            ul = node.find_next('ul')
-            if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
-                assumptions = False
-                self.logger.error(
-                        "Invalid assumption: " +
-                        "children_all_one_tag_type(node=ul,tag_name='li') == True")
-            else:
-                for li in [li for li in ul.children
-                           if not self.util.get_string(node=li).isspace()]:
-                    for child in self.util.get_children(node=li):
-                        if not child.name == 'a':
-                            assumptions = False
-                            self.logger.error("Invalid assumption: child.name == 'a'")
-                        string = self.util.get_string(node=child)
-                        if not 'HDU' in string:
-                            assumptions = False
-                            self.logger.error("Invalid assumption: 'HDU' in string")
-                        if not ':' in string:
-                            assumptions = False
-                            self.logger.error("Invalid assumption: ':' in string")
-        else:
-            self.ready = False
-            self.logger.error(
-                'Unable to verify_assumptions_parse_section_h4_ul. ' +
-                'node: {}.'.format(node))
-#        print('assumptions: %r' % assumptions)
-#        input('pause')
-        if not assumptions: self.ready = False
-        return assumptions
-
-    def parse_section_ul(self,node=None):
-        '''Get hdu names from the intro Section.'''
-        if self.ready:
-            assumptions = self.verify_assumptions_parse_section_ul(node=node)
-            if node and assumptions:
-                hdu_hdu_titles = list()
-                for li in [li for li in node.find_all('li')
-                           if not self.util.get_string(node=li).isspace()]:
-                    section_name = li.contents[1].replace(':',str()).strip()
-                    hdu_hdu_titles.append(section_name)
-                hdu_numbers = list(range(len(hdu_hdu_titles)))
-                self.section_hdu_titles = dict(zip(hdu_numbers,hdu_hdu_titles))
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_section_ul.' +
-                                  'node: {}'.format(node) +
-                                  'assumptions: {}'.format(assumptions))
-
-    def verify_assumptions_parse_section_ul(self,node=None):
-        '''Verify assumptions made in parse_section_ul.'''
-        assumptions = None
-        if node:
-            assumptions = True
-            child_names = self.util.get_child_names(node=node)
-            if not child_names == ['ul']:
-                assumptions = False
-                self.logger.error("Invalid assumption: child_names == ['ul']")
-            # ul assumptions
-            # Asume all children of the <ul> tag are <li> tags
-            ul = node.find_next('ul') if node else None
-            if not self.util.children_all_one_tag_type(node=ul,tag_name='li'):
-                assumptions = False
-                self.logger.error(
-                        "Invalid assumption: " +
-                        "children_all_one_tag_type(node=ul,tag_name='li') == True")
-            # li assumptions
-            # Assume the only child of each <li> tag is an <a> tag
-            lis = ul.find_all('li')
-            for li in lis:
-                child_names = self.util.get_child_names(node=li)
-                if not child_names == ['a']:
-                    assumptions = False
-                    self.logger.error("Invalid assumption: child_names == ['a']")
-        else:
-            self.ready = False
-            self.logger.error(
-                'Unable to verify_assumptions_parse_section_ul. ' +
-                'node: {}.'.format(node))
-#        print('assumptions: %r' % assumptions)
-#        input('pause')
-        if not assumptions: self.ready = False
-        return assumptions
 
     def parse_file_h1_p_h3_ul_pre(self):
         '''Parse the HTML of the given BeautifulSoup div tag object with

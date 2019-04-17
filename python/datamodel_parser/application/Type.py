@@ -127,7 +127,7 @@ class Type(object):
                     for tag in node.find_all(tag_name):
                         if self.correct_type:
                             child_names = self.util.get_child_names(node=tag)
-                            if not child_names[0] in child_tag_type:
+                            if not (child_names and child_names[0] in child_tag_type):
                                 self.correct_type = False
                                 self.logger.debug(
                                     "not all the tags of the given node with " +
@@ -317,7 +317,6 @@ class Intro_type(Type):
                 self.correct_type = True
                 self.logger.debug("First inconsistency for check_intro_type_4:")
                 tag_names = self.util.get_child_names(node=node)
-                
                 # check tag_names = {h,p}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
@@ -361,7 +360,7 @@ class Hdu_type(Type):
                                       'Unexpected child_names encountered ' +
                                       'in Hdu.parse_file_hdu_div(). ')
                 if self.verbose: print('hdu_type: %r' % hdu_type )
-                input('pause')
+#                input('pause')
         return hdu_type
 
     def check_hdu_type_1(self,node=None):
@@ -454,14 +453,14 @@ class Hdu_type(Type):
                 self.check_p_tags_have_only_text_content(node=node)
                 self.check_pre_tags_have_only_text_content(node=node)
                 self.check_pre_tag_assumptions_type_5(node=node)
-                print('self.correct_type: %r' % self.correct_type)
-                input('pause')
+#                print('self.correct_type: %r' % self.correct_type)
+#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to check_hdu_type_1. ' +
                                   'node: {}.'.format(node))
-        print('self.correct_type: %r' % self.correct_type)
-        input('pause')
+#        print('self.correct_type: %r' % self.correct_type)
+#        input('pause')
 
         return self.correct_type
 

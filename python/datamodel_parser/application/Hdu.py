@@ -112,8 +112,8 @@ class Hdu:
                 child_names = set(self.util.get_child_names(node=node)) # REMOVE
                 type = Hdu_type(logger=self.logger,options=self.options)
                 hdu_type = type.get_hdu_type(node=node)
-                print('hdu_type: %r' % hdu_type)
-                input('pause')
+#                print('hdu_type: %r' % hdu_type)
+#                input('pause')
 
                 if   hdu_type == 5: self.parse_file_hdu_type_5(node=node)
                 

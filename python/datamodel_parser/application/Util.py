@@ -349,7 +349,7 @@ class Util:
                     string = h.string.lower()
                     # find the end of the intro (the file contents or first hdu)
                     if (string.replace(':','') in self.sections_strings or
-                        string.startswith('hdu')
+                        'hdu' in string
                         ):
                         previous_siblings = h.previous_siblings
                         break
@@ -379,6 +379,7 @@ class Util:
         if self.ready:
             if node:
                 # get next_siblings if the first hdu heading tag
+                next_siblings = None
                 heading_tags = self.get_heading_tag_children(node=node)
                 for heading_tag in heading_tags:
                     h = node.find_next(heading_tag)
@@ -388,11 +389,17 @@ class Util:
                         next_siblings = h.previous_sibling.next_siblings
                         break
                 # create new BeautifulSoup object out of the next_siblings text
-                tag_text = list()
-                for sibling in next_siblings:
-                    tag_text.append(str(sibling))
-                tag_text = ''.join(tag_text)
-                hdus = BeautifulSoup(tag_text, 'html.parser')
+                if next_siblings:
+                    tag_text = list()
+                    for sibling in next_siblings:
+                        tag_text.append(str(sibling))
+                    tag_text = ''.join(tag_text)
+                    hdus = BeautifulSoup(tag_text, 'html.parser')
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_intro. ' +
+                                      'next_siblings: {}'.format(next_siblings))
+
             else:
                 self.ready = False
                 self.logger.error('Unable to get_hdus. ' +
