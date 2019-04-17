@@ -373,6 +373,32 @@ class Util:
                                   'node: {}'.format(node))
         return intro
 
+    def get_hdus(self,node=None):
+        '''Get the hdu tags from the given BeautifulSoup node.'''
+        hdus = None
+        if self.ready:
+            if node:
+                # get next_siblings if the first hdu heading tag
+                heading_tags = self.get_heading_tag_children(node=node)
+                for heading_tag in heading_tags:
+                    h = node.find_next(heading_tag)
+                    string = h.string.lower()
+                    # find the beginning of the hdus
+                    if string.startswith('hdu'):
+                        next_siblings = h.previous_sibling.next_siblings
+                        break
+                # create new BeautifulSoup object out of the next_siblings text
+                tag_text = list()
+                for sibling in next_siblings:
+                    tag_text.append(str(sibling))
+                tag_text = ''.join(tag_text)
+                hdus = BeautifulSoup(tag_text, 'html.parser')
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_hdus. ' +
+                                  'node: {}'.format(node))
+        return hdus
+
     def get_tag_names(self,tag_list=None):
         '''Get a list of tag names from the given BeautifulSoup tag_list.'''
         tag_names = list()
