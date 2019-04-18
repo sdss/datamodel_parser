@@ -79,29 +79,30 @@ class Hdu:
             if node:
                 child_names = set(self.util.get_child_names(node=node)) # REMOVE
                 type = Hdu_type(logger=self.logger,options=self.options)
-                hdu_type = type.get_hdu_type(node=node)
-#                print('hdu_type: %r' % hdu_type)
+                self.hdu_type = type.get_hdu_type(node=node)
+#                print('self.hdu_type: %r' % self.hdu_type)
 #                input('pause')
 
-                if hdu_type == 1:
-                    self.parse_file_hdu_intro_type_1(node=node)
-                    self.parse_file_hdu_tables_type_1(node=node)
-                elif hdu_type == 2:
-                    self.parse_file_hdu_intro_type_2(node=node)
-                    self.parse_file_hdu_tables_type_1(node=node)
-                elif hdu_type == 3:
-                    self.parse_file_hdu_intro_type_3(node=node)
-                    self.parse_file_hdu_tables_type_3(node=node)
-                elif hdu_type == 4:
-                    self.parse_file_hdu_intro_h2_p_table(node=node)
-                    self.parse_file_hdu_tables_h2_p_table(node=node)
-                elif child_names == {'h2','p'} or child_names == {'h2','p','table'}:
-                    self.parse_file_hdu_intro_h2_p_table(node=node)
-                    self.parse_file_hdu_tables_h2_p_table(node=node)
-                else:
-                    self.ready = False
-                    self.logger.error('Unexpected child_names encountered ' +
-                                      'in Hdu.parse_file_hdu_div().')
+                if self.hdu_type:
+                    if self.hdu_type == 1:
+                        self.parse_file_hdu_intro_type_1(node=node)
+                        self.parse_file_hdu_tables_type_1(node=node)
+                    elif self.hdu_type == 2:
+                        self.parse_file_hdu_intro_type_2(node=node)
+                        self.parse_file_hdu_tables_type_1(node=node)
+                    elif self.hdu_type == 3:
+                        self.parse_file_hdu_intro_type_3(node=node)
+                        self.parse_file_hdu_tables_type_3(node=node)
+                    elif self.hdu_type == 4:
+                        self.parse_file_hdu_intro_h2_p_table(node=node)
+                        self.parse_file_hdu_tables_h2_p_table(node=node)
+                    elif child_names == {'h2','p'} or child_names == {'h2','p','table'}:
+                        self.parse_file_hdu_intro_h2_p_table(node=node)
+                        self.parse_file_hdu_tables_h2_p_table(node=node)
+                    else:
+                        self.ready = False
+                        self.logger.error('Unexpected child_names encountered ' +
+                                          'in Hdu.parse_file_hdu_div().')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_div. ' +
@@ -113,11 +114,11 @@ class Hdu:
             if node:
                 child_names = set(self.util.get_child_names(node=node)) # REMOVE
 #                type = Hdu_type(logger=self.logger,options=self.options)
-#                hdu_type = type.get_hdu_type(node=node)
-#                print('hdu_type: %r' % hdu_type)
+#                self.hdu_type = type.get_hdu_type(node=node)
+#                print('self.hdu_type: %r' % self.hdu_type)
 #                input('pause')
 
-#                if hdu_type == 5:
+#                if self.hdu_type == 5:
 #                    self.parse_file_hdu_intro_type_5(node=node)
 #                    self.parse_file_hdu_tables_type_5(node=node)
 

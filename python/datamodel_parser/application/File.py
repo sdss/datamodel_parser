@@ -47,6 +47,14 @@ class File:
                           self.database
                           )
 
+    def set_attributes(self):
+        '''Set class attributes.'''
+        if self.ready:
+            self.verbose = self.options.verbose if self.options else None
+            self.intro_type = None
+            self.hdu_type = None
+            
+
     def set_file_path_info(self,file_path_info=None):
         '''Set the html file file_path_info.'''
         self.tree_edition  = None
@@ -107,11 +115,6 @@ class File:
                 self.logger.error('Unable to set_body. ' +
                                   'self.html_text: {}'.format(self.html_text))
 
-    def set_attributes(self):
-        '''Set class attributes.'''
-        if self.ready:
-            self.verbose = self.options.verbose if self.options else None
-
     def populate_file_hdu_info_tables(self):
         '''Populate tables comprised of file HTML text information.'''
         if self.ready:
@@ -127,26 +130,30 @@ class File:
             if self.ready:
                 self.logger.info('Parsing file HTML')
                 self.intro.parse_file()
-                self.hdu.parse_file()
-                self.ready = self.ready and self.intro.ready and self.hdu.ready
+                self.ready = self.ready and self.intro.ready
                 if self.ready:
-                    self.intro_positions      = self.intro.intro_positions
-                    self.intro_heading_levels = self.intro.intro_heading_levels
-                    self.intro_heading_titles = self.intro.intro_heading_titles
-                    self.intro_descriptions   = self.intro.intro_descriptions
-                    self.hdu_count            = self.hdu.hdu_count
-                    self.file_hdu_info        = self.hdu.file_hdu_info
-                    self.file_hdu_tables      = self.hdu.file_hdu_tables
+                    self.hdu.parse_file()
+                    self.ready = self.ready and self.hdu.ready
+                    self.intro_type = self.intro.intro_type
+                    self.hdu_type   = self.hdu.hdu_type
+                    if self.ready:
+                        self.intro_positions      = self.intro.intro_positions
+                        self.intro_heading_levels = self.intro.intro_heading_levels
+                        self.intro_heading_titles = self.intro.intro_heading_titles
+                        self.intro_descriptions   = self.intro.intro_descriptions
+                        self.hdu_count            = self.hdu.hdu_count
+                        self.file_hdu_info        = self.hdu.file_hdu_info
+                        self.file_hdu_tables      = self.hdu.file_hdu_tables
 
-#                    print('HI File.parse_file()')
-#                    print('self.intro_positions: {}'.format(self.intro_positions))
-#                    print('self.intro_heading_levels: %r' % self.intro_heading_levels)
-#                    print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
-#                    print('self.intro_descriptions: {}'.format(self.intro_descriptions))
-#                    print('self.hdu_count: {}'.format(self.hdu_count))
-#                    print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
-#                    print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
-#                    input('pause')
+#                        print('HI File.parse_file()')
+#                        print('self.intro_positions: {}'.format(self.intro_positions))
+#                        print('self.intro_heading_levels: %r' % self.intro_heading_levels)
+#                        print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
+#                        print('self.intro_descriptions: {}'.format(self.intro_descriptions))
+#                        print('self.hdu_count: {}'.format(self.hdu_count))
+#                        print('self.file_hdu_info: \n' + dumps(self.file_hdu_info,indent=1))
+#                        print('self.file_hdu_tables: {}'.format(self.file_hdu_tables))
+#                        input('pause')
 
     def set_intro_and_hdu(self):
         '''Set file intro tags and hdu tags.'''

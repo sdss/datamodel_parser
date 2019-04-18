@@ -62,17 +62,21 @@ class Database:
         percent_complete = 100*numerator/denominator
         return percent_complete
 
-    def update_file_table_status(self,ready=None):
+    def update_file_table_status(self,ready=None,intro_type=None,hdu_type=None):
         '''Update the status of the file table.'''
-        if self.file_columns and ready is not None:
+        if self.file_columns and ready is not None: # intro_type and hdu_type can be None
             status = 'completed' if ready else 'failed'
             self.file_columns['status'] = status
+            self.file_columns['intro_type'] = intro_type
+            self.file_columns['hdu_type'] = hdu_type
             self.set_file()
             self.update_file_row()
         else:
             self.ready = False
-            self.logger.error('Unable to update_file_table_status.' +
-                              'self.file_columns: {}.'.format(self.file_columns))
+            self.logger.error('Unable to update_file_table_status. ' +
+                              'self.file_columns: {}, '.format(self.file_columns) +
+                              'ready: {}, '.format(ready)
+                              )
 
     def get_intros_sections_hdus(self):
         '''

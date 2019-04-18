@@ -24,14 +24,14 @@ else:
     file_list = list()
     for path in store.get_file_paths():
         if store.ready:
-            if ('BOSS_SPECTRO_REDUX'     in path or
-                'MANGA_SPECTRO_REDUX'    in path or
-                'MANGA_SPECTRO_ANALYSIS' in path or
-                'MANGA_TARGET'           in path or
-                'APOGEE_REDUX'           in path
-                ):
-                file_list.append(path)
-#            file_list.append(path)
+#            if ('BOSS_SPECTRO_REDUX'     in path or
+#                'MANGA_SPECTRO_REDUX'    in path or
+#                'MANGA_SPECTRO_ANALYSIS' in path or
+#                'MANGA_TARGET'           in path or
+#                'APOGEE_REDUX'           in path
+#                ):
+#                file_list.append(path)
+            file_list.append(path)
             store.set_path(path=path)
             store.split_path()
             store.populate_file_path_tables()

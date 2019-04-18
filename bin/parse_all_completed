@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# $Id: parse_all 2019-03-14 n.benjamin.murphy $
+#
+
+
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-RSS.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECZ/DRPVER/SPECZVER/speczall.html
+ parse_html -l error -v --path datamodel/files/APO_SPECTRO_DATA/MJD5/sdR.html
+ parse_html -l error -v --path datamodel/files/MANGA_HI/HIPVER/spectra/HIPROP/mangaHI.html
+ parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
+ parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
+ parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_DATA/MJD5/sdR.html

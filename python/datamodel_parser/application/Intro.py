@@ -78,18 +78,19 @@ class Intro:
         if self.ready:
             if node:
                 type = Intro_type(logger=self.logger,options=self.options)
-                intro_type = type.get_intro_type(node=node)
+                self.intro_type = type.get_intro_type(node=node)
 #                print('HI parse_file_intro_div')
-#                print('intro_type: %r'% intro_type)
+#                print('self.intro_type: %r'% self.intro_type)
 #                input('pause')
-                if   intro_type == 1: self.parse_file_type_1(node=node)
-                elif intro_type == 2: self.parse_file_type_2(node=node)
-                elif intro_type == 3: self.parse_file_type_3(node=node)
-                else:
-                    self.ready = False
-                    self.logger.error(
-                        'Unexpected child_names encountered ' +
-                        'in Intro.parse_file_intro_div().')
+                if self.intro_type:
+                    if   self.intro_type == 1: self.parse_file_type_1(node=node)
+                    elif self.intro_type == 2: self.parse_file_type_2(node=node)
+                    elif self.intro_type == 3: self.parse_file_type_3(node=node)
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                            'Unexpected child_names encountered ' +
+                            'in Intro.parse_file_intro_div().')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_intro_div. ' +
@@ -100,13 +101,13 @@ class Intro:
         if self.ready:
             if node:
                 type = Intro_type(logger=self.logger,options=self.options)
-                intro_type = type.get_intro_type(node=node)
+                self.intro_type = type.get_intro_type(node=node)
                 child_names = set(self.util.get_child_names(node=node))
 #                print('HI parse_file_intro')
-#                print('intro_type: %r'% intro_type)
+#                print('self.intro_type: %r'% self.intro_type)
 #                print('child_names: %r' % child_names)
 #                input('pause')
-                if intro_type == 4: self.parse_file_type_4(node=node)
+                if self.intro_type == 4: self.parse_file_type_4(node=node)
                 
                 
                 

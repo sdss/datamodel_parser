@@ -52,6 +52,8 @@ CREATE TABLE sdss.file (
     location_id INT4 REFERENCES sdss.location(id) NOT NULL,
     name VARCHAR(64) NOT NULL,
     status VARCHAR(16),
+    intro_type INT2,
+    hdu_type INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

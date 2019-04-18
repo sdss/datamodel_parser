@@ -2,7 +2,7 @@
 from datamodel_parser.application import Argument
 from datamodel_parser.application import Store
 
-print('Percent Complete:')
+print('Percent Completed:')
 arg = Argument('parse_html')
 options = arg.options if arg else None
 store = Store(options=options) if options else None
