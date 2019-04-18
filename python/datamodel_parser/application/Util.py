@@ -174,8 +174,8 @@ class Util:
                 header_tag = node.find_next(heading_tag_name)
                 heading = self.get_string(node=header_tag)
                 split = heading.split(':')
-                hdu_number = int(split[0].lower().replace('hdu',str()))
-                hdu_title = split[1].strip()
+                hdu_number = int(split[0].lower().replace('hdu',str())) if split else None
+                hdu_title = split[1].strip() if split else None
         return (hdu_number,hdu_title)
 
     def get_all_possible_hdu_titles(self):
@@ -383,7 +383,8 @@ class Util:
                 heading_tags = self.get_heading_tag_children(node=node)
                 for heading_tag in heading_tags:
                     h = node.find_next(heading_tag)
-                    string = h.string.lower()
+                    string = h.string
+                    string = string.lower() if string else str()
                     # find the beginning of the hdus
                     if string.startswith('hdu'):
                         next_siblings = h.previous_sibling.next_siblings
@@ -391,7 +392,7 @@ class Util:
                 # create new BeautifulSoup object out of the next_siblings text
                 if next_siblings:
                     tag_text = list()
-                    for sibling in next_siblings:
+                    for sibling in [s for s in next_siblings if s.name]:
                         tag_text.append(str(sibling))
                     tag_text = ''.join(tag_text)
                     hdus = BeautifulSoup(tag_text, 'html.parser')
@@ -405,6 +406,76 @@ class Util:
                 self.logger.error('Unable to get_hdus. ' +
                                   'node: {}'.format(node))
         return hdus
+
+
+#    def get_hdus(self,node=None):
+#        '''Get the hdu tags from the given BeautifulSoup node.'''
+#        hdus = None
+#        if self.ready:
+#            if node:
+#                # get next_siblings if the first hdu heading tag
+#                next_siblings = None
+#                heading_tags = self.get_heading_tag_children(node=node)
+#                for heading_tag in heading_tags:
+#                    h = node.find_next(heading_tag)
+#                    string = h.string.lower()
+#                    # find the beginning of the hdus
+#                    if string.startswith('hdu'):
+#                        next_siblings = h.previous_sibling.next_siblings
+#                        break
+#                # create new BeautifulSoup object out of the next_siblings text
+#                if next_siblings:
+#                    hdu_number = 0
+#                    new_hdu = False
+#                    hdus = list()
+#                    tag_text = list()
+#                    for sibling in [s for s in next_siblings if s.name]:
+#                        # get hdu number
+#                        if hdu_number == 0:
+#                            new_hdu = True
+#                        if sibling.name in heading_tags:
+#                            string = self.get_string(node=sibling)
+#                            spaceless_string = ''.join(string.split()).lower()
+#                            find_hdunum = spaceless_string.find('hdu'+str(hdu_number))
+#                            find_primaryhdu = spaceless_string.find('primaryhdu')
+#                            if find_hdunum >= 0 or find_primaryhdu >=0:
+#                                n
+#                            print('string: %r' % string)
+#                            print('find_hdunum: %r' % find_hdunum)
+#                            print('find_primaryhdu: %r' % find_primaryhdu)
+#                            input('pause')
+#                        if not first_heading and sibling.name in heading_tags:
+#                            tag_text = ''.join(tag_text)
+#                            hdus.append(BeautifulSoup(tag_text, 'html.parser'))
+#                            hdu_number += 1
+#                            tag_text = list()
+#                            tag_text.append(str(sibling))
+#                        else:
+#                            if sibling.name in heading_tags:
+#                                first_heading = False
+#                            tag_text.append(str(sibling))
+#                        print('tag_text: %r' % tag_text)
+#                        print('sibling: %r' % sibling)
+#                        input('pause')
+#
+#                    print('hdus: %r' % hdus)
+#                    input('pause')
+#
+#
+#                    for sibling in [s for s in next_siblings if s.name]:
+#                        tag_text.append(str(sibling))
+#                    tag_text = ''.join(tag_text)
+#                    hdus = BeautifulSoup(tag_text, 'html.parser')
+#                else:
+#                    self.ready = False
+#                    self.logger.error('Unable to get_intro. ' +
+#                                      'next_siblings: {}'.format(next_siblings))
+#
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to get_hdus. ' +
+#                                  'node: {}'.format(node))
+#        return hdus
 
     def get_tag_names(self,tag_list=None):
         '''Get a list of tag names from the given BeautifulSoup tag_list.'''

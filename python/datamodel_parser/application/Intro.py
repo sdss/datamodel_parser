@@ -44,13 +44,14 @@ class Intro:
             self.paragraph_tags      = self.util.paragraph_tags
             self.bold_tags           = self.util.bold_tags
             self.unordered_list_tags = self.util.unordered_list_tags
+            self.intro_positions      = list()
+            self.intro_heading_levels = list()
+            self.intro_heading_titles = list()
+            self.intro_descriptions   = list()
+
 
     def parse_file(self):
         '''Parse the HTML of the given BeautifulSoup object.'''
-        self.intro_positions = list()
-        self.intro_heading_levels = list()
-        self.intro_heading_titles = list()
-        self.intro_descriptions   = list()
         if self.ready:
             # process different intro types
             if self.body:
@@ -67,7 +68,6 @@ class Intro:
 #                print('self.intro_heading_titles: %r'% self.intro_heading_titles)
 #                print('self.intro_descriptions: %r'% self.intro_descriptions)
 #                input('pause')
-
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_info. ' +

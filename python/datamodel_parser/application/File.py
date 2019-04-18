@@ -73,8 +73,8 @@ class File:
                                   else None)
             if not (self.tree_edition and
                     self.env_variable and
-                    self.file_name and
-                    self.location_path):
+                    self.file_name):
+                    # self.location_path can be None
                 self.ready = False
                 self.logger.error(
                             'Unable to set_html_text. '

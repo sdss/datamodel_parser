@@ -430,38 +430,30 @@ class Hdu_type(Type):
                 self.ready = False
                 self.logger.error('Unable to check_hdu_type_3. ' +
                                   'node: {}.'.format(node))
-#        print('self.correct_type: %r' % self.correct_type)
-#        input('pause')
         return self.correct_type
 
     def check_hdu_type_5(self,node=None):
-        '''Determine class Hdu template type from the given BeautifulSoup node.'''
         '''Determine class Hdu template type from the given BeautifulSoup node.'''
         self.correct_type = False
         if self.ready:
             if node:
                 self.correct_type = True
-                self.logger.debug("First inconsistency for check_hdu_type_1:")
+                self.logger.debug("First inconsistency for check_hdu_type_5:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p,ul,table}
                 if not (tag_names == (tag_names & self.util.heading_tags)
                                      | {'p','pre'}
                         ):
                     self.correct_type = False
-                    self.logger.debug("not tag_names = {h,p,ul,table}")
+                    self.logger.debug("not tag_names = {h,p,pre}")
                 self.check_heading_tags_have_only_text_content(node=node)
                 self.check_p_tags_have_only_text_content(node=node)
                 self.check_pre_tags_have_only_text_content(node=node)
                 self.check_pre_tag_assumptions_type_5(node=node)
-#                print('self.correct_type: %r' % self.correct_type)
-#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to check_hdu_type_1. ' +
                                   'node: {}.'.format(node))
-#        print('self.correct_type: %r' % self.correct_type)
-#        input('pause')
-
         return self.correct_type
 
     def check_heading_tag_assumptions_type_1(self,node=None):
@@ -489,7 +481,8 @@ class Hdu_type(Type):
                 # check heading = 'HDUn: HduTitle', where n is a digit
                 if self.correct_type:
                     h = node.find_next(heading_tag_names[0])
-                    string = self.util.get_string(node=h).lower()
+                    string = self.util.get_string(node=h)
+                    string = string.lower() if string else str()
                     if not ('hdu' in string and
                             ':' in string   and
                             string.split(':')[0]

@@ -53,9 +53,9 @@ parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/a
         
 intro_type = 4, hdu_type = 5
 Fail!
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
 
 Fail!
+parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
 parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
 parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
 parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html

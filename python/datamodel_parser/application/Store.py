@@ -355,16 +355,17 @@ class Store:
         if self.ready:
             if (self.tree_edition  and
                 self.env_variable  and
-                self.file_name     and
-                self.location_path):
+                self.file_name):
+                # self.location_path can be null
                 self.file_path_info = {'tree_edition'  : self.tree_edition,
                                        'env_variable'  : self.env_variable,
                                        'file_name'     : self.file_name,
                                        'location_path' : self.location_path,
                                         }
+                                        
             else:
                 self.ready = False
-                self.logger.error('Unable to render_template.' +
+                self.logger.error('Unable to render_template. ' +
                                   'self.tree_edition: {}, '.format(self.tree_edition) +
                                   'self.env_variable: {}, '.format(self.env_variable) +
                                   'self.file_name: {}, '.format(self.file_name) +

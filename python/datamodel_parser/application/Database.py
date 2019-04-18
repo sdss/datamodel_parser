@@ -45,6 +45,14 @@ class Database:
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
             self.tree_columns = None
+            self.intro_positions      = None
+            self.intro_heading_levels = None
+            self.intro_heading_titles = None
+            self.intro_descriptions   = None
+            self.hdu_count            = None
+            self.file_hdu_info        = None
+            self.file_hdu_tables      = None
+
 
     def get_file_percent_complete(self):
         '''Get the percentage of all file table rows with status='complete.'
@@ -190,13 +198,6 @@ class Database:
                 self.location_id = self.location.id if self.location else None
                 if not self.location_id:
                     pass # location_id doesn't have to be unique
-#                    self.ready = False
-#                    self.logger.error(
-#                            'Unable to set_location_id. ' +
-#                            'tree_edition: {}, '.format(tree_edition) +
-#                            'env_variable: {}, '.format(env_variable) +
-#                            'self.location_id: {}, '.format(self.location_id) +
-#                            'self.env_id: {}.'.format(self.env_id))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_location_id. '
