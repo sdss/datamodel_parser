@@ -170,12 +170,44 @@ class Util:
                 child_names = self.get_child_names(node=node)
                 heading_tag_names = [name for name in child_names
                                     if name in self.heading_tags]
-                heading_tag_name = heading_tag_names[0]
-                header_tag = node.find_next(heading_tag_name)
-                heading = self.get_string(node=header_tag)
-                split = heading.split(':')
-                hdu_number = int(split[0].lower().replace('hdu',str())) if split else None
-                hdu_title = split[1].strip() if split else None
+                heading_tag_name = heading_tag_names[0]       if heading_tag_names else None
+                header_tag = node.find_next(heading_tag_name) if heading_tag_name else None
+                heading = self.get_string(node=header_tag)    if header_tag else None
+                if heading:
+                    if heading.lower().startswith('primary'):
+                        hdu_number = 0
+                        split = heading.split(':')
+                        hdu_title = split[1].strip() if split else 'Primary Header'
+                    else:
+                        # hdu_number
+                        id_hdu_number = None
+                        node_id = node['id']
+                        if node_id and node_id.lower().startswith('hdu'):
+                            id_hdu_number = node_id[3:].strip()
+                            id_hdu_number = (int(id_hdu_number)
+                                             if id_hdu_number.isdigit()
+                                             else None)
+                        
+                        heading_hdu_number = None
+                        split = heading.split(':')
+                        if (split and split[0].lower().startswith('hdu')):
+                            heading_hdu_number = split[0].lower().replace('hdu',str())
+                            heading_hdu_number = (int(heading_hdu_number)
+                                                  if heading_hdu_number.isdigit()
+                                                  else None)
+                        hdu_number = (id_hdu_number
+                                        if id_hdu_number is not None
+                                      else heading_hdu_number
+                                        if heading_hdu_number is not None
+                                      else None)
+                        # hdu_title
+                        hdu_title = (split[1].strip() if split else
+                                    node_id.upper()   if node_id else None)
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
+                                      'heading: {}'.format(heading))
+
         return (hdu_number,hdu_title)
 
     def get_all_possible_hdu_titles(self):

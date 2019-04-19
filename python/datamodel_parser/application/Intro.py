@@ -48,6 +48,7 @@ class Intro:
             self.intro_heading_levels = list()
             self.intro_heading_titles = list()
             self.intro_descriptions   = list()
+            self.intro_type = None
 
 
     def parse_file(self):
@@ -91,6 +92,10 @@ class Intro:
                         self.logger.error(
                             'Unexpected child_names encountered ' +
                             'in Intro.parse_file_intro_div().')
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to parse_file_intro_div. ' +
+                                      'self.intro_type: {}'.format(self.intro_type))
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_intro_div. ' +

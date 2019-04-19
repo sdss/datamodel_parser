@@ -681,9 +681,22 @@ class Hdu_type(Type):
                             if not (tag_names == {'td'} or tag_names == {'th'}):
                                 self.correct_type = False
                                 self.logger.debug("not all <tr> tag children are <th> or <td> tags")
-#                print('self.correct_type: %r' % self.correct_type)
-#                input('pause')
-
+                # check first <tr> tag children are <th> tags
+                if self.correct_type:
+                    tr = table.find_next('tr') # get first tr tag
+                    if not self.util.children_all_one_tag_type(node = tr,
+                                                           tag_name = 'th'):
+                        self.correct_type = False
+                        self.logger.debug("not first <tr> tag children are <th> tags")
+                # check after first <tr> tag children are <td> tags
+                if self.correct_type:
+                    siblings = tr.next_siblings # get next siblings of first tr tag
+                    for sibling in [s for s in siblings if s.name]:
+                        if self.correct_type:
+                            if not self.util.children_all_one_tag_type(node = sibling,
+                                                                   tag_name = 'td'):
+                                self.correct_type = False
+                                self.logger.debug("not after first <tr> tag children are <td> tags")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_tr_tag_assumptions_1. ' +
