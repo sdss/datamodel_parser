@@ -430,7 +430,9 @@ class File:
                 ):
                 hdu_info = self.file_hdu_info
                 hdu_tables = self.file_hdu_tables
-
+#                print('hdu_info: %r' % hdu_info)
+#                print('hdu_tables: %r' % hdu_tables)
+#                input('pause')
                 if len(hdu_info) == len(hdu_tables):
                     for (hdu_info,hdu_tables) in list(zip(hdu_info,hdu_tables)):
                         if self.ready:
