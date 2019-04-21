@@ -42,6 +42,7 @@ class Util:
             self.description_list_tags ={'dl'}
             self.table_tags = {'table'}
             self.sections_strings = {'sections','file contents'}
+            self.header_table_column_names = {}
 
     def get_string(self,node=None):
         string = None

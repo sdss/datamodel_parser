@@ -1422,8 +1422,8 @@ class Database:
                 if self.keyword_columns and 'keyword' in self.keyword_columns
                 else None)
             if header_id and position is not None and keyword:
-                self.keyword = (Keyword.load(header_id     = header_id,
-                                             position = position,
+                self.keyword = (Keyword.load(header_id = header_id,
+                                             position  = position,
                                              keyword   = keyword)
                                 if header_id
                                 and position is not None
@@ -1432,7 +1432,11 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_keyword. ' +
-                                  'header_id: {}, '.format(header_id))
+                                  'header_id: {}, '.format(header_id) +
+                                  'position: {}, '.format(position) +
+                                  'keyword: {}.'.format(keyword) +
+                                  'self.keyword_columns: {}.'.format(self.keyword_columns)
+                                  )
 
     def update_keyword_row(self):
         '''Update row in keyword table.'''

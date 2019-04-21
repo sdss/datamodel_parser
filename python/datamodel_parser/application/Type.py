@@ -303,23 +303,17 @@ class Hdu_type(Type):
         hdu_type = None
         if self.ready:
             if node:
-            
-#                tag_names = set(self.util.get_child_names(node=node))
-#                print('tag_names: %r' % tag_names)
-#                input('pause')
-
-
                 if   self.check_hdu_type_1(node=node): hdu_type = 1
                 elif self.check_hdu_type_2(node=node): hdu_type = 2
                 elif self.check_hdu_type_3(node=node): hdu_type = 3
                 elif self.check_hdu_type_4(node=node): hdu_type = 4
                 elif self.check_hdu_type_5(node=node): hdu_type = 5
-                elif self.check_hdu_type_6(node=node): hdu_type = 6
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_hdu_type. '
                                       'Unexpected hdu_type')
                 if self.verbose: print('hdu_type: %r' % hdu_type )
+#                input('pause')
         return hdu_type
 
     def check_hdu_type_1(self,node=None):
@@ -424,29 +418,6 @@ class Hdu_type(Type):
                 self.correct_type = True
                 self.logger.debug("First inconsistency for check_hdu_type_5:")
                 tag_names = set(self.util.get_child_names(node=node))
-                # check tag_names = {h,p,table}
-                if not (tag_names == (tag_names & self.util.heading_tags)
-                                     | {'p','table'}
-                        ):
-                    self.correct_type = False
-                    self.logger.debug("not tag_names = {h,p,table}")
-                self.check_heading_tag_assumptions_1(node=node)
-                self.check_p_tag_assumptions_1(node=node)
-                self.check_table_tag_assumptions_3(node=node)
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_hdu_type_5. ' +
-                                  'node: {}.'.format(node))
-        return self.correct_type
-
-    def check_hdu_type_6(self,node=None):
-        '''Determine class Hdu template type from the given BeautifulSoup node.'''
-        self.correct_type = False
-        if self.ready:
-            if node:
-                self.correct_type = True
-                self.logger.debug("First inconsistency for check_hdu_type_5:")
-                tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p}
                 if not (tag_names == (tag_names & self.util.heading_tags)
                                      | {'p'}
@@ -468,7 +439,7 @@ class Hdu_type(Type):
         if self.ready:
             if node:
                 self.correct_type = True
-                self.logger.debug("First inconsistency for check_hdu_type_6:")
+                self.logger.debug("First inconsistency for check_hdu_type_7:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p,pre}
                 if not (tag_names == (tag_names & self.util.heading_tags)
@@ -483,7 +454,7 @@ class Hdu_type(Type):
                 self.check_pre_tag_assumptions_2(node=node)
             else:
                 self.ready = False
-                self.logger.error('Unable to check_hdu_type_6. ' +
+                self.logger.error('Unable to check_hdu_type_7. ' +
                                   'node: {}.'.format(node))
         return self.correct_type
 
@@ -658,39 +629,6 @@ class Hdu_type(Type):
                 self.logger.error('Unable to check_table_tag_assumptions_1. ' +
                                   'node: {}.'.format(node))
 
-    def check_table_tag_assumptions_3(self,node=None):
-        '''Check table tag assumptions for the given BeautifulSoup node.'''
-        if self.ready:
-            if node:
-                # check <table> in node
-                if self.correct_type:
-                    tag_names = set(self.util.get_child_names(node=node))
-                    if not 'table' in tag_names:
-                        self.correct_type = False
-                        self.logger.debug("not 'table' in tag_names")
-                # check <table> contains <caption>, <thead> and <tbody>
-                if self.correct_type:
-                    tables = node.find_all('table')
-                    for table in tables:
-                        child_names = set(self.util.get_child_names(node=table))
-                        if not child_names == {'caption','tr'}:
-                            self.correct_type = False
-                            self.logger.debug(
-                                "not table.children = {caption,tbody}")
-                        self.check_tr_tag_assumptions_2(table=table)
-
-                        print('HI check_table_tag_assumptions_3')
-                        print('child_names: %r' % child_names)
-                        print('self.correct_type: %r' % self.correct_type)
-                        input('pause')
-
-                        self.check_thead_tag_assumptions_1(table=table)
-                        self.check_tbody_tag_assumptions_1(table=table)
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_table_tag_assumptions_3. ' +
-                                  'node: {}.'.format(node))
-
     def check_thead_tag_assumptions_1(self,table=None):
         '''Check thead tag assumptions for the given BeautifulSoup table.'''
         if self.ready:
@@ -757,32 +695,6 @@ class Hdu_type(Type):
                                   'table: {}.'.format(table))
 
     def check_tr_tag_assumptions_1(self,table=None):
-        '''Check tbody tag assumptions for the given BeautifulSoup table.'''
-        if self.ready:
-            if table:
-                self.check_tr_tag_assumptions_2(table=table)
-                # check first <tr> tag has exactly 4 <th> children
-                if self.correct_type:
-                    tr = table.find_next('tr') # get first tr tag
-                    ths = tr.find_all('th')
-                    if not (ths and len(ths) == 4):
-                        self.correct_type = False
-                        self.logger.debug("not first <tr> tag has exactly 4 <th> children")
-                # check after first <tr> tag, has exactly 4 <td> children
-                if self.correct_type:
-                    siblings = tr.next_siblings # get next siblings of first tr tag
-                    for sibling in [s for s in siblings if s.name]:
-                        if self.correct_type:
-                            tds = sibling.find_all('td')
-                            if not (tds and len(tds) == 4):
-                                self.correct_type = False
-                                self.logger.debug("not first <tr> tag has exactly 4 <td> children")
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_tr_tag_assumptions_1. ' +
-                                  'table: {}.'.format(table))
-
-    def check_tr_tag_assumptions_2(self,table=None):
         '''Check tbody tag assumptions for the given BeautifulSoup table.'''
         if self.ready:
             if table:

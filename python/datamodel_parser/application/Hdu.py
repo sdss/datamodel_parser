@@ -52,7 +52,6 @@ class Hdu:
             self.file_hdu_tables = list()
             self.hdu_type = None
 
-
     def parse_file(self):
         '''Parse the HTML of the given BeautifulSoup object.'''
         self.hdu_count = None
@@ -99,7 +98,7 @@ class Hdu:
                         self.parse_file_hdu_intro_4(node=node)
                         self.parse_file_hdu_tables_3(node=node)
                     
-                    elif self.hdu_type == 6:
+                    elif self.hdu_type == 5:
                         self.parse_file_hdu_intro_5(node=node)
                         self.parse_file_hdu_tables_4(node=node)
                     else:
@@ -170,7 +169,7 @@ class Hdu:
                 (hdu_number,hdu_title) = (
                     self.util.get_hdu_number_and_hdu_title(node=node))
 
-                # hdu.description
+                # hdu_description
                 p = node.find_next('p')
                 hdu_description = self.util.get_string(node=p)
                 
@@ -269,6 +268,10 @@ class Hdu:
                 (hdu_number,hdu_title) = (
                     self.util.get_hdu_number_and_hdu_title(node=node))
 
+                # hdu_description
+                p = node.find_next('p')
+                hdu_description = self.util.get_string(node=p)
+                
                 # is_image
                 tables = node.find_all('table')
                 is_image = (True       if len(tables) == 1
@@ -281,7 +284,7 @@ class Hdu:
                 hdu_info['hdu_number']      = hdu_number
                 hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = None
-                hdu_info['hdu_description'] = None
+                hdu_info['hdu_description'] = hdu_description
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
@@ -296,10 +299,9 @@ class Hdu:
                 (hdu_number,hdu_title) = (
                     self.util.get_hdu_number_and_hdu_title(node=node))
 
-                # hdu.description
+                # hdu_description
                 ps = node.find_all('p')
                 hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
-#                hdu_description = self.util.get_string(node=p)
 
                 # put it all together
                 hdu_info = dict()
@@ -389,7 +391,7 @@ class Hdu:
                 rows = self.util.get_string(node=pre).split('\n')
                 table_rows = dict()
                 for (position,row) in enumerate(rows):
-                    table_rows[position] = self.get_pre_table_row(row=row)
+                    table_rows[position] = self.get_table_row_pre_1(row=row)
                 # put it all together
                 hdu_table['is_header']          = True
                 hdu_table['table_caption']      = table_caption
@@ -404,7 +406,7 @@ class Hdu:
                     rows = self.util.get_string(node=pre).split('\n')
                     table_rows = dict()
                     for (position,row) in enumerate(rows):
-                        table_rows[position] = self.get_pre_table_row(row=row)
+                        table_rows[position] = self.get_table_row_pre_1(row=row)
                     # put it all together
                     hdu_table['is_header']          = True
                     hdu_table['table_caption']      = table_caption
@@ -419,7 +421,7 @@ class Hdu:
                                   'node: {}, '.format(node) +
                                   'assumptions: {}'.format(assumptions))
 
-    def get_pre_table_row(self,row=None):
+    def get_table_row_pre_1(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
         table_row = list()
         if self.ready:
@@ -465,7 +467,7 @@ class Hdu:
                 table_row = [keyword,value,datatype,comment]
             else:
                 self.ready = False
-                self.logger.error('Unable to get_pre_table_row. ' +
+                self.logger.error('Unable to get_table_row_pre_1. ' +
                                   'row: {}'.format(row))
         return table_row
 
@@ -476,43 +478,86 @@ class Hdu:
         if self.ready:
             if node:
                 tables = node.find_all('table')
-                for table in tables:
-                    hdu_table = dict()
+                for (table_number,table) in enumerate(tables):
+                    
                     # table caption
                     caption = table.find_next('caption')
                     table_caption = self.util.get_string(node=caption)
+                    
                     # parse table
                     trs = [tr for tr in table.find_all('tr')
                            if not self.util.get_string(node=tr).isspace()]
+                    # table_column_names from <th> children of first <tr> tag
+                    ths = trs[0]
+                    column_names = list([s.lower() for s in ths.strings
+                                            if not s.isspace()])
+                    # table keyword/values
+                    hdu_table = dict()
                     table_rows = dict()
-                    first_tr = True
-                    for (position,tr) in enumerate(trs):
-                       # table_column_names
-                        if first_tr:
-                            first_tr = False
-                            table_column_names = list(tr.strings)
-                            # is_header
-                            s = set([x.lower() for x in table_column_names])
-                            is_header = (s == {'key','value','type','comment'})
-                        else:
-                            # table keyword/values
-                            table_row = list()
-                            for td in tr.find_all('td'):
-                                string = self.util.get_string(node=td)
-                                table_row.append(string)
-                            table_rows[position - 1]  = table_row
-                            
-                            # put it all together
-                            hdu_table['is_header']          = is_header
-                            hdu_table['table_caption']      = table_caption
-                            hdu_table['table_column_names'] = table_column_names
-                            hdu_table['table_rows']         = table_rows
-                            hdu_tables.append(hdu_table)
+                    for (position,tr) in enumerate(trs[1:]):
+                        table_row = self.get_table_row_tr_1(table_number=table_number,
+                                                            column_names=column_names,
+                                                            node=tr)
+                        table_rows[position]  = table_row
+                        
+                        # put it all together
+                        hdu_table['is_header'] = False if 'units' in column_names else True
+                        hdu_table['table_caption']      = table_caption
+                        hdu_table['table_column_names'] = column_names
+                        hdu_table['table_rows']         = table_rows
+                        hdu_tables.append(hdu_table)
                 self.file_hdu_tables.append(hdu_tables)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_tables_3. ' +
                                   'node: {}, '.format(node))
+
+    def get_table_row_tr_1(self,table_number=None,column_names=None,node=None):
+        '''Get table row from the <td> children of the given BeautifulSoup node.'''
+        table_row = [None,None,None,None]
+        if self.ready:
+            if table_number is not None and column_names and node:
+                is_header = False if 'units' in column_names else True
+                if is_header:
+                    column_dict = {'key'         : 0,
+                                   'name'        : 0,
+                                   'value'       : 1,
+                                   'example'     : 1,
+                                   'type'        : 2,
+                                   'comment'     : 3,
+                                   'description' : 3,
+                                   }
+                else:
+                    column_dict = {'name'         : 0,
+                                   'type'         : 1,
+                                   'units'        : 2,
+                                   'description'  : 3,
+                                   }
+                column_names = [n.strip().lower() for n in column_names]
+                strings = list()
+                # get strings from the <td> tags
+                for td in node.find_all('td'):
+                    strings.append(self.util.get_string(node=td))
+                strings = [s.strip() for s in strings if not s.isspace()]
+                # put the strings in the appropriate table rows
+                for (column_name,string) in list(zip(column_names,strings)):
+                    if self.ready:
+                        if column_name in column_dict:
+                            table_row[column_dict[column_name]] = string
+                        else:
+                            self.ready=False
+                            self.logger.error('Unable to get_table_row_tr_1. '
+                                              'Unanticipated column_name:{}'
+                                                .format(column_name))
+        
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_hdu_tables_4. ' +
+                                  'table_number: {}, '.format(table_number) +
+                                  'table_column_names: {}, '.format(table_column_names) +
+                                  'node: {}.'.format(node) )
+        return table_row
+
 
     def parse_file_hdu_tables_4(self,node=None):
         '''Parse file hdu keyword/value/type/comment content

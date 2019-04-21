@@ -85,7 +85,7 @@ class File:
                     # self.location_path can be None
                 self.ready = False
                 self.logger.error(
-                            'Unable to set_html_text. '
+                            'Unable to set_file_path_info. '
                             'self.tree_edition: {}, '.format(self.tree_edition) +
                             'self.env_variable: {}, '.format(self.env_variable) +
                             'self.file_name: {}.'.format(self.file_name) +
