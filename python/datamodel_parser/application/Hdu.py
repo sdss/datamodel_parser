@@ -61,6 +61,7 @@ class Hdu:
                 # self.body all div tags
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
+                    print('***** All divs *****')
                     divs = self.util.get_hdu_divs(node=self.body)
                     for (self.hdu_number,div) in enumerate(divs):
                         if self.ready: self.parse_file_hdu_div(node=div)
@@ -97,10 +98,9 @@ class Hdu:
                     elif self.hdu_type == 4:
                         self.parse_file_hdu_intro_4(node=node)
                         self.parse_file_hdu_tables_3(node=node)
-                    
                     elif self.hdu_type == 5:
                         self.parse_file_hdu_intro_5(node=node)
-                        self.parse_file_hdu_tables_4(node=node)
+                        self.parse_file_hdu_tables_4(node=node) # No table
                     else:
                         self.ready = False
                         self.logger.error('Unexpected child_names encountered ' +
@@ -269,9 +269,9 @@ class Hdu:
                     self.util.get_hdu_number_and_hdu_title(node=node))
 
                 # hdu_description
-                p = node.find_next('p')
-                hdu_description = self.util.get_string(node=p)
-                
+                ps = node.find_all('p')
+                hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
+
                 # is_image
                 tables = node.find_all('table')
                 is_image = (True       if len(tables) == 1
