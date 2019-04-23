@@ -52,6 +52,7 @@ class Database:
             self.hdu_count            = None
             self.file_hdu_info        = None
             self.file_hdu_tables      = None
+            self.location_columns     = None
 
 
     def get_file_percent_complete(self):

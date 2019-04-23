@@ -64,7 +64,7 @@ CREATE TABLE sdss.intro (
     position INT2 NOT NULL,
     heading_level INT2,
     heading_title VARCHAR(64),
-    description VARCHAR(1024),
+    description VARCHAR(2048),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -85,7 +85,7 @@ CREATE TABLE sdss.hdu (
     number INT2 NOT NULL,
     title VARCHAR(64),
     size VARCHAR(32),
-    description VARCHAR(1024),
+    description VARCHAR(2048),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -106,7 +106,7 @@ CREATE TABLE sdss.keyword (
     keyword VARCHAR(64) NOT NULL,
     value VARCHAR(256),
     datatype VARCHAR(80),
-    comment VARCHAR(1024),
+    comment VARCHAR(2048),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -127,7 +127,7 @@ CREATE TABLE sdss.column (
     name VARCHAR(64) NOT NULL,
     datatype VARCHAR(64),
     units VARCHAR(64),
-    description VARCHAR(1024),
+    description VARCHAR(2048),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

@@ -309,7 +309,7 @@ class Hdu:
                 hdu_info['hdu_number']      = hdu_number
                 hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = None
-                hdu_info['hdu_description'] = None
+                hdu_info['hdu_description'] = hdu_description
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
@@ -479,29 +479,50 @@ class Hdu:
             if node:
                 tables = node.find_all('table')
                 for (table_number,table) in enumerate(tables):
-                    
-                    # table caption
-                    caption = table.find_next('caption')
-                    table_caption = self.util.get_string(node=caption)
-                    
-                    # parse table
-                    trs = [tr for tr in table.find_all('tr')
-                           if not self.util.get_string(node=tr).isspace()]
-                    # table_column_names from <th> children of first <tr> tag
-                    ths = trs[0]
-                    column_names = list([s.lower() for s in ths.strings
-                                            if not s.isspace()])
-                    # table keyword/values
-                    hdu_table = dict()
-                    table_rows = dict()
-                    for (position,tr) in enumerate(trs[1:]):
-                        table_row = self.get_table_row_tr_1(table_number=table_number,
+                    if self.ready:
+                        # table caption
+                        caption = table.find_next('caption')
+                        table_caption = self.util.get_string(node=caption)
+                        
+                        # parse table
+                        trs = [tr for tr in table.find_all('tr')
+                               if not self.util.get_string(node=tr).isspace()]
+                        
+                        # table_column_names from <th> children of first <tr> tag
+                        column_names = str()
+                        if self.util.children_all_one_tag_type(node=trs[0],tag_name='th'):
+                            ths = trs[0]
+                            trs = trs[1:]
+                            column_names = list([s.lower() for s in ths.strings
+                                                    if not s.isspace()])
+
+                        # table keyword/values
+                        hdu_table = dict()
+                        table_rows = dict()
+                        for (position,tr) in enumerate(trs):
+                            if self.ready:
+                                if column_names:
+                                    is_header = (False
+                                                if ('unit' in column_names
+                                                    or 'units' in column_names)
+                                                else True)
+                                    table_row = self.get_table_row_tr_1(
+                                                            table_number=table_number,
                                                             column_names=column_names,
                                                             node=tr)
-                        table_rows[position]  = table_row
+                                else:
+                                    column_names = (['key','value','type','comment']
+                                                    if table_number == 0 else
+                                                    ['name','type','unit','description'])
+                                    is_header = True if table_number == 0 else False
+                                    table_row = list()
+                                    for td in tr.find_all('td'):
+                                        string = self.util.get_string(node=td)
+                                        table_row.append(string)
+                                table_rows[position]  = table_row
                         
                         # put it all together
-                        hdu_table['is_header'] = False if 'units' in column_names else True
+                        hdu_table['is_header']          = is_header
                         hdu_table['table_caption']      = table_caption
                         hdu_table['table_column_names'] = column_names
                         hdu_table['table_rows']         = table_rows
@@ -517,7 +538,8 @@ class Hdu:
         table_row = [None,None,None,None]
         if self.ready:
             if table_number is not None and column_names and node:
-                is_header = False if 'units' in column_names else True
+                is_header = (False if ('unit' in column_names or 'units' in column_names)
+                            else True)
                 if is_header:
                     column_dict = {'key'         : 0,
                                    'name'        : 0,
@@ -530,7 +552,9 @@ class Hdu:
                 else:
                     column_dict = {'name'         : 0,
                                    'type'         : 1,
+                                   'unit'         : 2,
                                    'units'        : 2,
+                                   'comment'      : 3,
                                    'description'  : 3,
                                    }
                 column_names = [n.strip().lower() for n in column_names]

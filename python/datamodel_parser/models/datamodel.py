@@ -285,7 +285,7 @@ class Intro(db.Model):
     position = db.Column(db.Integer, nullable = False)
     heading_level = db.Column(db.Integer)
     heading_title = db.Column(db.String(64))
-    description = db.Column(db.String(1024))
+    description = db.Column(db.String(2048))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -419,7 +419,7 @@ class Hdu(db.Model):
     number = db.Column(db.Integer, nullable = False)
     title = db.Column(db.String(64))
     size = db.Column(db.String(32))
-    description = db.Column(db.String(1024))
+    description = db.Column(db.String(2048))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -550,7 +550,7 @@ class Keyword(db.Model):
     keyword = db.Column(db.String(64), nullable = False)
     value = db.Column(db.String(256))
     datatype = db.Column(db.String(80))
-    comment = db.Column(db.String(1024))
+    comment = db.Column(db.String(2048))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -683,7 +683,7 @@ class Column(db.Model):
     name = db.Column(db.String(64), nullable = False)
     datatype = db.Column(db.String(64))
     units = db.Column(db.String(64))
-    description = db.Column(db.String(1024))
+    description = db.Column(db.String(2048))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,

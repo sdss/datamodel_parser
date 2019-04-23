@@ -182,7 +182,8 @@ class Util:
                     else:
                         # hdu_number
                         id_hdu_number = None
-                        node_id = node['id']
+                        node_id = (node.attrs['id']
+                                   if node.attrs and 'id' in node.attrs else None)
                         if node_id and node_id.lower().startswith('hdu'):
                             id_hdu_number = node_id[3:].strip()
                             id_hdu_number = (int(id_hdu_number)
@@ -202,8 +203,8 @@ class Util:
                                         if heading_hdu_number is not None
                                       else None)
                         # hdu_title
-                        hdu_title = (split[1].strip() if split else
-                                    node_id.upper()   if node_id else None)
+                        hdu_title = (split[1].strip() if split and len(split) > 1 else
+                                     node_id.upper()   if node_id else None)
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
@@ -247,7 +248,9 @@ class Util:
                 divs = node.find_all('div')
                 for div in [div for div in divs
                             if not self.get_string(node=div).isspace()]:
-                    if div['id'].startswith('hdu'):
+                    div_id = (div.attrs['id']
+                               if div.attrs and 'id' in div.attrs else None)
+                    if div_id and div_id.startswith('hdu'):
                         hdu_divs.append(div)
             else:
                 self.ready = False
@@ -264,7 +267,9 @@ class Util:
                 divs = node.find_all('div')
                 for div in [div for div in divs
                             if not self.get_string(node=div).isspace()]:
-                    if 'intro' in div['id']:
+                    div_id = (div.attrs['id']
+                               if div.attrs and 'id' in div.attrs else None)
+                    if div_id and div_id.startswith('intro'):
                         intro_divs.append(div)
                 # check one and only one intro div
                 if not intro_divs:

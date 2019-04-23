@@ -4,39 +4,55 @@
 #
 
 
-parse_html -l error -v --path datamodel/files/BOSS_LYA/cat/BOSSLyaDR9_cat.html
+ parse_html -l error -v --path datamodel/files/EBOSS_ELG/composite/ELG_COMPOSITE_VER/eBOSS_ELG_NUV_composite.html
+ parse_html -l error -v --path datamodel/files/EBOSS_ELG/composite/ELG_COMPOSITE_VER/eBOSS_ELG_composite.html
+ parse_html -l error -v --path datamodel/files/BOSS_LYA/cat/BOSSLyaDR9_cat.html
  parse_html -l error -v --path datamodel/files/BOSS_LYA/mocks/VERS/rawlite/PLATE4/mock_lya.html
  parse_html -l error -v --path datamodel/files/PHOTO_SKY/RERUN/RUN/sky/skyymodel.html
  parse_html -l error -v --path datamodel/files/APO_ROOT/bias/MJD5/idB.html
  parse_html -l error -v --path datamodel/files/GCAM_DATA/MJD/gimg.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
+ parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/WISE/RERUN/RUN/CAMCOL/photoWISE.html
+ parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/frames/RERUN/RUN/CAMCOL/frame.html
  parse_html -l error -v --path datamodel/files/MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECZ/DRPVER/SPECZVER/speczall.html
  parse_html -l error -v --path datamodel/files/MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-RSS.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECZ/DRPVER/SPECZVER/speczall.html
+ parse_html -l error -v --path datamodel/files/MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html
+ parse_html -l error -v --path datamodel/files/APOGEE_RC/cat/apogee-rc-DR13.html
+ parse_html -l error -v --path datamodel/files/APOGEE_RC/cat/apogee-rc-DR12.html
+ parse_html -l error -v --path datamodel/files/APOGEE_RC/cat/apogee-rc-DR11.html
+ parse_html -l error -v --path datamodel/files/APOGEE_RC/cat/apogee-rc-DR14.html
  parse_html -l error -v --path datamodel/files/APO_SPECTRO_DATA/MJD5/sdR.html
+ parse_html -l error -v --path datamodel/files/MANGA_HI/HIPVER/mangaHIall.html
+ parse_html -l error -v --path datamodel/files/MANGA_HI/HIPVER/mangaHIbonus.html
  parse_html -l error -v --path datamodel/files/MANGA_HI/HIPVER/spectra/HIPROP/mangaHI.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
+ parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
+ parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_DATA/MJD5/sdR.html
  parse_html -l error -v --path datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/QC_MaNGA.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/DR14Q/DR14Q_v3_1.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/DR12Q/DR12Q_sup.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/variability/qsoVarPTF.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/DR10Q/DR10Q.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/variability/qsoVarStripe.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/DR14Q/DR14Q_v4_4.html
+ parse_html -l error -v --path datamodel/files/ATLAS_DATA/ATLAS_MAJOR_VERSION/nsa.html
+ parse_html -l error -v --path datamodel/files/PHOTO_SWEEP/external/WISE/wisematch.html
  parse_html -l error -v --path datamodel/files/BOSS_QSO/DR14Q/DR14Q_v3_0.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/composite/binned/QSO_data.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/composite/binned/QSO_comps.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/composite/harris15_composite.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/DR12Q/DR12Q.html
- parse_html -l error -v --path datamodel/files/BOSS_QSO/DR12Q/DR12Q_BAL.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/DR9Q/DR9Q.html
  parse_html -l error -v --path datamodel/files/BOSS_QSO/DR12Q/DR12Q_superset.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/DR12Q/DR12Q_BAL.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/DR12Q/DR12Q.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/composite/harris15_composite.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/composite/binned/QSO_comps.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/composite/binned/QSO_data.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/DR14Q/DR14Q_v4_4.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/variability/qsoVarStripe.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/DR10Q/DR10Q.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/variability/qsoVarPTF.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/DR12Q/DR12Q_sup.html
+ parse_html -l error -v --path datamodel/files/BOSS_QSO/DR14Q/DR14Q_v3_1.html
+ parse_html -l error -v --path datamodel/files/EBOSS_TARGET/elg/fisher-selection/eBOSS_ELG_griW.html
+ parse_html -l error -v --path datamodel/files/EBOSS_TARGET/elg/fisher-selection/eBOSS_ELG_UgrizW.html
+ parse_html -l error -v --path datamodel/files/MANGA_GEMA/GEMA_VER/GEMA.html
