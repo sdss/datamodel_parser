@@ -32,7 +32,7 @@ FITS or ASCII
 
 ## Page Contents
 * [HDU0: NULL EXTENSION](#hdu0-null-extension)
-* [HDU1: BOSSLYADR9_CAT CATALOG](#hdu1-bosslyadr9_cat-catalog)
+* [HDU1: BOSSLYADR9_CAT CATALOG](#hdu1-bosslyadr9-cat-catalog)
 
 ## HDU0: NULL EXTENSION
 This is a null header created by IDL MWRFITS.
