@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# $Id: parse_all 2019-03-14 n.benjamin.murphy $
+#
+
+template_html -l error -v --path datamodel/files/APOGEE_TGAS/apogee_tgas.html
+template_html -l error -v --path datamodel/files/BOSS_LYA/cat/BOSSLyaDR9_cat.html
+template_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/WISE/RERUN/RUN/CAMCOL/photoWISE.html
+template_html -l error -v --path datamodel/files/SPIDERS_TARGET/spiderstargetClusters.html
+template_html -l error -v --path datamodel/files/SPIDERS_TARGET/spiderstargetSequelsClus.html
+template_html -l error -v --path datamodel/files/SPIDERS_TARGET/spiderstargetAGN-SPIDERS_XMMSL_AGN.html
+template_html -l error -v --path datamodel/files/SPIDERS_TARGET/spiderstargetAGN-SPIDERS_RASS_AGN.html
+template_html -l error -v --path datamodel/files/SPIDERS_TARGET/spiderstargetSequelsAGN.html
+template_html -l error -v --path datamodel/files/SSPP_REDUX/ssppOut.html
+template_html -l error -v --path datamodel/files/SPIDERS_ANALYSIS/VAC_spiders_2RXS.html
+template_html -l error -v --path datamodel/files/SPIDERS_ANALYSIS/VAC_spiders_XMMSL.html
+template_html -l error -v --path datamodel/files/SPIDERS_ANALYSIS/SpidersXclusterBCGs.html
+template_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/LOCATION_ID/cannonField.html
+template_html -l error -v --path datamodel/files/SPECTRO_REDUX/specObj.html
+template_html -l error -v --path datamodel/files/APOGEE_TARGET/apogeeDesign.html
+template_html -l error -v --path datamodel/files/APOGEE_TARGET/apogeeField.html
+template_html -l error -v --path datamodel/files/APOGEE_TARGET/apogeePlate.html
+template_html -l error -v --path datamodel/files/APOGEE_TARGET/apogee2Design.html
+template_html -l error -v --path datamodel/files/APOGEE_TARGET/apogee2Field.html
+template_html -l error -v --path datamodel/files/APOGEE_TARGET/apogee2Plate.html
+template_html -l error -v --path datamodel/files/APOGEE_DISTANCES/apogee_distances.html
+template_html -l error -v --path datamodel/files/PHOTO_SWEEP/external/WISE/wisematch.html
+template_html -l error -v --path datamodel/files/BOSS_QSO/variability/qsoVarPTF.html
+template_html -l error -v --path datamodel/files/BOSS_QSO/variability/qsoVarStripe.html

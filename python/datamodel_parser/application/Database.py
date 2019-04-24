@@ -90,11 +90,11 @@ class Database:
                 intros        = Intro.load_all(file_id=self.file_id)
                 hdus          = Hdu.load_all(file_id=self.file_id)
                 hdu_info_dict = self.get_hdu_info_dict(hdus=hdus)
-                if not (intros and hdu_info_dict):
+                if not intros: # hdus and hdu_info_dict can be empty
                     self.ready = False
                     self.logger.error('Unable to get_intros_sections_hdus.' +
-                                      'intros: {}, '.format(intros) +
-                                      'hdu_info_dict: {}.'.format(hdu_info_dict))
+                                      'intros: {}, '.format(intros)
+                                      )
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intros_sections_hdus.' +
@@ -110,9 +110,13 @@ class Database:
         if self.ready:
             headers = Header.load_all(hdus=hdus) if hdus else None
             datas   = Data.load_all(hdus=hdus)   if hdus else None
-            if hdus and headers:
+#            print('\nheaders: %r' % headers)
+#            print('\ndatas: %r' % datas)
+#            input('pause')
+
+            if hdus: # headers and datas can be empty
                 hdu_info_dict = dict()
-                for hdu in hdus: # datas can be empth
+                for hdu in hdus:
                     hdu_info_dict[hdu.number] = dict()
                     # hdu table information
                     hdu_info_dict[hdu.number]['hdu_number'] = (
@@ -122,16 +126,16 @@ class Database:
                     hdu_info_dict[hdu.number]['hdu_description'] = (
                                                hdu.description if hdu else None)
                     hdu_info_dict[hdu.number]['hdu_datatype'] = (
-                                'IMAGE' if hdu.is_image else
-                                'BINARY TABLE' if hdu.is_image is not None
+                                'IMAGE'        if hdu and hdu.is_image == True else
+                                'BINARY TABLE' if hdu and hdu.is_image == False
                                 else None)
                     hdu_info_dict[hdu.number]['hdu_size'] = (
                                                hdu.size if hdu else None)
                     # header and data tables
                     hdu_info_dict[hdu.number]['header_table'] = dict()
-                    hdu_info_dict[hdu.number]['data_table']    = dict()
-                    header = headers[hdu.number] if hdu.number in headers else None
-                    data   = datas[hdu.number]   if hdu.number in datas   else None
+                    hdu_info_dict[hdu.number]['data_table']   = dict()
+                    header = headers[hdu.number] if hdu and hdu.number in headers else None
+                    data   = datas[hdu.number]   if hdu and hdu.number in datas   else None
                     keywords = (Keyword.load_all(header_id=header.id)
                                 if header else None)
                     columns =  (Column.load_all(data_id=data.id)
@@ -144,12 +148,7 @@ class Database:
                                     data.table_caption if data else None)
                     hdu_info_dict[hdu.number]['data_table']['columns'] = (
                                     columns if columns else None)
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_hdu_info_dict. ' +
-                                  '\nhdus: {}, '.format(hdus) +
-                                  '\nheaders: {}, '.format(headers) +
-                                  '\ndatas: {}.'.format(datas))
+            else: pass # hdus can be empty
         return hdu_info_dict
 
     def set_tree_id(self,tree_edition=None):

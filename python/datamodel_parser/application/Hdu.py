@@ -69,6 +69,9 @@ class Hdu:
                     hdus = self.util.get_hdus(node=self.body)
                     self.parse_file_hdus(node=hdus)
                 self.set_hdu_count()
+#                print('self.file_hdu_info: %r' % self.file_hdu_info)
+#                print('self.file_hdu_tables: %r' % self.file_hdu_tables)
+#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. ' +
@@ -269,8 +272,11 @@ class Hdu:
                     self.util.get_hdu_number_and_hdu_title(node=node))
 
                 # hdu_description
-                ps = node.find_all('p')
-                hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
+                hdu_description = None
+                child_names = set(self.util.get_child_names(node=node))
+                if 'p' in child_names:
+                    ps = node.find_all('p')
+                    hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
 
                 # is_image
                 tables = node.find_all('table')
@@ -525,7 +531,7 @@ class Hdu:
                         hdu_table['is_header']          = is_header
                         hdu_table['table_caption']      = table_caption
                         hdu_table['table_column_names'] = column_names
-                        hdu_table['table_rows']         = table_rows
+                        hdu_table['table_rows']         = table_rows                        
                         hdu_tables.append(hdu_table)
                 self.file_hdu_tables.append(hdu_tables)
             else:
@@ -590,6 +596,8 @@ class Hdu:
         if self.ready:
             if node:
                 # No header or data table for this one
+                hdu_table = dict()
+                hdu_tables.append(hdu_table)
                 self.file_hdu_tables.append(hdu_tables)
             else:
                 self.ready = False

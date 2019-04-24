@@ -181,6 +181,7 @@ class Util:
                         hdu_title = split[1].strip() if split else 'Primary Header'
                     else:
                         # hdu_number
+                        # hdu_number from node['id']
                         id_hdu_number = None
                         node_id = (node.attrs['id']
                                    if node.attrs and 'id' in node.attrs else None)
@@ -189,7 +190,7 @@ class Util:
                             id_hdu_number = (int(id_hdu_number)
                                              if id_hdu_number.isdigit()
                                              else None)
-                        
+                        # hdu_number from hdu_title
                         heading_hdu_number = None
                         split = heading.split(':')
                         if (split and split[0].lower().startswith('hdu')):
@@ -197,6 +198,7 @@ class Util:
                             heading_hdu_number = (int(heading_hdu_number)
                                                   if heading_hdu_number.isdigit()
                                                   else None)
+                        # put hdu_number together
                         hdu_number = (id_hdu_number
                                         if id_hdu_number is not None
                                       else heading_hdu_number

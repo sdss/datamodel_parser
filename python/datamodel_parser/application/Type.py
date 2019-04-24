@@ -39,7 +39,9 @@ class Type(object):
         tag_has_text_content = False
         if tag:
             child_names = self.util.get_child_names(node=tag)
-            if not child_names or set(child_names).issubset({'a','b','code','i','em'}):
+            if ((not child_names) or
+                set(child_names).issubset({'a','b','code','i','em','sub','sup'})
+                ):
                 tag_has_text_content = True
             else:
                 tag_has_text_content = False
@@ -396,14 +398,18 @@ class Hdu_type(Type):
                 self.logger.debug("First inconsistency for check_hdu_type_4:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p,table}
-                if not (tag_names == (tag_names & self.util.heading_tags)
-                                     | {'p','table'}
+                if not ((tag_names == (tag_names & self.util.heading_tags)
+                                     | {'p','table'})
+                        or
+                        (tag_names == (tag_names & self.util.heading_tags)
+                                     | {'table'})
                         ):
                     self.correct_type = False
                     self.logger.debug("not tag_names = {h,p,table}")
                 self.check_heading_tag_assumptions_1(node=node)
-                self.check_tags_have_only_text_content(node=node,tag_names=['p'])
                 self.check_table_tag_assumptions_2(node=node)
+                if 'p' in tag_names:
+                    self.check_tags_have_only_text_content(node=node,tag_names=['p'])
             else:
                 self.ready = False
                 self.logger.error('Unable to check_hdu_type_4. ' +

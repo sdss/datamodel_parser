@@ -413,6 +413,8 @@ class Store:
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
+#                print('self.database.file_id: %r' % self.database.file_id)
+#                input('pause')
                 (intros,hdu_info_dict) = (self.database.get_intros_sections_hdus()
                                           if self.ready and self.database.ready
                                           else None)

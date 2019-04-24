@@ -376,26 +376,35 @@ class File:
                     for (hdu_info,hdu_tables) in list(zip(self.file_hdu_info,self.file_hdu_tables)):
                         if self.ready:
                             for hdu_table in hdu_tables:
-                                hdu_number = hdu_info['hdu_number']
-                                hdu_title  = hdu_info['hdu_title']
-                                table_caption = hdu_table['table_caption']
+                                hdu_number = (hdu_info['hdu_number']
+                                              if hdu_info and 'hdu_number' in hdu_info
+                                              else None)
+                                hdu_title  = (hdu_info['hdu_title']
+                                              if hdu_info and 'hdu_title' in hdu_info
+                                              else None)
+                                table_caption = (hdu_table['table_caption']
+                                                 if hdu_table and 'table_caption' in hdu_table
+                                                 else None)
+                                is_header = (hdu_table['is_header']
+                                             if hdu_table and 'is_header' in hdu_table
+                                             else None)
                                 self.database.set_hdu_id(
                                                 tree_edition  = self.tree_edition,
                                                 env_variable  = self.env_variable,
                                                 location_path = self.location_path,
                                                 file_name     = self.file_name,
                                                 hdu_number    = hdu_number)
-                                if hdu_table['is_header']:
+                                if is_header == True:
                                     self.database.set_header_columns(
                                                         hdu_number    = hdu_number,
                                                         table_caption = table_caption)
                                     self.database.populate_header_table()
-                                else:
+                                elif is_header == False:
                                     self.database.set_data_columns(
                                                         hdu_number    = hdu_number,
                                                         table_caption = table_caption)
                                     self.database.populate_data_table()
-
+                                else: pass # can have empty table
                                 self.ready = self.database.ready
                 else:
                     self.ready = False
@@ -438,11 +447,16 @@ class File:
                         if self.ready:
                             hdu_number = hdu_info['hdu_number']
                             for hdu_table in hdu_tables:
-                                is_header          = hdu_table['is_header']
-                                table_rows         = hdu_table['table_rows']
-
+#                                print('hdu_table: %r'% hdu_table)
+#                                input('pause')
+                                is_header = (hdu_table['is_header']
+                                             if hdu_table and 'is_header' in hdu_table
+                                             else None)
+                                table_rows = (hdu_table['table_rows']
+                                             if hdu_table and 'table_rows' in hdu_table
+                                             else None)
                                 # Populate keyword table
-                                if is_header:
+                                if is_header == True:
                                     self.database.set_header_id(
                                             tree_edition  = self.tree_edition,
                                             env_variable  = self.env_variable,
@@ -458,7 +472,7 @@ class File:
                                             self.ready = self.database.ready
                             
                                 # Populate column table
-                                else:
+                                elif is_header == False:
                                     self.database.set_data_id(
                                             tree_edition  = self.tree_edition,
                                             env_variable  = self.env_variable,
@@ -472,6 +486,7 @@ class File:
                                                 table_row = table_rows[position])
                                             self.database.populate_column_table()
                                             self.ready = self.database.ready
+                                else: pass # can have empty table
                 else:
                     self.ready = False
                     self.logger.error(
