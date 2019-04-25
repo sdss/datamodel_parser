@@ -494,39 +494,37 @@ class Hdu:
                         trs = [tr for tr in table.find_all('tr')
                                if not self.util.get_string(node=tr).isspace()]
                         
-                        # table_column_names from <th> children of first <tr> tag
+                        # table_column_names and table keyword/values
                         column_names = str()
-                        if self.util.children_all_one_tag_type(node=trs[0],tag_name='th'):
-                            ths = trs[0]
-                            trs = trs[1:]
-                            column_names = list([s.lower() for s in ths.strings
-                                                    if not s.isspace()])
-
-                        # table keyword/values
                         hdu_table = dict()
                         table_rows = dict()
                         for (position,tr) in enumerate(trs):
                             if self.ready:
-                                if column_names:
-                                    is_header = (False
-                                                if ('unit' in column_names
-                                                    or 'units' in column_names)
-                                                else True)
-                                    table_row = self.get_table_row_tr_1(
-                                                            table_number=table_number,
-                                                            column_names=column_names,
-                                                            node=tr)
+                                # table_column_names from <th> children
+                                if self.util.children_all_one_tag_type(node=tr,tag_name='th'):
+                                    column_names = list([s.lower() for s in tr.strings
+                                                            if not s.isspace()])
+                                # table keyword/values
                                 else:
-                                    column_names = (['key','value','type','comment']
-                                                    if table_number == 0 else
-                                                    ['name','type','unit','description'])
-                                    is_header = True if table_number == 0 else False
-                                    table_row = list()
-                                    for td in tr.find_all('td'):
-                                        string = self.util.get_string(node=td)
-                                        table_row.append(string)
-                                table_rows[position]  = table_row
-                        
+                                    if column_names:
+                                        is_header = (False
+                                                    if ('unit' in column_names
+                                                        or 'units' in column_names)
+                                                    else True)
+                                        table_row = self.get_table_row_tr_1(
+                                                                table_number=table_number,
+                                                                column_names=column_names,
+                                                                node=tr)
+                                    else:
+                                        column_names = (['key','value','type','comment']
+                                                        if table_number == 0 else
+                                                        ['name','type','unit','description'])
+                                        is_header = True if table_number == 0 else False
+                                        table_row = list()
+                                        for td in tr.find_all('td'):
+                                            string = self.util.get_string(node=td)
+                                            table_row.append(string)
+                                    table_rows[position]  = table_row
                         # put it all together
                         hdu_table['is_header']          = is_header
                         hdu_table['table_caption']      = table_caption

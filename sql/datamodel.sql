@@ -126,7 +126,7 @@ CREATE TABLE sdss.column (
     position INT2 NOT NULL,
     name VARCHAR(64) NOT NULL,
     datatype VARCHAR(64),
-    units VARCHAR(64),
+    units VARCHAR(128),
     description VARCHAR(2048),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()

@@ -497,18 +497,18 @@ class Hdu_type(Type):
                             ):
                         self.correct_type = False
                         self.logger.error("not heading starts with hdu or primary")
-                # if heading starts with hdu,
-                # then check next character is a digit or whitespace then a digit
-                if self.correct_type:
-                    if string.startswith('hdu'):
-                        if not string[3].isdigit(): # hdu0, hdu1, ...
-                            split = string.split()
-                            if not( split                    and
-                                    isinstance(split[1],str) and
-                                    split[1][0].isdigit()
-                                    ):
-                                self.correct_type = False
-                                self.logger.error("not next character is a digit or whitespace then a digit")
+#                # if heading starts with hdu,
+#                # then check next character is a digit or whitespace then a digit
+#                if self.correct_type:
+#                    if string.startswith('hdu'):
+#                        if not string[3].isdigit(): # hdu0, hdu1, ...
+#                            split = string.split()
+#                            if not( split                    and
+#                                    isinstance(split[1],str) and
+#                                    split[1][0].isdigit()
+#                                    ):
+#                                self.correct_type = False
+#                                self.logger.error("not next character is a digit or whitespace then a digit")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_heading_tag_assumptions_1. ' +
@@ -721,33 +721,6 @@ class Hdu_type(Type):
                                 self.correct_type = False
                                 self.logger.debug("not all <tr> tag children are "
                                                   "<th> or <td> tags")
-                # check if first <tr> tag children are <th> tags
-                # then the strings are column_names
-                if self.correct_type:
-                    tr = table.find_next('tr') # get first <tr> tag
-                    if self.util.children_all_one_tag_type(node = tr,tag_name = 'th'):
-                        strings = set([s.lower().strip() for s in tr.strings if not s.isspace()])
-                        column_names = {'key','name','value','example','type',
-                                        'comment','description','unit','units'}
-                        if not strings.issubset(column_names):
-                            self.correct_type = False
-                            self.logger.debug(
-                                "not if first <tr> tag children are <th> tags " +
-                                "then the strings are column_names")
-#                        print('self.correct_type: %r' % self.correct_type )
-#                        print('tr: %r' % tr)
-#                        print('strings: %r' % strings)
-#                        input('pause')
-                # check after first <tr> tag children are <td> tags
-                if self.correct_type:
-                    siblings = tr.next_siblings # get next siblings of first tr tag
-                    for sibling in [s for s in siblings if s.name]:
-                        if self.correct_type:
-                            if not self.util.children_all_one_tag_type(node = sibling,
-                                                                   tag_name = 'td'):
-                                self.correct_type = False
-                                self.logger.debug("not after first <tr> tag children are <td> tags")
-
             else:
                 self.ready = False
                 self.logger.error('Unable to check_tr_tag_assumptions_1. ' +
