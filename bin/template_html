@@ -27,16 +27,6 @@ else:
 '''
 Examples:
 File Type 1)
-    datamodel_template --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html -l debug -v
-        
-File Type 2)
-    datamodel_template --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html -l debug -v
-    datamodel_template --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html -l debug -v
-
-File Type 3)
-    datamodel_template --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html -l debug -v
-
-File Type 4)
-    datamodel_template --path datamodel/files/MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html -l debug -v
+    template_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
 
 '''

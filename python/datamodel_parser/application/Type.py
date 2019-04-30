@@ -310,6 +310,7 @@ class Hdu_type(Type):
                 elif self.check_hdu_type_3(node=node): hdu_type = 3
                 elif self.check_hdu_type_4(node=node): hdu_type = 4
                 elif self.check_hdu_type_5(node=node): hdu_type = 5
+                elif self.check_hdu_type_6(node=node): hdu_type = 6
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_hdu_type. '
@@ -436,6 +437,32 @@ class Hdu_type(Type):
             else:
                 self.ready = False
                 self.logger.error('Unable to check_hdu_type_5. ' +
+                                  'node: {}.'.format(node))
+        return self.correct_type
+
+    def check_hdu_type_6(self,node=None):
+        '''Determine class Hdu template type from the given BeautifulSoup node.'''
+        self.correct_type = False
+        if self.ready:
+            if node:
+                self.correct_type = True
+                self.logger.debug("First inconsistency for check_hdu_type_6:")
+                tag_names = set(self.util.get_child_names(node=node))
+                # check tag_names = {h,p,ul,table}
+                if not ((tag_names == (tag_names & self.util.heading_tags)
+                                     | {'p','ul','table'})
+                         or
+                         (tag_names == (tag_names & self.util.heading_tags)
+                                     | {'p','ul'})
+                        ):
+                    self.correct_type = False
+                    self.logger.debug("not tag_names = {h,p,ul,table}")
+                self.check_heading_tag_assumptions_1(node=node)
+                self.check_tags_have_only_text_content(node=node,tag_names=['p'])
+                self.check_table_tag_assumptions_2(node=node)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_hdu_type_6. ' +
                                   'node: {}.'.format(node))
         return self.correct_type
 

@@ -231,7 +231,6 @@ class File(db.Model):
     name = db.Column(db.String(64), nullable = False)
     status = db.Column(db.String(16), nullable = False,default='pending')
     intro_type = db.Column(db.Integer)
-    hdu_type = db.Column(db.Integer)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -284,7 +283,7 @@ class Intro(db.Model):
                         nullable = False)
     position = db.Column(db.Integer, nullable = False)
     heading_level = db.Column(db.Integer)
-    heading_title = db.Column(db.String(64))
+    heading_title = db.Column(db.String(128))
     description = db.Column(db.String(2048))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
@@ -416,10 +415,11 @@ class Hdu(db.Model):
                         db.ForeignKey('sdss.file.id'),
                         nullable = False)
     is_image = db.Column(db.Boolean)
-    number = db.Column(db.Integer, nullable = False)
+    number = db.Column(db.Integer)
     title = db.Column(db.String(64))
     size = db.Column(db.String(32))
     description = db.Column(db.String(2048))
+    hdu_type = db.Column(db.Integer)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -430,6 +430,10 @@ class Hdu(db.Model):
         if file_id and number is not None:
             try: hdu = (Hdu.query.filter(Hdu.file_id==file_id)
                                  .filter(Hdu.number==number)
+                                 .one())
+            except: hdu = None
+        elif file_id:
+            try: hdu = (Hdu.query.filter(Hdu.file_id==file_id)
                                  .one())
             except: hdu = None
         else:

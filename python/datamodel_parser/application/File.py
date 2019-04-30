@@ -326,29 +326,57 @@ class File:
             if (self.tree_edition               and
                 self.env_variable               and
 #               self.location_path # can be None
-                self.file_name                  and
-                self.file_hdu_info
+                self.file_name
+#                self.file_hdu_info # can be None
                 ):
                 self.database.set_file_id(tree_edition  = self.tree_edition,
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
-                for hdu_info in self.file_hdu_info:
-                    if self.ready:
-                        is_image     = hdu_info['is_image']
-                        hdu_number   = hdu_info['hdu_number']
-                        hdu_title    = hdu_info['hdu_title']
-                        size         = hdu_info['hdu_size']
-                        description  = hdu_info['hdu_description']
-                        self.database.set_hdu_columns(
-                                                    is_image     = is_image,
-                                                    number       = hdu_number,
-                                                    title        = hdu_title,
-                                                    size         = size,
-                                                    description  = description,
-                                                      )
-                        self.database.populate_hdu_table()
-                        self.ready = self.database.ready
+                if self.file_hdu_info is not None:
+                    for hdu_info in self.file_hdu_info:
+                        if self.ready:
+                            is_image     = (hdu_info['is_image']
+                                            if hdu_info and 'is_image' in hdu_info
+                                            else None)
+                            hdu_number   = (hdu_info['hdu_number']
+                                            if hdu_info and 'hdu_number' in hdu_info
+                                            else None)
+                            hdu_title    = (hdu_info['hdu_title']
+                                            if hdu_info and 'hdu_title' in hdu_info
+                                            else None)
+                            size         = (hdu_info['hdu_size']
+                                            if hdu_info and 'hdu_size' in hdu_info
+                                            else None)
+                            description  = (hdu_info['hdu_description']
+                                            if hdu_info and 'hdu_description' in hdu_info
+                                            else None)
+                            hdu_type     = (hdu_info['hdu_type']
+                                            if hdu_info and 'hdu_type' in hdu_info
+                                            else None)
+                            self.database.set_hdu_columns(
+                                                        is_image     = is_image,
+                                                        number       = hdu_number,
+                                                        title        = hdu_title,
+                                                        size         = size,
+                                                        description  = description,
+                                                        hdu_type     = hdu_type,
+                                                          )
+                            self.database.populate_hdu_table()
+                            self.ready = self.database.ready
+                else:
+                    self.database.set_hdu_columns(
+                                                is_image     = None,
+                                                number       = None,
+                                                title        = None,
+                                                size         = None,
+                                                description  = None,
+                                                hdu_type     = None,
+                                                  )
+                    self.database.populate_hdu_table()
+                    self.ready = self.database.ready
+
+                    
             else:
                 self.ready = False
                 self.logger.error(
@@ -365,54 +393,55 @@ class File:
         if self.ready:
             if (self.tree_edition           and
                 self.env_variable           and
-#               self.location_path # can be None
-                self.file_name              and
-                self.file_hdu_info     and
-                self.file_hdu_tables
+#               self.location_path          # can be None
+                self.file_name
+#                self.file_hdu_info         # can be None
+#                self.file_hdu_tables       # can be None
                 ):
                 hdu_info = self.file_hdu_info
                 hdu_tables = self.file_hdu_tables
-                if len(hdu_info) == len(hdu_tables):
-                    for (hdu_info,hdu_tables) in list(zip(self.file_hdu_info,self.file_hdu_tables)):
-                        if self.ready:
-                            for hdu_table in hdu_tables:
-                                hdu_number = (hdu_info['hdu_number']
-                                              if hdu_info and 'hdu_number' in hdu_info
-                                              else None)
-                                hdu_title  = (hdu_info['hdu_title']
-                                              if hdu_info and 'hdu_title' in hdu_info
-                                              else None)
-                                table_caption = (hdu_table['table_caption']
-                                                 if hdu_table and 'table_caption' in hdu_table
+                if hdu_info is not None:
+                    if len(hdu_info) == len(hdu_tables):
+                        for (hdu_info,hdu_tables) in list(zip(self.file_hdu_info,self.file_hdu_tables)):
+                            if self.ready:
+                                for hdu_table in hdu_tables:
+                                    hdu_number = (hdu_info['hdu_number']
+                                                  if hdu_info and 'hdu_number' in hdu_info
+                                                  else None)
+                                    hdu_title  = (hdu_info['hdu_title']
+                                                  if hdu_info and 'hdu_title' in hdu_info
+                                                  else None)
+                                    table_caption = (hdu_table['table_caption']
+                                                     if hdu_table and 'table_caption' in hdu_table
+                                                     else None)
+                                    is_header = (hdu_table['is_header']
+                                                 if hdu_table and 'is_header' in hdu_table
                                                  else None)
-                                is_header = (hdu_table['is_header']
-                                             if hdu_table and 'is_header' in hdu_table
-                                             else None)
-                                self.database.set_hdu_id(
-                                                tree_edition  = self.tree_edition,
-                                                env_variable  = self.env_variable,
-                                                location_path = self.location_path,
-                                                file_name     = self.file_name,
-                                                hdu_number    = hdu_number)
-                                if is_header == True:
-                                    self.database.set_header_columns(
-                                                        hdu_number    = hdu_number,
-                                                        table_caption = table_caption)
-                                    self.database.populate_header_table()
-                                elif is_header == False:
-                                    self.database.set_data_columns(
-                                                        hdu_number    = hdu_number,
-                                                        table_caption = table_caption)
-                                    self.database.populate_data_table()
-                                else: pass # can have empty table
-                                self.ready = self.database.ready
-                else:
-                    self.ready = False
-                    self.logger.error(
-                            'Unable to populate_header_and_data_tables. ' +
-                            'Data and header lists have unequal length. ' +
-                            'len(hdu_info): {}, '.format(len(hdu_info)) +
-                            'len(hdu_tables): {}, '.format(len(hdu_tables)))
+                                    self.database.set_hdu_id(
+                                                    tree_edition  = self.tree_edition,
+                                                    env_variable  = self.env_variable,
+                                                    location_path = self.location_path,
+                                                    file_name     = self.file_name,
+                                                    hdu_number    = hdu_number)
+                                    if is_header == True:
+                                        self.database.set_header_columns(
+                                                            hdu_number    = hdu_number,
+                                                            table_caption = table_caption)
+                                        self.database.populate_header_table()
+                                    elif is_header == False:
+                                        self.database.set_data_columns(
+                                                            hdu_number    = hdu_number,
+                                                            table_caption = table_caption)
+                                        self.database.populate_data_table()
+                                    else: pass # can have empty table
+                                    self.ready = self.database.ready
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                                'Unable to populate_header_and_data_tables. ' +
+                                'Data and header lists have unequal length. ' +
+                                'len(hdu_info): {}, '.format(len(hdu_info)) +
+                                'len(hdu_tables): {}, '.format(len(hdu_tables)))
                 
             else:
                 self.ready = False
@@ -420,11 +449,7 @@ class File:
                     'Unable to populate_header_and_data_tables. '                 +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.file_name: {}, '    .format(self.file_name)     +
-                    'self.file_hdu_info: {}'
-                    .format(self.file_hdu_info)                 +
-                    'self.file_hdu_tables: {}'
-                    .format(self.file_hdu_tables)
+                    'self.file_name: {}, '    .format(self.file_name)
                     )
 
     def populate_keyword_and_column_tables(self):
@@ -432,68 +457,66 @@ class File:
         if self.ready:
             if (self.tree_edition           and
                 self.env_variable           and
-#               self.location_path # can be None
-                self.file_name              and
-                self.file_hdu_info     and
-                self.file_hdu_tables
+#               self.location_path          # can be None
+                self.file_name
+#                self.file_hdu_info         # can be None
+#                self.file_hdu_tables       # can be None
                 ):
                 hdu_info = self.file_hdu_info
                 hdu_tables = self.file_hdu_tables
-#                print('hdu_info: %r' % hdu_info)
-#                print('hdu_tables: %r' % hdu_tables)
-#                input('pause')
-                if len(hdu_info) == len(hdu_tables):
-                    for (hdu_info,hdu_tables) in list(zip(hdu_info,hdu_tables)):
-                        if self.ready:
-                            hdu_number = hdu_info['hdu_number']
-                            for hdu_table in hdu_tables:
-#                                print('hdu_table: %r'% hdu_table)
-#                                input('pause')
-                                is_header = (hdu_table['is_header']
-                                             if hdu_table and 'is_header' in hdu_table
-                                             else None)
-                                table_rows = (hdu_table['table_rows']
-                                             if hdu_table and 'table_rows' in hdu_table
-                                             else None)
-                                # Populate keyword table
-                                if is_header == True:
-                                    self.database.set_header_id(
-                                            tree_edition  = self.tree_edition,
-                                            env_variable  = self.env_variable,
-                                            location_path = self.location_path,
-                                            file_name     = self.file_name,
-                                            hdu_number    = hdu_number)
-                                    for position in table_rows.keys():
-                                        if self.ready:
-                                            self.database.set_keyword_columns(
-                                                position  = position,
-                                                table_row = table_rows[position])
-                                            self.database.populate_keyword_table()
-                                            self.ready = self.database.ready
-                            
-                                # Populate column table
-                                elif is_header == False:
-                                    self.database.set_data_id(
-                                            tree_edition  = self.tree_edition,
-                                            env_variable  = self.env_variable,
-                                            location_path = self.location_path,
-                                            file_name     = self.file_name,
-                                            hdu_number    = hdu_number)
-                                    for position in table_rows.keys():
-                                        if self.ready:
-                                            self.database.set_column_columns(
-                                                position  = position,
-                                                table_row = table_rows[position])
-                                            self.database.populate_column_table()
-                                            self.ready = self.database.ready
-                                else: pass # can have empty table
-                else:
-                    self.ready = False
-                    self.logger.error(
-                        'Unable to populate_keyword_and_column_tables. ' +
-                        'hdu_info and hdu_tables lists have unequal length. ' +
-                        'len(hdu_info): {}, '.format(len(hdu_info)) +
-                        'len(hdu_tables): {}, '.format(len(hdu_tables)))
+                if hdu_info is not None:
+                    if len(hdu_info) == len(hdu_tables):
+                        for (hdu_info,hdu_tables) in list(zip(hdu_info,hdu_tables)):
+                            if self.ready:
+                                hdu_number = hdu_info['hdu_number']
+                                for hdu_table in hdu_tables:
+    #                                print('hdu_table: %r'% hdu_table)
+    #                                input('pause')
+                                    is_header = (hdu_table['is_header']
+                                                 if hdu_table and 'is_header' in hdu_table
+                                                 else None)
+                                    table_rows = (hdu_table['table_rows']
+                                                 if hdu_table and 'table_rows' in hdu_table
+                                                 else None)
+                                    # Populate keyword table
+                                    if is_header == True:
+                                        self.database.set_header_id(
+                                                tree_edition  = self.tree_edition,
+                                                env_variable  = self.env_variable,
+                                                location_path = self.location_path,
+                                                file_name     = self.file_name,
+                                                hdu_number    = hdu_number)
+                                        for position in table_rows.keys():
+                                            if self.ready:
+                                                self.database.set_keyword_columns(
+                                                    position  = position,
+                                                    table_row = table_rows[position])
+                                                self.database.populate_keyword_table()
+                                                self.ready = self.database.ready
+                                
+                                    # Populate column table
+                                    elif is_header == False:
+                                        self.database.set_data_id(
+                                                tree_edition  = self.tree_edition,
+                                                env_variable  = self.env_variable,
+                                                location_path = self.location_path,
+                                                file_name     = self.file_name,
+                                                hdu_number    = hdu_number)
+                                        for position in table_rows.keys():
+                                            if self.ready:
+                                                self.database.set_column_columns(
+                                                    position  = position,
+                                                    table_row = table_rows[position])
+                                                self.database.populate_column_table()
+                                                self.ready = self.database.ready
+                                    else: pass # can have empty table
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                            'Unable to populate_keyword_and_column_tables. ' +
+                            'hdu_info and hdu_tables lists have unequal length. ' +
+                            'len(hdu_info): {}, '.format(len(hdu_info)) +
+                            'len(hdu_tables): {}, '.format(len(hdu_tables)))
                 
             else:
                 self.ready = False
@@ -501,9 +524,5 @@ class File:
                     'Unable to populate_keyword_and_column_tables. '                 +
                     'self.tree_edition: {}, ' .format(self.tree_edition)  +
                     'self.env_variable: {}, ' .format(self.env_variable)  +
-                    'self.file_name: {}, '    .format(self.file_name)     +
-                    'self.file_hdu_info: {}'
-                    .format(self.file_hdu_info)                 +
-                    'self.file_hdu_tables: {}'
-                    .format(self.file_hdu_tables)
+                    'self.file_name: {}, '    .format(self.file_name)
                     )

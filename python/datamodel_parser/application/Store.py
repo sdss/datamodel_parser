@@ -196,10 +196,8 @@ class Store:
             self.ready = self.ready and self.database.ready and self.file.ready
             if self.ready:
                 intro_type = self.file.intro_type
-                hdu_type = self.file.hdu_type
                 self.database.update_file_table_status(ready=self.ready,
-                                                       intro_type=intro_type,
-                                                       hdu_type=hdu_type)
+                                                       intro_type=intro_type)
 
     def populate_file_path_tables(self):
         '''Populate tables comprised of file path information.'''

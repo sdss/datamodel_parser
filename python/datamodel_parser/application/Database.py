@@ -54,7 +54,6 @@ class Database:
             self.file_hdu_tables      = None
             self.location_columns     = None
 
-
     def get_file_percent_complete(self):
         '''Get the percentage of all file table rows with status='complete.'
         '''
@@ -63,13 +62,12 @@ class Database:
         percent_complete = 100*numerator/denominator
         return percent_complete
 
-    def update_file_table_status(self,ready=None,intro_type=None,hdu_type=None):
+    def update_file_table_status(self,ready=None,intro_type=None):
         '''Update the status of the file table.'''
-        if self.file_columns and ready is not None: # intro_type and hdu_type can be None
+        if self.file_columns and ready is not None: # intro_type can be None
             status = 'completed' if ready else 'failed'
             self.file_columns['status'] = status
             self.file_columns['intro_type'] = intro_type
-            self.file_columns['hdu_type'] = hdu_type
             self.set_file()
             self.update_file_row()
         else:
@@ -89,7 +87,8 @@ class Database:
             if self.file_id:
                 intros        = Intro.load_all(file_id=self.file_id)
                 hdus          = Hdu.load_all(file_id=self.file_id)
-                hdu_info_dict = self.get_hdu_info_dict(hdus=hdus)
+                hdu_info_dict = (self.get_hdu_info_dict(hdus=hdus)
+                                 if self.check_nonempty_hdus(hdus=hdus) else None)
                 if not intros: # hdus and hdu_info_dict can be empty
                     self.ready = False
                     self.logger.error('Unable to get_intros_sections_hdus.' +
@@ -100,6 +99,27 @@ class Database:
                 self.logger.error('Unable to get_intros_sections_hdus.' +
                                   'self.file_id: {}.'.format(self.file_id))
         return (intros,hdu_info_dict)
+
+    def check_nonempty_hdus(self,hdus=None):
+        '''Check if hdus is not one hdu with Null content.'''
+        nonempty_hdus = False
+        if self.ready:
+            if hdus:
+                if len(hdus)==1:
+                    hdu = hdus[0]
+                    nonempty_hdus = (hdu.is_image    is not None or
+                                     hdu.number      is not None or
+                                     hdu.title       is not None or
+                                     hdu.size        is not None or
+                                     hdu.description is not None or
+                                     hdu.hdu_type    is not None
+                                    )
+                else: nonempty_hdus = True
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_nonempty_hdus.' +
+                                  'hdus: {}.'.format(hdus))
+        return nonempty_hdus
 
     def get_hdu_info_dict(self,hdus=None):
         '''
@@ -920,13 +940,14 @@ class Database:
                         title=None,
                         size=None,
                         description=None,
+                        hdu_type=None,
                         ):
         '''Set columns of the hdu table.'''
         self.hdu_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            if file_id and number is not None:
-                # title, size and description can be null
+            if file_id:
+                # number, title, size and description can be null
                 self.hdu_columns = {
                     'file_id'      : file_id
                                         if file_id              else None,
@@ -940,7 +961,8 @@ class Database:
                                         if size                 else None,
                     'description'  : description
                                         if description          else None,
-
+                    'hdu_type'  : hdu_type
+                                        if hdu_type          else None,
                     }
             else:
                 self.ready = False
@@ -970,9 +992,9 @@ class Database:
                 if self.hdu_columns
                 and 'number' in self.hdu_columns
                 else None)
-            if file_id and number is not None:
+            if file_id:
                 self.hdu = (Hdu.load(file_id=file_id,number=number)
-                            if file_id and number is not None
+                            if file_id # number can be None
                             else None)
             else:
                 self.ready = False
@@ -1023,6 +1045,8 @@ class Database:
                         if columns and 'size' in columns else None,
                     description = columns['description']
                         if columns and 'description' in columns else None,
+                    hdu_type = columns['hdu_type']
+                        if columns and 'hdu_type' in columns else None,
                                   )
                 if hdu:
                     hdu.add()

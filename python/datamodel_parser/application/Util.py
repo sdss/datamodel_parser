@@ -88,6 +88,8 @@ class Util:
             if node:
                 for child in self.get_children(node=node):
                     if child.name: child_names.append(str(child.name))
+                # remove irrelevant <br> tags
+                child_names = [name for name in child_names if not name=='br']
             else:
                 self.ready = False
                 self.logger.error('Unable to get_child_names. ' +

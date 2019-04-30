@@ -53,7 +53,6 @@ CREATE TABLE sdss.file (
     name VARCHAR(64) NOT NULL,
     status VARCHAR(16),
     intro_type INT2,
-    hdu_type INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -63,7 +62,7 @@ CREATE TABLE sdss.intro (
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     position INT2 NOT NULL,
     heading_level INT2,
-    heading_title VARCHAR(64),
+    heading_title VARCHAR(128),
     description VARCHAR(2048),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -82,10 +81,11 @@ CREATE TABLE sdss.hdu (
     id SERIAL NOT NULL PRIMARY KEY,
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     is_image BOOLEAN,
-    number INT2 NOT NULL,
+    number INT2,
     title VARCHAR(64),
     size VARCHAR(32),
     description VARCHAR(2048),
+    hdu_type INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

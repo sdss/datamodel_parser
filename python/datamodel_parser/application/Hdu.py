@@ -63,12 +63,19 @@ class Hdu:
                                                        tag_name = 'div'):
                     print('***** All divs *****')
                     divs = self.util.get_hdu_divs(node=self.body)
-                    for (self.hdu_number,div) in enumerate(divs):
-                        if self.ready: self.parse_file_hdu_div(node=div)
+                    if divs:
+                        for (self.hdu_number,div) in enumerate(divs):
+                            if self.ready: self.parse_file_hdu_div(node=div)
+                    else:
+                        # No hdu divs
+                        self.file_hdu_info = None
+                        self.file_hdu_tables = None
+
                 else:
                     hdus = self.util.get_hdus(node=self.body)
                     self.parse_file_hdus(node=hdus)
                 self.set_hdu_count()
+                
 #                print('self.file_hdu_info: %r' % self.file_hdu_info)
 #                print('self.file_hdu_tables: %r' % self.file_hdu_tables)
 #                input('pause')
@@ -104,6 +111,9 @@ class Hdu:
                     elif self.hdu_type == 5:
                         self.parse_file_hdu_intro_5(node=node)
                         self.parse_file_hdu_tables_4(node=node) # No table
+                    elif self.hdu_type == 6:
+                        self.parse_file_hdu_intro_6(node=node)
+                        self.parse_file_hdu_tables_3(node=node)
                     else:
                         self.ready = False
                         self.logger.error('Unexpected child_names encountered ' +
@@ -148,7 +158,7 @@ class Hdu:
     def set_hdu_count(self):
         '''Set the class attribute hdu_count.'''
         if self.ready:
-            if self.file_hdu_info and self.file_hdu_tables:
+            if self.file_hdu_info is not None and self.file_hdu_tables is not None:
                 if len(self.file_hdu_info) == len(self.file_hdu_tables):
                     self.hdu_count = len(self.file_hdu_info)
                 else:
@@ -158,11 +168,7 @@ class Hdu:
                         'len(self.file_hdu_info) != len(self.file_hdu_tables). ' +
                         'len(self.file_hdu_info): {}, '.format(len(self.file_hdu_info)) +
                         'len(self.file_hdu_tables): {}.'.format(len(self.file_hdu_tables)))
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_hdu_count. ' +
-                                  'self.file_hdu_info: {}, '.format(self.file_hdu_info) +
-                                  'self.file_hdu_tables: {}.'.format(self.file_hdu_tables))
+            else: self.hdu_count = 0
 
     def parse_file_hdu_intro_1(self,node=None):
         '''Parse file hdu data content from given BeautifulSoup node.'''
@@ -193,6 +199,7 @@ class Hdu:
                 hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = hdu_size
                 hdu_info['hdu_description'] = hdu_description
+                hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
@@ -230,6 +237,7 @@ class Hdu:
                 hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = hdu_size
                 hdu_info['hdu_description'] = hdu_description
+                hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
@@ -257,6 +265,7 @@ class Hdu:
                 hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = None
                 hdu_info['hdu_description'] = None
+                hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
@@ -291,6 +300,7 @@ class Hdu:
                 hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = None
                 hdu_info['hdu_description'] = hdu_description
+                hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
@@ -316,10 +326,49 @@ class Hdu:
                 hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                 hdu_info['hdu_size']        = None
                 hdu_info['hdu_description'] = hdu_description
+                hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_5. ' +
+                                  'node: {}, '.format(node) )
+
+    def parse_file_hdu_intro_6(self,node=None):
+        '''Parse file hdu data content from given BeautifulSoup node.'''
+        if self.ready:
+            if node:
+                # hdu_number and header_title (from first heading tag)
+                (hdu_number,hdu_title) = (
+                    self.util.get_hdu_number_and_hdu_title(node=node))
+
+                # hdu_description
+                hdu_description = str()
+                child_names = set(self.util.get_child_names(node=node))
+                if 'p' in child_names:
+                    ps = node.find_all('p')
+                    hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
+                if 'ul' in child_names:
+                    uls = node.find_all('ul')
+                    hdu_description += '\n'.join([self.util.get_string(node=ul) for ul in uls])
+
+                # is_image
+                tables = node.find_all('table')
+                is_image = (True       if len(tables) == 1
+                            else False if len(tables) == 2
+                            else None)
+
+                # put it all together
+                hdu_info = dict()
+                hdu_info['is_image']        = is_image
+                hdu_info['hdu_number']      = hdu_number
+                hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
+                hdu_info['hdu_size']        = None
+                hdu_info['hdu_description'] = hdu_description
+                hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
+                self.file_hdu_info.append(hdu_info)
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_hdu_intro_6. ' +
                                   'node: {}, '.format(node) )
 
     def parse_file_hdu_tables_1(self,node=None):
@@ -580,7 +629,7 @@ class Hdu:
         
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_tables_4. ' +
+                self.logger.error('Unable to get_table_row_tr_1. ' +
                                   'table_number: {}, '.format(table_number) +
                                   'table_column_names: {}, '.format(table_column_names) +
                                   'node: {}.'.format(node) )
@@ -720,8 +769,8 @@ class Hdu:
                     hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
                     hdu_info['hdu_size']        = None
                     hdu_info['hdu_description'] = None
+                    hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
                     self.file_hdu_info.append(hdu_info)
-                    self.hdu_count = len(self.file_hdu_info)
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_info_h1_p_h3_ul_pre. ' +
