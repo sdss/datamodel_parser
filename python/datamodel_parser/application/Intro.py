@@ -14,6 +14,7 @@ class Intro:
         self.set_attributes()
 
     def initialize(self,logger=None,options=None):
+        '''Initialize utility class, logger, and command line options.'''
         self.util = Util(logger=logger,options=options)
         self.logger  = self.util.logger  if self.util.logger  else None
         self.options = self.util.options if self.util.options else None
@@ -60,6 +61,9 @@ class Intro:
                 if self.util.children_all_one_tag_type(node = self.body,
                                                        tag_name = 'div'):
                     div = self.util.get_intro_div(node=self.body)
+#                    print('div: %r' %  div)
+#                    input('pause')
+
                     self.parse_file_intro_div(node=div)
                 else:
                     intro = self.util.get_intro(node=self.body)
@@ -352,8 +356,6 @@ class Intro:
             self.logger.error(
                 'Unable to verify_assumptions_parse_file_h1_p_h3_ul_pre. ' +
                 'body: {}.'.format(body))
-#        print('assumptions: %r' % assumptions)
-#        input('pause')
         if not assumptions: self.ready = False
         return assumptions
 
@@ -370,11 +372,6 @@ class Intro:
                     self.body.find_next(child)
                     if child in self.util.heading_tags:
                         hdu_titles = self.util.get_all_possible_hdu_titles()
-#                        print('hdu_titles: %r'% hdu_titles)
-#                        input('pause')
-
-#                    print('child: %r' % child)
-#                    input('pause')
 
             else:
                 self.ready = False

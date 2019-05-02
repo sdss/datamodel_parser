@@ -364,19 +364,8 @@ class File:
                                                           )
                             self.database.populate_hdu_table()
                             self.ready = self.database.ready
-                else:
-                    self.database.set_hdu_columns(
-                                                is_image     = None,
-                                                number       = None,
-                                                title        = None,
-                                                size         = None,
-                                                description  = None,
-                                                hdu_type     = None,
-                                                  )
-                    self.database.populate_hdu_table()
-                    self.ready = self.database.ready
+                else: pass # Don't add a row to hdu table
 
-                    
             else:
                 self.ready = False
                 self.logger.error(
@@ -470,8 +459,6 @@ class File:
                             if self.ready:
                                 hdu_number = hdu_info['hdu_number']
                                 for hdu_table in hdu_tables:
-    #                                print('hdu_table: %r'% hdu_table)
-    #                                input('pause')
                                     is_header = (hdu_table['is_header']
                                                  if hdu_table and 'is_header' in hdu_table
                                                  else None)

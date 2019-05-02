@@ -177,16 +177,12 @@ class Util:
                 header_tag = node.find_next(heading_tag_name) if heading_tag_name else None
                 heading = self.get_string(node=header_tag)    if header_tag else None
                 if heading:
-                    if heading.lower().startswith('primary'):
-                        hdu_number = 0
-                        split = heading.split(':')
-                        hdu_title = split[1].strip() if split else 'Primary Header'
-                    else:
+                    node_id = (node.attrs['id']
+                               if node.attrs and 'id' in node.attrs else None)
+                    if node_id:
                         # hdu_number
                         # hdu_number from node['id']
                         id_hdu_number = None
-                        node_id = (node.attrs['id']
-                                   if node.attrs and 'id' in node.attrs else None)
                         if node_id and node_id.lower().startswith('hdu'):
                             id_hdu_number = node_id[3:].strip()
                             id_hdu_number = (int(id_hdu_number)
@@ -207,8 +203,19 @@ class Util:
                                         if heading_hdu_number is not None
                                       else None)
                         # hdu_title
-                        hdu_title = (split[1].strip() if split and len(split) > 1 else
-                                     node_id.upper()   if node_id else None)
+                        hdu_title = (split[1].strip() if split and len(split) > 1
+                                     else heading.strip())
+                    elif (heading.lower().startswith('primary') or
+                        heading.lower().startswith('the primary')
+                        ):
+                        hdu_number = 0
+                        split = heading.split(':')
+                        hdu_title = (split[1].strip() if split and len(split) > 1
+                                     else heading.strip())
+                    else:
+                        self.ready = False
+                        self.logger.error("Unable to get_hdu_number_and_hdu_title "
+                                          "from node.attrs['id'] or 'header_tag'.")
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
@@ -254,7 +261,7 @@ class Util:
                             if not self.get_string(node=div).isspace()]:
                     div_id = (div.attrs['id']
                                if div.attrs and 'id' in div.attrs else None)
-                    if div_id and div_id.startswith('hdu'):
+                    if div_id and div_id.lower().startswith('hdu'):
                         hdu_divs.append(div)
             else:
                 self.ready = False
@@ -363,14 +370,16 @@ class Util:
                                   'dl: {0}'.format(dl))
         return (datatype,hdu_size)
 
-    def get_children(self,node=None):
+    def get_children(self,node=None,name=None):
         '''Get the children from the BeautifulSoup node, excluding line endings.'''
         children = None
         if self.ready:
             if node:
 #                children = [child for child in node.children
 #                              if not self.get_string(node=child).isspace()]
-                children = [child for child in node.children if child.name]
+                children = ([child for child in node.children if child.name == name]
+                            if name else
+                            [child for child in node.children if child.name])
             else:
                 self.ready = False
                 self.logger.error('Unable to get_children. ' +

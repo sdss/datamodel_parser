@@ -87,8 +87,8 @@ class Database:
             if self.file_id:
                 intros        = Intro.load_all(file_id=self.file_id)
                 hdus          = Hdu.load_all(file_id=self.file_id)
-                hdu_info_dict = (self.get_hdu_info_dict(hdus=hdus)
-                                 if self.check_nonempty_hdus(hdus=hdus) else None)
+                if hdus: hdu_info_dict = self.get_hdu_info_dict(hdus=hdus)
+                                 
                 if not intros: # hdus and hdu_info_dict can be empty
                     self.ready = False
                     self.logger.error('Unable to get_intros_sections_hdus.' +
@@ -100,27 +100,6 @@ class Database:
                                   'self.file_id: {}.'.format(self.file_id))
         return (intros,hdu_info_dict)
 
-    def check_nonempty_hdus(self,hdus=None):
-        '''Check if hdus is not one hdu with Null content.'''
-        nonempty_hdus = False
-        if self.ready:
-            if hdus:
-                if len(hdus)==1:
-                    hdu = hdus[0]
-                    nonempty_hdus = (hdu.is_image    is not None or
-                                     hdu.number      is not None or
-                                     hdu.title       is not None or
-                                     hdu.size        is not None or
-                                     hdu.description is not None or
-                                     hdu.hdu_type    is not None
-                                    )
-                else: nonempty_hdus = True
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_nonempty_hdus.' +
-                                  'hdus: {}.'.format(hdus))
-        return nonempty_hdus
-
     def get_hdu_info_dict(self,hdus=None):
         '''
             Get a data structure with columns from the data, header,
@@ -130,9 +109,6 @@ class Database:
         if self.ready:
             headers = Header.load_all(hdus=hdus) if hdus else None
             datas   = Data.load_all(hdus=hdus)   if hdus else None
-#            print('\nheaders: %r' % headers)
-#            print('\ndatas: %r' % datas)
-#            input('pause')
 
             if hdus: # headers and datas can be empty
                 hdu_info_dict = dict()

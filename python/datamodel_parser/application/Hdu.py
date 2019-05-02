@@ -18,6 +18,7 @@ class Hdu:
         self.set_attributes()
 
     def initialize(self,logger=None,options=None):
+        '''Initialize utility class, logger, and command line options.'''
         self.util = Util(logger=logger,options=options)
         self.logger  = self.util.logger  if self.util.logger  else None
         self.options = self.util.options if self.util.options else None
@@ -63,6 +64,8 @@ class Hdu:
                                                        tag_name = 'div'):
                     print('***** All divs *****')
                     divs = self.util.get_hdu_divs(node=self.body)
+#                    print('divs: %r' %  divs)
+#                    input('pause')
                     if divs:
                         for (self.hdu_number,div) in enumerate(divs):
                             if self.ready: self.parse_file_hdu_div(node=div)
@@ -75,10 +78,6 @@ class Hdu:
                     hdus = self.util.get_hdus(node=self.body)
                     self.parse_file_hdus(node=hdus)
                 self.set_hdu_count()
-                
-#                print('self.file_hdu_info: %r' % self.file_hdu_info)
-#                print('self.file_hdu_tables: %r' % self.file_hdu_tables)
-#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file. ' +
@@ -184,7 +183,8 @@ class Hdu:
                 
                 # datatype and hdu_size
                 dl = node.find_next('dl')
-                (datatype,hdu_size) = self.util.get_datatype_and_hdu_size(node=dl)
+                (datatype,hdu_size) = (self.util.get_datatype_and_hdu_size(node=dl)
+                                       if dl else (None,None))
 
                 # is_image
                 tables = node.find_all('table')
@@ -218,7 +218,8 @@ class Hdu:
                 ps = list()
                 for p in node.find_all('p'): ps.append(p)
                 ps.pop() # remove last p tag containing datatype and hdu_size
-                hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
+                hdu_description = ('\n'.join([self.util.get_string(node=p) for p in ps])
+                                   if ps else None)
                 
                 # datatype and hdu_size
                 for p in node.find_all('p'): pass # get last p tag
@@ -317,8 +318,8 @@ class Hdu:
 
                 # hdu_description
                 ps = node.find_all('p')
-                hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
-
+                hdu_description = ('\n'.join([self.util.get_string(node=p) for p in ps])
+                                    if ps else None)
                 # put it all together
                 hdu_info = dict()
                 hdu_info['is_image']        = None
@@ -385,6 +386,7 @@ class Hdu:
                 if (is_image and len(tables) == 2):
                     self.ready = False
                     self.logger.error('Inconsistent is_image.')
+                    
                 # check that HDU0 has only one table
                 if hdu_number == 0 and len(tables) > 1:
                     if self.options.force:
@@ -397,16 +399,19 @@ class Hdu:
                 # parse table(s)
                 if self.ready:
                     for table in tables:
-                        hdu_table = dict()
                         # table caption
-                        caption = table.find_next('caption')
-                        table_caption = self.util.get_string(node=caption)
+                        captions = self.util.get_children(node=table,name='caption')
+                        table_caption = (self.util.get_string(node=captions[0])
+                                         if captions and len(captions) == 1
+                                         else None)
+
                         # table_column_names
                         table_column_names = list(table.find_next('thead')
                                                        .find_next('tr').strings)
                         # is_header
                         s = set([x.lower() for x in table_column_names])
                         is_header = (s == {'key','value','type','comment'})
+                        
                         # table keyword/values
                         trs = table.find_next('tbody').find_all('tr')
                         table_rows = dict()
@@ -418,6 +423,7 @@ class Hdu:
                             table_rows[position]  = table_row
                         
                         # put it all together
+                        hdu_table = dict()
                         hdu_table['is_header']          = is_header
                         hdu_table['table_caption']      = table_caption
                         hdu_table['table_column_names'] = table_column_names
@@ -533,11 +539,14 @@ class Hdu:
         if self.ready:
             if node:
                 tables = node.find_all('table')
+                number_of_tables = len(tables)
                 for (table_number,table) in enumerate(tables):
                     if self.ready:
                         # table caption
-                        caption = table.find_next('caption')
-                        table_caption = self.util.get_string(node=caption)
+                        captions = self.util.get_children(node=table,name='caption')
+                        table_caption = (self.util.get_string(node=captions[0])
+                                         if captions and len(captions) == 1
+                                         else None)
                         
                         # parse table
                         trs = [tr for tr in table.find_all('tr')
@@ -556,13 +565,17 @@ class Hdu:
                                 # table keyword/values
                                 else:
                                     if column_names:
-                                        is_header = (False
-                                                    if ('unit' in column_names
-                                                        or 'units' in column_names)
-                                                    else True)
+                                        if number_of_tables == 1:
+                                            is_header = (False
+                                                        if ('unit' in column_names
+                                                            or 'units' in column_names)
+                                                        else True)
+                                        else:
+                                            is_header = True if table_number == 0 else False
                                         table_row = self.get_table_row_tr_1(
                                                                 table_number=table_number,
                                                                 column_names=column_names,
+                                                                is_header=is_header,
                                                                 node=tr)
                                     else:
                                         column_names = (['key','value','type','comment']
@@ -581,18 +594,17 @@ class Hdu:
                         hdu_table['table_rows']         = table_rows                        
                         hdu_tables.append(hdu_table)
                 self.file_hdu_tables.append(hdu_tables)
+
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_tables_3. ' +
                                   'node: {}, '.format(node))
 
-    def get_table_row_tr_1(self,table_number=None,column_names=None,node=None):
+    def get_table_row_tr_1(self,table_number=None,column_names=None,is_header=None,node=None):
         '''Get table row from the <td> children of the given BeautifulSoup node.'''
         table_row = [None,None,None,None]
         if self.ready:
-            if table_number is not None and column_names and node:
-                is_header = (False if ('unit' in column_names or 'units' in column_names)
-                            else True)
+            if table_number is not None and column_names and is_header is not None and node:
                 if is_header:
                     column_dict = {'key'         : 0,
                                    'name'        : 0,
