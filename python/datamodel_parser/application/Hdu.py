@@ -493,9 +493,10 @@ class Hdu:
                 comment = None
                 value_comment = None
                 # determine keyword
-                if 'HISTORY' in row or row.strip() == 'END':
+                if 'HISTORY' in row or 'COMMENT' in row or row.strip() == 'END':
                     if   'HISTORY AP3D:' in row: keyword = 'HISTORY AP3D:'
                     elif 'HISTORY' in row:       keyword = 'HISTORY'
+                    elif 'COMMENT' in row:       keyword = 'COMMENT'
                     else:                        keyword = 'END'
                     value_comment = row.replace(keyword,'')
                     keyword = keyword.replace(':','')
@@ -507,12 +508,12 @@ class Hdu:
                     self.ready = False
                     self.logger.error(
                             'Unable to set_table_row_h2_pre. ' +
-                            "The strings 'HISTORY', 'END' and '=' " +
+                            "The strings 'HISTORY', 'COMMENT', 'END' and '=' " +
                             'not found in row. ' +
                             'row: {}'.format(row))
                 # determine value and comment
                 if self.ready:
-                    if 'HISTORY' in row or 'END' in row:
+                    if 'HISTORY' in row or 'COMMENT' in row or 'END' in row:
                         value = None
                         comment = value_comment
                     elif '=' in row:
@@ -556,42 +557,39 @@ class Hdu:
                         column_names = str()
                         hdu_table = dict()
                         table_rows = dict()
+                        # get column names from trs with all th tag children
+                        column_names = self.util.get_column_names(trs=trs)
+                        # remove trs with all th tag children
+                        trs = [tr for tr in trs
+                               if not self.util.children_all_one_tag_type(node=tr,
+                                                                          tag_name='th')]
                         for (position,tr) in enumerate(trs):
                             if self.ready:
-                                # table_column_names from <th> children
-                                if self.util.children_all_one_tag_type(node=tr,tag_name='th'):
-                                    column_names = list([s.lower() for s in tr.strings
-                                                            if not s.isspace()])
                                 # table keyword/values
+                                if column_names:
+                                    is_header = (False
+                                                if ('unit' in column_names or
+                                                    'units' in column_names)
+                                                else True)
+                                    table_row = self.get_table_row_tr_1(
+                                                    column_names=column_names,
+                                                    is_header=is_header,
+                                                    node=tr)
                                 else:
-                                    if column_names:
-                                        if number_of_tables == 1:
-                                            is_header = (False
-                                                        if ('unit' in column_names
-                                                            or 'units' in column_names)
-                                                        else True)
-                                        else:
-                                            is_header = True if table_number == 0 else False
-                                        table_row = self.get_table_row_tr_1(
-                                                                table_number=table_number,
-                                                                column_names=column_names,
-                                                                is_header=is_header,
-                                                                node=tr)
-                                    else:
-                                        column_names = (['key','value','type','comment']
-                                                        if table_number == 0 else
-                                                        ['name','type','unit','description'])
-                                        is_header = True if table_number == 0 else False
-                                        table_row = list()
-                                        for td in tr.find_all('td'):
-                                            string = self.util.get_string(node=td)
-                                            table_row.append(string)
-                                    table_rows[position]  = table_row
+                                    column_names = (['key','value','type','comment']
+                                                    if table_number == 0 else
+                                                    ['name','type','unit','description'])
+                                    is_header = True if table_number == 0 else False
+                                    table_row = list()
+                                    for td in tr.find_all('td'):
+                                        string = self.util.get_string(node=td)
+                                        table_row.append(string)
+                                table_rows[position]  = table_row
                         # put it all together
                         hdu_table['is_header']          = is_header
                         hdu_table['table_caption']      = table_caption
                         hdu_table['table_column_names'] = column_names
-                        hdu_table['table_rows']         = table_rows                        
+                        hdu_table['table_rows']         = table_rows
                         hdu_tables.append(hdu_table)
                 self.file_hdu_tables.append(hdu_tables)
 
@@ -600,11 +598,14 @@ class Hdu:
                 self.logger.error('Unable to parse_file_hdu_tables_3. ' +
                                   'node: {}, '.format(node))
 
-    def get_table_row_tr_1(self,table_number=None,column_names=None,is_header=None,node=None):
+    def get_table_row_tr_1(self,
+                           column_names=None,
+                           is_header=None,
+                           node=None):
         '''Get table row from the <td> children of the given BeautifulSoup node.'''
         table_row = [None,None,None,None]
         if self.ready:
-            if table_number is not None and column_names and is_header is not None and node:
+            if column_names and is_header is not None and node:
                 if is_header:
                     column_dict = {'key'         : 0,
                                    'name'        : 0,
@@ -616,11 +617,13 @@ class Hdu:
                                    }
                 else:
                     column_dict = {'name'         : 0,
+                                   'channel'      : 0,
                                    'type'         : 1,
                                    'unit'         : 2,
                                    'units'        : 2,
                                    'comment'      : 3,
                                    'description'  : 3,
+                                   'details of its content' : 3,
                                    }
                 column_names = [n.strip().lower() for n in column_names]
                 strings = list()
@@ -628,6 +631,7 @@ class Hdu:
                 for td in node.find_all('td'):
                     strings.append(self.util.get_string(node=td))
                 strings = [s.strip() for s in strings if not s.isspace()]
+                
                 # put the strings in the appropriate table rows
                 for (column_name,string) in list(zip(column_names,strings)):
                     if self.ready:
@@ -638,13 +642,32 @@ class Hdu:
                             self.logger.error('Unable to get_table_row_tr_1. '
                                               'Unanticipated column_name:{}'
                                                 .format(column_name))
-        
+                # Warn when there is less columns than column_names
+                if len(column_names) != len(strings):
+                    self.logger.warning('Unable to get_table_row_tr_1. ' +
+                                      'len(column_names) != len(strings). ' +
+                                      'Truncating to the smaller length. ' +
+                                      'len(column_names): {}, '.format(len(column_names)) +
+                                      'len(strings): {}, '.format(len(strings)) +
+                                      '\ncolumn_names: {}, '.format(column_names) +
+                                      '\nstrings: {}.'.format(strings)
+                                      )
+                # Warn when len(column_names) > 4
+                if len(column_names) > 4:
+                    self.logger.warning('Table does not adhere to database schema. ' +
+                                      'len(column_names) > 4. ' +
+                                      '\ncolumn_names: {}, '.format(column_names)
+                                      )
             else:
                 self.ready = False
                 self.logger.error('Unable to get_table_row_tr_1. ' +
-                                  'table_number: {}, '.format(table_number) +
                                   'table_column_names: {}, '.format(table_column_names) +
                                   'node: {}.'.format(node) )
+        if table_row == [None,None,None,None]:
+            self.ready = False
+            self.logger.error('Unable to get_table_row_tr_1. ' +
+                              'table_row: {}, '.format(table_row)
+                              )
         return table_row
 
 

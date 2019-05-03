@@ -82,9 +82,9 @@ CREATE TABLE sdss.hdu (
     file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     is_image BOOLEAN,
     number INT2,
-    title VARCHAR(64),
+    title VARCHAR(128),
     size VARCHAR(64),
-    description VARCHAR(2048),
+    description VARCHAR(4096),
     hdu_type INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()

@@ -197,11 +197,9 @@
  parse_html -l error -v --path datamodel/files/SSPP_REDUX/targets/all/segueTarget.html
  parse_html -l error -v --path datamodel/files/SSPP_REDUX/RERUN/plate_mjds_done.html
  parse_html -l error -v --path datamodel/files/SSPP_REDUX/RERUN/plate_mjds_sspp.html
- parse_html -l error -v --path datamodel/files/SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut.html
  parse_html -l error -v --path datamodel/files/SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut_lineindex.html
  parse_html -l error -v --path datamodel/files/SSPP_REDUX/duplicates/dup.html
  parse_html -l error -v --path datamodel/files/PHOTO_CALIB/RERUN/RUN/nfcalib/calibPhotomGlobal.html
- parse_html -l error -v --path datamodel/files/SPIDERS_ANALYSIS/catCluster-SPIDERS_RASS_CLUS.html
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/thingIndex.html
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/window_unified.html
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/window_blist_noindx.html
@@ -213,9 +211,6 @@
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/window_blist.html
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/window_findx_unsorted.html
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/RERUN/RUN/resolve/CAMCOL/reObjGlobal.html
- parse_html -l error -v --path datamodel/files/APOGEE_OCCAM/occam_member.html
- parse_html -l error -v --path datamodel/files/APOGEE_OCCAM/occam_cluster.html
- parse_html -l error -v --path datamodel/files/MANGA_MORPHOLOGY/galaxyzoo/MaNGA_gz.html
  parse_html -l error -v --path datamodel/files/MARVELS_DATA/MJD/done.html
  parse_html -l error -v --path datamodel/files/MARVELS_DATA/MJD/MJD.md5sum.html
  parse_html -l error -v --path datamodel/files/MARVELS_DATA/MJD/logs_qualityassurance/MARVELS1_QALOG.html
@@ -264,7 +259,6 @@
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/photo/calib/idB.html
  parse_html -l error -v --path datamodel/files/SEGUE_TARGET/segue1TargetObjSetAllDup.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlan.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apVisit.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/flux/apFlux.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/bpm/apBPM.html
@@ -333,7 +327,6 @@
  parse_html -l error -v --path datamodel/files/SEGUE2_TARGET/seguetsObjSetAllDup.html
  parse_html -l error -v --path datamodel/files/SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPlate.html
  parse_html -l error -v --path datamodel/files/SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjSetAll.html
- parse_html -l error -v --path datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html
  parse_html -l error -v --path datamodel/files/APOGEE_TARGET/apogeeObject/apogeeObject.html
  parse_html -l error -v --path datamodel/files/PHOTO_DATA/RUN/gangs/idGang.html
  parse_html -l error -v --path datamodel/files/PHOTO_DATA/RUN/fields/CAMCOL/idR.html

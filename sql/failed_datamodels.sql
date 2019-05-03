@@ -4,7 +4,8 @@ select location.env_id as env_id, location.path, file.name, file.status
 from file
 join location
 on file.location_id = location.id
-where file.status = 'failed' or file.status = 'pending'
+where (file.status = 'failed' or file.status = 'pending')
+and file.name != 'manga.Pipe3D.cube.html'
 ),
 ppq as
 (

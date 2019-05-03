@@ -62,7 +62,9 @@ class Type(object):
                             if not self.check_tag_has_only_text_content(tag=child):
                                 self.correct_type = False
                                 self.logger.debug("not tags have only text content " +
-                                                  "for tag_names: {}".format(tag_names))
+                                                  "for tag_names: {}".format(tag_names) +
+                                                  "child: {}".format(child)
+                                                  )
             else:
                 self.logger.error('Unable to check_tags_have_only_text_content. ' +
                                   'node: {}.'.format(node) +
@@ -407,7 +409,7 @@ class Hdu_type(Type):
                                      | {'table'})
                         ):
                     self.correct_type = False
-                    self.logger.debug("not tag_names = {h,p,table}")
+                    self.logger.debug("not tag_names = {h,p,table} or {h,table}")
                 self.check_heading_tag_assumptions_1(node=node)
                 self.check_table_tag_assumptions_2(node=node)
                 if 'p' in tag_names:
@@ -639,8 +641,10 @@ class Hdu_type(Type):
                     tables = node.find_all('table')
                     for table in tables:
                         child_names = set(self.util.get_child_names(node=table))
-                        if not (child_names == {'caption','tr'} or
-                                child_names == {'tr'}
+                        if not (child_names == {'caption','tr'}         or
+                                child_names == {'tr'}                   or
+                                child_names == {'caption','tr','tfoot'} or
+                                child_names == {'tr','tfoot'}
                             ):
                             self.correct_type = False
                             self.logger.debug(
@@ -720,15 +724,6 @@ class Hdu_type(Type):
         '''Check tbody tag assumptions for the given BeautifulSoup table.'''
         if self.ready:
             if table:
-                # check children of the <table> tag are <caption> and <tr> tags
-                if self.correct_type:
-                    tag_names = set(self.util.get_child_names(node=table))
-                    if not (tag_names == {'caption','tr'} or
-                            tag_names == {'tr'}
-                        ):
-                        self.correct_type = False
-                        self.logger.debug("not children of the <table> tag are "
-                                          "<caption> and <tr> tags")
                 # check all <tr> tag children are <th> or <td> tags
                 if self.correct_type:
                     for node in [node for node in table.find_all('tr')
@@ -737,8 +732,8 @@ class Hdu_type(Type):
                             tag_names = set(self.util.get_child_names(node=node))
                             if not (tag_names == {'td'} or tag_names == {'th'}):
                                 self.correct_type = False
-                                self.logger.debug("not all <tr> tag children are "
-                                                  "<th> or <td> tags")
+                                self.logger.debug("not all <tr> tag children are " +
+                                                  "<th> or <td> tags" )
             else:
                 self.ready = False
                 self.logger.error('Unable to check_tr_tag_assumptions_1. ' +
@@ -773,7 +768,11 @@ class Hdu_type(Type):
                         if self.correct_type:
                             for row in rows:
                                 if self.correct_type:
-                                    if not ('=' in row or 'HISTORY' in row or 'END' in row):
+                                    if not ('=' in row or
+                                            'HISTORY' in row or
+                                            'COMMENT' in row or
+                                            'END' in row
+                                        ):
                                         self.correct_type = False
                                         self.logger.error("the rows contain either '=' " +
                                                           "for data or 'HISTORY' or 'END'")

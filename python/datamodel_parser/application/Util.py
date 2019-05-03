@@ -458,6 +458,35 @@ class Util:
                                   'node: {}'.format(node))
         return hdus
 
+    def get_tag_names(self,tag_list=None):
+        '''Get a list of tag names from the given BeautifulSoup tag_list.'''
+        tag_names = list()
+        if self.ready:
+            if tag_list:
+                for tag in tag_list:
+                    tag_names.append(tag.name)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_tag_names. ' +
+                                  'tag_list: {}'.format(tag_list))
+        return tag_names
+
+    def get_column_names(self,trs=None):
+        '''Get column_names from the <tr> tag with all <th> tag children.'''
+        column_names = None
+        if self.ready:
+            if trs:
+                for tr in trs:
+                    if self.children_all_one_tag_type(node=tr,tag_name='th'):
+                        column_names = list([s.lower() for s in tr.strings
+                                                if not s.isspace()])
+                        break
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_column_names. ' +
+                                  'trs: {}'.format(trs))
+        return column_names
+
 
 #    def get_hdus(self,node=None):
 #        '''Get the hdu tags from the given BeautifulSoup node.'''
@@ -527,19 +556,6 @@ class Util:
 #                self.logger.error('Unable to get_hdus. ' +
 #                                  'node: {}'.format(node))
 #        return hdus
-
-    def get_tag_names(self,tag_list=None):
-        '''Get a list of tag names from the given BeautifulSoup tag_list.'''
-        tag_names = list()
-        if self.ready:
-            if tag_list:
-                for tag in tag_list:
-                    tag_names.append(tag.name)
-            else:
-                self.ready = False
-                self.logger.error('Unable to get_tag_names. ' +
-                                  'tag_list: {}'.format(tag_list))
-        return tag_names
 
 
 
