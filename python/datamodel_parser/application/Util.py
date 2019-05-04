@@ -162,8 +162,86 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_dts_and_dds_from_dl. ' +
-                                  'dl: {}'.format(dl))
+                                  'dl: {}.'.format(dl))
         return (dts,dds)
+
+    def get_titles_and_descriptions_from_ps(self,node=None):
+        '''From the given list of BeautifulSoup <p> tag objects,
+        get Python lists for the associated titles and descriptions
+        '''
+        titles  = list()
+        descriptions = list()
+        if self.ready:
+            if node:
+                ps = node.find_all('p')
+                for p in ps:
+                    (title,description) = self.get_title_and_description_from_p(p=p)
+                    if title and description: # can be empty if no <b> tag
+                        if self.check_found_hdus(title=title,description=description):
+                            break
+                        else:
+                            titles.append(title)
+                            descriptions.append(description)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_titles_and_descriptions_from_ps. ' +
+                                  'node: {}'.format(node))
+        if not (titles and descriptions) and len(titles)==len(descriptions):
+            self.ready = False
+            self.logger.error('Unable to get_titles_and_descriptions_from_ps. ' +
+                              'titles: {}, '.format(titles) +
+                              'descriptions: {}, '.format(descriptions) +
+                              'len(titles): {}, '.format(len(titles)) +
+                              'len(descriptions): {}.'.format(len(descriptions))
+                              )
+        return (titles,descriptions)
+
+    def get_title_and_description_from_p(self,p=None):
+        '''From the given list of BeautifulSoup <p> tag objects,
+        get Python lists for the associated titles and descriptions
+        '''
+        title = str()
+        description = str()
+        if p:
+            # titles
+            child_names = self.get_child_names(node=p)
+            if 'b' in child_names:
+                b = p.find_next('b')
+                title = self.get_string(node=b) if b else str()
+                title = title.replace(':','') if title else str()
+                
+                # descriptions
+                description_list = list()
+                for sibling in b.next_siblings:
+                    string = str(sibling).strip()
+                    description_list.append(string)
+                description = ' '.join(description_list)
+        else:
+            self.ready = False
+            self.logger.error('Unable to get_title_and_description_from_p. ' +
+                              'p: {}'.format(p))
+        if not (title and description): pass # can be empty if no <b> tag
+        return (title,description)
+
+
+    def check_found_hdus(self,title=str(),description=str()):
+        '''Check if the title and description indicates the hdus have been found.'''
+        found_hdus = False
+        if title or description:
+            split_title = set([s.lower() for s in title.split()])
+            description_title = set([s.lower() for s in description.split()])
+            string_set = split_title | description_title
+            if ({'required','keywords'}.issubset(string_set) or
+                {'required','column'}.issubset(string_set)
+                ):
+                found_hdus = True
+        else:
+            self.ready = False
+            self.logger.error('Unable to get_titles_and_descriptions_from_ps. ' +
+                              'title: {}, '.format(title) +
+                              'description: {}.'.format(description)
+                              )
+        return found_hdus
 
     def get_hdu_number_and_hdu_title(self,node=None):
         '''Get hdu_number and hdu_title from first heading tag in BeautifulSoup node.'''
