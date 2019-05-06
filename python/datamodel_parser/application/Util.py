@@ -165,7 +165,7 @@ class Util:
                                   'dl: {}.'.format(dl))
         return (dts,dds)
 
-    def get_titles_and_descriptions_from_ps(self,node=None):
+    def get_titles_and_descriptions_from_ps_1(self,node=None):
         '''From the given list of BeautifulSoup <p> tag objects,
         get Python lists for the associated titles and descriptions
         '''
@@ -177,18 +177,20 @@ class Util:
                 for p in ps:
                     (title,description) = self.get_title_and_description_from_p(p=p)
                     if title and description: # can be empty if no <b> tag
-                        if self.check_found_hdus(title=title,description=description):
-                            break
-                        else:
-                            titles.append(title)
-                            descriptions.append(description)
+                        titles.append(title)
+                        descriptions.append(description)
+#                        if self.check_found_hdus(title=title,description=description):
+#                            break
+#                        else:
+#                            titles.append(title)
+#                            descriptions.append(description)
             else:
                 self.ready = False
-                self.logger.error('Unable to get_titles_and_descriptions_from_ps. ' +
+                self.logger.error('Unable to get_titles_and_descriptions_from_ps_1. ' +
                                   'node: {}'.format(node))
         if not (titles and descriptions) and len(titles)==len(descriptions):
             self.ready = False
-            self.logger.error('Unable to get_titles_and_descriptions_from_ps. ' +
+            self.logger.error('Unable to get_titles_and_descriptions_from_ps_1. ' +
                               'titles: {}, '.format(titles) +
                               'descriptions: {}, '.format(descriptions) +
                               'len(titles): {}, '.format(len(titles)) +
@@ -237,7 +239,7 @@ class Util:
                 found_hdus = True
         else:
             self.ready = False
-            self.logger.error('Unable to get_titles_and_descriptions_from_ps. ' +
+            self.logger.error('Unable to check_found_hdus. ' +
                               'title: {}, '.format(title) +
                               'description: {}.'.format(description)
                               )
@@ -464,7 +466,7 @@ class Util:
                                   'node: {0}'.format(node))
         return children
 
-    def get_intro(self,node=None):
+    def get_intro_1(self,node=None):
         '''Get a new BeautifulSoup object comprised of the intro tags
             of the given BeautifulSoup node.'''
         intro = None
@@ -477,30 +479,41 @@ class Util:
                     h = node.find_next(heading_tag)
                     string = h.string.lower()
                     # find the end of the intro (the file contents or first hdu)
-                    if (string.replace(':','') in self.sections_strings or
-                        'hdu' in string
+                    if (#string.replace(':','') in self.sections_strings or
+                        'hdu' in string or
+                        'primary header' in string
                         ):
                         previous_siblings = h.previous_siblings
                         break
-                # reverse the order of the previous_siblings
-                if previous_siblings:
-                    intro_tags = list()
-                    for sibling in [s for s in previous_siblings if s.name]:
-                        intro_tags.append(sibling)
-                    intro_tags.reverse()
-                    
-                    # create new BeautifulSoup object out of the intro_tags text
-                    tag_text = '\n'.join([str(tag) for tag in intro_tags])
-                    intro = BeautifulSoup(tag_text, 'html.parser')
-                else:
-                    self.ready = False
-                    self.logger.error('Unable to get_intro. ' +
-                                      'previous_siblings: {}'.format(previous_siblings))
+                intro = self.get_reversed_previous_siblings(previous_siblings=previous_siblings)
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro. ' +
                                   'node: {}'.format(node))
         return intro
+
+    def get_reversed_previous_siblings(self,previous_siblings=None):
+        '''Create a list out of the previous_siblings, reverse the order,
+        and create new BeautifulSoup object out of the list.'''
+        node = None
+        if previous_siblings:
+            # create a list of strings out of the previous_siblings and reverse it
+            siblings = [str(s) for s in previous_siblings if s and not str(s).isspace()]
+            siblings.reverse()
+#            siblings = list()
+#            for sibling in [str(s) for s in previous_siblings if s and not str(s).isspace()]:
+#                siblings.append(sibling)
+#            siblings.reverse()
+
+            # create new BeautifulSoup object out of the siblings text
+            text = '\n'.join(siblings)
+            node = BeautifulSoup(text, 'html.parser') if text else None
+        else:
+            self.ready = False
+            self.logger.error('Unable to get_reversed_previous_siblings. ' +
+                              'previous_siblings: {}'.format(previous_siblings))
+        return node
+
 
     def get_hdus(self,node=None):
         '''Get the hdu tags from the given BeautifulSoup node.'''

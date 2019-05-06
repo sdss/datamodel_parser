@@ -69,14 +69,9 @@ class Hdu:
                     if divs:
                         for (self.hdu_number,div) in enumerate(divs):
                             if self.ready: self.parse_file_hdu_div(node=div)
-                    else:
-                        # No hdu divs
-                        self.file_hdu_info = None
-                        self.file_hdu_tables = None
-
+                    else: pass # some files don't have div hdus
                 else:
-                    hdus = self.util.get_hdus(node=self.body)
-                    self.parse_file_hdus(node=hdus)
+                    self.parse_file_hdus()
                 self.set_hdu_count()
             else:
                 self.ready = False
@@ -128,19 +123,21 @@ class Hdu:
                 self.logger.error('Unable to parse_file_hdu_div. ' +
                                   'node: {}.'.format(node))
 
-    def parse_file_hdus(self,node=None):
+    def parse_file_hdus(self):
         '''Parse file hdu content from given BeautifulSoup node.'''
         if self.ready:
+            node = self.body
             if node:
                 child_names = set(self.util.get_child_names(node=node)) # REMOVE
-#                type = Hdu_type(logger=self.logger,options=self.options)
-#                self.hdu_type = type.get_hdu_type(node=node)
+                type = Hdu_type(logger=self.logger,options=self.options)
+                self.hdu_type = type.get_hdu_type(node=node)
+
 #                print('self.hdu_type: %r' % self.hdu_type)
 #                input('pause')
 
-#                if self.hdu_type == 5:
-#                    self.parse_file_hdu_intro_type_5(node=node)
-#                    self.parse_file_hdu_tables_type_5(node=node)
+                if self.hdu_type == 7:
+                    self.parse_file_hdu_intro_type_5(node=node)
+                    self.parse_file_hdu_tables_type_5(node=node)
 
                 
                 if child_names == {'h1','p','h3','ul','pre'}:
@@ -479,8 +476,8 @@ class Hdu:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_tables_2. ' +
-                                  'node: {}, '.format(node) +
-                                  'assumptions: {}'.format(assumptions))
+                                  'node: {}, '.format(node)
+                                  )
 
     def get_table_row_pre_1(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
