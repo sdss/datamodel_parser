@@ -53,6 +53,7 @@ CREATE TABLE sdss.file (
     name VARCHAR(64) NOT NULL,
     status VARCHAR(16),
     intro_type INT2,
+    file_type INT2,
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

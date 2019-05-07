@@ -296,11 +296,9 @@ class Type(object):
                                   'node: {}.'.format(node))
 
 
-
-
 class Intro_type(Type):
     '''Determine the class Intro type of the given node.'''
-    def __init__(self,logger=None,options=None,node=None):
+    def __init__(self,logger=None,options=None):
         Type.__init__(self,logger=logger,options=options)
 
     def get_intro_type(self,node=None):
@@ -507,7 +505,7 @@ class Intro_type(Type):
 
 class Hdu_type(Type):
     '''Determine the class Hdu_type of the given node.'''
-    def __init__(self,logger=None,options=None,node=None):
+    def __init__(self,logger=None,options=None):
         Type.__init__(self,logger=logger,options=options)
 
     def get_hdu_type(self,node=None):
@@ -966,4 +964,106 @@ class Hdu_type(Type):
                 self.ready = False
                 self.logger.error('Unable to check_tr_tag_assumptions_1. ' +
                                   'table: {}.'.format(table))
+
+class File_type(Type):
+    '''Determine the class File type of the given node.'''
+    def __init__(self,logger=None,options=None):
+        Type.__init__(self,logger=logger,options=options)
+
+    def get_file_type(self,node=None):
+        '''Determine class Hdu template type from the given BeautifulSoup node.'''
+        file_type = None
+        if self.ready:
+            if node:
+                if   self.check_file_type_1(node=node): file_type = 1
+                elif self.check_file_type_2(node=node): file_type = 2
+                elif self.check_file_type_3(node=node): file_type = 3
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_file_type. '
+                                      'Unexpected file_type.')
+
+
+            if self.verbose: print('file_type: %r' % file_type )
+#            input('pause')
+        return file_type
+
+    def check_file_type_1(self,node=None):
+        '''Determine class File_type template from the given BeautifulSoup node.'''
+        self.correct_type = False
+        if self.ready:
+            if node:
+                self.correct_type = True
+                self.logger.debug("First inconsistency for check_file_type_1:")
+                # check if all children of node are <div> tags
+                if not self.util.children_all_one_tag_type(node=node,tag_name='div'):
+                    self.correct_type = False
+                    self.logger.debug("not all children of node are <div> tags")
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_file_type_1. ' +
+                                  'node: {}.'.format(node))
+        return self.correct_type
+
+
+    def check_file_type_2(self,node=None):
+        '''Determine class File_type template from the given BeautifulSoup node.'''
+        self.correct_type = False
+        if self.ready:
+            if node:
+                self.correct_type = True
+                self.logger.debug("First inconsistency for check_file_type_2:")
+                tag_names = self.util.get_child_names(node=node)
+                # check tag_names = {h,p,ul}
+                if self.correct_type:
+                    set_tag_names = set(tag_names)
+                    if not (set_tag_names == (set_tag_names & self.util.heading_tags)
+                                              | {'ul','p'}
+                            ):
+                        self.correct_type = False
+                        self.logger.debug("not tag_names = {h,p,ul}")
+                # check node has only one heading tag
+                if self.correct_type:
+                    heading_tag_names = self.util.get_heading_tag_children(node=node)
+                    l = len(heading_tag_names)
+                    if not l == 1:
+                        self.correct_type = False
+                        self.logger.debug("not node has only one heading tag")
+                # check heading tag only has text content
+                self.check_tags_have_only_text_content(node=node,
+                                                       tag_names=self.util.heading_tags)
+                self.check_ul_tag_assumptions_1(node=node)
+                self.check_p_tag_assumptions_3(node=node)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_file_type_2. ' +
+                                  'node: {}.'.format(node))
+        return self.correct_type
+
+    def check_file_type_3(self,node=None):
+        '''Determine class File_type template from the given BeautifulSoup node.'''
+        self.correct_type = False
+        if self.ready:
+            if node:
+                self.correct_type = True
+                self.logger.debug("First inconsistency for check_file_type_3:")
+                tag_names = self.util.get_child_names(node=node)
+                # check tag_names = {h,p,pre}
+                if self.correct_type:
+                    set_tag_names = set(tag_names)
+                    if not (set_tag_names == (set_tag_names & self.util.heading_tags)
+                                              | {'pre','p','table'}
+                            ):
+                        self.correct_type = False
+                        self.logger.debug("not tag_names = {h,p,pre}")
+                # check heading tag only has text content
+                self.check_tags_have_only_text_content(node=node,
+                                                       tag_names=self.util.heading_tags)
+                self.check_pre_tag_assumptions_2(node=node)
+                self.check_p_tag_assumptions_4(node=node)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_file_type_3. ' +
+                                  'node: {}.'.format(node))
+        return self.correct_type
 

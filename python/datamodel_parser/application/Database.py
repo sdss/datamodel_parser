@@ -62,12 +62,13 @@ class Database:
         percent_complete = 100*numerator/denominator
         return percent_complete
 
-    def update_file_table_status(self,ready=None,intro_type=None):
+    def update_file_table_status(self,ready=None,intro_type=None,file_type=None):
         '''Update the status of the file table.'''
-        if self.file_columns and ready is not None: # intro_type can be None
+        if self.file_columns and ready is not None and file_type: # intro_type can be None
             status = 'completed' if ready else 'failed'
             self.file_columns['status'] = status
             self.file_columns['intro_type'] = intro_type
+            self.file_columns['file_type'] = file_type
             self.set_file()
             self.update_file_row()
         else:

@@ -231,6 +231,7 @@ class File(db.Model):
     name = db.Column(db.String(64), nullable = False)
     status = db.Column(db.String(16), nullable = False,default='pending')
     intro_type = db.Column(db.Integer)
+    file_type = db.Column(db.Integer)
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,

@@ -3,6 +3,7 @@ from datamodel_parser.application import Intro
 from datamodel_parser.application import Hdu
 from datamodel_parser.application import Database
 from datamodel_parser.application import Stub
+from datamodel_parser.application.Type import File_type
 from bs4 import BeautifulSoup
 from flask import render_template
 from datamodel_parser import app
@@ -129,10 +130,15 @@ class File:
             self.set_intro_and_hdu()
             if self.ready:
                 self.logger.info('Parsing file HTML')
-                self.intro.parse_file()
-                self.ready = self.ready and self.intro.ready
+                node = self.body
+                type = File_type(logger=self.logger,options=self.options)
+                self.file_type = type.get_file_type(node=node)
+                (intro,hdus) = self.util.get_intro_and_hdus(node=node,
+                                                            file_type=self.file_type)
+                self.intro.parse_file(node=intro)
+                self.ready = self.ready and type.ready and self.intro.ready
                 if self.ready:
-                    self.hdu.parse_file()
+                    self.hdu.parse_file(nodes=hdus)
                     self.ready = self.ready and self.hdu.ready
                     self.intro_type = self.intro.intro_type
                     self.hdu_type   = self.hdu.hdu_type

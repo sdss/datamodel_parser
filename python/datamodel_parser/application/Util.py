@@ -465,55 +465,108 @@ class Util:
                 self.logger.error('Unable to get_children. ' +
                                   'node: {0}'.format(node))
         return children
-
-    def get_intro_1(self,node=None):
-        '''Get a new BeautifulSoup object comprised of the intro tags
+    
+    def get_intro_and_hdus(self,node=None,file_type=None):
+        '''Get new BeautifulSoup objects comprised of the intro tags and hdu tags
             of the given BeautifulSoup node.'''
-        intro = None
+        (intro,hdus) = (None,None)
+        if self.ready:
+            if node and file_type:
+                if   file_type == 1: (intro,hdus) = self.get_intro_and_hdus_1(node=node)
+                elif file_type == 2: (intro,hdus) = self.get_intro_and_hdus_2(node=node)
+                elif file_type == 3: (intro,hdus) = self.get_intro_and_hdus_3(node=node)
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_intro_and_hdus. '
+                                      'Unexpected file_type.')
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intro_and_hdus. ' +
+                                  'node: {}, '.format(node) +
+                                  'file_type: {}.'.format(file_type))
+        return (intro,hdus)
+
+    def get_intro_and_hdus_1(self,node=None):
+        '''Get new BeautifulSoup objects comprised of the intro tags and hdu tags
+            of the given BeautifulSoup node.'''
+        (intro,hdus) = (None,None)
         if self.ready:
             if node:
-                # get previous_siblings of the end of intro heading tag
-                previous_siblings = None
+                intro = self.get_intro_div(node=node)
+                hdus  = self.get_hdu_divs(node=node)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intro_and_hdus_1. ' +
+                                  'node: {}, '.format(node)
+                                  )
+        return (intro,hdus)
+
+    def get_intro_and_hdus_2(self,node=None):
+        return (None,None)
+
+    def get_intro_and_hdus_3(self,node=None):
+        '''Get new BeautifulSoup objects comprised of the intro tags and hdu tags
+            of the given BeautifulSoup node.'''
+        (intro,hdus) = (None,None)
+        if self.ready:
+            if node:
+                (intro,combined_hdus) = self.get_intro_and_combined_hdus_1(node=node)
+                hdus = self.split_hdus_1(combined_hdus=combined_hdus)
+                print('hdus: %r'%  hdus)
+                input('pause')
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intro_and_hdus_3. ' +
+                                  'node: {}, '.format(node)
+                                  )
+        return (intro,hdus)
+
+    def get_intro_and_combined_hdus_1(self,node=None):
+        '''Get a new BeautifulSoup object comprised of the intro tags
+            of the given BeautifulSoup node.'''
+        (intro,combined_hdus) = (None,None)
+        if self.ready:
+            if node:
                 heading_tags = self.get_heading_tag_children(node=node)
                 for heading_tag in heading_tags:
                     h = node.find_next(heading_tag)
                     string = h.string.lower()
-                    # find the end of the intro (the file contents or first hdu)
-                    if (#string.replace(':','') in self.sections_strings or
-                        'hdu' in string or
+                    if ('hdu'            in string or
                         'primary header' in string
                         ):
                         previous_siblings = h.previous_siblings
+                        next_siblings = h.previous_sibling.next_siblings
                         break
-                intro = self.get_reversed_previous_siblings(previous_siblings=previous_siblings)
+                intro = self.get_soup_from_generator(generator=previous_siblings,
+                                                     reverse=True)
+                combined_hdus = self.get_soup_from_generator(generator=next_siblings,
+                                                             reverse=False)
             else:
                 self.ready = False
-                self.logger.error('Unable to get_intro. ' +
+                self.logger.error('Unable to get_intro_and_combined_hdus_1. ' +
                                   'node: {}'.format(node))
-        return intro
+        return (intro,combined_hdus)
 
-    def get_reversed_previous_siblings(self,previous_siblings=None):
-        '''Create a list out of the previous_siblings, reverse the order,
-        and create new BeautifulSoup object out of the list.'''
-        node = None
-        if previous_siblings:
-            # create a list of strings out of the previous_siblings and reverse it
-            siblings = [str(s) for s in previous_siblings if s and not str(s).isspace()]
-            siblings.reverse()
-#            siblings = list()
-#            for sibling in [str(s) for s in previous_siblings if s and not str(s).isspace()]:
-#                siblings.append(sibling)
-#            siblings.reverse()
-
-            # create new BeautifulSoup object out of the siblings text
-            text = '\n'.join(siblings)
-            node = BeautifulSoup(text, 'html.parser') if text else None
+    def get_soup_from_generator(self,generator=None,reverse=None):
+        '''Create a list out of the generator, reverse the order if reverse==True,
+        and create new BeautifulSoup object out of the list text.'''
+        soup = None
+        if generator and reverse is not None:
+            siblings = [str(s) for s in generator if s and not str(s).isspace()]
+            if reverse: siblings.reverse() if siblings else list()
+            text = '\n'.join(siblings) if siblings else str()
+            soup = BeautifulSoup(text, 'html.parser') if text else None
         else:
             self.ready = False
-            self.logger.error('Unable to get_reversed_previous_siblings. ' +
-                              'previous_siblings: {}'.format(previous_siblings))
-        return node
+            self.logger.error('Unable to get_soup_from_generator. ' +
+                              'generator: {}'.format(generator) +
+                              'reverse: {}'.format(reverse)
+                              )
+        return soup
 
+    def split_hdus_1(self,combined_hdus=None):
+        hdus = None
+        return hdus
 
     def get_hdus(self,node=None):
         '''Get the hdu tags from the given BeautifulSoup node.'''

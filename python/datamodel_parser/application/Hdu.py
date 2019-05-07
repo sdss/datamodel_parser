@@ -53,103 +53,147 @@ class Hdu:
             self.file_hdu_tables = list()
             self.hdu_type = None
 
-    def parse_file(self):
-        '''Parse the HTML of the given BeautifulSoup object.'''
-        self.hdu_count = None
+    def parse_file(self,nodes=None):
+        '''Parse file hdu content from given BeautifulSoup nodes.'''
         if self.ready:
-            # process different hdu types
-            if self.body:
-                # self.body all div tags
-                if self.util.children_all_one_tag_type(node = self.body,
-                                                       tag_name = 'div'):
-                    print('***** All divs *****')
-                    divs = self.util.get_hdu_divs(node=self.body)
-#                    print('divs: %r' %  divs)
+            if nodes:
+                for node in nodes:
+                    type = Hdu_type(logger=self.logger,options=self.options)
+                    self.hdu_type = type.get_hdu_type(node=node)
+
+#                    print('self.hdu_type: %r' % self.hdu_type)
 #                    input('pause')
-                    if divs:
-                        for (self.hdu_number,div) in enumerate(divs):
-                            if self.ready: self.parse_file_hdu_div(node=div)
-                    else: pass # some files don't have div hdus
-                else:
-                    self.parse_file_hdus()
-                self.set_hdu_count()
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file. ' +
-                                  'self.body: {}.'.format(self.body))
 
-    def parse_file_hdu_div(self,node=None):
-        '''Parse file hdu content from given BeautifulSoup division node.'''
-        if self.ready:
-            if node:
-                child_names = set(self.util.get_child_names(node=node)) # REMOVE
-                type = Hdu_type(logger=self.logger,options=self.options)
-                self.hdu_type = type.get_hdu_type(node=node)
-
-#                print('self.hdu_type: %r' % self.hdu_type)
-#                input('pause')
-
-                if self.hdu_type:
-                    if self.hdu_type == 1:
-                        self.parse_file_hdu_intro_1(node=node)
-                        self.parse_file_hdu_tables_1(node=node)
-                    elif self.hdu_type == 2:
-                        self.parse_file_hdu_intro_2(node=node)
-                        self.parse_file_hdu_tables_1(node=node)
-                    elif self.hdu_type == 3:
-                        self.parse_file_hdu_intro_3(node=node)
-                        self.parse_file_hdu_tables_2(node=node)
-                    elif self.hdu_type == 4:
-                        self.parse_file_hdu_intro_4(node=node)
-                        self.parse_file_hdu_tables_3(node=node)
-                    elif self.hdu_type == 5:
-                        self.parse_file_hdu_intro_5(node=node)
-                        self.parse_file_hdu_tables_4(node=node) # No table
-                    elif self.hdu_type == 6:
-                        self.parse_file_hdu_intro_6(node=node)
-                        self.parse_file_hdu_tables_3(node=node)
+                    if self.hdu_type:
+                        # div types
+                        if self.hdu_type == 1:
+                            self.parse_file_hdu_intro_1(node=node)
+                            self.parse_file_hdu_tables_1(node=node)
+                        elif self.hdu_type == 2:
+                            self.parse_file_hdu_intro_2(node=node)
+                            self.parse_file_hdu_tables_1(node=node)
+                        elif self.hdu_type == 3:
+                            self.parse_file_hdu_intro_3(node=node)
+                            self.parse_file_hdu_tables_2(node=node)
+                        elif self.hdu_type == 4:
+                            self.parse_file_hdu_intro_4(node=node)
+                            self.parse_file_hdu_tables_3(node=node)
+                        elif self.hdu_type == 5:
+                            self.parse_file_hdu_intro_5(node=node)
+                            self.parse_file_hdu_tables_4(node=node) # No table
+                        elif self.hdu_type == 6:
+                            self.parse_file_hdu_intro_6(node=node)
+                            self.parse_file_hdu_tables_3(node=node)
+                        # non-div types
+                        else:
+                            self.ready = False
+                            self.logger.error('Unexpected self.hdu_type encountered ' +
+                                              'in Hdu.parse_file_hdu_div().')
                     else:
                         self.ready = False
-                        self.logger.error('Unexpected child_names encountered ' +
-                                          'in Hdu.parse_file_hdu_div().')
-                else:
-                    self.ready = False
-                    child_names = set(self.util.get_child_names(node=node))
-                    self.logger.error('Unable to parse_file_hdu_div. ' +
-                                      'self.hdu_type: {}, '.format(self.hdu_type) +
-                                      'child_names: {}.'.format(child_names))
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_hdu_div. ' +
-                                  'node: {}.'.format(node))
+                        self.logger.error('Unable to parse_file. ' +
+                                          'self.hdu_type: {}, '.format(self.hdu_type) )
+                self.set_hdu_count()
+            else: # some files don't have hdus
+                self.hdu_count = 0
+                self.logger.warning('Unable to parse_file. ' +
+                                  'nodes: {}.'.format(nodes))
 
-    def parse_file_hdus(self):
-        '''Parse file hdu content from given BeautifulSoup node.'''
-        if self.ready:
-            node = self.body
-            if node:
-                child_names = set(self.util.get_child_names(node=node)) # REMOVE
-                type = Hdu_type(logger=self.logger,options=self.options)
-                self.hdu_type = type.get_hdu_type(node=node)
 
-#                print('self.hdu_type: %r' % self.hdu_type)
-#                input('pause')
-
-                if self.hdu_type == 7:
-                    self.parse_file_hdu_intro_type_5(node=node)
-                    self.parse_file_hdu_tables_type_5(node=node)
-
-                
-                if child_names == {'h1','p','h3','ul','pre'}:
-                    self.parse_file_h1_p_h3_ul_pre()
-                else:
-                    self.ready = False
-                    self.logger.error('Unexpected HTML body type encountered ' +
-                                      'in Hdu.parse_file.')
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_hdus. ' +
-                                  'node: {}.'.format(node))
+#    def parse_file(self):
+#        '''Parse the HTML of the given BeautifulSoup object.'''
+#        self.hdu_count = None
+#        if self.ready:
+#            # process different hdu types
+#            if self.body:
+#                # self.body all div tags
+#                if self.util.children_all_one_tag_type(node = self.body,
+#                                                       tag_name = 'div'):
+#                    print('***** All divs *****')
+#                    hdu_divs = self.util.get_hdu_divs(node=self.body)
+##                    print('divs: %r' %  divs)
+##                    input('pause')
+#                    if hdu_divs:
+#                        for (self.hdu_number,hdu_div) in enumerate(hdu_divs):
+#                            if self.ready: self.parse_file_hdu_div(node=hdu_div)
+#                    else: pass # some files don't have div hdus
+#                else:
+#                    self.parse_file_hdus()
+#                self.set_hdu_count()
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to parse_file. ' +
+#                                  'self.body: {}.'.format(self.body))
+#
+#    def parse_file_hdu_div(self,node=None):
+#        '''Parse file hdu content from given BeautifulSoup division node.'''
+#        if self.ready:
+#            if node:
+#                type = Hdu_type(logger=self.logger,options=self.options)
+#                self.hdu_type = type.get_hdu_type(node=node)
+#
+##                print('self.hdu_type: %r' % self.hdu_type)
+##                input('pause')
+#
+#                if self.hdu_type:
+#                    if self.hdu_type == 1:
+#                        self.parse_file_hdu_intro_1(node=node)
+#                        self.parse_file_hdu_tables_1(node=node)
+#                    elif self.hdu_type == 2:
+#                        self.parse_file_hdu_intro_2(node=node)
+#                        self.parse_file_hdu_tables_1(node=node)
+#                    elif self.hdu_type == 3:
+#                        self.parse_file_hdu_intro_3(node=node)
+#                        self.parse_file_hdu_tables_2(node=node)
+#                    elif self.hdu_type == 4:
+#                        self.parse_file_hdu_intro_4(node=node)
+#                        self.parse_file_hdu_tables_3(node=node)
+#                    elif self.hdu_type == 5:
+#                        self.parse_file_hdu_intro_5(node=node)
+#                        self.parse_file_hdu_tables_4(node=node) # No table
+#                    elif self.hdu_type == 6:
+#                        self.parse_file_hdu_intro_6(node=node)
+#                        self.parse_file_hdu_tables_3(node=node)
+#                    else:
+#                        self.ready = False
+#                        self.logger.error('Unexpected self.hdu_type encountered ' +
+#                                          'in Hdu.parse_file_hdu_div().')
+#                else:
+#                    self.ready = False
+#                    self.logger.error('Unable to parse_file_hdu_div. ' +
+#                                      'self.hdu_type: {}, '.format(self.hdu_type) )
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to parse_file_hdu_div. ' +
+#                                  'node: {}.'.format(node))
+#
+#    def parse_file_hdus(self):
+#        '''Parse file hdu content from given BeautifulSoup node.'''
+#        if self.ready:
+#            node = self.body
+#            if node:
+#                child_names = set(self.util.get_child_names(node=node)) # REMOVE
+#                type = Hdu_type(logger=self.logger,options=self.options)
+#                self.hdu_type = type.get_hdu_type(node=node)
+#
+##                print('self.hdu_type: %r' % self.hdu_type)
+##                input('pause')
+#
+#                if self.hdu_type == 7:
+#                    self.parse_file_hdu_intro_type_5(node=node)
+#                    self.parse_file_hdu_tables_type_5(node=node)
+#
+#
+#                if child_names == {'h1','p','h3','ul','pre'}:
+#                    self.parse_file_h1_p_h3_ul_pre()
+#                else:
+#                    self.ready = False
+#                    self.logger.error('Unexpected HTML body type encountered ' +
+#                                      'in Hdu.parse_file.')
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to parse_file_hdus. ' +
+#                                  'node: {}.'.format(node))
 
     def set_hdu_count(self):
         '''Set the class attribute hdu_count.'''

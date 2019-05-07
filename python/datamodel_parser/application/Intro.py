@@ -51,47 +51,18 @@ class Intro:
             self.intro_descriptions   = list()
             self.intro_type = None
 
-
-    def parse_file(self):
+    def parse_file(self,node=None):
         '''Parse the HTML of the given BeautifulSoup object.'''
-        if self.ready:
-            # process different intro types
-            if self.body:
-                # self.body all div tags
-                if self.util.children_all_one_tag_type(node = self.body,
-                                                       tag_name = 'div'):
-                    div = self.util.get_intro_div(node=self.body)
-#                    print('div: %r' %  div)
-#                    input('pause')
-
-                    self.parse_file_intro_div(node=div)
-                else:
-                    self.parse_file_intro()
-#                print('self.intro_positions: %r'% self.intro_positions)
-#                print('self.intro_heading_levels: %r'% self.intro_heading_levels)
-#                print('self.intro_heading_titles: %r'% self.intro_heading_titles)
-#                print('self.intro_descriptions: %r'% self.intro_descriptions)
-#                input('pause')
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_hdu_info. ' +
-                                  'self.body: {}'.format(self.body))
-
-    def parse_file_intro_div(self,node=None):
-        '''Parse file intro content from given BeautifulSoup node.'''
         if self.ready:
             if node:
                 type = Intro_type(logger=self.logger,options=self.options)
                 self.intro_type = type.get_intro_type(node=node)
-#                intro = self.util.get_intro(node=self.body)
-
-#                print('HI parse_file_intro_div')
-#                print('self.intro_type: %r'% self.intro_type)
-#                input('pause')
                 if self.intro_type:
+                    # div types
                     if   self.intro_type == 1: self.parse_file_type_1(node=node)
                     elif self.intro_type == 2: self.parse_file_type_2(node=node)
                     elif self.intro_type == 3: self.parse_file_type_3(node=node)
+                    # non-div types
                     else:
                         self.ready = False
                         self.logger.error(
@@ -99,34 +70,89 @@ class Intro:
                             'in Intro.parse_file_intro_div().')
                 else:
                     self.ready = False
-                    self.logger.error('Unable to parse_file_intro_div. ' +
+                    self.logger.error('Unable to parse_file. ' +
                                       'self.intro_type: {}'.format(self.intro_type))
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_intro_div. ' +
+                self.logger.error('Unable to parse_file. ' +
                                   'node: {}.'.format(node))
 
-    def parse_file_intro(self):
-        '''Parse file intro content from given BeautifulSoup node.'''
-        if self.ready:
-            if self.body:
-                node = self.body
-                type = Intro_type(logger=self.logger,options=self.options)
-                self.intro_type = type.get_intro_type(node=node)
-                child_names = set(self.util.get_child_names(node=node))
-#                print('HI parse_file_intro')
-#                print('self.intro_type: %r'% self.intro_type)
-#                print('child_names: %r' % child_names)
-#                input('pause')
-                if   self.intro_type == 4: self.parse_file_type_4(node=node)
-                elif self.intro_type == 5: self.parse_file_type_5(node=node)
-                else:
-                    self.ready = False
-                    self.logger.error(
-                        'Unexpected self.intro_type encountered ' +
-                        'in parse_file_intro().')
 
-                
+#    def parse_file(self):
+#        '''Parse the HTML of the given BeautifulSoup object.'''
+#        if self.ready:
+#            # process different intro types
+#            if self.body:
+#                # self.body all div tags
+#                if self.util.children_all_one_tag_type(node = self.body,
+#                                                       tag_name = 'div'):
+#                    intro_div = self.util.get_intro_div(node=self.body)
+##                    print('div: %r' %  div)
+##                    input('pause')
+#
+#                    self.parse_file_intro_div(node=intro_div)
+#                else:
+#                    self.parse_file_intro()
+##                print('self.intro_positions: %r'% self.intro_positions)
+##                print('self.intro_heading_levels: %r'% self.intro_heading_levels)
+##                print('self.intro_heading_titles: %r'% self.intro_heading_titles)
+##                print('self.intro_descriptions: %r'% self.intro_descriptions)
+##                input('pause')
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to parse_file_hdu_info. ' +
+#                                  'self.body: {}'.format(self.body))
+#
+#    def parse_file_intro_div(self,node=None):
+#        '''Parse file intro content from given BeautifulSoup node.'''
+#        if self.ready:
+#            if node:
+#                type = Intro_type(logger=self.logger,options=self.options)
+#                self.intro_type = type.get_intro_type(node=node)
+##                intro = self.util.get_intro(node=self.body)
+#
+##                print('HI parse_file_intro_div')
+##                print('self.intro_type: %r'% self.intro_type)
+##                input('pause')
+#                if self.intro_type:
+#                    if   self.intro_type == 1: self.parse_file_type_1(node=node)
+#                    elif self.intro_type == 2: self.parse_file_type_2(node=node)
+#                    elif self.intro_type == 3: self.parse_file_type_3(node=node)
+#                    else:
+#                        self.ready = False
+#                        self.logger.error(
+#                            'Unexpected self.intro_type encountered ' +
+#                            'in Intro.parse_file_intro_div().')
+#                else:
+#                    self.ready = False
+#                    self.logger.error('Unable to parse_file_intro_div. ' +
+#                                      'self.intro_type: {}'.format(self.intro_type))
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to parse_file_intro_div. ' +
+#                                  'node: {}.'.format(node))
+#
+#    def parse_file_intro(self):
+#        '''Parse file intro content from given BeautifulSoup node.'''
+#        if self.ready:
+#            if self.body:
+#                node = self.body
+#                type = Intro_type(logger=self.logger,options=self.options)
+#                self.intro_type = type.get_intro_type(node=node)
+#                child_names = set(self.util.get_child_names(node=node))
+##                print('HI parse_file_intro')
+##                print('self.intro_type: %r'% self.intro_type)
+##                print('child_names: %r' % child_names)
+##                input('pause')
+#                if   self.intro_type == 4: self.parse_file_type_4(node=node)
+#                elif self.intro_type == 5: self.parse_file_type_5(node=node)
+#                else:
+#                    self.ready = False
+#                    self.logger.error(
+#                        'Unexpected self.intro_type encountered ' +
+#                        'in parse_file_intro().')
+#
+#                
 #
 #
 #                elif child_names == {'h1','p','h3','ul','pre'}:
@@ -137,11 +163,11 @@ class Intro:
 #                    self.ready = False
 #                    self.logger.error('Unexpected HTML body type encountered ' +
 #                                      'in Intro.parse_file.')
-
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_intro. ' +
-                                  'self.body: {}.'.format(self.body))
+#
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to parse_file_intro. ' +
+#                                  'self.body: {}.'.format(self.body))
 
     def parse_file_type_1(self,node=None):
         '''Parse the HTML of the given BeautifulSoup node.'''
