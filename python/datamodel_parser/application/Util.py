@@ -502,7 +502,22 @@ class Util:
         return (intro,hdus)
 
     def get_intro_and_hdus_2(self,node=None):
-        return (None,None)
+        '''Get new BeautifulSoup objects comprised of the intro tags and hdu tags
+            of the given BeautifulSoup node.'''
+        (intro,hdus) = (None,None)
+        if self.ready:
+            if node:
+                (intro,combined_hdus) = self.get_intro_and_combined_hdus_2(node=node)
+                hdus = self.split_hdus_2(combined_hdus=combined_hdus)
+                print('intro: %r'%  intro)
+                input('pause')
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intro_and_hdus_3. ' +
+                                  'node: {}, '.format(node)
+                                  )
+        return (intro,hdus)
+
 
     def get_intro_and_hdus_3(self,node=None):
         '''Get new BeautifulSoup objects comprised of the intro tags and hdu tags
@@ -510,7 +525,7 @@ class Util:
         (intro,hdus) = (None,None)
         if self.ready:
             if node:
-                (intro,combined_hdus) = self.get_intro_and_combined_hdus_1(node=node)
+                (intro,combined_hdus) = self.get_intro_and_combined_hdus_3(node=node)
                 hdus = self.split_hdus_1(combined_hdus=combined_hdus)
                 print('hdus: %r'%  hdus)
                 input('pause')
@@ -521,7 +536,38 @@ class Util:
                                   )
         return (intro,hdus)
 
-    def get_intro_and_combined_hdus_1(self,node=None):
+    def get_intro_and_combined_hdus_2(self,node=None):
+        '''Get a new BeautifulSoup object comprised of the intro tags
+            of the given BeautifulSoup node.'''
+        (intro,combined_hdus) = (None,None)
+        if self.ready:
+            if node:
+                ps = node.find_all('p')
+                for p in ps:
+                    (title,description) = self.get_title_and_description_from_p(p=p)
+                    if title or description:
+                        split_title       = set([s.lower() for s in title.split()])
+                        split_description = set([s.lower() for s in description.split()])
+                        string_set = split_title | split_description
+                        if ({'required','keywords'}.issubset(string_set) or
+                            {'required','column'}.issubset(string_set)
+                            ):
+                            previous_siblings = p.previous_siblings
+                            next_siblings = p.previous_sibling.next_siblings
+                            break
+                intro = self.get_soup_from_generator(generator=previous_siblings,
+                                                     reverse=True)
+                combined_hdus = self.get_soup_from_generator(generator=next_siblings,
+                                                             reverse=False)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intro_and_combined_hdus_2. ' +
+                                  'node: {}'.format(node))
+        return (intro,combined_hdus)
+
+
+
+    def get_intro_and_combined_hdus_3(self,node=None):
         '''Get a new BeautifulSoup object comprised of the intro tags
             of the given BeautifulSoup node.'''
         (intro,combined_hdus) = (None,None)
@@ -543,7 +589,7 @@ class Util:
                                                              reverse=False)
             else:
                 self.ready = False
-                self.logger.error('Unable to get_intro_and_combined_hdus_1. ' +
+                self.logger.error('Unable to get_intro_and_combined_hdus_3. ' +
                                   'node: {}'.format(node))
         return (intro,combined_hdus)
 
@@ -565,6 +611,10 @@ class Util:
         return soup
 
     def split_hdus_1(self,combined_hdus=None):
+        hdus = None
+        return hdus
+
+    def split_hdus_2(self,combined_hdus=None):
         hdus = None
         return hdus
 
@@ -630,77 +680,6 @@ class Util:
                 self.logger.error('Unable to get_column_names. ' +
                                   'trs: {}'.format(trs))
         return column_names
-
-
-#    def get_hdus(self,node=None):
-#        '''Get the hdu tags from the given BeautifulSoup node.'''
-#        hdus = None
-#        if self.ready:
-#            if node:
-#                # get next_siblings if the first hdu heading tag
-#                next_siblings = None
-#                heading_tags = self.get_heading_tag_children(node=node)
-#                for heading_tag in heading_tags:
-#                    h = node.find_next(heading_tag)
-#                    string = h.string.lower()
-#                    # find the beginning of the hdus
-#                    if string.startswith('hdu'):
-#                        next_siblings = h.previous_sibling.next_siblings
-#                        break
-#                # create new BeautifulSoup object out of the next_siblings text
-#                if next_siblings:
-#                    hdu_number = 0
-#                    new_hdu = False
-#                    hdus = list()
-#                    tag_text = list()
-#                    for sibling in [s for s in next_siblings if s.name]:
-#                        # get hdu number
-#                        if hdu_number == 0:
-#                            new_hdu = True
-#                        if sibling.name in heading_tags:
-#                            string = self.get_string(node=sibling)
-#                            spaceless_string = ''.join(string.split()).lower()
-#                            find_hdunum = spaceless_string.find('hdu'+str(hdu_number))
-#                            find_primaryhdu = spaceless_string.find('primaryhdu')
-#                            if find_hdunum >= 0 or find_primaryhdu >=0:
-#                                n
-#                            print('string: %r' % string)
-#                            print('find_hdunum: %r' % find_hdunum)
-#                            print('find_primaryhdu: %r' % find_primaryhdu)
-#                            input('pause')
-#                        if not first_heading and sibling.name in heading_tags:
-#                            tag_text = ''.join(tag_text)
-#                            hdus.append(BeautifulSoup(tag_text, 'html.parser'))
-#                            hdu_number += 1
-#                            tag_text = list()
-#                            tag_text.append(str(sibling))
-#                        else:
-#                            if sibling.name in heading_tags:
-#                                first_heading = False
-#                            tag_text.append(str(sibling))
-#                        print('tag_text: %r' % tag_text)
-#                        print('sibling: %r' % sibling)
-#                        input('pause')
-#
-#                    print('hdus: %r' % hdus)
-#                    input('pause')
-#
-#
-#                    for sibling in [s for s in next_siblings if s.name]:
-#                        tag_text.append(str(sibling))
-#                    tag_text = ''.join(tag_text)
-#                    hdus = BeautifulSoup(tag_text, 'html.parser')
-#                else:
-#                    self.ready = False
-#                    self.logger.error('Unable to get_intro. ' +
-#                                      'next_siblings: {}'.format(next_siblings))
-#
-#            else:
-#                self.ready = False
-#                self.logger.error('Unable to get_hdus. ' +
-#                                  'node: {}'.format(node))
-#        return hdus
-
 
 
 
