@@ -22,13 +22,14 @@ else:
 
 '''
 Examples:
-Finished!
+
+## div types ###
+
+All Finished!
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
 
-
-Finished!
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
@@ -36,36 +37,82 @@ parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/
 parse_html -f -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
 parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
 
-Fail!
 parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
 
-Fail!
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html
-
-
-Fail!
 parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
 parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
 parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
-        
+
+
+
+
+
+## non-div types ###
+
+file_type = 2
+# Intro: one h,p,ul
+# HDUs:  p,ul hdu tables
+    New table triggers:
+        <p> tag with
+        'required header keywords'      or
+        'required column names'         or
+        'required hdu k keywords'       or
+        'required hdu k column names'   or
 parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAll.html
 parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAllLine.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAlldat.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platelist.html
 
-Fail!
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
+file_type = 3
+# Intro: h,p,sections table with notes after
+# HDUs: h,p,pre
+    New table triggers:
+        <h> tag with
+        'primary hdu'       or
+        'hduk'              or
+        'hdu k'
 parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html
 
-File Type 3)
-    parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
-    Fail!
+# Intro: h,p
+# HDUs: h,p,pre (possibly no pre, like possibly no table in div types)
+    New table triggers:
+        <h> tag with
+        'primary hdu'       or
+        'hduk'              or
+        'hdu k'             or
+parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spArc.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFlat.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxdistort.html
 
-File Type 4)
-    parse_html -l debug -v --path datamodel/files/MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html
+# Intro: h,p,pre
+# HDUs: h,p,pre
+    New table triggers:
+        <h> tag with
+        'primary hdu'       or
+        'hduk'              or
+        'hdu k'             or
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcalib.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spXYthrucorr.html
 
+file_type = 4
+# Intro: one h,p, (ul or pre)
+#HDUs: No hdus
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/images/RUN2D/RUN1D/PLATE4-MJD/spec-image-PLATE4-MJD-FIBER4.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platequality.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcorr.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFrame.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spSN2d.html
+
+file_type = None)
+parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
+parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
 
 '''
 

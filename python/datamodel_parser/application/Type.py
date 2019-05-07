@@ -372,7 +372,7 @@ class Intro_type(Type):
                         self.logger.debug("not tag_names = {h,dl}")
                 # check node has only one heading tag
                 if self.correct_type:
-                    heading_tag_names = self.util.get_heading_tag_children(node=node)
+                    heading_tag_names = self.util.get_heading_tag_child_names(node=node)
                     l = len(heading_tag_names)
                     if not l == 1:
                         self.correct_type = False
@@ -405,7 +405,7 @@ class Intro_type(Type):
                         self.logger.debug("not tag_names = {h,dl}")
                 # check node has only one heading tag
                 if self.correct_type:
-                    heading_tag_names = self.util.get_heading_tag_children(node=node)
+                    heading_tag_names = self.util.get_heading_tag_child_names(node=node)
                     l = len(heading_tag_names)
                     if not l == 1:
                         self.correct_type = False
@@ -438,7 +438,7 @@ class Intro_type(Type):
                         self.logger.debug("not tag_names = {h,p,ul}")
                 # check node has only one heading tag
                 if self.correct_type:
-                    heading_tag_names = self.util.get_heading_tag_children(node=node)
+                    heading_tag_names = self.util.get_heading_tag_child_names(node=node)
                     l = len(heading_tag_names)
                     if not l == 1:
                         self.correct_type = False
@@ -732,7 +732,7 @@ class Hdu_type(Type):
                                                        tag_names=self.util.heading_tags)
                 # check node has either one or three heading tags
                 if self.correct_type:
-                    heading_tag_names = self.util.get_heading_tag_children(node=node)
+                    heading_tag_names = self.util.get_heading_tag_child_names(node=node)
                     l = len(heading_tag_names)
                     if not ( l == 1 or l == 3):
                         self.correct_type = False
@@ -1024,7 +1024,7 @@ class File_type(Type):
                         self.logger.debug("not tag_names = {h,p,ul}")
                 # check node has only one heading tag
                 if self.correct_type:
-                    heading_tag_names = self.util.get_heading_tag_children(node=node)
+                    heading_tag_names = self.util.get_heading_tag_child_names(node=node)
                     l = len(heading_tag_names)
                     if not l == 1:
                         self.correct_type = False
@@ -1048,14 +1048,17 @@ class File_type(Type):
                 self.correct_type = True
                 self.logger.debug("First inconsistency for check_file_type_3:")
                 tag_names = self.util.get_child_names(node=node)
-                # check tag_names = {h,p,pre}
+                # check tag_names = {h,p,pre,table}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
                     if not (set_tag_names == (set_tag_names & self.util.heading_tags)
                                               | {'pre','p','table'}
                             ):
                         self.correct_type = False
-                        self.logger.debug("not tag_names = {h,p,pre}")
+                        self.logger.debug("not tag_names = {h,p,pre,table}")
+#                print('self.correct_type: %r'% self.correct_type)
+#                print('set_tag_names: %r'% set_tag_names)
+#                input('pause')
                 # check heading tag only has text content
                 self.check_tags_have_only_text_content(node=node,
                                                        tag_names=self.util.heading_tags)

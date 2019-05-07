@@ -57,10 +57,10 @@ class Hdu:
         '''Parse file hdu content from given BeautifulSoup nodes.'''
         if self.ready:
             if nodes:
+                type = Hdu_type(logger=self.logger,options=self.options)
                 for node in nodes:
-                    type = Hdu_type(logger=self.logger,options=self.options)
                     self.hdu_type = type.get_hdu_type(node=node)
-
+                    
 #                    print('self.hdu_type: %r' % self.hdu_type)
 #                    input('pause')
 

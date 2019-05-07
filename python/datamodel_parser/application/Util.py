@@ -381,7 +381,7 @@ class Util:
                                   'node: {}'.format(node))
         return intro_divs[0] if self.ready else None
 
-    def get_heading_tag_siblings(self,node=None):
+    def get_heading_tag_sibling_names(self,node=None):
         '''Get a list of heading tags, which are siblings of the given node.'''
         heading_tags = list()
         if self.ready:
@@ -390,21 +390,34 @@ class Util:
                 heading_tags = list(set(self.heading_tags) & siblings)
             else:
                 self.ready = False
-                self.logger.error('Unable to get_heading_tag_siblings. ' +
+                self.logger.error('Unable to get_heading_tag_sibling_names. ' +
                                   'node: {0}'.format(node))
         return heading_tags
+
+    def get_heading_tag_child_names(self,node=None):
+        '''Get a list of heading tags, which are children of the given node.'''
+        heading_tag_names = list()
+        if self.ready:
+            if node:
+                children = self.get_child_names(node=node)
+                heading_tag_names = [child for child in children
+                                if child in self.heading_tags]
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_heading_tag_child_names. ' +
+                                  'node: {0}'.format(node))
+        return heading_tag_names
 
     def get_heading_tag_children(self,node=None):
         '''Get a list of heading tags, which are children of the given node.'''
         heading_tags = list()
         if self.ready:
             if node:
-                children = self.get_child_names(node=node)
-                heading_tags = [child for child in children
-                                if child in self.heading_tags]
+                heading_tags = [c for c in node.children
+                                if c.name and c.name in self.heading_tags]
             else:
                 self.ready = False
-                self.logger.error('Unable to get_heading_tag_children. ' +
+                self.logger.error('Unable to get_heading_tag_child_names. ' +
                                   'node: {0}'.format(node))
         return heading_tags
 
@@ -471,6 +484,8 @@ class Util:
             of the given BeautifulSoup node.'''
         (intro,hdus) = (None,None)
         if self.ready:
+#            print('file_type: %r' % file_type)
+#            input('pause')
             if node and file_type:
                 if   file_type == 1: (intro,hdus) = self.get_intro_and_hdus_1(node=node)
                 elif file_type == 2: (intro,hdus) = self.get_intro_and_hdus_2(node=node)
@@ -482,7 +497,7 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_hdus. ' +
-                                  'node: {}, '.format(node) +
+                                  'bool(node): {}, '.format(bool(node)) +
                                   'file_type: {}.'.format(file_type))
         return (intro,hdus)
 
@@ -497,7 +512,7 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_hdus_1. ' +
-                                  'node: {}, '.format(node)
+                                  'bool(node): {}, '.format(bool(node))
                                   )
         return (intro,hdus)
 
@@ -509,7 +524,7 @@ class Util:
             if node:
                 (intro,combined_hdus) = self.get_intro_and_combined_hdus_2(node=node)
                 hdus = self.split_hdus_2(combined_hdus=combined_hdus)
-                print('intro: %r'%  intro)
+                print('hdus: %r'%  hdus)
                 input('pause')
             else:
                 self.ready = False
@@ -565,8 +580,6 @@ class Util:
                                   'node: {}'.format(node))
         return (intro,combined_hdus)
 
-
-
     def get_intro_and_combined_hdus_3(self,node=None):
         '''Get a new BeautifulSoup object comprised of the intro tags
             of the given BeautifulSoup node.'''
@@ -575,18 +588,27 @@ class Util:
             if node:
                 heading_tags = self.get_heading_tag_children(node=node)
                 for heading_tag in heading_tags:
-                    h = node.find_next(heading_tag)
-                    string = h.string.lower()
-                    if ('hdu'            in string or
-                        'primary header' in string
+                    strings=list(heading_tag.strings)
+                    string = ' '.join(strings).lower()
+                    previous_siblings = None
+                    next_siblings = None
+                    if (string.find('hdu')            != -1 or
+                        string.find('primary header') != -1
                         ):
-                        previous_siblings = h.previous_siblings
-                        next_siblings = h.previous_sibling.next_siblings
+                        previous_siblings = heading_tag.previous_siblings
+                        next_siblings = heading_tag.previous_sibling.next_siblings
                         break
-                intro = self.get_soup_from_generator(generator=previous_siblings,
-                                                     reverse=True)
-                combined_hdus = self.get_soup_from_generator(generator=next_siblings,
-                                                             reverse=False)
+                if previous_siblings and next_siblings:
+                    intro = self.get_soup_from_generator(generator=previous_siblings,
+                                                         reverse=True)
+                    combined_hdus = self.get_soup_from_generator(generator=next_siblings,
+                                                                 reverse=False)
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_intro_and_combined_hdus_3. ' +
+                                      'previous_siblings: {}, '.format(previous_siblings) +
+                                      'combined_hdus: {}.'.format(combined_hdus)
+                                      )
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_combined_hdus_3. ' +
@@ -625,7 +647,7 @@ class Util:
             if node:
                 # get next_siblings if the first hdu heading tag
                 next_siblings = None
-                heading_tags = self.get_heading_tag_children(node=node)
+                heading_tags = self.get_heading_tag_child_names(node=node)
                 for heading_tag in heading_tags:
                     h = node.find_next(heading_tag)
                     string = h.string

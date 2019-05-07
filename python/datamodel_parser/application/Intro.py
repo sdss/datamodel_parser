@@ -217,7 +217,7 @@ class Intro:
         if self.ready:
             if node:
                 # page title
-                heading_tag_name = self.util.get_heading_tag_children(node=node)[0]
+                heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
                 h = node.find_next(heading_tag_name)
                 title = self.util.get_string(node=h)
                 description = str() # no description for page title
@@ -247,7 +247,7 @@ class Intro:
         if self.ready:
             if node:
                 # page title
-                heading_tag_name = self.util.get_heading_tag_children(node=node)[0]
+                heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
                 h = node.find_next(heading_tag_name)
                 title = self.util.get_string(node=h)
                 description = str() # no description for page title
@@ -280,7 +280,7 @@ class Intro:
         if self.ready:
             if node:
                 # page title
-                heading_tag_name = self.util.get_heading_tag_children(node=node)[0]
+                heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
                 h = node.find_next(heading_tag_name) if heading_tag_name else None
                 title = self.util.get_string(node=h) if h else str()
                 description = str() # no description for page title
@@ -312,7 +312,7 @@ class Intro:
 
             if node:
                 # page title
-                heading_tag_name = self.util.get_heading_tag_children(node=node)[0]
+                heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
                 h = node.find_next(heading_tag_name) if heading_tag_name else None
                 title = self.util.get_string(node=h) if h else str()
                 description = str() # no description for page title
