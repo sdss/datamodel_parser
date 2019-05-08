@@ -45,7 +45,7 @@ class Hdu:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.heading_tags        = self.util.heading_tags
+            self.heading_tags        = self.util.heading_tag_names
             self.paragraph_tags      = self.util.paragraph_tags
             self.bold_tags           = self.util.bold_tags
             self.unordered_list_tags = self.util.unordered_list_tags

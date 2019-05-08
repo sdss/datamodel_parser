@@ -41,7 +41,7 @@ class Intro:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.heading_tags        = self.util.heading_tags
+            self.heading_tags        = self.util.heading_tag_names
             self.paragraph_tags      = self.util.paragraph_tags
             self.bold_tags           = self.util.bold_tags
             self.unordered_list_tags = self.util.unordered_list_tags
@@ -437,7 +437,7 @@ class Intro:
 
                 for child in child_names:
                     self.body.find_next(child)
-                    if child in self.util.heading_tags:
+                    if child in self.util.heading_tag_names:
                         hdu_titles = self.util.get_all_possible_hdu_titles()
 
             else:

@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
+from re import search, compile
 from json import dumps
 
 
@@ -35,7 +36,7 @@ class Util:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.heading_tags = {'h1','h2','h3','h4','h5','h6'}
+            self.heading_tag_names = {'h1','h2','h3','h4','h5','h6'}
             self.paragraph_tags = {'p'}
             self.bold_tags = {'b'}
             self.unordered_list_tags = {'ul'}
@@ -252,7 +253,7 @@ class Util:
             if node:
                 child_names = self.get_child_names(node=node)
                 heading_tag_names = [name for name in child_names
-                                    if name in self.heading_tags]
+                                    if name in self.heading_tag_names]
                 heading_tag_name = heading_tag_names[0]       if heading_tag_names else None
                 header_tag = node.find_next(heading_tag_name) if heading_tag_name else None
                 heading = self.get_string(node=header_tag)    if header_tag else None
@@ -387,7 +388,7 @@ class Util:
         if self.ready:
             if node:
                 siblings = set(self.get_sibling_names(node=node))
-                heading_tags = list(set(self.heading_tags) & siblings)
+                heading_tags = list(set(self.heading_tag_names) & siblings)
             else:
                 self.ready = False
                 self.logger.error('Unable to get_heading_tag_sibling_names. ' +
@@ -401,7 +402,7 @@ class Util:
             if node:
                 children = self.get_child_names(node=node)
                 heading_tag_names = [child for child in children
-                                if child in self.heading_tags]
+                                if child in self.heading_tag_names]
             else:
                 self.ready = False
                 self.logger.error('Unable to get_heading_tag_child_names. ' +
@@ -414,7 +415,7 @@ class Util:
         if self.ready:
             if node:
                 heading_tags = [c for c in node.children
-                                if c.name and c.name in self.heading_tags]
+                                if c.name and c.name in self.heading_tag_names]
             else:
                 self.ready = False
                 self.logger.error('Unable to get_heading_tag_child_names. ' +
@@ -542,7 +543,8 @@ class Util:
         if self.ready:
             if node:
                 (intro,combined_hdus) = self.get_intro_and_combined_hdus_3(node=node)
-                hdus = self.get_split_hdus_3(node=combined_hdus)
+                hdus = (self.get_split_hdus_3(node=combined_hdus)
+                        if self.ready else None)
                 print('bool(intro): %r'%  bool(intro))
                 print('bool(combined_hdus): %r'%  bool(combined_hdus))
                 print('bool(hdus): %r'%  bool(hdus))
@@ -573,9 +575,9 @@ class Util:
                             previous_siblings = p.previous_siblings
                             next_siblings = p.previous_sibling.next_siblings
                             break
-                intro = self.get_soup_from_generator(generator=previous_siblings,
+                intro = self.get_soup_from_iterator(iterator=previous_siblings,
                                                      reverse=True)
-                combined_hdus = self.get_soup_from_generator(generator=next_siblings,
+                combined_hdus = self.get_soup_from_iterator(iterator=next_siblings,
                                                              reverse=False)
             else:
                 self.ready = False
@@ -602,9 +604,9 @@ class Util:
                         next_siblings = heading_tag.previous_sibling.next_siblings
                         break
                 if previous_siblings and next_siblings:
-                    intro = self.get_soup_from_generator(generator=previous_siblings,
+                    intro = self.get_soup_from_iterator(iterator=previous_siblings,
                                                          reverse=True)
-                    combined_hdus = self.get_soup_from_generator(generator=next_siblings,
+                    combined_hdus = self.get_soup_from_iterator(iterator=next_siblings,
                                                                  reverse=False)
                 else:
                     self.ready = False
@@ -618,20 +620,20 @@ class Util:
                                   'node: {}'.format(node))
         return (intro,combined_hdus)
 
-    def get_soup_from_generator(self,generator=None,reverse=None):
-        '''Create a list out of the generator, reverse the order if reverse==True,
+    def get_soup_from_iterator(self,iterator=None,reverse=False):
+        '''Create a list out of the iterator, reverse the order if reverse==True,
         and create new BeautifulSoup object out of the list text.'''
         soup = None
-        if generator and reverse is not None:
-            siblings = [str(s) for s in generator if s and not str(s).isspace()]
+        if iterator and isinstance(reverse, bool):
+            siblings = [str(s) for s in iterator if s and not str(s).isspace()]
             if reverse: siblings.reverse() if siblings else list()
             text = '\n'.join(siblings) if siblings else str()
             soup = BeautifulSoup(text, 'html.parser') if text else None
         else:
             self.ready = False
-            self.logger.error('Unable to get_soup_from_generator. ' +
-                              'generator: {}'.format(generator) +
-                              'reverse: {}'.format(reverse)
+            self.logger.error('Unable to get_soup_from_iterator. ' +
+                              'iterator: {}, '.format(iterator) +
+                              'isinstance(reverse, bool): {}'.format(isinstance(reverse, bool))
                               )
         return soup
 
@@ -641,22 +643,113 @@ class Util:
 
     def get_split_hdus_3(self,node=None):
         '''Split the node into a list of BeautifulSoup objects containing file HDUs.'''
-        hdus = None
+        hdus = list()
         if self.ready:
             if node:
                 children = self.get_children(node=node)
                 if children:
+                    first_heading = True
                     hdu = list()
                     for child in children:
-                        if child.name in self.util.heading_tags:
-                            print(' child: %r'% child)
-                            input('pause')
-        
+                        if self.ready:
+#                            print('\n\n child: %r'%  child)
+#                            print('self.ready: %r'%  self.ready)
+#                            input('pause')
+                            if child.name in self.heading_tag_names:
+                                strings = [s.strip().replace(':','').lower()
+                                           for s in child.strings
+                                           if s and not s.isspace()]
+                                # check only one string in tag
+                                string = (strings[0]
+                                          if strings and len(strings) == 1 else None)
+                                if string:
+                                    if ('primany header' in string or
+                                        string.find('hdu') != -1
+                                        ):
+                                        # can have hdu k in string
+                                        # then hdu k data table in string
+                                        title = self.get_hdu_title(string=string)
+                                        if first_heading:
+                                            first_heading = False
+                                            previous_title = title
+                                            hdu.append(child)
+                                        elif previous_title in string:
+                                            hdu.append(child)
+                                        else:
+#                                            print('hdu: %r' %  hdu)
+#                                            input('pause')
+                                            soup = self.get_soup_from_iterator(hdu) if hdu else None
+                                            if soup:
+                                                hdus.append(soup)
+                                                hdu = list()
+                                                hdu.append(child)
+                                                previous_title = title
+                                            else:
+                                                self.ready = False
+                                                self.logger.error('Unable to get_split_hdus_3. ' +
+                                                                  'In for loop. ' +
+                                                                  'soup: {}.'.format(soup))
+                                else:
+#                                    print('child: %r'%  child)
+#                                    print('child.name: %r'%  child.name)
+#                                    print('string: %r'%  string)
+#                                    input('pause')
+
+                                    self.ready = False
+                                    self.logger.error('Unable to get_split_hdus_3. ' +
+                                                      'string: {}.'.format(string))
+                            else:
+                                hdu.append(child)
+                    soup = self.get_soup_from_iterator(hdu) if hdu else None
+                    if soup:
+                        hdus.append(soup)
+                        hdu = list()
+                        hdu.append(child)
+                        previous_title = title
+                    else:
+                        self.ready = False
+                        self.logger.error('Unable to get_split_hdus_3. ' +
+                                          'In for loop. ' +
+                                          'soup: {}.'.format(soup))
+#                    print('hdu: %r' % hdu)
+#                    input('pause')
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_column_names. ' +
+                                      'children: {}'.format(children))
             else:
                 self.ready = False
                 self.logger.error('Unable to get_column_names. ' +
                                   'node: {}'.format(node))
         return hdus
+
+    def get_hdu_title(self,string=None):
+        '''Get HDU title from given string.'''
+        hdu_title = None
+        if self.ready:
+            if string:
+                # find case insensitive hdu + zero-or-more space + digit
+                # or case insensitive primary + zero-or-more space +
+                # case insensitive header
+                p1 = compile('(?i)hdu\s*\d|(?i)primary\s*(?i)header')
+                iterator = p1.finditer(string)
+                titles = list()
+                for match in iterator:
+                    text = string[match.start() : match.end()] if match else None
+                    if text: titles.append(text)
+                if len(titles) == 1:
+                    hdu_title = titles[0]
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_hdu_title. ' +
+                                      'len(titles) != 1. ' +
+                                      'titles: {}'.format(titles)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_hdu_title. ' +
+                                  'string: {}'.format(string))
+        return hdu_title
 
 
     def get_hdus(self,node=None):
