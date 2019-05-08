@@ -53,7 +53,7 @@ file_type = 2
 # Intro: one h,p,ul
 # HDUs:  p,ul hdu tables
     New table triggers:
-        <p> tag with
+        <p> tag with bolded
         'required header keywords'      or
         'required column names'         or
         'required hdu k keywords'       or
@@ -64,7 +64,7 @@ parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAlldat.
 parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platelist.html
 
 file_type = 3
-# Intro: h,p,sections table with notes after
+# Intro: h,p, table (sections with notes after)
 # HDUs: h,p,pre
     New table triggers:
         <h> tag with
@@ -95,6 +95,16 @@ parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/sp
         'hdu k'             or
 parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcalib.html
 parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spXYthrucorr.html
+parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
+
+# Intro: h,p,ul
+# HDUs: h,p,pre
+    New table triggers:
+        <h> tag with
+        'primary hdu'       or
+        'hduk'              or
+        'hdu k'             or
+parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
 
 file_type = 4
 # Intro: one h,p, (ul or pre)
@@ -111,8 +121,6 @@ parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/sp
 
 file_type = None)
 parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
 
 '''
 

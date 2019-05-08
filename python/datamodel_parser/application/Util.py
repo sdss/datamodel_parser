@@ -533,7 +533,6 @@ class Util:
                                   )
         return (intro,hdus)
 
-
     def get_intro_and_hdus_3(self,node=None):
         '''Get new BeautifulSoup objects comprised of the intro tags and hdu tags
             of the given BeautifulSoup node.'''
@@ -703,11 +702,28 @@ class Util:
                                   'trs: {}'.format(trs))
         return column_names
 
-
-
-
-
-
+    def check_node_string_is_filename(self,node=None,extension_list=['txt','html']):
+        '''Check the sub-string of the <li> tag is a filename with extension
+        in ext_list.'''
+        is_filename = None
+        if self.ready:
+            if node:
+                strings = [s for s in node.strings if s and not s.isspace()]
+                if len(strings) > 1:
+                    is_filename = False
+                else:
+                    string = strings[0] if strings else str()
+                    split = string.split('.') if string else list()
+                    extension = split[1] if split and len(split) > 0 else str()
+                    if extension in extension_list:
+                        is_filename = True
+                    else:
+                        is_filename = False
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_node_string_is_filename. ' +
+                                  'node: {}'.format(node))
+        return is_filename
 
 
 
