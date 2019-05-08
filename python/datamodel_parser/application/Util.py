@@ -523,12 +523,14 @@ class Util:
         if self.ready:
             if node:
                 (intro,combined_hdus) = self.get_intro_and_combined_hdus_2(node=node)
-                hdus = self.split_hdus_2(combined_hdus=combined_hdus)
-                print('hdus: %r'%  hdus)
+                hdus = self.get_split_hdus_2(node=combined_hdus)
+                print('bool(intro): %r'%  bool(intro))
+                print('bool(combined_hdus): %r'%  bool(combined_hdus))
+                print('bool(hdus): %r'%  bool(hdus))
                 input('pause')
             else:
                 self.ready = False
-                self.logger.error('Unable to get_intro_and_hdus_3. ' +
+                self.logger.error('Unable to get_intro_and_hdus_2. ' +
                                   'node: {}, '.format(node)
                                   )
         return (intro,hdus)
@@ -540,8 +542,10 @@ class Util:
         if self.ready:
             if node:
                 (intro,combined_hdus) = self.get_intro_and_combined_hdus_3(node=node)
-                hdus = self.split_hdus_1(combined_hdus=combined_hdus)
-                print('hdus: %r'%  hdus)
+                hdus = self.get_split_hdus_3(node=combined_hdus)
+                print('bool(intro): %r'%  bool(intro))
+                print('bool(combined_hdus): %r'%  bool(combined_hdus))
+                print('bool(hdus): %r'%  bool(hdus))
                 input('pause')
             else:
                 self.ready = False
@@ -631,13 +635,29 @@ class Util:
                               )
         return soup
 
-    def split_hdus_1(self,combined_hdus=None):
+    def get_split_hdus_2(self,node=None):
         hdus = None
         return hdus
 
-    def split_hdus_2(self,combined_hdus=None):
+    def get_split_hdus_3(self,node=None):
+        '''Split the node into a list of BeautifulSoup objects containing file HDUs.'''
         hdus = None
+        if self.ready:
+            if node:
+                children = self.get_children(node=node)
+                if children:
+                    hdu = list()
+                    for child in children:
+                        if child.name in self.util.heading_tags:
+                            print(' child: %r'% child)
+                            input('pause')
+        
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_column_names. ' +
+                                  'node: {}'.format(node))
         return hdus
+
 
     def get_hdus(self,node=None):
         '''Get the hdu tags from the given BeautifulSoup node.'''

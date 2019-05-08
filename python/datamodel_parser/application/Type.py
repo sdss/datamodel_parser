@@ -139,7 +139,7 @@ class Type(object):
                         # check only one string in tag
                         string = strings[0] if strings and len(strings) == 1 else None
                         if string:
-                            if ('primany hdu' in string     or
+                            if ('primany header' in string or
                                 string.find('hdu') != -1
                                 ):
                                 found_hdu = True
