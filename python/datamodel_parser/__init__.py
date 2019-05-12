@@ -15,7 +15,7 @@ import yaml
 def merge(user, default):
     """Merges a user configuration with the default one."""
 
-    if isinstance(user, dict) and isinstance(default, dict):
+    if isinstance(user,dict) and isinstance(default,dict):
         for kk, vv in default.items():
             if kk not in user:
                 user[kk] = vv

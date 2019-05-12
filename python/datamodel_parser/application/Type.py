@@ -1,4 +1,5 @@
 from datamodel_parser.application import Util
+from re import search, compile
 import inspect
 from json import dumps
 
@@ -29,10 +30,7 @@ class Type(object):
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.heading_tags        = self.util.heading_tag_names
-            self.paragraph_tags      = self.util.paragraph_tags
-            self.bold_tags           = self.util.bold_tags
-            self.unordered_list_tags = self.util.unordered_list_tags
+            self.heading_tag_names   = self.util.heading_tag_names
 
     def check_tag_has_only_text_content(self,tag=None):
         '''Check children of given tag is None, <code>, <b>, or <a>.'''
@@ -100,7 +98,7 @@ class Type(object):
         if self.ready:
             if node:
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 # check node has either one or three heading tags
                 if self.correct_type:
                     heading_tag_names = self.util.get_heading_tag_child_names(node=node)
@@ -123,12 +121,12 @@ class Type(object):
                 self.logger.error('Unable to check_heading_tag_assumptions_1. ' +
                                   'node: {}.'.format(node))
 
-    def check_heading_tag_assumptions_2(self,node=None):
+    def check_heading_tag_assumptions_2(self,node=None,toggle=False):
         '''Check heading tag assumptions.'''
         if self.ready:
-            if node:
+            if node and isinstance(toggle,bool):
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 # check there is a heading tag with HDU title
                 if self.correct_type:
                     found_hdu = False
@@ -138,18 +136,26 @@ class Type(object):
                                    for s in tag.strings if s and not s.isspace()]
                         # check only one string in tag
                         string = strings[0] if strings and len(strings) == 1 else None
+                        # check hdu or primary header or primary hdu in tag
                         if string:
-                            if ('primany header' in string or
-                                string.find('hdu') != -1
-                                ):
-                                found_hdu = True
+                            p1 = compile('(?i)hdu\s*\d|(?i)primary\s*(?i)header|(?i)primary\s*(?i)hdu')
+                            iterator = p1.finditer(string)
+                            for match in iterator:
+                                text = string[match.start() : match.end()] if match else None
+                                if text:
+                                    found_hdu = True
+                                    break
+                    if toggle: found_hdu = not found_hdu
                     if not found_hdu:
                         self.correct_type = False
-                        self.logger.debug("not there is a heading tag with HDU title")
+                        self.logger.debug("not there is a heading tag with " +
+                                          "primany header or HDU title")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_heading_tag_assumptions_2. ' +
-                                  'node: {}.'.format(node))
+                                  'node: {}.'.format(node) +
+                                  'isinstance(toggle,bool): {}'.format(isinstance(toggle,bool))
+                                  )
 
     def check_dl_tag_assumptions_1(self,node=None,dl_child_names=None):
         '''Check hdu <dl> tag assumptions.'''
@@ -462,13 +468,13 @@ class Intro_type(Type):
                 # check tag_names = {h,p,div}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
-                    if not (set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                    if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'p','div'}
                             ):
                         self.correct_type = False
                         self.logger.debug("not tag_names = {h,p,div}")
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 self.check_tags_have_only_text_content(node=node,tag_names=['p'])
                 self.check_middle_tags_h_p_1(node=node)
             else:
@@ -488,7 +494,7 @@ class Intro_type(Type):
                 # check tag_names = {h,dl}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
-                    if not (set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                    if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'dl'}
                             ):
                         self.correct_type = False
@@ -501,7 +507,7 @@ class Intro_type(Type):
                         self.correct_type = False
                         self.logger.debug("not node has only one heading tag")
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 self.check_dl_tag_assumptions_1(node=node,
                                                      dl_child_names={'dt','dd','ul'})
             else:
@@ -521,7 +527,7 @@ class Intro_type(Type):
                 # check tag_names = {h,dl}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
-                    if not (set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                    if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'dl'}
                             ):
                         self.correct_type = False
@@ -534,7 +540,7 @@ class Intro_type(Type):
                         self.correct_type = False
                         self.logger.debug("not node has only one heading tag")
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 self.check_dl_tag_assumptions_1(node=node,
                                                      dl_child_names={'dt','dd'})
             else:
@@ -554,7 +560,7 @@ class Intro_type(Type):
                 # check tag_names = {h,p,ul}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
-                    if not (set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                    if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'ul','p'}
                             ):
                         self.correct_type = False
@@ -568,7 +574,7 @@ class Intro_type(Type):
                         self.logger.debug("not node has only one heading tag")
                 # check heading tag only has text content
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 self.check_ul_tag_assumptions_1(node=node)
                 self.check_p_tag_assumptions_3(node=node)
             else:
@@ -588,14 +594,14 @@ class Intro_type(Type):
                 # check tag_names = {h,p,pre}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
-                    if not (set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                    if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'pre','p','table'}
                             ):
                         self.correct_type = False
                         self.logger.debug("not tag_names = {h,p,pre}")
                 # check heading tag only has text content
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 self.check_pre_tag_assumptions_2(node=node)
                 self.check_p_tag_assumptions_4(node=node)
             else:
@@ -613,7 +619,7 @@ class Intro_type(Type):
                 if self.correct_type:
                     tag_names = self.util.get_child_names(node=node)
                     middle_tags = set(tag_names[1:-1])
-                    if not (middle_tags == (middle_tags & self.util.heading_tag_names)
+                    if not (middle_tags == (middle_tags & self.heading_tag_names)
                                             | {'p'}
                             ):
                         self.correct_type = False
@@ -665,7 +671,7 @@ class Hdu_type(Type):
                 self.logger.debug("First inconsistency for check_hdu_type_1:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p,ul,table}
-                if not (tag_names == (tag_names & self.util.heading_tag_names)
+                if not (tag_names == (tag_names & self.heading_tag_names)
                                      | {'p','dl','table'}
                         ):
                     self.correct_type = False
@@ -692,7 +698,7 @@ class Hdu_type(Type):
                 self.logger.debug("First inconsistency for check_hdu_type_2:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p,table}
-                if not (tag_names == (tag_names & self.util.heading_tag_names)
+                if not (tag_names == (tag_names & self.heading_tag_names)
                                      | {'p','table'}
                         ):
                     self.correct_type = False
@@ -715,7 +721,7 @@ class Hdu_type(Type):
                 self.logger.debug("Inconsistencies for check_hdu_type_3:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,pre}
-                if not (tag_names == (tag_names & self.util.heading_tag_names)
+                if not (tag_names == (tag_names & self.heading_tag_names)
                                      | {'pre'}
                         ):
                     self.correct_type = False
@@ -737,10 +743,10 @@ class Hdu_type(Type):
                 self.logger.debug("First inconsistency for check_hdu_type_4:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p,table}
-                if not ((tag_names == (tag_names & self.util.heading_tag_names)
+                if not ((tag_names == (tag_names & self.heading_tag_names)
                                      | {'p','table'})
                         or
-                        (tag_names == (tag_names & self.util.heading_tag_names)
+                        (tag_names == (tag_names & self.heading_tag_names)
                                      | {'table'})
                         ):
                     self.correct_type = False
@@ -764,15 +770,15 @@ class Hdu_type(Type):
                 self.logger.debug("First inconsistency for check_hdu_type_5:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p} or {h}
-                if not ((tag_names == (tag_names & self.util.heading_tag_names)
+                if not ((tag_names == (tag_names & self.heading_tag_names)
                                      | {'p'})
                         or
-                        tag_names == (tag_names & self.util.heading_tag_names)
+                        tag_names == (tag_names & self.heading_tag_names)
                         ):
                     self.correct_type = False
                     self.logger.debug("not tag_names = {h,p} or {h}")
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 if 'p' in tag_names:
                     self.check_tags_have_only_text_content(node=node,tag_names=['p'])
             else:
@@ -790,10 +796,10 @@ class Hdu_type(Type):
                 self.logger.debug("First inconsistency for check_hdu_type_6:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p,ul,table}
-                if not ((tag_names == (tag_names & self.util.heading_tag_names)
+                if not ((tag_names == (tag_names & self.heading_tag_names)
                                      | {'p','ul','table'})
                          or
-                         (tag_names == (tag_names & self.util.heading_tag_names)
+                         (tag_names == (tag_names & self.heading_tag_names)
                                      | {'p','ul'})
                         ):
                     self.correct_type = False
@@ -831,13 +837,13 @@ class Hdu_type(Type):
                 self.logger.debug("First inconsistency for check_hdu_type_8:")
                 tag_names = set(self.util.get_child_names(node=node))
                 # check tag_names = {h,p,pre}
-                if not (tag_names == (tag_names & self.util.heading_tag_names)
+                if not (tag_names == (tag_names & self.heading_tag_names)
                                      | {'p','pre'}
                         ):
                     self.correct_type = False
                     self.logger.debug("not tag_names = {h,p,pre}")
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 self.check_tags_have_only_text_content(node=node,tag_names=['p'])
                 self.check_tags_have_only_text_content(node=node,tag_names=['pre'])
                 self.check_pre_tag_assumptions_2(node=node)
@@ -1027,6 +1033,7 @@ class File_type(Type):
                 if   self.check_file_type_1(node=node): file_type = 1
                 elif self.check_file_type_2(node=node): file_type = 2
                 elif self.check_file_type_3(node=node): file_type = 3
+                elif self.check_file_type_4(node=node): file_type = 4
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_file_type. '
@@ -1066,7 +1073,7 @@ class File_type(Type):
                 # check tag_names = {h,p,ul}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
-                    if not (set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                    if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'p','ul'}
                             ):
                         self.correct_type = False
@@ -1080,7 +1087,7 @@ class File_type(Type):
                         self.logger.debug("not node has only one heading tag")
                 # check heading tag only has text content
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 self.check_p_tag_assumptions_3(node=node)
             else:
                 self.ready = False
@@ -1099,26 +1106,57 @@ class File_type(Type):
                 # check tag_names = {h,p,pre,ul,table}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
-                    if not (set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                    if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'p','pre','table'}
                             or
-                            set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'p','pre'}
                             or
-                            set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'p'}
                             or
-                            set_tag_names == (set_tag_names & self.util.heading_tag_names)
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'p','pre','ul'}
                             ):
                         self.correct_type = False
                         self.logger.debug("not tag_names = {h,p,pre,ul,table}")
                 self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.util.heading_tag_names)
+                                                       tag_names=self.heading_tag_names)
                 self.check_heading_tag_assumptions_2(node=node)
             else:
                 self.ready = False
                 self.logger.error('Unable to check_file_type_3. ' +
+                                  'node: {}.'.format(node))
+        return self.correct_type
+
+    def check_file_type_4(self,node=None):
+        '''Determine class File_type template from the given BeautifulSoup node.'''
+        self.correct_type = False
+        if self.ready:
+            if node:
+                self.correct_type = True
+                self.logger.debug("First inconsistency for check_file_type_4:")
+                tag_names = self.util.get_child_names(node=node)
+                # check tag_names = {h,p,pre,ul,table}
+                if self.correct_type:
+                    set_tag_names = set(tag_names)
+                    if not (set_tag_names == (set_tag_names & self.heading_tag_names)
+                                              | {'p'}
+                            or
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
+                                              | {'p','ul'}
+                            or
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
+                                              | {'p','pre'}
+                            ):
+                        self.correct_type = False
+                        self.logger.debug("not tag_names = {h,p,pre,ul,table}")
+                self.check_tags_have_only_text_content(node=node,
+                                                       tag_names=self.heading_tag_names)
+                self.check_heading_tag_assumptions_2(node=node,toggle=True)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_file_type_4. ' +
                                   'node: {}.'.format(node))
         return self.correct_type
 

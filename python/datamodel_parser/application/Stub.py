@@ -36,7 +36,7 @@ class Stub(object):
         Write HTML files to this directory.
     """
     def __init__(self, files=None, console=False, outpath=None):
-        if isinstance(files, str):
+        if isinstance(files,str):
             files = [files]
         self.files = files
         self.outpath = outpath
