@@ -132,17 +132,18 @@ class File:
                 self.logger.info('Parsing file HTML')
                 node = self.body
                 type = File_type(logger=self.logger,options=self.options)
-                self.file_type = type.get_file_type(node=node)
-                (intro,hdus) = self.util.get_intro_and_hdus(node=node,
-                                                            file_type=self.file_type)
+                self.file_type = type.get_file_type(node=node) if type and node else None
+                (intro,hdus) = (self.util.get_intro_and_hdus(node=node,
+                                                             file_type=self.file_type)
+                                if node and self.file_type else (None,None))
                 self.intro.parse_file(node=intro)
-                self.ready = self.ready and type.ready and self.intro.ready
+                self.ready = type.ready and self.util.ready and self.intro.ready
                 if self.ready:
                     self.hdu.parse_file(nodes=hdus)
-                    self.ready = self.ready and self.hdu.ready
-                    self.intro_type = self.intro.intro_type
-                    self.hdu_type   = self.hdu.hdu_type
+                    self.ready = self.hdu.ready
                     if self.ready:
+                        self.intro_type = self.intro.intro_type
+                        self.hdu_type   = self.hdu.hdu_type
                         self.intro_positions      = self.intro.intro_positions
                         self.intro_heading_levels = self.intro.intro_heading_levels
                         self.intro_heading_titles = self.intro.intro_heading_titles
@@ -278,10 +279,10 @@ class File:
             if (self.tree_edition              and
                 self.env_variable              and
 #               self.location_path # can be None
-                self.file_name                 and
-                self.intro_positions and
-                self.intro_heading_levels and
-                self.intro_heading_titles and
+                self.file_name            and
+                self.intro_positions      and
+#                self.intro_heading_levels and # can be None
+#                self.intro_heading_titles and # can be None
                 self.intro_descriptions
                 ):
                 self.database.set_file_id(tree_edition  = self.tree_edition,

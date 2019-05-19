@@ -584,43 +584,58 @@ class Hdu:
                 number_of_tables = len(tables)
                 for (table_number,table) in enumerate(tables):
                     if self.ready:
-                        # table caption
+                        # table_caption
                         captions = self.util.get_children(node=table,name='caption')
                         table_caption = (self.util.get_string(node=captions[0])
                                          if captions and len(captions) == 1
                                          else None)
                         
-                        # parse table
+                        # table rows
                         trs = [tr for tr in table.find_all('tr')
                                if not self.util.get_string(node=tr).isspace()]
                         
-                        # table_column_names and table keyword/values
-                        column_names = str()
-                        hdu_table = dict()
-                        table_rows = dict()
+                        # column_names
                         # get column names from trs with all th tag children
                         column_names = self.util.get_column_names(trs=trs)
                         # remove trs with all th tag children
                         trs = [tr for tr in trs
                                if not self.util.children_all_one_tag_type(node=tr,
                                                                           tag_name='th')]
+                        # is_header
+                        if table.attrs and 'class' in table.attrs:
+                            is_header = (True if table.attrs['class'] == ['header'] else
+                                        False if table.attrs['class'] == ['columns']
+                                        else None)
+                            if is_header is None:
+                                self.ready = False
+                                self.logger.error('Unable to parse_file_hdu_tables_3. ' +
+                                                  'is_header: {}, '.format(is_header) +
+                                                  'table.attrs: {}.'.format(table.attrs))
+                        elif column_names:
+                            is_header = (False
+                                        if ('unit' in column_names or
+                                            'units' in column_names)
+                                        else True)
+                        else:
+                            is_header = True if table_number == 0 else False
+
+                        # check if errors have occurred
+                        self.ready = self.ready and self.util.ready
+                        
+                        # table keyword/values
+                        hdu_table = dict()
+                        table_rows = dict()
                         for (position,tr) in enumerate(trs):
                             if self.ready:
-                                # table keyword/values
                                 if column_names:
-                                    is_header = (False
-                                                if ('unit' in column_names or
-                                                    'units' in column_names)
-                                                else True)
                                     table_row = self.get_table_row_tr_1(
                                                     column_names=column_names,
                                                     is_header=is_header,
                                                     node=tr)
                                 else:
                                     column_names = (['key','value','type','comment']
-                                                    if table_number == 0 else
+                                                    if is_header else
                                                     ['name','type','unit','description'])
-                                    is_header = True if table_number == 0 else False
                                     table_row = list()
                                     for td in tr.find_all('td'):
                                         string = self.util.get_string(node=td)
@@ -633,7 +648,6 @@ class Hdu:
                         hdu_table['table_rows']         = table_rows
                         hdu_tables.append(hdu_table)
                 self.file_hdu_tables.append(hdu_tables)
-
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_tables_3. ' +

@@ -4,7 +4,6 @@
 #
 
  parse_html -l error -v --path datamodel/files/IRCAM_DATA/MJD/cR.html
- parse_html -l error -v --path datamodel/files/IRCAM_DATA/MJD/irsc.html
  parse_html -l error -v --path datamodel/files/MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html
  parse_html -l error -v --path datamodel/files/MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/tio1d_PLATENAME.html
  parse_html -l error -v --path datamodel/files/MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/tioprof_PLATENAME.html
@@ -21,8 +20,6 @@
  parse_html -l error -v --path datamodel/files/MARVELS_REDUX/RERUN_V001/PARAMS/fibretranslationtable.html
  parse_html -l error -v --path datamodel/files/MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplantable.html
  parse_html -l error -v --path datamodel/files/SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoMatchPlate.html
- parse_html -l error -v --path datamodel/files/SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoPlate.html
- parse_html -l error -v --path datamodel/files/SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoPosPlate.html
  parse_html -l error -v --path datamodel/files/BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin_full.html
  parse_html -l error -v --path datamodel/files/BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin.html
  parse_html -l error -v --path datamodel/files/BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_stellarmass.html
@@ -35,15 +32,11 @@
  parse_html -l error -v --path datamodel/files/BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/granada/fsps/granada_fsps.html
  parse_html -l error -v --path datamodel/files/BOSS_TARGET/TARGET_RUN/bosstarget.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platelist.html
- parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platequality.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAlldat.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAllLine.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAll.html
- parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcorr.html
- parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlan.html
- parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spArc.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxdistort.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFlat.html
@@ -51,23 +44,18 @@
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFrame.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spXYthrucorr.html
- parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spSN2d.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
- parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/spAll-SUBSET.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/specfiles.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html
- parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spectra/lite/PLATE4/spec.html
- parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/images/RUN2D/RUN1D/PLATE4-MJD/spec-image-PLATE4-MJD-FIBER4.html
  parse_html -l error -v --path datamodel/files/PHOTO_SKY/RERUN/RUN/sky/skyframes.html
  parse_html -l error -v --path datamodel/files/PHOTO_SKY/RERUN/RUN/sky/skymodel.html
  parse_html -l error -v --path datamodel/files/PHOTO_SKY/RERUN/RUN/sky/skymask.html
  parse_html -l error -v --path datamodel/files/PHOTO_SKY/RERUN/RUN/sky/skyweights.html
  parse_html -l error -v --path datamodel/files/PHOTO_SKY/RERUN/RUN/qa/skyvals.html
  parse_html -l error -v --path datamodel/files/APOGEE_DATA_1M/MJD5/apR.html
- parse_html -l error -v --path datamodel/files/APOGEE_DATA_1M/MJD5/MJD5.html
  parse_html -l error -v --path datamodel/files/STAGING_DATA/oplogs/MJD/idCCDLog.html
  parse_html -l error -v --path datamodel/files/STAGING_DATA/oplogs/MJD/sdReport.html
  parse_html -l error -v --path datamodel/files/STAGING_DATA/oplogs/MJD/idReport.html
@@ -82,12 +70,8 @@
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/mask_DRX_SAMPLE_NS.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/data_DR14_LRG_NS.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html
- parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html
- parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/random_DR14_LRG_NS.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/randoms_DR9_CMASS_NS.html
- parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-specObj.html
- parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-photoObj.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/data_DR14_QSO_NS.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html
@@ -103,6 +87,7 @@
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html
  parse_html -l error -v --path datamodel/files/BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html
+ parse_html -l error -v --path datamodel/files/EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html
  parse_html -l error -v --path datamodel/files/SEGUE2_TARGET_ALL/RERUN/RUN/seguetsObjAll.html
  parse_html -l error -v --path datamodel/files/SEGUE2_TARGET_ALL/RERUN/RUN/segue2TargetAll.html
  parse_html -l error -v --path datamodel/files/SEGUE2_TARGET_ALL/RERUN/RUN/seguetsCasObj.html
@@ -110,7 +95,6 @@
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastarall-DRPVER-MPROCVER.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/photoRunAll.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/astromQAFields.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/astromqa.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/CAT/astromQAImage.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQASummary.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQAFieldSummary.html
@@ -118,40 +102,23 @@
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQAFieldFlag.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/CAMCOL/astromQA.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/CAT/starastro/starastro.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/astromqa/plots/RERUN/RUN/astromQA-offsets.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/xdqso/xdqso_index.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/xdqso/xdcore/xdcore_RUN6.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/photoz-weight/pofz.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoMatchPlate.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoPlate.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoPosPlate.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/PM/RERUN/RUN/photoPM.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/PM/RERUN/RUN/CAMCOL/photoPM.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/RC3/RERUN/RUN/photoRC3Camcol.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/RC3/RERUN/RUN/CAMCOL/photoRC3.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/WISEForcedTarget/RERUN/RUN/CAMCOL/photoWISEForcedTarget.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/First/RERUN/RUN/photoFirstCamcol.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/First/RERUN/RUN/CAMCOL/photoFirst.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/USNOB/RERUN/RUN/photoUSNOBCamcol.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/USNOB/RERUN/RUN/CAMCOL/photoUSNOB.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/ROSAT/RERUN/RUN/photoROSATCamcol.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/ROSAT/RERUN/RUN/CAMCOL/photoROSAT.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/2MASS/RERUN/RUN/photo2MASSCamcol.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/2MASS/RERUN/RUN/CAMCOL/photo2MASS.html
- parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/2MASSXSC/RERUN/RUN/photo2MASSXSCCamcol.html
  parse_html -l error -v --path datamodel/files/BOSS_PHOTOOBJ/external/2MASSXSC/RERUN/RUN/CAMCOL/photo2MASSXSC.html
  parse_html -l error -v --path datamodel/files/APOGEE_DATA/MJD5/apR.html
- parse_html -l error -v --path datamodel/files/APOGEE_DATA/MJD5/MJD5.html
  parse_html -l error -v --path datamodel/files/SDSS_TILING/final/sdss_tiling_polygons.html
  parse_html -l error -v --path datamodel/files/SDSS_TILING/final/sdss_tiles.html
- parse_html -l error -v --path datamodel/files/CAS_LOAD/phCSV/SKYVERSION/RUN/csv_ready.html
- parse_html -l error -v --path datamodel/files/CAS_LOAD/phCSV/SKYVERSION/RUN/sqlField.html
- parse_html -l error -v --path datamodel/files/CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoProfile.html
- parse_html -l error -v --path datamodel/files/CAS_LOAD/phCSV/SKYVERSION/RUN/sqlFieldProfile.html
- parse_html -l error -v --path datamodel/files/CAS_LOAD/phCSV/SKYVERSION/RUN/sqlRun.html
- parse_html -l error -v --path datamodel/files/CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoObjAll.html
  parse_html -l error -v --path datamodel/files/BOSSTILELIST_DIR/bosschunks.html
  parse_html -l error -v --path datamodel/files/BOSSTILELIST_DIR/bosstiles.html
  parse_html -l error -v --path datamodel/files/BOSSTILELIST_DIR/geometry/boss_sector2tile.html
@@ -180,7 +147,6 @@
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-ELMKEY.html
  parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-BINKEY.html
  parse_html -l error -v --path datamodel/files/RAWDATA_DIR/MJD/frames.list.html
- parse_html -l error -v --path datamodel/files/RAWDATA_DIR/MJD/MJD.md5sum.html
  parse_html -l error -v --path datamodel/files/RAWDATA_DIR/MJD/sdR.html
  parse_html -l error -v --path datamodel/files/RAWDATA_DIR/MJD/guider/gimg.html
  parse_html -l error -v --path datamodel/files/APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html
@@ -189,8 +155,6 @@
  parse_html -l error -v --path datamodel/files/APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapParam.html
  parse_html -l error -v --path datamodel/files/APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapCova.html
  parse_html -l error -v --path datamodel/files/APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/lib/aspcapSynth.html
- parse_html -l error -v --path datamodel/files/SSPP_REDUX/ssppOut_lineindex.html
- parse_html -l error -v --path datamodel/files/SSPP_REDUX/ssppPlates.html
  parse_html -l error -v --path datamodel/files/SSPP_REDUX/ssppTargets.html
  parse_html -l error -v --path datamodel/files/SSPP_REDUX/targets/PLATE4/segueTargetPlate.html
  parse_html -l error -v --path datamodel/files/SSPP_REDUX/targets/all/plate2targetfile.html
@@ -211,8 +175,6 @@
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/window_blist.html
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/window_findx_unsorted.html
  parse_html -l error -v --path datamodel/files/PHOTO_RESOLVE/RERUN/RUN/resolve/CAMCOL/reObjGlobal.html
- parse_html -l error -v --path datamodel/files/MARVELS_DATA/MJD/done.html
- parse_html -l error -v --path datamodel/files/MARVELS_DATA/MJD/MJD.md5sum.html
  parse_html -l error -v --path datamodel/files/MARVELS_DATA/MJD/logs_qualityassurance/MARVELS1_QALOG.html
  parse_html -l error -v --path datamodel/files/MARVELS_DATA/MJD/et1/MARVELS1.html
  parse_html -l error -v --path datamodel/files/BOSSTARGET_DIR/data/geometry/boss_survey.html
@@ -232,10 +194,8 @@
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpObjc.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psCT.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/ssc/koCat.html
- parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/ssc/scParam.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/ssc/scPlan.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/resolve/CAMCOL/reObjRun.html
- parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asParam.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asQA.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asPlan.html
@@ -254,31 +214,13 @@
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/window/wiTrimRun.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/photo/fpPlan.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/photo/psPlan.html
- parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/photo/psParam.html
- parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/photo/fpParam.html
  parse_html -l error -v --path datamodel/files/PHOTO_REDUX/RERUN/RUN/photo/calib/idB.html
  parse_html -l error -v --path datamodel/files/SEGUE_TARGET/segue1TargetObjSetAllDup.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlan.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/flux/apFlux.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/bpm/apBPM.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/detector/apDetector.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/darkcorr/apDark.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/flatcorr/apFlat.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/wave/apWave.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/cal/lsf/apLSF.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.mdl.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.ipf.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.err.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.wav.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.spm.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.frd.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.err.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.wav.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.ipf.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.frd.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.spm.html
- parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.mdl.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.dat.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.unf.html
  parse_html -l error -v --path datamodel/files/APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.hdr.html
@@ -303,26 +245,16 @@
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galSpecExtra.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/photoMatchPlate.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galSpecInfo.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/photoPlate.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galSpecIndx.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galSpecLine.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/photoPosPlate.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/spZline.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/spZbest.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/spPlancomb.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/tsObj.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/spZall.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/spPlan2d.html
  parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/RUN2D/spectra/lite/PLATE4/spec.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_emlinekin_full.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_emlinekin.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_stellarmass.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galaxy/GALAXY_VERSION/granada_fsps.html
- parse_html -l error -v --path datamodel/files/SPECTRO_REDUX/galaxy/GALAXY_VERSION/wisconsin_pca.html
  parse_html -l error -v --path datamodel/files/SPINSPECT_DIR/data/NAME/spInspect.html
  parse_html -l error -v --path datamodel/files/SEGUE2_TARGET/seguetsObjSetAllDup.html
  parse_html -l error -v --path datamodel/files/SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPlate.html
@@ -330,28 +262,21 @@
  parse_html -l error -v --path datamodel/files/APOGEE_TARGET/apogeeObject/apogeeObject.html
  parse_html -l error -v --path datamodel/files/PHOTO_DATA/RUN/gangs/idGang.html
  parse_html -l error -v --path datamodel/files/PHOTO_DATA/RUN/fields/CAMCOL/idR.html
- parse_html -l error -v --path datamodel/files/SPECLOG_DIR/MJD/plPlugMapM.html
  parse_html -l error -v --path datamodel/files/PHOTO_SWEEP/datasweep-index.html
  parse_html -l error -v --path datamodel/files/PHOTO_SWEEP/RERUN/calibObj.html
  parse_html -l error -v --path datamodel/files/CALIBPLATE_DIR/calibPlateP.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/platePlans.html
- parse_html -l error -v --path datamodel/files/PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateStandard.html
- parse_html -l error -v --path datamodel/files/PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateGuide.html
- parse_html -l error -v --path datamodel/files/PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateTrap.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateDesign.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateInput-output.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideAdjust.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideOffsets.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHoles.html
- parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plPlugMapP.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHolesSorted.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/definitions/DESIGNID6XX/plateDefinition.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plParam.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plMeas.html
- parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plOverlay.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plPlan.html
- parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plFanuc.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plPlugMap.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plDrillPos.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plObs.html

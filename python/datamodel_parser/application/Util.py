@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
-from re import search, compile
+from re import search, compile, match
 from json import dumps
 
 
@@ -103,9 +103,13 @@ class Util:
         if self.ready:
             if node and tag_name:
                 all_one_tag_type = True
-                for child in self.get_children(node=node):
-                    if child.name and child.name != tag_name:
-                        all_one_tag_type = False
+                children = self.get_children(node=node)
+                if children:
+                    for child in children:
+                        if child.name and child.name != tag_name:
+                            all_one_tag_type = False
+                else:
+                    all_one_tag_type = False
             else:
                 self.ready = False
                 self.logger.error('Unable to children_all_one_tag_type. ' +
@@ -180,11 +184,6 @@ class Util:
                     if title and description: # can be empty if no <b> tag
                         titles.append(title)
                         descriptions.append(description)
-#                        if self.check_found_hdus(title=title,description=description):
-#                            break
-#                        else:
-#                            titles.append(title)
-#                            descriptions.append(description)
             else:
                 self.ready = False
                 self.logger.error('Unable to get_titles_and_descriptions_from_ps_1. ' +
@@ -192,6 +191,47 @@ class Util:
         if not (titles and descriptions) and len(titles)==len(descriptions):
             self.ready = False
             self.logger.error('Unable to get_titles_and_descriptions_from_ps_1. ' +
+                              'titles: {}, '.format(titles) +
+                              'descriptions: {}, '.format(descriptions) +
+                              'len(titles): {}, '.format(len(titles)) +
+                              'len(descriptions): {}.'.format(len(descriptions))
+                              )
+        return (titles,descriptions)
+
+    def get_titles_and_descriptions_from_ps_2(self,node=None):
+        '''From the given list of BeautifulSoup <p> tag objects,
+        get Python lists for the associated titles and descriptions
+        '''
+        titles  = list()
+        descriptions = list()
+        if self.ready:
+            if node:
+                ps = node.find_all('p')
+                for p in ps:
+                    (title,description) = self.get_title_and_description_from_p(p=p)
+                    if (title and description): # has <b> tag and other text
+                        pass # we have both
+                    elif title and not description: # has <b> tag and no other text
+                        # Naming convention unordered list
+                        next_siblings = [s for s in p.next_siblings if s and not str(s).isspace()]
+                        if next_siblings:
+                            if next_siblings[0].name == 'ul':
+                                ul = p.find_next('ul')
+                                description = str(ul)
+                        else:
+                            description = str() # just title with no description
+                    elif not (title and description): # does not have <b> tag
+                        title = 'Note'
+                        description = self.get_string(node=p)
+                    titles.append(title)
+                    descriptions.append(description)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_titles_and_descriptions_from_ps_2. ' +
+                                  'node: {}'.format(node))
+        if not (titles and descriptions) and len(titles)==len(descriptions):
+            self.ready = False
+            self.logger.error('Unable to get_titles_and_descriptions_from_ps_2. ' +
                               'titles: {}, '.format(titles) +
                               'descriptions: {}, '.format(descriptions) +
                               'len(titles): {}, '.format(len(titles)) +
@@ -208,7 +248,7 @@ class Util:
         if p:
             # titles
             child_names = self.get_child_names(node=p)
-            if 'b' in child_names:
+            if child_names and 'b' in child_names:
                 b = p.find_next('b')
                 title = self.get_string(node=b) if b else str()
                 title = title.replace(':','') if title else str()
@@ -492,6 +532,7 @@ class Util:
                 elif file_type == 2: (intro,hdus) = self.get_intro_and_hdus_2(node=node)
                 elif file_type == 3: (intro,hdus) = self.get_intro_and_hdus_3(node=node)
                 elif file_type == 4: (intro,hdus) = self.get_intro_and_hdus_4(node=node)
+                elif file_type == 5: (intro,hdus) = self.get_intro_and_hdus_4(node=node)
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_intro_and_hdus. '
@@ -525,11 +566,14 @@ class Util:
         if self.ready:
             if node:
                 (intro,combined_hdus) = self.get_intro_and_combined_hdus_2(node=node)
-                hdus = self.get_split_hdus_2(node=combined_hdus)
-                print('bool(intro): %r'%  bool(intro))
-                print('bool(combined_hdus): %r'%  bool(combined_hdus))
-                print('bool(hdus): %r'%  bool(hdus))
-                input('pause')
+                hdus = self.get_split_hdus_2(node=combined_hdus) if combined_hdus else None
+#                print('/nintro: %r' % intro)
+#                print('/ncombined_hdus: %r' % combined_hdus)
+#                print('hdus: %r' % hdus)
+#                print('bool(intro): %r' % bool(intro))
+#                print('bool(combined_hdus): %r' % bool(combined_hdus))
+#                print('bool(hdus): %r' % bool(hdus))
+#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_hdus_2. ' +
@@ -544,13 +588,14 @@ class Util:
         if self.ready:
             if node:
                 (intro,combined_hdus) = self.get_intro_and_combined_hdus_3(node=node)
-                hdus = (self.get_split_hdus_3(node=combined_hdus)
-                        if self.ready else None)
-#                print('bool(intro): %r'%  bool(intro))
-#                print('bool(combined_hdus): %r'%  bool(combined_hdus))
-                print('bool(hdus): %r'%  bool(hdus))
-                print('\nhdus: \n%r'%  hdus)
-                input('pause')
+                hdus = self.get_split_hdus_3(node=combined_hdus) if combined_hdus else None
+#                print('/nintro: %r' % intro)
+#                print('/ncombined_hdus: %r' % combined_hdus)
+#                print('hdus: %r' % hdus)
+#                print('bool(intro): %r' % bool(intro))
+#                print('bool(combined_hdus): %r' % bool(combined_hdus))
+#                print('bool(hdus): %r' % bool(hdus))
+#                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_hdus_3. ' +
@@ -566,11 +611,6 @@ class Util:
             if node:
                 intro = node
                 hdus = None # There's no hdu's for this file type
-                print('bool(intro): %r'%  bool(intro))
-                print('intro: %r'%  intro)
-                print('bool(hdus): %r'%  bool(hdus))
-
-                input('pause')
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_hdus_4. ' +
@@ -578,30 +618,33 @@ class Util:
                                   )
         return (intro,hdus)
 
-
     def get_intro_and_combined_hdus_2(self,node=None):
         '''Get a new BeautifulSoup object comprised of the intro tags
             of the given BeautifulSoup node.'''
         (intro,combined_hdus) = (None,None)
         if self.ready:
             if node:
+                previous_siblings = None
+                next_siblings = None
                 ps = node.find_all('p')
                 for p in ps:
                     (title,description) = self.get_title_and_description_from_p(p=p)
-                    if title or description:
-                        split_title       = set([s.lower() for s in title.split()])
-                        split_description = set([s.lower() for s in description.split()])
-                        string_set = split_title | split_description
-                        if ({'required','keywords'}.issubset(string_set) or
-                            {'required','column'}.issubset(string_set)
-                            ):
+                    if title:
+                        regex = ('(?i)required\s+header\s+keywords'     + '|'
+                                 '(?i)required\s+column\s+names'        + '|'
+                                 '(?i)required\s+hdu\s*\d*\s+keywords'  + '|'
+                                 '(?i)required\s+hdu\s*\d*\s+column\s+names'
+                                 )
+                        if match(regex,title):
                             previous_siblings = p.previous_siblings
                             next_siblings = p.previous_sibling.next_siblings
                             break
-                intro = self.get_soup_from_iterator(iterator=previous_siblings,
-                                                     reverse=True)
-                combined_hdus = self.get_soup_from_iterator(iterator=next_siblings,
+                intro = (self.get_soup_from_iterator(iterator=previous_siblings,
+                                                        reverse=True)
+                        if previous_siblings else None)
+                combined_hdus = (self.get_soup_from_iterator(iterator=next_siblings,
                                                              reverse=False)
+                                 if next_siblings else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_combined_hdus_2. ' +
@@ -614,18 +657,20 @@ class Util:
         (intro,combined_hdus) = (None,None)
         if self.ready:
             if node:
+                previous_siblings = None
+                next_siblings = None
                 heading_tags = self.get_heading_tag_children(node=node)
                 for heading_tag in heading_tags:
-                    strings=list(heading_tag.strings)
-                    string = ' '.join(strings).lower()
-                    previous_siblings = None
-                    next_siblings = None
-                    if (string.find('hdu')            != -1 or
-                        string.find('primary header') != -1
-                        ):
-                        previous_siblings = heading_tag.previous_siblings
-                        next_siblings = heading_tag.previous_sibling.next_siblings
-                        break
+                    strings=list(heading_tag.strings) if heading_tag else list()
+                    string = ' '.join(strings) if strings else str()
+                    if string:
+                        regex = ('(?i)primary\s*hdu' + '|'
+                                 '(?i)hdu\s*\d*'
+                                 )
+                        if match(regex,string):
+                            previous_siblings = heading_tag.previous_siblings
+                            next_siblings = heading_tag.previous_sibling.next_siblings
+                            break
                 if previous_siblings and next_siblings:
                     intro = self.get_soup_from_iterator(iterator=previous_siblings,
                                                          reverse=True)
@@ -662,6 +707,7 @@ class Util:
         return soup
 
     def get_split_hdus_2(self,node=None):
+        '''Split the node into a list of BeautifulSoup objects containing file HDUs.'''
         hdus = None
         return hdus
 
@@ -759,8 +805,6 @@ class Util:
                 if len(titles) == 1:
                     hdu_title = titles[0]
                 else:
-                    print('string: %r' % string)
-                    input('pause')
                     self.ready = False
                     self.logger.error('Unable to get_hdu_title. ' +
                                       'len(titles) != 1. ' +
@@ -822,7 +866,7 @@ class Util:
 
     def get_column_names(self,trs=None):
         '''Get column_names from the <tr> tag with all <th> tag children.'''
-        column_names = None
+        column_names = list()
         if self.ready:
             if trs:
                 for tr in trs:
@@ -836,7 +880,7 @@ class Util:
                                   'trs: {}'.format(trs))
         return column_names
 
-    def check_node_string_is_filename(self,node=None,extension_list=['txt','html']):
+    def check_node_string_is_filename(self,node=None):
         '''Check the sub-string of the <li> tag is a filename with extension
         in ext_list.'''
         is_filename = None
@@ -846,9 +890,10 @@ class Util:
                 if len(strings) > 1:
                     is_filename = False
                 else:
+                    extension_list=['txt','html']
                     string = strings[0] if strings else str()
                     split = string.split('.') if string else list()
-                    extension = split[1] if split and len(split) > 0 else str()
+                    extension = split[1] if split and len(split) > 1 else str()
                     if extension in extension_list:
                         is_filename = True
                     else:
