@@ -170,6 +170,7 @@ class Util:
                                   'dl: {}.'.format(dl))
         return (dts,dds)
 
+
     def get_titles_and_descriptions_from_ps_1(self,node=None):
         '''From the given list of BeautifulSoup <p> tag objects,
         get Python lists for the associated titles and descriptions
@@ -181,7 +182,7 @@ class Util:
                 ps = node.find_all('p')
                 for p in ps:
                     (title,description) = self.get_title_and_description_from_p(p=p)
-                    if title and description: # can be empty if no <b> tag
+                    if title or description:
                         titles.append(title)
                         descriptions.append(description)
             else:
@@ -221,7 +222,7 @@ class Util:
                         else:
                             description = str() # just title with no description
                     elif not (title and description): # does not have <b> tag
-                        title = 'Note'
+                        title = str()
                         description = self.get_string(node=p)
                     titles.append(title)
                     descriptions.append(description)
@@ -246,19 +247,30 @@ class Util:
         title = str()
         description = str()
         if p:
-            # titles
             child_names = self.get_child_names(node=p)
-            if child_names and 'b' in child_names:
-                b = p.find_next('b')
-                title = self.get_string(node=b) if b else str()
-                title = title.replace(':','') if title else str()
-                
-                # descriptions
-                description_list = list()
-                for sibling in b.next_siblings:
-                    string = str(sibling).strip()
-                    description_list.append(string)
-                description = ' '.join(description_list)
+            if child_names:
+                if child_names[0] == 'b':
+                    b = p.find('b')
+                    if b:
+                        # title
+                        title = self.get_string(node=b) if b else str()
+                        title = title.replace(':','') if title else str()
+                    
+                        # description
+                        description_list = list()
+                        for sibling in b.next_siblings:
+                            string = str(sibling).strip()
+                            description_list.append(string)
+                        description = ' '.join(description_list)
+                    else:
+                        title = str()
+                        description = self.get_string(node=p)
+                else:
+                    title = str()
+                    description = self.get_string(node=p)
+            else:
+                title = str()
+                description = self.get_string(node=p)
         else:
             self.ready = False
             self.logger.error('Unable to get_title_and_description_from_p. ' +
@@ -635,7 +647,7 @@ class Util:
                                  '(?i)required\s+hdu\s*\d*\s+keywords'  + '|'
                                  '(?i)required\s+hdu\s*\d*\s+column\s+names'
                                  )
-                        if match(regex,title):
+                        if self.check_match(regex,title):
                             previous_siblings = p.previous_siblings
                             next_siblings = p.previous_sibling.next_siblings
                             break
@@ -667,7 +679,7 @@ class Util:
                         regex = ('(?i)primary\s*hdu' + '|'
                                  '(?i)hdu\s*\d*'
                                  )
-                        if match(regex,string):
+                        if self.check_match(regex,string):
                             previous_siblings = heading_tag.previous_siblings
                             next_siblings = heading_tag.previous_sibling.next_siblings
                             break
@@ -708,7 +720,82 @@ class Util:
 
     def get_split_hdus_2(self,node=None):
         '''Split the node into a list of BeautifulSoup objects containing file HDUs.'''
-        hdus = None
+        hdus = list()
+        if self.ready:
+            if node:
+                children = self.get_children(node=node)
+                if children:
+                    first_heading = True
+                    hdu = list()
+                    self.ready = False
+                    print('UNDER CONSTRUCTION')
+                    '''for child in children:
+                        if self.ready:
+#                            print('\n\n child: %r'%  child)
+#                            print('self.ready: %r'%  self.ready)
+#                            input('pause')
+
+                            (title,description) = self.get_title_and_description_from_p(p=p)
+                            if title and not description: # has <b> tag and no other text
+                                regex = ('(?i)required\s+header\s+keywords'     + '|'
+                                         '(?i)required\s+hdu\s*\d*\s+keywords'  + '|'
+                                         '(?i)required\s+column\s+names'        + '|'
+                                         '(?i)required\s+hdu\s*\d*\s+column\s+names'
+                                         )
+                                if self.check_match(regex,title):
+                                    if first_heading:
+                                        first_heading = False
+                                        previous_title = title
+                                        hdu.append(child)
+                                    # when same title for header and data tables
+                                    elif previous_title == title:
+                                        hdu.append(child)
+                                    else:
+#                                            print('hdu: %r' %  hdu)
+#                                            input('pause')
+                                        soup = self.get_soup_from_iterator(hdu) if hdu else None
+                                        if soup:
+                                            hdus.append(soup)
+                                            hdu = list()
+                                            hdu.append(child)
+                                            previous_title = title
+                                        else:
+                                            self.ready = False
+                                            self.logger.error('Unable to get_split_hdus_2. ' +
+                                                              'In for loop. ' +
+                                                              'soup: {}.'.format(soup))
+                                else:
+#                                    print('child: %r'%  child)
+#                                    print('child.name: %r'%  child.name)
+#                                    print('string: %r'%  string)
+#                                    input('pause')
+
+                                    self.ready = False
+                                    self.logger.error('Unable to get_split_hdus_2. ' +
+                                                      'title: {}.'.format(title))
+                            else:
+                                hdu.append(child)
+                    soup = self.get_soup_from_iterator(hdu) if hdu else None
+                    if soup:
+                        hdus.append(soup)
+                        hdu = list()
+                        hdu.append(child)
+                        previous_title = title
+                    else:
+                        self.ready = False
+                        self.logger.error('Unable to get_split_hdus_2. ' +
+                                          'Out of for loop. ' +
+                                          'soup: {}.'.format(soup))
+#                    print('hdu: %r' % hdu)
+#                    input('pause')
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_split_hdus_2. ' +
+                                      'children: {}'.format(children))
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_split_hdus_2. ' +
+                                  'node: {}'.format(node))'''
         return hdus
 
     def get_split_hdus_3(self,node=None):
@@ -731,7 +818,12 @@ class Util:
                                 # check only one string in tag
                                 string = (strings[0]
                                           if strings and len(strings) == 1 else None)
-                                title = self.get_hdu_title(string=string) if string else None
+                                regex = ('(?i)hdu\s*\d'             + '|' +
+                                         '(?i)primary\s*(?i)header' + '|' +
+                                         '(?i)primary\s*(?i)hdu'
+                                         )
+                                title = (self.get_hdu_title(string=string,regex=regex)
+                                         if string and regex else None)
                                 if title:
                                     if first_heading:
                                         first_heading = False
@@ -780,23 +872,20 @@ class Util:
 #                    input('pause')
                 else:
                     self.ready = False
-                    self.logger.error('Unable to get_column_names. ' +
+                    self.logger.error('Unable to get_split_hdus_3. ' +
                                       'children: {}'.format(children))
             else:
                 self.ready = False
-                self.logger.error('Unable to get_column_names. ' +
+                self.logger.error('Unable to get_split_hdus_3. ' +
                                   'node: {}'.format(node))
         return hdus
 
-    def get_hdu_title(self,string=None):
+    def get_hdu_title(self,string=None,regex=None):
         '''Get HDU title from given string.'''
         hdu_title = None
         if self.ready:
-            if string:
-                # find case insensitive hdu + zero-or-more space + digit
-                # or case insensitive primary + zero-or-more space +
-                # case insensitive header
-                p1 = compile('(?i)hdu\s*\d|(?i)primary\s*(?i)header|(?i)primary\s*(?i)hdu')
+            if string and regex:
+                p1 = compile(regex)
                 iterator = p1.finditer(string)
                 titles = list()
                 for match in iterator:
@@ -813,7 +902,9 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_hdu_title. ' +
-                                  'string: {}'.format(string))
+                                  'string: {}'.format(string) +
+                                  'regex: {}'.format(regex)
+                                  )
         return hdu_title
 
 
@@ -904,7 +995,24 @@ class Util:
                                   'node: {}'.format(node))
         return is_filename
 
-
+    def check_match(self,regex,string):
+        match = None
+        if self.ready:
+            if regex and string:
+                pattern = compile(regex)
+                match = bool(pattern.match(str(string)))
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_match. ' +
+                                  'regex: {}'.format(regex) +
+                                  'string: {}'.format(string)
+                                  )
+        if match is None:
+            self.ready = False
+            self.logger.error('Unable to check_match. ' +
+                              'match: {}. '.format(match)
+                              )
+        return match
 
 
 

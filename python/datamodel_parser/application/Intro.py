@@ -2,6 +2,7 @@ from json import dumps
 from bs4 import Tag, NavigableString
 from datamodel_parser.application import Util
 from datamodel_parser.application.Type import Intro_type
+from re import search, compile, match
 
 
 class Intro:
@@ -57,6 +58,11 @@ class Intro:
             if node:
                 type = Intro_type(logger=self.logger,options=self.options)
                 self.intro_type = type.get_intro_type(node=node)
+                
+#                print('node: %r'% node)
+#                print('self.intro_type: %r'% self.intro_type)
+#                input('pause')
+
                 if self.intro_type:
                     # div types
                     if   self.intro_type == 1: self.parse_file_type_1(node=node)
@@ -67,6 +73,7 @@ class Intro:
                     elif self.intro_type == 5: self.parse_file_type_5(node=node)
                     elif self.intro_type == 6: self.parse_file_type_6(node=node)
                     elif self.intro_type == 7: self.parse_file_type_7(node=node)
+                    elif self.intro_type == 8: self.parse_file_type_8(node=node)
                     else:
                         self.ready = False
                         self.logger.error(
@@ -292,7 +299,7 @@ class Intro:
             if node:
                 # page title
                 heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
-                h = node.find_next(heading_tag_name) if heading_tag_name else None
+                h = node.find(heading_tag_name) if heading_tag_name else None
                 title = self.util.get_string(node=h) if h else str()
                 description = str() # no description for page title
                 self.intro_heading_titles.append(title)
@@ -331,7 +338,7 @@ class Intro:
             if node:
                 # page title
                 heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
-                h = node.find_next(heading_tag_name) if heading_tag_name else None
+                h = node.find(heading_tag_name) if heading_tag_name else None
                 title = self.util.get_string(node=h) if h else str()
                 description = str() # no description for page title
                 self.intro_heading_titles.append(title)
@@ -367,6 +374,120 @@ class Intro:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_type_7. ' +
+                                  'node: {}'.format(node) )
+
+    def parse_file_type_8(self,node=None):
+        '''Parse the HTML of the given BeautifulSoup node.'''
+        if self.ready:
+            if node:
+                # page title
+                heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
+                h = node.find(heading_tag_name) if heading_tag_name else None
+                title = self.util.get_string(node=h) if h else str()
+                description = str() # no description for page title
+                self.intro_heading_titles.append(title)
+                self.intro_descriptions.append(description)
+                
+                # page intro
+                table = node.find('table')
+                if table:
+                    # ps before File Contents table
+                    previous_siblings = [s for s in table.previous_siblings
+                                        if str(s) and not str(s).isspace()]
+                    soup = self.util.get_soup_from_iterator(iterator=previous_siblings,
+                                                       reverse=True)
+                    (titles,descriptions) = (
+                        self.util.get_titles_and_descriptions_from_ps_1(node=soup))
+                    self.intro_heading_titles.extend(titles)
+                    self.intro_descriptions.extend(descriptions)
+
+                    # ps after File Contents table (Notes)
+                    # remove FITS Header Keywords heading if present
+                    header_keywords_string = str()
+                    next_siblings = [s for s in table.next_siblings if s.name]
+                    if next_siblings:
+                        last_sibling = next_siblings[-1]
+                        if last_sibling.name in self.util.heading_tag_names:
+                            regex = '(?i)\s*FITS Header Keywords\s*'
+                            header_keywords_string = str(last_sibling.string)
+                            if self.util.check_match(regex,header_keywords_string):
+                                next_siblings.pop()
+                    soup = self.util.get_soup_from_iterator(iterator=next_siblings)
+
+                    # check for heading tag with Note or Notes
+                    heading_tag_names = self.util.get_heading_tag_child_names(node=soup)
+                    h = (soup.find(heading_tag_names[0])
+                         if heading_tag_names and len(heading_tag_names) == 1 else None)
+                    title = self.util.get_string(node=h) if h else str()
+                    if title:
+                        regex = '(?i)\s*Note\s*' + '|' '(?i)\s*Notes\s*'
+                        if self.util.check_match(regex,title):
+                            ps = soup.find_all('p')
+                            if ps:
+                                descriptions = [self.util.get_string(p) for p in ps
+                                                if str(p) and not str(p).isspace()]
+                                description = '\n\n'.join(descriptions)
+                                self.intro_heading_titles.append(title)
+                                self.intro_descriptions.append(description)
+                            else:
+                                self.ready = False
+                                self.logger.error('Unable to parse_file_type_8. ' +
+                                                  'Anticipated <p> tags. ' +
+                                                  'ps: {}'.format(ps))
+                        else:
+                            self.ready = False
+                            self.logger.error('Unable to parse_file_type_8. ' +
+                                              'Anticipated Note or Notes in title. ' +
+                                              'title: {}'.format(title))
+                    # get Note or Notes from ps
+                    else:
+                        (titles,descriptions) = (
+                            self.util.get_titles_and_descriptions_from_ps_1(node=soup))
+                        if titles:
+                            if len(titles) > 1:
+                                regex = '(?i)\s*Note\s*' + '|' '(?i)\s*Notes\s*'
+                                if (self.util.check_match(regex,titles[0])
+                                    and not [t for t in titles[1:] if t]
+                                    ):
+                                    title = titles[0]
+                                    description = '\n\n'.join(descriptions)
+                                    self.intro_heading_titles.append(title)
+                                    self.intro_descriptions.append(description)
+                                else:
+                                    self.ready = False
+                                    self.logger.error('Unable to parse_file_type_8. ' +
+                                                      'Anticipated one Note title ' +
+                                                      'and multiple <p> tags ' +
+                                                      'soup: {}'.format(soup))
+                            else:
+                                title = titles[0]
+                                description = descriptions[0]
+                                self.intro_heading_titles.append(title)
+                                self.intro_descriptions.append(description)
+                    if header_keywords_string:
+                        self.intro_heading_titles.append(header_keywords_string.strip())
+                        self.intro_descriptions.append(str())
+
+
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to parse_file_type_8. ' +
+                                      'Expected table. ' +
+                                      'table: {}.'.format(table)
+                                      )
+                # put it all together
+                self.ready = self.ready and self.util.ready
+                if self.ready:
+                    # Already done above
+#                    self.intro_heading_titles.extend(titles)
+#                    self.intro_descriptions.extend(descriptions)
+                    number_headings = len(self.intro_heading_titles)
+                    self.intro_positions = list(range(number_headings))
+                    self.intro_heading_levels = [1]
+                    self.intro_heading_levels.extend([4] * (number_headings - 1))
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_type_8. ' +
                                   'node: {}'.format(node) )
 
     def parse_file_h1_p_h3_ul_pre(self):
