@@ -217,7 +217,7 @@ class Util:
                         next_siblings = [s for s in p.next_siblings if s and not str(s).isspace()]
                         if next_siblings:
                             if next_siblings[0].name == 'ul':
-                                ul = p.find_next('ul')
+                                ul = p.find('ul')
                                 description = str(ul)
                         else:
                             description = str() # just title with no description
@@ -303,57 +303,62 @@ class Util:
         (hdu_number,hdu_title) = (None,None)
         if self.ready:
             if node:
-                child_names = self.get_child_names(node=node)
+                child_names = self.get_child_names(node=node) if node else None
                 heading_tag_names = [name for name in child_names
-                                    if name in self.heading_tag_names]
-                heading_tag_name = heading_tag_names[0]       if heading_tag_names else None
-                header_tag = node.find_next(heading_tag_name) if heading_tag_name else None
-                heading = self.get_string(node=header_tag)    if header_tag else None
-                if heading:
-                    node_id = (node.attrs['id']
-                               if node.attrs and 'id' in node.attrs else None)
-                    if node_id:
-                        # hdu_number
-                        # hdu_number from node['id']
-                        id_hdu_number = None
-                        if node_id and node_id.lower().startswith('hdu'):
-                            id_hdu_number = node_id[3:].strip()
-                            id_hdu_number = (int(id_hdu_number)
-                                             if id_hdu_number.isdigit()
-                                             else None)
-                        # hdu_number from hdu_title
-                        heading_hdu_number = None
-                        split = heading.split(':')
-                        if (split and split[0].lower().startswith('hdu')):
-                            heading_hdu_number = split[0].lower().replace('hdu',str())
-                            heading_hdu_number = (int(heading_hdu_number)
-                                                  if heading_hdu_number.isdigit()
-                                                  else None)
-                        # put hdu_number together
-                        hdu_number = (id_hdu_number
-                                        if id_hdu_number is not None
-                                      else heading_hdu_number
-                                        if heading_hdu_number is not None
-                                      else None)
-                        # hdu_title
-                        hdu_title = (split[1].strip() if split and len(split) > 1
-                                     else heading.strip())
-                    elif (heading.lower().startswith('primary') or
-                        heading.lower().startswith('the primary')
-                        ):
-                        hdu_number = 0
-                        split = heading.split(':')
-                        hdu_title = (split[1].strip() if split and len(split) > 1
-                                     else heading.strip())
-                    else:
-                        self.ready = False
-                        self.logger.error("Unable to get_hdu_number_and_hdu_title "
-                                          "from node.attrs['id'] or 'header_tag'.")
+                                    if name in self.heading_tag_names] if child_names else None
+                heading_tag_name = heading_tag_names[0] if heading_tag_names else None
+                header_tag = node.find(heading_tag_name) if heading_tag_name else None
+                heading = self.get_string(node=header_tag).strip() if header_tag else None
+                if header_tag and heading:
+                    # hdu_number
+                    # hdu_number from node['id']
+                    match = None
+                    id_hdu_number = None
+                    node_id = (header_tag.attrs['id']
+                               if header_tag.attrs and 'id' in header_tag.attrs
+                               else None)
+                    regex = '(?i)hdu\s*\d'
+                    match = (self.get_matches(regex=regex,string=node_id)[0]
+                             if node_id else str())
+                    regex = '\d+'
+                    id_hdu_number = (self.get_matches(regex=regex,string=match)[0]
+                                     if match else None)
+
+                    # hdu_number from hdu_title
+                    heading_hdu_N = None
+                    heading_hdu_number = None
+                    regex = '(?i)hdu\s*\d'
+                    heading_hdu_N = (self.get_matches(regex=regex,string=heading)[0]
+                                     if heading else None)
+                    regex = '\d+'
+                    heading_hdu_number = (self.get_matches(regex=regex,string=heading_hdu_N)[0]
+                                          if heading_hdu_N else None)
+                    if heading_hdu_number is None:
+                        regex = '(?i)primary'
+                        heading_hdu_number = ('0' if self.check_match(regex=regex,string=heading)
+                                              else None)
+                    
+                    # put hdu_number together
+                    hdu_number = (id_hdu_number
+                                    if id_hdu_number is not None
+                                  else heading_hdu_number
+                                    if heading_hdu_number is not None
+                                  else None)
+                                  
+                    # put hdu_title together
+                    hdu_title = heading.replace(heading_hdu_N,str()).replace(':',str())
                 else:
                     self.ready = False
+                    self.logger.error('Unable to get_hdu_number_and_hdu_title from first heading. ' +
+                                      'header_tag: {}, '.format(header_tag) +
+                                      'heading: {}.'.format(heading)
+                                      )
+                if (hdu_number,hdu_title) == (None,None):
+                    self.ready = False
                     self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
-                                      'heading: {}'.format(heading))
-
+                                      'hdu_number: {}, '.format(hdu_number) +
+                                      'hdu_title: {}'.format(hdu_title)
+                                      )
         return (hdu_number,hdu_title)
 
     def get_all_possible_hdu_titles(self):
@@ -521,8 +526,11 @@ class Util:
         children = None
         if self.ready:
             if node:
-#                children = [child for child in node.children
-#                              if not self.get_string(node=child).isspace()]
+#                children = ([child for child in node.children if child.name == name]
+#                            if name else
+#                            [child for child in node.children
+#                             if str(child) and not str(child).isspace()]
+#                            )
                 children = ([child for child in node.children if child.name == name]
                             if name else
                             [child for child in node.children if child.name])
@@ -647,7 +655,7 @@ class Util:
                                  '(?i)required\s+hdu\s*\d*\s+keywords'  + '|'
                                  '(?i)required\s+hdu\s*\d*\s+column\s+names'
                                  )
-                        if self.check_match(regex,title):
+                        if self.check_match(regex=regex,string=title):
                             previous_siblings = p.previous_siblings
                             next_siblings = p.previous_sibling.next_siblings
                             break
@@ -677,9 +685,10 @@ class Util:
                     string = ' '.join(strings) if strings else str()
                     if string:
                         regex = ('(?i)primary\s*hdu' + '|'
+                                 '(?i)primary\s*hdu\s*\d*' + '|'
                                  '(?i)hdu\s*\d*'
                                  )
-                        if self.check_match(regex,string):
+                        if self.check_match(regex=regex,string=string):
                             previous_siblings = heading_tag.previous_siblings
                             next_siblings = heading_tag.previous_sibling.next_siblings
                             break
@@ -742,7 +751,7 @@ class Util:
                                          '(?i)required\s+column\s+names'        + '|'
                                          '(?i)required\s+hdu\s*\d*\s+column\s+names'
                                          )
-                                if self.check_match(regex,title):
+                                if self.check_match(regex=regex,string=title):
                                     if first_heading:
                                         first_heading = False
                                         previous_title = title
@@ -878,6 +887,8 @@ class Util:
                 self.ready = False
                 self.logger.error('Unable to get_split_hdus_3. ' +
                                   'node: {}'.format(node))
+#        print('hdus: %r' % hdus)
+#        input('pause')
         return hdus
 
     def get_hdu_title(self,string=None,regex=None):
@@ -917,7 +928,7 @@ class Util:
                 next_siblings = None
                 heading_tags = self.get_heading_tag_child_names(node=node)
                 for heading_tag in heading_tags:
-                    h = node.find_next(heading_tag)
+                    h = node.find(heading_tag)
                     string = h.string
                     string = string.lower() if string else str()
                     # find the beginning of the hdus
@@ -995,12 +1006,12 @@ class Util:
                                   'node: {}'.format(node))
         return is_filename
 
-    def check_match(self,regex,string):
+    def check_match(self,regex=None,string=None):
+        '''Use regular exparession pattern to check if there is a match in the given string'''
         match = None
         if self.ready:
             if regex and string:
-                pattern = compile(regex)
-                match = bool(pattern.match(str(string)))
+                match = bool(self.get_matches(regex=regex,string=string))
             else:
                 self.ready = False
                 self.logger.error('Unable to check_match. ' +
@@ -1014,7 +1025,78 @@ class Util:
                               )
         return match
 
+    def get_matches(self,regex=None,string=None):
+        matches = None
+        if self.ready:
+            if regex and string:
+                pattern = compile(regex)
+                iterator = pattern.finditer(string)
+                matches = list()
+                for match in iterator:
+                    text = string[match.start() : match.end()] if match else None
+                    if text: matches.append(text)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_match. ' +
+                                  'regex: {}'.format(regex) +
+                                  'string: {}'.format(string)
+                                  )
+        return matches
 
+    def get_pre_tables_1(self,node=None):
+        '''Test if node contains two pre tables and split them into a list of Beautiful soup objects'''
+        pre_tables = None
+        if self.ready:
+            if node:
+                pres = node.find_all('pre')
+                if pres:
+                    if len(list(pres)) == 1:
+                        pre_tables = [node]
+                    elif len(list(pres)) == 2:
+                        children = self.get_children(node=node)
+                        if children:
+                            previous_siblings = None
+                            next_siblings = None
+                            for child in children:
+                                if child.name == 'pre':
+                                    previous_siblings = child.next_sibling.previous_siblings
+                                    next_siblings = child.next_siblings
+                                    break
+                            if previous_siblings and next_siblings:
+                                pre_tables = [self.get_soup_from_iterator(
+                                                    iterator=previous_siblings,
+                                                    reverse=True),
+                                              self.get_soup_from_iterator(
+                                                    iterator=next_siblings,
+                                                    reverse=False)
+                                              ]
+                        else:
+                            self.ready = False
+                            self.logger.error('Unable to get_pre_tables_1. ' +
+                                              'children: {}, '.format(children)
+                                              )
+                    else:
+                        self.ready = False
+                        self.logger.error('Unable to get_pre_tables_1. ' +
+                                          'len(list(pres)) > 2, '
+                                          'len(list(pres)): {}, '.format(len(list(pres)))
+                                          )
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_pre_tables_1. ' +
+                                      'pres: {}, '.format(pres)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_pre_tables_1. ' +
+                                  'node: {}, '.format(node)
+                                  )
+            if pre_tables is None:
+                self.ready = False
+                self.logger.error('Unable to get_pre_tables_1. ' +
+                                  'pre_tables: {}, '.format(pre_tables)
+                                  )
+        return pre_tables
 
 
 

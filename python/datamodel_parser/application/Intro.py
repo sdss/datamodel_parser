@@ -236,14 +236,14 @@ class Intro:
             if node:
                 # page title
                 heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
-                h = node.find_next(heading_tag_name)
+                h = node.find(heading_tag_name)
                 title = self.util.get_string(node=h)
                 description = str() # no description for page title
                 self.intro_heading_titles.append(title)
                 self.intro_descriptions.append(description)
                 
                 # page intro
-                dl = node.find_next('dl')
+                dl = node.find('dl')
                 (titles,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
                 if titles[-1].lower() == 'sections': titles.pop()
                 assert(len(titles)==len(descriptions))
@@ -266,14 +266,14 @@ class Intro:
             if node:
                 # page title
                 heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
-                h = node.find_next(heading_tag_name)
+                h = node.find(heading_tag_name)
                 title = self.util.get_string(node=h)
                 description = str() # no description for page title
                 self.intro_heading_titles.append(title)
                 self.intro_descriptions.append(description)
                 
                 # page intro
-                dl = node.find_next('dl')
+                dl = node.find('dl')
                 (titles,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
                 if (titles[-1].lower() == 'sections' or
                     titles[-1].lower() == 'file contents'
@@ -364,6 +364,7 @@ class Intro:
         '''Parse the HTML of the given BeautifulSoup node.'''
         if self.ready:
             if node:
+                # this file type just consists of a string with no tags
                 strings = node.strings if node else list()
                 string = ' '.join(strings).strip() if strings else str()
             
@@ -410,7 +411,7 @@ class Intro:
                         if last_sibling.name in self.util.heading_tag_names:
                             regex = '(?i)\s*FITS Header Keywords\s*'
                             header_keywords_string = str(last_sibling.string)
-                            if self.util.check_match(regex,header_keywords_string):
+                            if self.util.check_match(regex=regex,string=header_keywords_string):
                                 next_siblings.pop()
                     soup = self.util.get_soup_from_iterator(iterator=next_siblings)
 
@@ -421,7 +422,7 @@ class Intro:
                     title = self.util.get_string(node=h) if h else str()
                     if title:
                         regex = '(?i)\s*Note\s*' + '|' '(?i)\s*Notes\s*'
-                        if self.util.check_match(regex,title):
+                        if self.util.check_match(regex=regex,string=title):
                             ps = soup.find_all('p')
                             if ps:
                                 descriptions = [self.util.get_string(p) for p in ps
@@ -446,7 +447,7 @@ class Intro:
                         if titles:
                             if len(titles) > 1:
                                 regex = '(?i)\s*Note\s*' + '|' '(?i)\s*Notes\s*'
-                                if (self.util.check_match(regex,titles[0])
+                                if (self.util.check_match(regex=regex,string=titles[0])
                                     and not [t for t in titles[1:] if t]
                                     ):
                                     title = titles[0]
@@ -588,7 +589,7 @@ class Intro:
                 print('child_names: %r' % child_names)
 
                 for child in child_names:
-                    self.body.find_next(child)
+                    self.body.find(child)
                     if child in self.util.heading_tag_names:
                         hdu_titles = self.util.get_all_possible_hdu_titles()
 
