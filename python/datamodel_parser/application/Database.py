@@ -804,7 +804,7 @@ class Database:
             if (file_id                   and
                 position is not None and
 #                heading_level is not None and
-                heading_title         and
+#                heading_title         and
                 description is not None
                 ):
                 self.intro_columns = {
@@ -825,8 +825,8 @@ class Database:
                     'Unable to set_intro_columns. ' +
                     'file_id: {}, '.format(file_id) +
                     'position: {}, '.format(position) +
-                    'heading_level: {}, '.format(heading_level) +
-                    'heading_title: {}, '.format(heading_title) +
+#                    'heading_level: {}, '.format(heading_level) +
+#                    'heading_title: {}, '.format(heading_title) +
                     'description: {}.'.format(description))
 
     def populate_intro_table(self):
@@ -836,7 +836,7 @@ class Database:
             if self.intro: self.update_intro_row()
             else:          self.create_intro_row()
 
-    def set_intro(self,file_id=None,heading_title=None):
+    def set_intro(self,file_id=None,position=None):
         '''Load row from intro table.'''
         self.intro = None
         if self.ready:
@@ -844,19 +844,19 @@ class Database:
                     else self.intro_columns['file_id']
                     if self.intro_columns and 'file_id' in self.intro_columns
                     else None)
-            heading_title = (heading_title if heading_title
-                    else self.intro_columns['heading_title']
-                    if self.intro_columns and 'heading_title' in self.intro_columns
+            position = (position if position is not None
+                    else self.intro_columns['position']
+                    if self.intro_columns and 'position' in self.intro_columns
                     else None)
-            if file_id and heading_title:
+            if file_id and position is not None:
                 self.intro = (Intro.load(file_id=file_id,
-                                        heading_title=heading_title)
-                              if file_id and heading_title else None)
+                                         position=position)
+                              if file_id and position is not None else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_intro. ' +
                                   'file_id: {}, '.format(file_id) +
-                                  'heading_title: {}.'.format(heading_title))
+                                  'position: {}.'.format(position))
 
     def update_intro_row(self):
         '''Update row in intro table.'''
@@ -869,9 +869,9 @@ class Database:
                 skip_keys = []
                 self.intro.update_if_needed(columns=columns,skip_keys=skip_keys)
                 if self.intro.updated:
-                    self.logger.info('Updated Intro[id={0}], heading_title: {1}.'
+                    self.logger.info('Updated Intro[id={0}], position: {1}.'
                                      .format(self.intro.id,
-                                             self.intro.heading_title))
+                                             self.intro.position))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_intro_row. ' +
@@ -900,8 +900,8 @@ class Database:
                 if intro:
                     intro.add()
                     intro.commit()
-                    self.logger.info('Added Intro[id={0}], heading_title: {1}.'
-                                     .format(intro.id,intro.heading_title))
+                    self.logger.info('Added Intro[id={0}], position: {1}.'
+                                     .format(intro.id,intro.position))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_intro_row. ' +

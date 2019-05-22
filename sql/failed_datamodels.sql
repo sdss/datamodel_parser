@@ -5,7 +5,6 @@ from file
 join location
 on file.location_id = location.id
 where (file.status = 'failed' or file.status = 'pending')
-and file.name != 'manga.Pipe3D.cube.html'
 ),
 ppq as
 (

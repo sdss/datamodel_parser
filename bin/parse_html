@@ -24,8 +24,6 @@ else:
 Examples:
 
 ## div types ###
-
-All Finished!
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
 parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html

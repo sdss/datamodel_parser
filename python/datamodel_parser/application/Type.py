@@ -116,7 +116,7 @@ class Type(object):
                                            for heading_node in heading_nodes]
                         found_binary_table = False
                         for heading_string in heading_strings:
-                            regex = '(?i)Binary\s*' + '|' + '(?i)Fields\s*'
+                            regex = '(?i)Binary\s*' + '|' + '(?i)Field\s*'
                             match = self.util.check_match(regex=regex,string=heading_string)
                             if match:
                                 found_binary_table = True
@@ -1194,9 +1194,12 @@ class Hdu_type(Type):
                 if self.correct_type:
                     for tr in [tr for tr in tbody.children
                                if not self.util.get_string(node=tr).isspace()]:
-                        if not len(tr.find_all('td')) == 4:
-                            self.correct_type = False
-                            self.logger.debug("not each <tr> tag as exactly 4 <td> tag children")
+                        if self.correct_type:
+                            if not len(tr.find_all('td')) == 4:
+                                print('tr: %r' % tr)
+                                input('pause')
+                                self.correct_type = False
+                                self.logger.debug("not each <tr> tag as exactly 4 <td> tag children")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_tbody_tag_assumptions_1. ' +

@@ -160,6 +160,7 @@ class Store:
         '''Set a list of all files for the current tree edition.'''
         file_paths = list()
         if self.ready:
+            self.set_file_path_skip_list()
             if not self.datamodel_dir:
                 self.set_datamodel_dir()
             if self.ready:
@@ -174,7 +175,10 @@ class Store:
                                 if exists(file):
                                     file_path = file.replace(
                                                     self.datamodel_dir + '/',str())
-                                    file_paths.append(file_path)
+                                    if (file_path and
+                                        file_path not in self.file_path_skip_list
+                                        ):
+                                        file_paths.append(file_path)
                                 else:
                                     self.ready = False
                                     self.logger.error('File does not exist: '
@@ -186,6 +190,13 @@ class Store:
                     'Unable to get_file_paths. ' +
                     'self.datamodel_dir: {}'.format(self.datamodel_dir))
         return file_paths
+
+    def set_file_path_skip_list(self):
+        '''Set a list of file paths that don't conform to the database schema.'''
+        self.file_path_skip_list = [
+            'datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html',
+            'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
+            ]
 
 
     def populate_database(self):
@@ -471,7 +482,7 @@ class Store:
     def exit(self):
         '''Report the presense/lack of errors.'''
         if self.ready:
-            if self.verbose: print('Finished!\n')
+            if self.verbose: print('Completed!\n')
             exit(0)
         else:
             if self.verbose: print('Fail!\n')

@@ -307,50 +307,84 @@ class Util:
                 heading_tag_names = [name for name in child_names
                                     if name in self.heading_tag_names] if child_names else None
                 heading_tag_name = heading_tag_names[0] if heading_tag_names else None
-                header_tag = node.find(heading_tag_name) if heading_tag_name else None
-                heading = self.get_string(node=header_tag).strip() if header_tag else None
-                if header_tag and heading:
+                heading_tag = node.find(heading_tag_name) if heading_tag_name else None
+                heading = self.get_string(node=heading_tag).strip() if heading_tag else None
+                if heading_tag and heading:
                     # hdu_number
                     # hdu_number from node['id']
-                    match = None
-                    id_hdu_number = None
-                    node_id = (header_tag.attrs['id']
-                               if header_tag.attrs and 'id' in header_tag.attrs
-                               else None)
+                    node_id = (node.attrs['id']
+                               if node.attrs and 'id' in node.attrs else str())
                     regex = '(?i)hdu\s*\d'
-                    match = (self.get_matches(regex=regex,string=node_id)[0]
-                             if node_id else str())
+                    matches1 = self.get_matches(regex=regex,string=node_id) if node_id else list()
+                    match1 = matches1[0] if matches1 else str()
                     regex = '\d+'
-                    id_hdu_number = (self.get_matches(regex=regex,string=match)[0]
-                                     if match else None)
+                    matches2 = self.get_matches(regex=regex,string=match1) if match1 else None
+                    node_id_hdu_number = int(matches2[0]) if matches2 else None
+
+                    # hdu_number from heading_tag['id']
+                    heading_id = (heading_tag.attrs['id']
+                               if heading_tag.attrs and 'id' in heading_tag.attrs else str())
+                    regex = '(?i)hdu\s*\d'
+                    matches3 = self.get_matches(regex=regex,string=heading_id) if heading_id else list()
+                    match2 = matches3[0] if matches3 else str()
+                    regex = '\d+'
+                    matches4 = self.get_matches(regex=regex,string=match2) if match2 else None
+                    heading_id_hdu_number = int(matches4[0]) if matches4 else None
 
                     # hdu_number from hdu_title
-                    heading_hdu_N = None
-                    heading_hdu_number = None
                     regex = '(?i)hdu\s*\d'
-                    heading_hdu_N = (self.get_matches(regex=regex,string=heading)[0]
-                                     if heading else None)
+                    matches5 = (self.get_matches(regex=regex,string=heading)
+                                if heading else list())
+                    heading_hdu_N = matches5[0] if matches5 else str()
                     regex = '\d+'
-                    heading_hdu_number = (self.get_matches(regex=regex,string=heading_hdu_N)[0]
-                                          if heading_hdu_N else None)
+                    matches6 = (self.get_matches(regex=regex,string=heading_hdu_N)
+                                if heading_hdu_N else list())
+                    heading_hdu_number = int(matches6[0]) if matches6 else None
+                    
                     if heading_hdu_number is None:
                         regex = '(?i)primary'
                         heading_hdu_number = ('0' if self.check_match(regex=regex,string=heading)
                                               else None)
-                    
+
                     # put hdu_number together
-                    hdu_number = (id_hdu_number
-                                    if id_hdu_number is not None
+                    hdu_number = (node_id_hdu_number
+                                    if node_id_hdu_number is not None
+                                  else heading_id_hdu_number
+                                    if heading_id_hdu_number is not None
                                   else heading_hdu_number
                                     if heading_hdu_number is not None
                                   else None)
                                   
                     # put hdu_title together
-                    hdu_title = heading.replace(heading_hdu_N,str()).replace(':',str())
+                    hdu_title = heading.strip()
+
+#                    print('\nnode_id: %r' % node_id)
+#                    print('matches1: %r' % matches1)
+#                    print('match1: %r' % match1)
+#                    print('matches2: %r' % matches2)
+#                    print('node_id_hdu_number: %r' % node_id_hdu_number)
+#                    
+#                    print('\nheading_id: %r' % heading_id)
+#                    print('matches3: %r' % matches3)
+#                    print('match2: %r' % match2)
+#                    print('matches4: %r' % matches4)
+#                    print('heading_id_hdu_number: %r' % heading_id_hdu_number)
+#                    
+#                    print('\nheading: %r' % heading)
+#                    print('matches5: %r' % matches5)
+#                    print('heading_hdu_N: %r' % heading_hdu_N)
+#                    print('matches6: %r' % matches6)
+#                    print('heading_hdu_number: %r' % heading_hdu_number)
+#                    
+#                    print('\nhdu_number: %r' % hdu_number)
+#                    print('hdu_title: %r' % hdu_title)
+#                    input('pause')
+
+
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_hdu_number_and_hdu_title from first heading. ' +
-                                      'header_tag: {}, '.format(header_tag) +
+                                      'heading_tag: {}, '.format(heading_tag) +
                                       'heading: {}.'.format(heading)
                                       )
                 if (hdu_number,hdu_title) == (None,None):

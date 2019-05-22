@@ -292,10 +292,10 @@ class Intro(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(file_id=None,heading_title=None):
-        if file_id and heading_title:
+    def load(file_id=None,position=None):
+        if file_id and position:
             try: intro = (Intro.query.filter(Intro.file_id==file_id)
-                                     .filter(Intro.heading_title==heading_title)
+                                     .filter(Intro.position==position)
                                      .one())
             except: intro = None
         elif file_id:
