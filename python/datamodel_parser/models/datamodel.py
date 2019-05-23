@@ -285,7 +285,7 @@ class Intro(db.Model):
     position = db.Column(db.Integer, nullable = False)
     heading_level = db.Column(db.Integer)
     heading_title = db.Column(db.String(128))
-    description = db.Column(db.String(2048))
+    description = db.Column(db.String(4096))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
@@ -552,7 +552,7 @@ class Keyword(db.Model):
                           db.ForeignKey('sdss.header.id'),
                           nullable = False)
     position = db.Column(db.Integer, nullable = False)
-    keyword = db.Column(db.String(64), nullable = False)
+    keyword = db.Column(db.String(64))
     value = db.Column(db.String(256))
     datatype = db.Column(db.String(80))
     comment = db.Column(db.String(2048))
@@ -562,12 +562,11 @@ class Keyword(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(header_id=None,position=None,keyword=None):
-        if header_id and position is not None and keyword:
+    def load(header_id=None,position=None):
+        if header_id and position is not None:
             try: header = (Keyword.query
                                 .filter(Keyword.header_id==header_id)
                                 .filter(Keyword.position==position)
-                                .filter(Keyword.keyword==keyword)
                                 .one())
             except: header = None
         else:
@@ -685,7 +684,7 @@ class Column(db.Model):
                         db.ForeignKey('sdss.data.id'),
                         nullable = False)
     position = db.Column(db.Integer, nullable = False)
-    name = db.Column(db.String(128), nullable = False)
+    name = db.Column(db.String(128))
     datatype = db.Column(db.String(128))
     units = db.Column(db.String(128))
     description = db.Column(db.String(2048))
@@ -695,12 +694,11 @@ class Column(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(data_id=None,position=None,name=None):
-        if data_id and position is not None and name:
+    def load(data_id=None,position=None):
+        if data_id and position is not None:
             try: column = (Column.query
                                 .filter(Column.data_id==data_id)
                                 .filter(Column.position==position)
-                                .filter(Column.name==name)
                                 .one())
             except: column = None
         else:

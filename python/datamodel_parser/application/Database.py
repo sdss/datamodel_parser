@@ -1192,14 +1192,9 @@ class Database:
                 else self.column_columns['name']
                 if self.column_columns and 'name' in self.column_columns
                 else None)
-            if data_id and position is not None and name:
-                self.column = (Column.load(data_id = data_id,
-                                           position  = position,
-                                           name      = name)
-                                if data_id
-                                and position is not None
-                                and name
-                                else None)
+            if data_id and position is not None:
+                self.column = (Column.load(data_id=data_id,position=position)
+                               if data_id and position is not None else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_column. ' +
@@ -1422,20 +1417,17 @@ class Database:
                 else self.keyword_columns['keyword']
                 if self.keyword_columns and 'keyword' in self.keyword_columns
                 else None)
-            if header_id and position is not None and keyword:
+            if header_id and position is not None:
                 self.keyword = (Keyword.load(header_id = header_id,
-                                             position  = position,
-                                             keyword   = keyword)
+                                             position  = position)
                                 if header_id
                                 and position is not None
-                                and keyword
                                 else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_keyword. ' +
                                   'header_id: {}, '.format(header_id) +
                                   'position: {}, '.format(position) +
-                                  'keyword: {}.'.format(keyword) +
                                   'self.keyword_columns: {}.'.format(self.keyword_columns)
                                   )
 
@@ -1454,7 +1446,7 @@ class Database:
                     self.logger.info(
                         'Updated Keyword[id={}], '.format(self.keyword.id) +
                         'header_id: {}, '.format(self.keyword.header_id) +
-                        'keyword: {}.'.format(self.keyword.keyword))
+                        'position: {}.'.format(self.keyword.position))
             else:
                 self.ready = False
                 self.logger.error('Unable to update_keyword_row. ' +
@@ -1488,7 +1480,7 @@ class Database:
                     self.logger.info(
                         'Added Keyword[id={}], '.format(keyword.id) +
                         'header_id: {}, '.format(keyword.header_id) +
-                        'keyword: {}.'.format(keyword.keyword))
+                        'position: {}.'.format(keyword.position))
                 else:
                     self.ready = False
                     self.logger.error('Unable to create_keyword_row. ' +

@@ -890,10 +890,10 @@ class Util:
                                                               'In for loop. ' +
                                                               'soup: {}.'.format(soup))
                                 else:
-#                                    print('child: %r'%  child)
-#                                    print('child.name: %r'%  child.name)
-#                                    print('string: %r'%  string)
-#                                    input('pause')
+                                    print('child: %r'%  child)
+                                    print('child.name: %r'%  child.name)
+                                    print('string: %r'%  string)
+                                    input('pause')
 
                                     self.ready = False
                                     self.logger.error('Unable to get_split_hdus_3. ' +

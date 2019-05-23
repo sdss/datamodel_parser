@@ -64,7 +64,7 @@ CREATE TABLE sdss.intro (
     position INT2 NOT NULL,
     heading_level INT2,
     heading_title VARCHAR(128),
-    description VARCHAR(2048),
+    description VARCHAR(4096),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -104,7 +104,7 @@ CREATE TABLE sdss.keyword (
     id SERIAL NOT NULL PRIMARY KEY,
     header_id INT4 REFERENCES sdss.header(id) NOT NULL,
     position INT2 NOT NULL,
-    keyword VARCHAR(64) NOT NULL,
+    keyword VARCHAR(64),
     value VARCHAR(256),
     datatype VARCHAR(80),
     comment VARCHAR(2048),
@@ -125,7 +125,7 @@ CREATE TABLE sdss.column (
     id SERIAL NOT NULL PRIMARY KEY,
     data_id INT4 REFERENCES sdss.data(id) NOT NULL,
     position INT2 NOT NULL,
-    name VARCHAR(128) NOT NULL,
+    name VARCHAR(128),
     datatype VARCHAR(128),
     units VARCHAR(128),
     description VARCHAR(2048),
