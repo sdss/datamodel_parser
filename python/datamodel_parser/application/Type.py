@@ -228,6 +228,7 @@ class Type(object):
                                         self.correct_type = False
                                         self.logger.debug(
                                             "not <ul> <li> tag contains a bold tag.")
+
             else:
                 self.ready = False
                 self.logger.error('Unable to check_ul_tag_assumptions_1. ' +
@@ -244,18 +245,26 @@ class Type(object):
                     if not 'ul' in tag_names:
                         self.correct_type = False
                         self.logger.debug("not 'ul' in tag_names")
-                # check <ul> tag has only <li> tag children
+                # check there's only one <ul> tag with only <li> tag children
                 if self.correct_type:
-                    ul = node.find('ul') if node else None
-                    lis = ul.find_all('li') if ul else list()
-                    if not lis:
+                    uls = node.find_all('ul') if node else None
+                    if not uls or len(list(uls)) > 1:
                         self.correct_type = False
-                        self.logger.debug("not <li> string is filename.")
+                        self.logger.debug("not there's only one <ul> tag.")
                     else:
-                        for li in lis:
-                            if not self.util.check_node_string_is_filename(node=li):
-                                self.correct_type = False
-                                self.logger.debug("not <li> string is filename.")
+                        # check <ul> tag has only <li> tag children
+                        ul = list(uls)[0]
+                        lis = ul.find_all('li') if ul else list()
+                        if not lis:
+                            self.correct_type = False
+                            self.logger.debug("not <ul> tag has only <li> tag children.")
+                        else:
+                            # check lis contain file names
+                            for li in lis:
+                                if self.correct_type:
+                                    if not self.util.check_node_string_is_filename(node=li):
+                                        self.correct_type = False
+                                        self.logger.debug("not <li> string is filename.")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_ul_tag_assumptions_1. ' +
@@ -377,7 +386,7 @@ class Type(object):
                             child_names = self.util.get_child_names(node=p)
                             if child_names and 'b' in child_names:
                                 b = p.find('b')
-                                if len(list(b.strings)) > 1 or ':' not in b.string:
+                                if len(list(b.strings)) > 1:
                                     self.correct_type = False
                                     self.logger.debug("not <p> tag <b> children have ':' in string")
             else:
@@ -444,7 +453,7 @@ class Intro_type(Type):
         return intro_type
 
     def check_intro_type_1(self,node=None):
-        '''Determine class Intro_type template from the given BeautifulSoup node.'''
+        '''Determine intro_type from the given BeautifulSoup node.'''
         self.correct_type = False
         if self.ready:
             if node:
@@ -475,7 +484,7 @@ class Intro_type(Type):
         return self.correct_type
 
     def check_intro_type_2(self,node=None):
-        '''Determine class Intro_type template from the given BeautifulSoup node.'''
+        '''Determine intro_type from the given BeautifulSoup node.'''
         self.correct_type = False
         if self.ready:
             if node:
@@ -514,7 +523,7 @@ class Intro_type(Type):
         return self.correct_type
 
     def check_intro_type_3(self,node=None):
-        '''Determine class Intro_type template from the given BeautifulSoup node.'''
+        '''Determine intro_type from the given BeautifulSoup node.'''
         self.correct_type = False
         if self.ready:
             if node:
@@ -552,7 +561,7 @@ class Intro_type(Type):
         return self.correct_type
 
     def check_intro_type_4(self,node=None):
-        '''Determine class Intro_type template from the given BeautifulSoup node.'''
+        '''Determine intro_type from the given BeautifulSoup node.'''
         self.correct_type = False
         if self.ready:
             if node:
@@ -591,7 +600,7 @@ class Intro_type(Type):
         return self.correct_type
 
     def check_intro_type_5(self,node=None):
-        '''Determine class Intro_type template from the given BeautifulSoup node.'''
+        '''Determine intro_type from the given BeautifulSoup node.'''
         self.correct_type = False
         if self.ready:
             if node:
@@ -618,7 +627,7 @@ class Intro_type(Type):
         return self.correct_type
 
     def check_intro_type_6(self,node=None):
-        '''Determine class Intro_type template from the given BeautifulSoup node.'''
+        '''Determine intro_type from the given BeautifulSoup node.'''
         self.correct_type = False
         if self.ready:
             if node:
@@ -671,7 +680,7 @@ class Intro_type(Type):
         return self.correct_type
 
     def check_intro_type_8(self,node=None):
-        '''Determine class Intro_type template from the given BeautifulSoup node.'''
+        '''Determine intro_type from the given BeautifulSoup node.'''
         self.correct_type = False
         if self.ready:
             if node:
@@ -762,6 +771,8 @@ class Hdu_type(Type):
         if self.ready:
             if node:
                 # found in file_type=1, with divs
+                tag_names = set(self.util.get_child_names(node=node))
+                if 'pre' in tag_names: print("'pre' in tag_names")
                 if   self.check_hdu_type_1(node=node): hdu_type = 1
                 elif self.check_hdu_type_2(node=node): hdu_type = 2
                 elif self.check_hdu_type_3(node=node): hdu_type = 3

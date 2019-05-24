@@ -768,23 +768,48 @@ class Util:
             if node:
                 children = self.get_children(node=node)
                 if children:
-                    first_heading = True
+                    first_table = True
                     hdu = list()
-                    self.ready = False
-                    print('UNDER CONSTRUCTION')
-                    '''for child in children:
+                    for child in children:
                         if self.ready:
-#                            print('\n\n child: %r'%  child)
-#                            print('self.ready: %r'%  self.ready)
+                            print('\n\n child: %r'%  child)
+                            print('self.ready: %r'%  self.ready)
 #                            input('pause')
-
-                            (title,description) = self.get_title_and_description_from_p(p=p)
+                            (title,description) = (self.get_title_and_description_from_p(p=child)
+                                                   if child.name and child.name == 'p'
+                                                   else (None,None))
+                            title = (title.replace(':',str())
+                                     if title and title.endswith(':') else title)
                             if title and not description: # has <b> tag and no other text
-                                regex = ('(?i)required\s+header\s+keywords'     + '|'
-                                         '(?i)required\s+hdu\s*\d*\s+keywords'  + '|'
-                                         '(?i)required\s+column\s+names'        + '|'
-                                         '(?i)required\s+hdu\s*\d*\s+column\s+names'
-                                         )
+                                regex1 = '(?i)Required(.*?)keywords'
+                                regex2 = '(?i)Required(.*?)column\s*names'
+                                match1 = (self.check_matches(regex=regex1,string=title)
+                                            if title else list())
+                                match2 = (self.check_matches(regex=regex2,string=title)
+                                            if title else list())
+                                
+                                regex = '(?i)hdu\s*\d'
+                                matches = (self.get_matches(regex=regex,string=table_title)
+                                           if table_title else list())
+                                hdu_k = (matches[0]
+                                         if matches and len(matches) == 1 else str())
+                                print('table_title: %r'%  table_title)
+                                print('hdu_k: %r'%  hdu_k)
+    #                            input('pause')
+
+#                                if table_title:
+#                                    if first_heading:
+#                                        first_heading = False
+#                                        previous_title = table_title
+#                                        hdu.append(child)
+#                                    # when same title for header and data tables
+#                                    elif hdu_k and hdu_k in previous_title:
+#                                        hdu.append(child)
+#                                    else:
+
+                                print('matches: %r'%  matches)
+                                input('pause')
+
                                 if self.check_match(regex=regex,string=title):
                                     if first_heading:
                                         first_heading = False
@@ -838,7 +863,7 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_split_hdus_2. ' +
-                                  'node: {}'.format(node))'''
+                                  'node: {}'.format(node))
         return hdus
 
     def get_split_hdus_3(self,node=None):
