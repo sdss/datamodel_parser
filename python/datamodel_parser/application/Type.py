@@ -317,8 +317,7 @@ class Type(object):
                 self.check_tags_have_only_text_content(node=node,tag_names=['p'])
                 # <p> tag details
                 if self.correct_type:
-                    found_header_table = False
-                    found_column_table = False
+                    found_table_title = False
                     for p in node.find_all('p'):
                         # check all <p> tags have <b> tag children
                         if self.correct_type:
@@ -335,15 +334,11 @@ class Type(object):
                                 # check only one string in <b> tag
                                 string = strings[0] if strings and len(strings) == 1 else None
                                 if string:
-                                    if ('required header keywords' in string        or
-                                        ('hdu' in string and 'keywords' in string)
-                                        ):
-                                        found_header_table = True
-                                    if ('required column names' in string           or
-                                        ('hdu' in string and 'column names' in string)
-                                        ):
-                                        found_column_table = True
-                    if not (found_header_table or found_column_table):
+                                    regex = ('(?i)Required(.*?)keywords' + '|'
+                                             '(?i)Required(.*?)column\s*names' )
+                                    match = self.util.check_match(regex=regex,string=string)
+                                    if match: found_table_title = True
+                    if not found_table_title:
                         self.correct_type = False
                         self.logger.debug("not there is a header table or data table " +
                                             "title in a <p> tag")
