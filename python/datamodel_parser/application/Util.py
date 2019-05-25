@@ -862,9 +862,9 @@ class Util:
                 self.ready = False
                 self.logger.error('Unable to get_split_hdus_3. ' +
                                   'node: {}'.format(node))
-        print('\n\n!!!!!!!! HI end of function !!!!!!!!!')
-        print('hdus: %r' % hdus)
-        input('pause')
+#        print('\n\n!!!!!!!! HI end of function !!!!!!!!!')
+#        print('hdus: %r' % hdus)
+#        input('pause')
 
         return hdus
 
