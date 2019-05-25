@@ -682,18 +682,32 @@ class Hdu:
                 tables = self.util.get_tables_2(node=node,
                                                 table_title_tag_names = ['p'],
                                                 regex=regex)
-                print('tables: %r' % tables)
-                input('pause')
+#                print('tables: %r' % tables)
+#                input('pause')
                 if tables:
                     for (table_number,table) in enumerate(tables):
                         if self.ready:
                             # table caption
-                            table_caption = None
+                            ps = self.util.get_children(node=table,names=['p'])
+                            p = ps[0] if ps and len(ps) == 1 else None
+                            (title,description) = (
+                                self.util.get_title_and_description_from_p(p=p)
+                                    if p else (None,None))
+                            table_caption = ('\n'.join([title,description])
+                                            if title or description else None)
                             
                             # is_header
-                            is_header = self.get_is_header_2(table=table,
-                                                             table_number=table_number)
-
+                            is_header = (True if title and
+                                            self.util.check_match(
+                                                regex='(?i)Required(.*?)keywords',
+                                                string=title)
+                                        else False if title and
+                                            self.util.check_match(
+                                                regex='(?i)Required(.*?)column\s*names',
+                                                string=title)
+                                        else None
+                                        )
+                                        
                             # column_names
                             column_names = (['Key','Value','Type','Comment']
                                             if is_header == True else
@@ -703,8 +717,9 @@ class Hdu:
                                             )
 
                             # table_rows
-                            table_rows = (self.get_table_rows_pre(table=table)
-                                          if table else None)
+                            table_rows = None #### DEBUG ####
+#                            table_rows = (self.get_table_rows_pre(table=table)
+#                                          if table and table.find('ul') else None)
 
                             # check if errors have occurred
                             self.ready = self.ready and self.util.ready
@@ -717,6 +732,10 @@ class Hdu:
                                 hdu_table['table_column_names'] = column_names
                                 hdu_table['table_rows']         = table_rows
                                 hdu_tables.append(hdu_table)
+
+                            print('hdu_table: %r' % hdu_table)
+                            input('pause')
+
                     self.file_hdu_tables.append(hdu_tables)
                 else:
                     self.ready = False

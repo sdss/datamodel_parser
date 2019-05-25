@@ -1260,7 +1260,7 @@ class Util:
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_tables_2. ' +
-                                      'table_tags: {}, '.format(table_tags)
+                                      'table_titles: {}, '.format(table_titles)
                                       )
             else:
                 self.ready = False
