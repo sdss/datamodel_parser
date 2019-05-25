@@ -298,7 +298,7 @@ class Util:
                               )
         return found_hdus
 
-    def get_hdu_number_and_hdu_title(self,node=None):
+    def get_hdu_number_and_hdu_title_from_heading_tag(self,node=None):
         '''Get hdu_number and hdu_title from first heading tag in BeautifulSoup node.'''
         (hdu_number,hdu_title) = (None,None)
         if self.ready:
@@ -383,25 +383,63 @@ class Util:
 
                 else:
                     self.ready = False
-                    self.logger.error('Unable to get_hdu_number_and_hdu_title from first heading. ' +
+                    self.logger.error('Unable to get_hdu_number_and_hdu_title_from_heading_tag from first heading. ' +
                                       'heading_tag: {}, '.format(heading_tag) +
                                       'heading: {}.'.format(heading)
                                       )
                 if (hdu_number,hdu_title) == (None,None):
                     self.ready = False
-                    self.logger.error('Unable to get_hdu_number_and_hdu_title. ' +
+                    self.logger.error('Unable to get_hdu_number_and_hdu_title_from_heading_tag. ' +
                                       'hdu_number: {}, '.format(hdu_number) +
                                       'hdu_title: {}'.format(hdu_title)
                                       )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_hdu_number_and_hdu_title_from_heading_tag. ' +
+                                  'node: {} '.format(node) )
         return (hdu_number,hdu_title)
 
-    def get_all_possible_hdu_titles(self):
-        '''Generate a list of hdu n where n is an integer.'''
-        hdu_titles = list()
+    def get_hdu_number_and_hdu_title_from_p_tags_1(self,node=None):
+        '''Get hdu_number and hdu_title from first heading tag in BeautifulSoup node.'''
+        (hdu_number,hdu_title) = (None,None)
         if self.ready:
-            for n in range(100):
-                hdu_titles.append('hdu ' + str(n))
-        return hdu_titles
+            if node:
+                hdu_numbers = list()
+                for p in node.find_all('p'):
+                    (title,description) = self.get_title_and_description_from_p(p=p)
+                    if title:
+                        regex1 = ('(?i)Required(.*?)keywords' + '|'
+                                 '(?i)Required(.*?)column\s*names' )
+                        regex2 = '(?i)hdu\s*\d'
+                        match1 = (self.check_match(regex=regex1,string=title)
+                                  if title else None)
+                        matches2 = (self.get_matches(regex=regex2,string=title)
+                                  if title else None)
+                        match2 = matches2[0] if matches2 else None
+                        if match1:
+                            if not match2:
+                                hdu_numbers.append(0)
+                            else:
+                                regex3 = '\d'
+                                matches3 = (self.get_matches(regex=regex3,string=title)
+                                          if title else None)
+                                match3 = matches3[0] if matches3 else None
+                                if match3:
+                                    hdu_numbers.append(match3)
+                if len(set(hdu_numbers)) == 1: # if all entries in hdu_numbers are the same
+                    hdu_number = hdu_numbers[0]
+                    hdu_title = 'HDU' + str(hdu_number)
+                if (hdu_number,hdu_title) == (None,None):
+                    self.ready = False
+                    self.logger.error('Unable to get_hdu_number_and_hdu_title_from_p_tags_1. ' +
+                                      'hdu_number: {}, '.format(hdu_number) +
+                                      'hdu_title: {}'.format(hdu_title)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_hdu_number_and_hdu_title_from_p_tags_1. ' +
+                                  'node: {} '.format(node) )
+        return (hdu_number,hdu_title)
 
     def get_single_digit(self,string=None):
         '''Get single digit 0-9 from the given string.'''
@@ -555,18 +593,19 @@ class Util:
                                   'dl: {0}'.format(dl))
         return (datatype,hdu_size)
 
-    def get_children(self,node=None,name=None):
+    def get_children(self,node=None,names=list()):
         '''Get the children from the BeautifulSoup node, excluding line endings.'''
         children = None
         if self.ready:
             if node:
-#                children = ([child for child in node.children if child.name == name]
-#                            if name else
+#                children = ([child for child in node.children if child.name in names]
+#                            if names else
 #                            [child for child in node.children
 #                             if str(child) and not str(child).isspace()]
 #                            )
-                children = ([child for child in node.children if child.name == name]
-                            if name else
+                children = ([child for child in node.children
+                             if child.name and child.name in names]
+                            if names else
                             [child for child in node.children if child.name])
             else:
                 self.ready = False
@@ -1106,7 +1145,8 @@ class Util:
         return matches
 
     def get_tables_1(self,node=None,table_tag=None):
-        '''Test if node contains two tables and split them into a list of Beautiful soup objects'''
+        '''Test if node contains two tables by table_tag
+            and split them into a list of Beautiful soup objects'''
         tables = None
         if self.ready:
             if node and table_tag:
@@ -1161,6 +1201,81 @@ class Util:
                                   )
         return tables
 
+    def get_tables_2(self,node=None,table_title_tag_names=None,regex=None):
+        '''Test if node contains two tables by table_title_tags with regex match
+            and split them into a list of Beautiful soup objects'''
+        tables = None
+        if self.ready:
+            if node and table_title_tag_names and regex:
+                # get all children of node with name in table_title_tag_names
+                table_title_tags = self.get_children(node=node,
+                                                     names=table_title_tag_names)
+                # get potential titles from
+                table_titles = list()
+                for tag in table_title_tags:
+                    strings = [s.strip() for s in tag.strings
+                               if str(s) and not str(s).isspace()]
+                    title = strings[0] if strings else None
+                    if title: table_titles.append(title)
+                # get titles with regex match
+                table_titles = [t for t in table_titles
+                                if self.check_match(regex=regex,string=t)]
+                if table_titles:
+                    if len(list(table_titles)) == 1:
+                        tables = [node]
+                    elif len(list(table_titles)) == 2:
+                        children = self.get_children(node=node)
+                        if children:
+                            previous_siblings = None
+                            next_siblings = None
+                            found_first_table_title = False
+                            for child in children:
+                                if child.name in table_title_tag_names:
+                                    if not found_first_table_title:
+                                        found_first_table_title = True
+                                    else:
+                                        previous_siblings = child.previous_siblings
+                                        next_siblings = child.previous_sibling.next_siblings
+                                        break
+                            if previous_siblings and next_siblings:
+                                tables = [self.get_soup_from_iterator(
+                                                    iterator=previous_siblings,
+                                                    reverse=True),
+                                              self.get_soup_from_iterator(
+                                                    iterator=next_siblings,
+                                                    reverse=False)
+                                              ]
+                        else:
+                            self.ready = False
+                            self.logger.error('Unable to get_tables_2. ' +
+                                              'children: {}, '.format(children)
+                                              )
+                    else:
+                        self.ready = False
+                        self.logger.error('Unable to get_tables_2. ' +
+                                          'len(list(table_titles)) > 2, '
+                                          'len(list(table_titles)): {}, '
+                                            .format(len(list(table_titles)))
+                                          )
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_tables_2. ' +
+                                      'table_tags: {}, '.format(table_tags)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_tables_2. ' +
+                                  'node: {}, '.format(node) +
+                                  'table_title_tag_names: {}, '
+                                    .format(table_title_tag_names) +
+                                  'regex: {}, '.format(regex)
+                                  )
+            if tables is None:
+                self.ready = False
+                self.logger.error('Unable to get_tables_2. ' +
+                                  'tables: {}, '.format(tables)
+                                  )
+        return tables
 
 
 

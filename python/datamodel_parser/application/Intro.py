@@ -579,22 +579,4 @@ class Intro:
         if not assumptions: self.ready = False
         return assumptions
 
-    def parse_file_h1_p_h2_table_h3_pre(self):
-        '''Parse the HTML of the given BeautifulSoup div tag object with
-            children: h1, p, h3, ul, and pre.'''
-        if self.ready:
-#            assumptions = self.verify_assumptions_parse_file_h1_p_h3_ul_pre()
-            if self.body:# and assumptions:
-                child_names = self.util.get_child_names(node=self.body)
-                print('child_names: %r' % child_names)
 
-                for child in child_names:
-                    self.body.find(child)
-                    if child in self.util.heading_tag_names:
-                        hdu_titles = self.util.get_all_possible_hdu_titles()
-
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_h1_p_h3_ul_pre. ' +
-                                  'self.body: {}'.format(self.body) +
-                                  'assumptions: {}'.format(assumptions))
