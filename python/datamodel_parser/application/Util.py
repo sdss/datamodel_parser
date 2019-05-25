@@ -1105,27 +1105,27 @@ class Util:
                                   )
         return matches
 
-    def get_pre_tables_1(self,node=None):
-        '''Test if node contains two pre tables and split them into a list of Beautiful soup objects'''
-        pre_tables = None
+    def get_tables_1(self,node=None,table_tag=None):
+        '''Test if node contains two tables and split them into a list of Beautiful soup objects'''
+        tables = None
         if self.ready:
-            if node:
-                pres = node.find_all('pre')
-                if pres:
-                    if len(list(pres)) == 1:
-                        pre_tables = [node]
-                    elif len(list(pres)) == 2:
+            if node and table_tag:
+                table_tags = node.find_all(table_tag)
+                if table_tags:
+                    if len(list(table_tags)) == 1:
+                        tables = [node]
+                    elif len(list(table_tags)) == 2:
                         children = self.get_children(node=node)
                         if children:
                             previous_siblings = None
                             next_siblings = None
                             for child in children:
-                                if child.name == 'pre':
+                                if child.name == table_tag:
                                     previous_siblings = child.next_sibling.previous_siblings
                                     next_siblings = child.next_siblings
                                     break
                             if previous_siblings and next_siblings:
-                                pre_tables = [self.get_soup_from_iterator(
+                                tables = [self.get_soup_from_iterator(
                                                     iterator=previous_siblings,
                                                     reverse=True),
                                               self.get_soup_from_iterator(
@@ -1134,31 +1134,32 @@ class Util:
                                               ]
                         else:
                             self.ready = False
-                            self.logger.error('Unable to get_pre_tables_1. ' +
+                            self.logger.error('Unable to get_tables_1. ' +
                                               'children: {}, '.format(children)
                                               )
                     else:
                         self.ready = False
-                        self.logger.error('Unable to get_pre_tables_1. ' +
-                                          'len(list(pres)) > 2, '
-                                          'len(list(pres)): {}, '.format(len(list(pres)))
+                        self.logger.error('Unable to get_tables_1. ' +
+                                          'len(list(table_tags)) > 2, '
+                                          'len(list(table_tags)): {}, '.format(len(list(table_tags)))
                                           )
                 else:
                     self.ready = False
-                    self.logger.error('Unable to get_pre_tables_1. ' +
-                                      'pres: {}, '.format(pres)
+                    self.logger.error('Unable to get_tables_1. ' +
+                                      'table_tags: {}, '.format(table_tags)
                                       )
             else:
                 self.ready = False
-                self.logger.error('Unable to get_pre_tables_1. ' +
-                                  'node: {}, '.format(node)
+                self.logger.error('Unable to get_tables_1. ' +
+                                  'node: {}, '.format(node) +
+                                  'table_tag: {}, '.format(table_tag)
                                   )
-            if pre_tables is None:
+            if tables is None:
                 self.ready = False
-                self.logger.error('Unable to get_pre_tables_1. ' +
-                                  'pre_tables: {}, '.format(pre_tables)
+                self.logger.error('Unable to get_tables_1. ' +
+                                  'tables: {}, '.format(tables)
                                   )
-        return pre_tables
+        return tables
 
 
 

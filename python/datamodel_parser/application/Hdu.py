@@ -506,7 +506,7 @@ class Hdu:
         hdu_tables = list()
         if self.ready:
             if node:
-                tables = self.util.get_pre_tables_1(node=node)
+                tables = self.util.get_tables_1(node=node,table_tag='pre')
                 if tables:
                     for (table_number,table) in enumerate(tables):
                         if self.ready:
