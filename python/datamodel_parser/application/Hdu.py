@@ -75,13 +75,13 @@ class Hdu:
                                     self.parse_file_hdu_intro_3(node=node)
                                     self.parse_file_hdu_tables_2(node=node)
                                 elif self.hdu_type == 4:
-                                    self.parse_file_hdu_intro_4(node=node)
+                                    self.parse_file_hdu_intro_3(node=node)
                                     self.parse_file_hdu_tables_3(node=node)
                                 elif self.hdu_type == 5:
-                                    self.parse_file_hdu_intro_5(node=node)
+                                    self.parse_file_hdu_intro_3(node=node)
                                     self.parse_file_hdu_tables_4(node=node) # No table
                                 elif self.hdu_type == 6:
-                                    self.parse_file_hdu_intro_6(node=node)
+                                    self.parse_file_hdu_intro_4(node=node)
                                     self.parse_file_hdu_tables_3(node=node)
                                 else:
                                     self.ready = False
@@ -148,13 +148,13 @@ class Hdu:
 #                        self.parse_file_hdu_intro_3(node=node)
 #                        self.parse_file_hdu_tables_2(node=node)
 #                    elif self.hdu_type == 4:
-#                        self.parse_file_hdu_intro_4(node=node)
+#                        self.parse_file_hdu_intro_3(node=node)
 #                        self.parse_file_hdu_tables_3(node=node)
 #                    elif self.hdu_type == 5:
-#                        self.parse_file_hdu_intro_5(node=node)
+#                        self.parse_file_hdu_intro_3(node=node)
 #                        self.parse_file_hdu_tables_4(node=node) # No table
 #                    elif self.hdu_type == 6:
-#                        self.parse_file_hdu_intro_6(node=node)
+#                        self.parse_file_hdu_intro_4(node=node)
 #                        self.parse_file_hdu_tables_3(node=node)
 #                    else:
 #                        self.ready = False
@@ -306,7 +306,7 @@ class Hdu:
                 hdu_descriptions = ([self.util.get_string(p) for p in ps
                                      if str(p) and not str(p).isspace()]
                                     if ps else list())
-                hdu_description = ' '.join(hdu_descriptions)
+                hdu_description = ' '.join(hdu_descriptions) if hdu_descriptions else str()
 
                 # datatype and hdu_size
                 (datatype,hdu_size) = (None,None)
@@ -333,82 +333,6 @@ class Hdu:
                                   'node: {}, '.format(node) )
 
     def parse_file_hdu_intro_4(self,node=None):
-        '''Parse file hdu data content from given BeautifulSoup node.'''
-        if self.ready:
-            if node:
-                # hdu_number and header_title (from first heading tag)
-                (hdu_number,hdu_title) = (
-                    self.util.get_hdu_number_and_hdu_title(node=node))
-
-                # hdu_description
-                hdu_description = None
-                child_names = set(self.util.get_child_names(node=node))
-                if 'p' in child_names:
-                    ps = node.find_all('p')
-                    hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
-
-                # datatype and hdu_size
-                (datatype,hdu_size) = (None,None)
-
-                # is_image
-                is_image = None
-                
-                # check if an error has occurred
-                self.ready = self.util.ready
-                
-                # put it all together
-                hdu_info = dict()
-                if self.ready:
-                    hdu_info['is_image']        = is_image
-                    hdu_info['hdu_number']      = hdu_number
-                    hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
-                    hdu_info['hdu_size']        = hdu_size
-                    hdu_info['hdu_description'] = hdu_description
-                    hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
-                self.file_hdu_info.append(hdu_info)
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_hdu_intro_4. ' +
-                                  'node: {}, '.format(node) )
-
-    def parse_file_hdu_intro_5(self,node=None):
-        '''Parse file hdu data content from given BeautifulSoup node.'''
-        if self.ready:
-            if node:
-                # hdu_number and header_title (from first heading tag)
-                (hdu_number,hdu_title) = (
-                    self.util.get_hdu_number_and_hdu_title(node=node))
-
-                # hdu_description
-                ps = node.find_all('p')
-                hdu_description = ('\n'.join([self.util.get_string(node=p) for p in ps])
-                                    if ps else None)
-                                    
-                # datatype and hdu_size
-                (datatype,hdu_size) = (None,None)
-
-                # is_image
-                is_image = None
-                
-                # check if an error has occurred
-                self.ready = self.util.ready
-                
-                # put it all together
-                hdu_info = dict()
-                if self.ready:
-                    hdu_info['is_image']        = is_image
-                    hdu_info['hdu_number']      = hdu_number
-                    hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
-                    hdu_info['hdu_size']        = hdu_size
-                    hdu_info['hdu_description'] = hdu_description
-                    hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
-                self.file_hdu_info.append(hdu_info)
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_hdu_intro_5. ' +
-                                  'node: {}, '.format(node) )
-
-    def parse_file_hdu_intro_6(self,node=None):
         '''Parse file hdu data content from given BeautifulSoup node.'''
         if self.ready:
             if node:
@@ -447,7 +371,7 @@ class Hdu:
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
-                self.logger.error('Unable to parse_file_hdu_intro_6. ' +
+                self.logger.error('Unable to parse_file_hdu_intro_4. ' +
                                   'node: {}, '.format(node) )
 
 
