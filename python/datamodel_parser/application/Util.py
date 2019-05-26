@@ -840,7 +840,7 @@ class Util:
                                         elif previous_match2 == match2:
                                             hdu.append(child)
 
-#                                            print('\n\n%%%%%% HI previous_match2 == match2 %%%%%%%%%')
+#                                            print('\n\n%%% HI previous_match2 == match2 %%%%%%')
 #                                            print('hdu: %r' %  hdu)
 #                                            input('pause')
                                         else:
@@ -859,15 +859,13 @@ class Util:
                                                 self.logger.error('Unable to get_split_hdus_2. ' +
                                                                   'In for loop. ' +
                                                                   'soup: {}.'.format(soup))
+                                    # append <p> tags without table title
                                     else:
-#                                        print('child: %r'%  child)
-#                                        print('child.name: %r'%  child.name)
-#                                        print('string: %r'%  string)
+                                        hdu.append(child)
+                                        
+#                                        print('\n\n^^^^^^^ HI not match1 ^^^^^^^')
+#                                        print('hdu: %r' %  hdu)
 #                                        input('pause')
-
-                                        self.ready = False
-                                        self.logger.error('Unable to get_split_hdus_2. ' +
-                                                          'title: {}. '.format(title))
                                 else:
                                     self.ready = False
                                     self.logger.error('Unable to get_split_hdus_2. ' +
@@ -875,6 +873,7 @@ class Util:
                                                       'title: {}. '.format(title) +
                                                       'description: {}. '.format(description)
                                                       )
+                            # append non <p> tags
                             else:
                                 hdu.append(child)
 

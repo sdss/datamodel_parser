@@ -293,7 +293,7 @@ class Intro(db.Model):
 
     @staticmethod
     def load(file_id=None,position=None):
-        if file_id and position:
+        if file_id and position is not None:
             try: intro = (Intro.query.filter(Intro.file_id==file_id)
                                      .filter(Intro.position==position)
                                      .one())

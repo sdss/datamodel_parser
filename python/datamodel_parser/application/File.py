@@ -138,6 +138,13 @@ class File:
                                 if node and self.file_type else (None,None))
                 self.intro.parse_file(node=intro)
                 self.ready = type.ready and self.util.ready and self.intro.ready
+#                print('intro: %r' % intro)
+#                print('hdus: %r' % hdus)
+#                print('type.ready: %r' % type.ready)
+#                print('self.util.ready: %r' % self.util.ready)
+#                print('self.intro.ready: %r' % self.intro.ready)
+#                print('self.ready: %r' % self.ready)
+#                input('pause')
                 if self.ready:
                     self.hdu.parse_file(nodes=hdus)
                     self.ready = self.hdu.ready

@@ -84,6 +84,7 @@ class Intro:
 #                    print('self.intro_heading_levels: %r' % self.intro_heading_levels)
 #                    print('self.intro_heading_titles: {}'.format(self.intro_heading_titles))
 #                    print('self.intro_descriptions: {}'.format(self.intro_descriptions))
+#                    print('self.ready: {}'.format(self.ready))
 #                    input('pause')
 
                 else:

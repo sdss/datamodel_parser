@@ -492,7 +492,7 @@ class Hdu:
 
                             # table_rows
                             table_rows = (self.get_table_rows_pre(table=table)
-                                          if table else None)
+                                          if table and table.find('pre') else None)
 
                             # check if errors have occurred
                             self.ready = self.ready and self.util.ready
@@ -717,10 +717,8 @@ class Hdu:
                                             )
 
                             # table_rows
-                            table_rows = None #### DEBUG ####
-#                            table_rows = (self.get_table_rows_pre(table=table)
-#                                          if table and table.find('ul') else None)
-
+                            table_rows = (self.get_table_rows_ul(table=table)
+                                          if table and table.find('ul') else dict())
                             # check if errors have occurred
                             self.ready = self.ready and self.util.ready
 
@@ -732,11 +730,10 @@ class Hdu:
                                 hdu_table['table_column_names'] = column_names
                                 hdu_table['table_rows']         = table_rows
                                 hdu_tables.append(hdu_table)
-
-                            print('hdu_table: %r' % hdu_table)
-                            input('pause')
-
                     self.file_hdu_tables.append(hdu_tables)
+#                    print('self.file_hdu_tables: %r' % self.file_hdu_tables)
+#                    input('pause')
+
                 else:
                     self.ready = False
                     self.logger.error('Unable to parse_file_hdu_tables_5. ' +
@@ -1104,6 +1101,36 @@ class Hdu:
                                   'table: {}'.format(table))
         return table_rows
 
+    def get_table_rows_ul(self,table=None):
+        '''Get table rows from the <table> tag.'''
+        table_rows = dict()
+        if self.ready:
+            ul = table.find('ul') if table else None
+            if ul:
+                rows = [self.util.get_string(li) for li in table.find_all('li')]
+                if rows:
+                    for (position,row) in enumerate(rows):
+                        if self.ready:
+                            table_row = self.get_table_row_1(row=row)
+                            if table_row:
+                                table_rows[position] = table_row
+                            else:
+                                self.ready = False
+                                self.logger.error('Unable to get_table_rows_ul. ' +
+                                                  'row: {}, '.format(row) +
+                                                  'table_row: {}, '.format(table_row)
+                                                  )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_table_rows_ul. ' +
+                                  'table: {}'.format(table))
+            if not table_rows:
+                self.ready = False
+                self.logger.error('Unable to get_table_rows_ul. ' +
+                                  'table: {}'.format(table))
+        return table_rows
+
+
     def get_table_row_1(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
         table_row = list()
@@ -1126,16 +1153,19 @@ class Hdu:
                           '^[A-Z]+\d*\_[A-Z]+\d*'                       + '|'
                           '^[A-Z]+\d*'
                           )
+                regex5 = '^\s*<b>(.*?)</b>'
                 match0 = self.util.check_match(regex=regex0,string=row)
                 match1 = self.util.check_match(regex=regex1,string=row.lstrip())
                 match2 = self.util.check_match(regex=regex2,string=row.lstrip())
                 match3 = self.util.check_match(regex=regex3,string=row.lstrip())
                 match4 = self.util.check_match(regex=regex4,string=row.lstrip())
+                match5 = self.util.check_match(regex=regex5,string=row.lstrip())
 #                print('match0: %r' % match0)
 #                print('match1: %r' % match1)
 #                print('match2: %r' % match2)
 #                print('match3: %r' % match3)
 #                print('match4: %r' % match4)
+#                print('match5: %r' % match5)
 #                input('pause')
 
                 # header_table_columns = ['Key','Value','Type','Comment']
@@ -1198,6 +1228,30 @@ class Hdu:
                         self.ready = False
                         self.logger.error('Unable to get_table_row_1. ' +
                                           'col0: {}'.format(col0))
+                elif match5:
+                    row = row.strip()
+                    matches = self.util.get_matches(regex=regex5,string=row)
+                    match = matches[0] if matches else None
+                    col0 = match if row.startswith(match) else None
+                    if col0:
+                        col23 = row.split(col0)[1].strip() # = [str(),row.replace(col0,str())]
+                        col0 = col0.replace('<b>',str()).replace('</b>',str()).strip()
+                        matches = self.util.get_matches(regex='\((.*?)\)',string=col23)
+                        col2 = matches[0] if matches else None
+                        col3 = col23.split(col2)[1].strip() if col2 else col23
+                        col2 = col2.replace('(',str()).replace(')',str()).strip() if col2 else None
+                        col3 = col3[1:].strip() if col3 and col3.startswith(':') else col3
+                        col3 = None if col3 and col3.strip() == '.' else col3
+                        table_row = [col0,None,col2,col3]
+
+#                        print('\n\nrow: %r' % row)
+#                        print('col0: %r' % col0)
+#                        print('col23: %r' % col23)
+#                        print('matches: %r' % matches)
+#                        print('col2: %r' % col2)
+#                        print('col3: %r' % col3)
+#                        print('table_row: %r' % table_row)
+#                        input('pause')
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_table_row_1. ' +
@@ -1214,5 +1268,35 @@ class Hdu:
 
         return table_row
 
+    def get_table_row_2(self,row=None):
+        '''Set the header keyword-value pairs for the given row.'''
+        table_row = list()
+        if self.ready:
+            if row:
+                regex1 = '^\s*<b>(.*?)</b>'
+                match1 = self.util.check_match(regex=regex1,string=row)
+#                print('match1: %r' % match1)
+#                input('pause')
+                # header_table_columns = ['Key','Value','Type','Comment']
+                # binary_table_columns = ['Name','Type','Unit','Description']
+                if match0 or match1:
+                    table_row = [None,None,None,row.strip()]
+                elif match2:
+                    row = row.strip()
+                    matches = self.util.get_matches(regex=regex2,string=row)
+                    match = matches[0] if matches else None
+                    col0 = match if row.startswith(match) else None
+                    if col0:
+                        col13 = row.split(col0)[1].strip() # = ['',row.replace(col0,'')]
+
+            else:
+                self.logger.debug('Unable to get_table_row_2. ' +
+                                    'row: {}'.format(row)
+                                  )
+#        print('row: %r' % row)
+#        print('table_row: %r' % table_row)
+#        input('pause')
+
+        return table_row
 
 
