@@ -84,10 +84,14 @@ class Hdu:
                                     self.parse_file_hdu_intro_4(node=node)
                                     self.parse_file_hdu_tables_3(node=node)
                                 elif self.hdu_type == 7:
-#                                    print('node: %r' % node)
-#                                    input('pause')
                                     self.parse_file_hdu_intro_5(node=node)
                                     self.parse_file_hdu_tables_5(node=node)
+                                elif self.hdu_type == 8:
+                                    self.parse_file_hdu_intro_6(node=node)
+                                    self.parse_file_hdu_tables_1(node=node)
+                                elif self.hdu_type == 9:
+                                    self.parse_file_hdu_intro_2(node=node)
+                                    self.parse_file_hdu_tables_1(node=node)
                                 else:
                                     self.ready = False
                                     self.logger.error('Unexpected self.hdu_type encountered ' +
@@ -238,7 +242,8 @@ class Hdu:
                                        if dl else (None,None))
                                        
                 # is_image
-                is_image = True if datatype.lower() == 'image' else False
+                is_image = (self.util.check_match(regex='(?i)IMAGE',string=datatype)
+                            if datatype else None)
                 
                 # check if an error has occurred
                 self.ready = self.util.ready
@@ -278,7 +283,8 @@ class Hdu:
                 (datatype,hdu_size) = self.util.get_datatype_and_hdu_size(node=p)
 
                 # is_image
-                is_image = True if datatype.lower() == 'image' else False
+                is_image = (self.util.check_match(regex='(?i)IMAGE',string=datatype)
+                            if datatype else None)
                 
                 # check if an error has occurred
                 self.ready = self.util.ready
@@ -413,6 +419,53 @@ class Hdu:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_intro_5. ' +
                                   'node: {}, '.format(node) )
+
+    def parse_file_hdu_intro_6(self,node=None):
+        '''Parse file hdu data content from given BeautifulSoup node.'''
+        if self.ready:
+            if node:
+                # hdu_number and header_title (from first heading tag)
+                (hdu_number,hdu_title) = (
+                    self.util.get_hdu_number_and_hdu_title_from_heading_tag(node=node))
+
+                # hdu.description
+                hdu_description = self.util.get_string_from_middle_children_1(node=node)
+
+                # datatype and hdu_size
+                for p in node.find_all('p'): pass # get last p tag
+                (datatype,hdu_size) = self.util.get_datatype_and_hdu_size(node=p)
+
+                # is_image
+                is_image = (self.util.check_match(regex='(?i)IMAGE',string=datatype)
+                            if datatype else None)
+                
+                # check if an error has occurred
+                self.ready = self.ready and self.util.ready
+
+                # put it all together
+                hdu_info = dict()
+                if self.ready:
+                    hdu_info['is_image']        = is_image
+                    hdu_info['hdu_number']      = hdu_number
+                    hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
+                    hdu_info['hdu_size']        = hdu_size
+                    hdu_info['hdu_description'] = hdu_description
+                    hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
+                
+#                print('hdu_number: %r' % hdu_number)
+#                print('hdu_title: %r' % hdu_title)
+#                print('datatype: %r' % datatype)
+#                print('hdu_size: %r' % hdu_size)
+#                print('is_image: %r' % is_image)
+#                print('self.ready: %r' % self.ready)
+#                input('pause')
+
+
+                self.file_hdu_info.append(hdu_info)
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_hdu_intro_6. ' +
+                                  'node: {}, '.format(node))
 
 
 
@@ -689,13 +742,20 @@ class Hdu:
                         if self.ready:
                             # table caption
                             ps = self.util.get_children(node=table,names=['p'])
-                            p = ps[0] if ps and len(ps) == 1 else None
+                            p = ps[0] if ps else None
+                            ps = ps[1:] if ps and len(ps) > 1 else None
                             (title,description) = (
                                 self.util.get_title_and_description_from_p(p=p)
                                     if p else (None,None))
-                            table_caption = ('\n'.join([title,description])
-                                            if title or description else None)
-                            
+                            p_strings = ([self.util.get_string(p) for p in ps if p]
+                                         if ps else list())
+                            table_caption = (title.strip() + '.\n'
+                                             if title.strip() else str())
+                            table_caption += (description.strip() + '\n'
+                                              if description.strip() else str())
+                            table_caption += ('\n'.join(p_strings)
+                                              if p_strings else str())
+                                              
                             # is_header
                             is_header = (True if title and
                                             self.util.check_match(

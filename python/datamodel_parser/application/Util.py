@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
 from re import search, compile, match
+from string import punctuation
 from json import dumps
 
 
@@ -278,6 +279,102 @@ class Util:
         if not (title and description): pass # can be empty if no <b> tag
         return (title,description)
 
+    def get_titles_and_descriptions_1(self,node=None):
+        '''From the given BeautifulSoup node, get Python lists for the associated
+            titles and descriptions, comprised of the heading strings and the tags
+            inbetween the headings, respectively.
+        '''
+        titles  = list()
+        descriptions = list()
+        if self.ready:
+            if node:
+                children = self.get_children(node=node)
+                if children:
+                    first_title = True
+                    second_title = True
+                    description_list = list()
+                    for child in children:
+                        if self.ready:
+#                            print('\n\n child: %r'%  child)
+#                            print('self.ready: %r'%  self.ready)
+#                            input('pause')
+                            if child.name == 'div': break # don't add Sections div
+                            elif child.name in self.heading_tag_names:
+                                if first_title:
+                                    first_title = False
+                                    continue
+                                elif second_title:
+                                    second_title = False
+                                    title = (self.get_string(node=child)
+                                             if child else None)
+                                    if title: titles.append(title)
+                                else:
+                                    description = '\n'.join(description_list)
+                                    description_list = list()
+                                    title = (self.get_string(node=child)
+                                             if child else None)
+                                    if title: titles.append(title)
+                                    if description: descriptions.append(description)
+                            else:
+                                description_list.append(self.get_string(child))
+                    if description_list:
+                        description = '\n'.join(description_list)
+                        descriptions.append(description)
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_titles_and_descriptions_1. ' +
+                                      'children: {}'.format(children))
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_titles_and_descriptions_1. ' +
+                                  'node: {}'.format(node))
+        if not (titles and descriptions) and len(titles)==len(descriptions):
+            self.ready = False
+            self.logger.error('Unable to get_titles_and_descriptions_from_ps_1. ' +
+                              'titles: {}, '.format(titles) +
+                              'descriptions: {}, '.format(descriptions) +
+                              'len(titles): {}, '.format(len(titles)) +
+                              'len(descriptions): {}.'.format(len(descriptions))
+                              )
+#        print('titles: %r' % titles)
+#        print('descriptions: %r' % descriptions)
+#        print('self.ready: %r' % self.ready)
+#        input('pause')
+        return (titles,descriptions)
+
+    def get_string_from_middle_children_1(self,node=None):
+        '''Combine strings of tags into one string, excluding first heading tag
+            and table tags.'''
+        string = None
+        if self.ready:
+            if node:
+                children = self.get_children(node=node)
+                if children:
+                    # remove table tags from children
+                    children = [c for c in children if c.name != 'table']
+
+                    # remove the first child if heading tag
+                    if children[0].name in self.heading_tag_names:
+                        children = children[1:]
+                    else:
+                        self.ready = False
+                        self.logger.error('Unable to get_string_from_middle_children_1. ' +
+                                          'first tag not in self.heading_tag_names. ' +
+                                          'children: {}. '.format(children))
+                    if self.ready:
+                        string = '\n\n'.join([self.get_string(node=child)
+                                              for child in children])
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_string_from_middle_children_1. ' +
+                                      'children: {}.'.format(children)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_string_from_middle_children_1. ' +
+                                  'node: {}.'.format(node)
+                                  )
+        return string
 
     def check_found_hdus(self,title=str(),description=str()):
         '''Check if the title and description indicates the hdus have been found.'''
@@ -566,16 +663,24 @@ class Util:
 
     def get_datatype_and_hdu_size(self,node=None):
         '''Get datatype and hdu_size from the given BeautifulSoup node.'''
-        (datatype,hdu_size)=(None,None)
+        (datatype,hdu_size) = (None,None)
         if self.ready:
             if node:
                 all_strings = self.get_all_strings(node=node)
-                if 'hdu type' in all_strings[0].lower(): datatype = all_strings[1]
-                if 'hdu size' in all_strings[2].lower(): hdu_size = all_strings[3]
+                if self.check_match(regex='(?i)hdu type',string=all_strings[0]):
+                    datatype = all_strings[1].strip().strip(punctuation).strip()
+                if self.check_match(regex='(?i)hdu size',string=all_strings[2]):
+                    hdu_size = all_strings[3].strip().strip(punctuation).strip()
             else:
                 self.ready = False
                 self.logger.error('Unable to get_datatype_and_hdu_size. ' +
                                   'node: {0}'.format(node))
+            if (datatype,hdu_size) == (None,None):
+                self.ready = False
+                self.logger.error('Unable to get_datatype_and_hdu_size. ' +
+                                  'datatype: {0}. '.format(datatype) +
+                                  'hdu_size: {0}. '.format(hdu_size)
+                                  )
         return (datatype,hdu_size)
 
     def get_datatype_and_hdu_size_from_dl(self,dl=None):
@@ -859,20 +964,20 @@ class Util:
                                                 self.logger.error('Unable to get_split_hdus_2. ' +
                                                                   'In for loop. ' +
                                                                   'soup: {}.'.format(soup))
-                                    # append <p> tags without table title
+                                    # append <p> tags without table title matching regex
                                     else:
                                         hdu.append(child)
                                         
 #                                        print('\n\n^^^^^^^ HI not match1 ^^^^^^^')
 #                                        print('hdu: %r' %  hdu)
 #                                        input('pause')
+                                # append <p> tags without table title 
                                 else:
-                                    self.ready = False
-                                    self.logger.error('Unable to get_split_hdus_2. ' +
-                                                      'Anticipated title and no description. ' +
-                                                      'title: {}. '.format(title) +
-                                                      'description: {}. '.format(description)
-                                                      )
+                                    hdu.append(child)
+
+#                                    print('\n\n^^^^^^^ HI not title ^^^^^^^')
+#                                    print('hdu: %r' %  hdu)
+#                                    input('pause')
                             # append non <p> tags
                             else:
                                 hdu.append(child)
