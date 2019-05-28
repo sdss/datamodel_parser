@@ -92,6 +92,9 @@ class Hdu:
                                 elif self.hdu_type == 9:
                                     self.parse_file_hdu_intro_2(node=node)
                                     self.parse_file_hdu_tables_1(node=node)
+                                elif self.hdu_type == 10:
+                                    self.parse_file_hdu_intro_3(node=node)
+                                    self.parse_file_hdu_tables_2(node=node)
                                 else:
                                     self.ready = False
                                     self.logger.error('Unexpected self.hdu_type encountered ' +
@@ -275,7 +278,7 @@ class Hdu:
                 ps = list()
                 for p in node.find_all('p'): ps.append(p)
                 ps.pop() # remove last p tag containing datatype and hdu_size
-                hdu_description = ('\n'.join([self.util.get_string(node=p) for p in ps])
+                hdu_description = ('\n\n'.join([self.util.get_string(node=p) for p in ps])
                                    if ps else None)
                 
                 # datatype and hdu_size
@@ -285,9 +288,18 @@ class Hdu:
                 # is_image
                 is_image = (self.util.check_match(regex='(?i)IMAGE',string=datatype)
                             if datatype else None)
-                
+
                 # check if an error has occurred
                 self.ready = self.util.ready
+
+#                print('hdu_number: %r' % hdu_number)
+#                print('hdu_title: %r' % hdu_title)
+#                print('datatype: %r' % datatype)
+#                print('hdu_size: %r' % hdu_size)
+#                print('is_image: %r' % is_image)
+#                print('self.ready: %r' % self.ready)
+#                input('pause')
+
 
                 # put it all together
                 hdu_info = dict()
@@ -356,10 +368,10 @@ class Hdu:
                 child_names = set(self.util.get_child_names(node=node))
                 if 'p' in child_names:
                     ps = node.find_all('p')
-                    hdu_description = '\n'.join([self.util.get_string(node=p) for p in ps])
+                    hdu_description = '\n\n'.join([self.util.get_string(node=p) for p in ps])
                 if 'ul' in child_names:
                     uls = node.find_all('ul')
-                    hdu_description += '\n'.join([self.util.get_string(node=ul) for ul in uls])
+                    hdu_description += '\n\n'.join([self.util.get_string(node=ul) for ul in uls])
 
                 # datatype and hdu_size
                 (datatype,hdu_size) = (None,None)
@@ -442,6 +454,14 @@ class Hdu:
                 # check if an error has occurred
                 self.ready = self.ready and self.util.ready
 
+#                print('hdu_number: %r' % hdu_number)
+#                print('hdu_title: %r' % hdu_title)
+#                print('datatype: %r' % datatype)
+#                print('hdu_size: %r' % hdu_size)
+#                print('is_image: %r' % is_image)
+#                print('self.ready: %r' % self.ready)
+#                input('pause')
+
                 # put it all together
                 hdu_info = dict()
                 if self.ready:
@@ -451,16 +471,6 @@ class Hdu:
                     hdu_info['hdu_size']        = hdu_size
                     hdu_info['hdu_description'] = hdu_description
                     hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
-                
-#                print('hdu_number: %r' % hdu_number)
-#                print('hdu_title: %r' % hdu_title)
-#                print('datatype: %r' % datatype)
-#                print('hdu_size: %r' % hdu_size)
-#                print('is_image: %r' % is_image)
-#                print('self.ready: %r' % self.ready)
-#                input('pause')
-
-
                 self.file_hdu_info.append(hdu_info)
             else:
                 self.ready = False
@@ -476,42 +486,45 @@ class Hdu:
         if self.ready:
             if node:
                 tables = node.find_all('table')
-                for table in tables:
-                    # table caption
-                    captions = self.util.get_children(node=table,names=['caption'])
-                    table_caption = (self.util.get_string(node=captions[0])
-                                     if captions and len(captions) == 1
-                                     else None)
-
-                    # column_names
-                    column_names = list(table.find('thead').find('tr').strings)
-                    # is_header
-                    s = set([x.lower() for x in column_names])
-                    is_header = (s == {'key','value','type','comment'})
-                    
-                    # table keyword/values
-                    trs = table.find('tbody').find_all('tr')
-                    table_rows = dict()
-                    for (position,tr) in enumerate(trs):
-                        table_row = list()
-                        for td in tr.find_all('td'):
-                            if self.util.ready:
-                                string = self.util.get_string(node=td)
-                                table_row.append(string)
-                        table_rows[position]  = table_row
-                
-                    # check if errors have occurred
-                    self.ready = self.ready and self.util.ready
-
-
-                    # put it all together
+                for (table_number,table) in enumerate(tables):
                     if self.ready:
-                        hdu_table = dict()
-                        hdu_table['is_header']          = is_header
-                        hdu_table['table_caption']      = table_caption
-                        hdu_table['table_column_names'] = column_names
-                        hdu_table['table_rows']         = table_rows
-                        hdu_tables.append(hdu_table)
+                        # table caption
+                        captions = self.util.get_children(node=table,names=['caption'])
+                        table_caption = (self.util.get_string(node=captions[0])
+                                         if captions and len(captions) == 1
+                                         else None)
+
+                        # column_names
+                        column_names = list(table.find('thead').find('tr').strings)
+                        
+                        # is_header
+                        is_header = self.get_is_header_1(table=table,
+                                                         column_names=column_names,
+                                                         table_number=table_number)
+
+                        # table keyword/values
+                        trs = table.find('tbody').find_all('tr')
+                        table_rows = dict()
+                        for (position,tr) in enumerate(trs):
+                            table_row = list()
+                            for td in tr.find_all('td'):
+                                if self.util.ready:
+                                    string = self.util.get_string(node=td)
+                                    table_row.append(string)
+                            table_rows[position]  = table_row
+                    
+                        # check if errors have occurred
+                        self.ready = self.ready and self.util.ready
+
+
+                        # put it all together
+                        if self.ready:
+                            hdu_table = dict()
+                            hdu_table['is_header']          = is_header
+                            hdu_table['table_caption']      = table_caption
+                            hdu_table['table_column_names'] = column_names
+                            hdu_table['table_rows']         = table_rows
+                            hdu_tables.append(hdu_table)
                 self.file_hdu_tables.append(hdu_tables)
             else:
                 self.ready = False
@@ -600,7 +613,6 @@ class Hdu:
                         is_header = self.get_is_header_1(table=table,
                                                          column_names=column_names,
                                                          table_number=table_number)
-
                         # check if errors have occurred
                         self.ready = self.ready and self.util.ready
                         
@@ -731,12 +743,10 @@ class Hdu:
         if self.ready:
             if node:
                 regex = ('(?i)Required(.*?)keywords' + '|'
-                         '(?i)Required(.*?)column\s*names' )
+                         '(?i)Required(.*?)column' )
                 tables = self.util.get_tables_2(node=node,
                                                 table_title_tag_names = ['p'],
                                                 regex=regex)
-#                print('tables: %r' % tables)
-#                input('pause')
                 if tables:
                     for (table_number,table) in enumerate(tables):
                         if self.ready:
@@ -753,7 +763,7 @@ class Hdu:
                                              if title.strip() else str())
                             table_caption += (description.strip() + '\n'
                                               if description.strip() else str())
-                            table_caption += ('\n'.join(p_strings)
+                            table_caption += ('\n\n'.join(p_strings)
                                               if p_strings else str())
                                               
                             # is_header
@@ -816,7 +826,7 @@ class Hdu:
                               if isinstance(table_class,list) and len(table_class) == 1 else None)
                 if table_class:
                     header_regex = '(?i)header'
-                    bin_table_regex = '(?i)column'
+                    bin_table_regex = '(?i)column' + '|' + '(?i)bintable'
                     is_header = (
                         True
                         if self.util.check_match(regex=header_regex,string=table_class)
@@ -920,7 +930,7 @@ class Hdu:
                         for pre_tag in pre_tags:
                             string = self.util.get_string(node=pre_tag)
                             table_info.append(string)
-                        table_info = '\n' + '\n'.join(table_info)
+                        table_info = '\n' + '\n\n'.join(table_info)
                         # put it all together
                         self.parse_file_hdu_info_h1_p_h3_ul_pre(
                                                         hdu_title  = hdu_title,

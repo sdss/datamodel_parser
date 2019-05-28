@@ -83,15 +83,6 @@
  parse_html -l error -v --path datamodel/files/APOGEE_DATA/MJD5/apR.html
  parse_html -l error -v --path datamodel/files/BOSSTILELIST_DIR/outputs/bossN/final-bossN.html
  parse_html -l error -v --path datamodel/files/BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/manga-MAPS-DAPTYPE.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/manga-LOGCUBE-DAPTYPE.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELMKEY.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-SIKEY.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-ELMKEY.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-BINKEY.html
  parse_html -l error -v --path datamodel/files/RAWDATA_DIR/MJD/frames.list.html
  parse_html -l error -v --path datamodel/files/RAWDATA_DIR/MJD/sdR.html
  parse_html -l error -v --path datamodel/files/RAWDATA_DIR/MJD/guider/gimg.html
@@ -177,10 +168,6 @@
  parse_html -l error -v --path datamodel/files/PHOTO_DATA/RUN/fields/CAMCOL/idR.html
  parse_html -l error -v --path datamodel/files/PHOTO_SWEEP/RERUN/calibObj.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html
- parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHoles.html
- parse_html -l error -v --path datamodel/files/PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHolesSorted.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plMeas.html
  parse_html -l error -v --path datamodel/files/PLATELIST_DIR/runs/PLATERUN/plPlugMap.html
  parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
- parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
- parse_html -l error -v --path datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html

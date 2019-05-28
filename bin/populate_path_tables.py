@@ -35,6 +35,6 @@ else:
             store.set_path(path=path)
             store.split_path()
             store.populate_file_path_tables()
-#    print('file_list: \n' + dumps(file_list,indent=1))
+    print('file_list: \n' + dumps(file_list,indent=1))
     store.exit()
 

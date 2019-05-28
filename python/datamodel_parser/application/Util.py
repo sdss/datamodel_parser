@@ -109,6 +109,8 @@ class Util:
                     for child in children:
                         if child.name and child.name != tag_name:
                             all_one_tag_type = False
+#                            print('child: %r' % child)
+#                            input('pause')
                 else:
                     all_one_tag_type = False
             else:
@@ -309,7 +311,7 @@ class Util:
                                              if child else None)
                                     if title: titles.append(title)
                                 else:
-                                    description = '\n'.join(description_list)
+                                    description = '\n\n'.join(description_list)
                                     description_list = list()
                                     title = (self.get_string(node=child)
                                              if child else None)
@@ -318,7 +320,7 @@ class Util:
                             else:
                                 description_list.append(self.get_string(child))
                     if description_list:
-                        description = '\n'.join(description_list)
+                        description = '\n\n'.join(description_list)
                         descriptions.append(description)
                 else:
                     self.ready = False
@@ -411,7 +413,7 @@ class Util:
                     # hdu_number from node['id']
                     node_id = (node.attrs['id']
                                if node.attrs and 'id' in node.attrs else str())
-                    regex = '(?i)hdu\s*\d'
+                    regex = '(?i)hdu\s*\d+'
                     matches1 = self.get_matches(regex=regex,string=node_id) if node_id else list()
                     match1 = matches1[0] if matches1 else str()
                     regex = '\d+'
@@ -421,7 +423,7 @@ class Util:
                     # hdu_number from heading_tag['id']
                     heading_id = (heading_tag.attrs['id']
                                if heading_tag.attrs and 'id' in heading_tag.attrs else str())
-                    regex = '(?i)hdu\s*\d'
+                    regex = '(?i)hdu\s*\d+'
                     matches3 = self.get_matches(regex=regex,string=heading_id) if heading_id else list()
                     match2 = matches3[0] if matches3 else str()
                     regex = '\d+'
@@ -429,7 +431,7 @@ class Util:
                     heading_id_hdu_number = int(matches4[0]) if matches4 else None
 
                     # hdu_number from hdu_title
-                    regex = '(?i)hdu\s*\d'
+                    regex = '(?i)hdu\s*\d+'
                     matches5 = (self.get_matches(regex=regex,string=heading)
                                 if heading else list())
                     heading_hdu_N = matches5[0] if matches5 else str()
@@ -460,19 +462,19 @@ class Util:
 #                    print('match1: %r' % match1)
 #                    print('matches2: %r' % matches2)
 #                    print('node_id_hdu_number: %r' % node_id_hdu_number)
-#                    
+#
 #                    print('\nheading_id: %r' % heading_id)
 #                    print('matches3: %r' % matches3)
 #                    print('match2: %r' % match2)
 #                    print('matches4: %r' % matches4)
 #                    print('heading_id_hdu_number: %r' % heading_id_hdu_number)
-#                    
+#
 #                    print('\nheading: %r' % heading)
 #                    print('matches5: %r' % matches5)
 #                    print('heading_hdu_N: %r' % heading_hdu_N)
 #                    print('matches6: %r' % matches6)
 #                    print('heading_hdu_number: %r' % heading_hdu_number)
-#                    
+#
 #                    print('\nhdu_number: %r' % hdu_number)
 #                    print('hdu_title: %r' % hdu_title)
 #                    input('pause')
@@ -507,7 +509,7 @@ class Util:
                     if title:
                         regex1 = ('(?i)Required(.*?)keywords' + '|'
                                  '(?i)Required(.*?)column\s*names' )
-                        regex2 = '(?i)hdu\s*\d'
+                        regex2 = '(?i)hdu\s*\d+'
                         match1 = (self.check_match(regex=regex1,string=title)
                                   if title else None)
                         matches2 = (self.get_matches(regex=regex2,string=title)
@@ -517,7 +519,7 @@ class Util:
                             if not match2:
                                 hdu_numbers.append(0)
                             else:
-                                regex3 = '\d'
+                                regex3 = '\d+'
                                 matches3 = (self.get_matches(regex=regex3,string=title)
                                           if title else None)
                                 match3 = matches3[0] if matches3 else None
@@ -864,7 +866,7 @@ class Util:
                     if string:
                         regex = ('(?i)primary\s*hdu' + '|'
                                  '(?i)primary\s*hdu\s*\d*' + '|'
-                                 '(?i)hdu\s*\d*'
+                                 '(?i)hdu\s*\d+'
                                  )
                         if self.check_match(regex=regex,string=string):
                             previous_siblings = heading_tag.previous_siblings
@@ -894,7 +896,7 @@ class Util:
         if iterator and isinstance(reverse,bool):
             siblings = [str(s) for s in iterator if s and not str(s).isspace()]
             if reverse: siblings.reverse() if siblings else list()
-            text = '\n'.join(siblings) if siblings else str()
+            text = '\n\n'.join(siblings) if siblings else str()
             soup = BeautifulSoup(text, 'html.parser') if text else None
         else:
             self.ready = False
@@ -925,7 +927,7 @@ class Util:
                                 if title:
                                     regex1 = ('(?i)Required(.*?)keywords' + '|'
                                              '(?i)Required(.*?)column\s*names' )
-                                    regex2 = '(?i)hdu\s*\d'
+                                    regex2 = '(?i)hdu\s*\d+'
                                     match1 = (self.check_match(regex=regex1,string=title)
                                               if title else None)
                                     matches2 = (self.get_matches(regex=regex2,string=title)
@@ -1032,7 +1034,7 @@ class Util:
                                 # check only one string in tag
                                 string = (strings[0]
                                           if strings and len(strings) == 1 else None)
-                                regex = ('(?i)hdu\s*\d'             + '|' +
+                                regex = ('(?i)hdu\s*\d+'             + '|' +
                                          '(?i)primary\s*(?i)header' + '|' +
                                          '(?i)primary\s*(?i)hdu'
                                          )
@@ -1061,10 +1063,10 @@ class Util:
                                                               'In for loop. ' +
                                                               'soup: {}.'.format(soup))
                                 else:
-                                    print('child: %r'%  child)
-                                    print('child.name: %r'%  child.name)
-                                    print('string: %r'%  string)
-                                    input('pause')
+#                                    print('child: %r'%  child)
+#                                    print('child.name: %r'%  child.name)
+#                                    print('string: %r'%  string)
+#                                    input('pause')
 
                                     self.ready = False
                                     self.logger.error('Unable to get_split_hdus_3. ' +
