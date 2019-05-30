@@ -501,7 +501,6 @@ class Hdu:
                         is_header = self.get_is_header_1(table=table,
                                                          column_names=column_names,
                                                          table_number=table_number)
-
                         # table keyword/values
                         trs = table.find('tbody').find_all('tr')
                         table_rows = dict()
@@ -515,7 +514,6 @@ class Hdu:
                     
                         # check if errors have occurred
                         self.ready = self.ready and self.util.ready
-
 
                         # put it all together
                         if self.ready:
@@ -537,8 +535,11 @@ class Hdu:
         hdu_tables = list()
         if self.ready:
             if node:
-                tables = self.util.get_tables_1(node=node,table_tag='pre')
+                tables = self.util.get_pre_tables_1(node=node,table_tag='pre')
                 if tables:
+                    print('tables: %r' % tables)
+                    print('len(tables): %r' % len(tables))
+                    input('pause')
                     for (table_number,table) in enumerate(tables):
                         if self.ready:
                             # table caption
@@ -839,6 +840,7 @@ class Hdu:
                                           'is_header: {}, '.format(is_header) +
                                           'table.attrs: {}.'.format(table.attrs))
                 elif column_names:
+                    column_names = [c.lower() for c in column_names]
                     is_header = (False
                                 if ('unit' in column_names or
                                     'units' in column_names)

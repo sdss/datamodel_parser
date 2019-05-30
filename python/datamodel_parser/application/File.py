@@ -10,6 +10,7 @@ from datamodel_parser import app
 from os import environ
 from os.path import join
 from json import dumps
+from re import search, compile, match
 
 
 class File:
@@ -115,6 +116,68 @@ class File:
                 self.ready = False
                 self.logger.error('Unable to set_body. ' +
                                   'self.html_text: {}'.format(self.html_text))
+
+    def get_tag(self):
+        '''Get tag containing the text in self.options.text.'''
+        if self.ready:
+            if self.body and self.options:
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
+                file_id = self.database.file_id if self.database else None
+                self.database.set_all_hdus(file_id=file_id)
+                all_hdus = self.database.all_hdus
+                hdu = all_hdus[11] if all_hdus else None
+                hdu_id = hdu.id if hdu else None
+                self.database.set_all_datas(hdu_id=hdu_id)
+                all_datas = self.database.all_datas
+                data = all_datas[0]
+                data_id = data.id
+                self.database.set_all_headers(hdu_id=hdu_id)
+                all_headers = self.database.all_headers
+                header = all_headers[0]
+                header_id = header.id
+                self.database.set_all_columns(data_id=data_id)
+                all_columns = self.database.all_columns
+                column = all_columns[0]
+                column_name = column.name if column else None
+                self.database.set_all_keywords(header_id=header_id)
+                all_keywords = self.database.all_keywords
+                keyword = all_keywords[0]
+                keyword_keyword = keyword.keyword if keyword else None
+
+#                print('Hi get_tag')
+#                print('self.options.string: %r' % self.options.string)
+#                print('file_id: %r' % file_id)
+#                print('hdu_id: %r' % hdu_id)
+#                print('data_id: %r' % data_id)
+#                print('header_id: %r' % header_id)
+                print('column_name: %r' % column_name)
+                print('keyword_keyword: %r' % keyword_keyword)
+
+                keyword_parent = list()
+                keyword_parent_parent = list()
+                string = keyword_keyword
+                for elem in self.body(text=compile(string)):
+                    keyword_parent.append(elem.parent)
+                    keyword_parent_parent.append(elem.parent.parent)
+                    print('elem.parent: %r' % elem.parent)
+                    print('elem.parent.parent: %r' % elem.parent.parent)
+                print('keyword_parent: %r' % keyword_parent)
+                print('keyword_parent_parent: %r' % keyword_parent_parent)
+
+                column_parent = list()
+                column_parent_parent = list()
+                string = column_name
+                for elem in self.body(text=compile(string)):
+                    column_parent.append(elem.parent)
+                    column_parent_parent.append(elem.parent.parent)
+                    print('elem.parent: %r' % elem.parent)
+                    print('elem.parent.parent: %r' % elem.parent.parent)
+                print('column_parent: %r' % column_parent)
+                print('column_parent_parent: %r' % column_parent_parent)
+                input('pause')
 
     def populate_file_hdu_info_tables(self):
         '''Populate tables comprised of file HTML text information.'''

@@ -979,6 +979,22 @@ class Database:
                                   'file_id: {}, '.format(file_id)+
                                   'number: {}.'.format(number))
 
+    def set_all_hdus(self,file_id=None):
+        '''Load all rows from hdu table with given file_id.'''
+        self.all_hdus = None
+        if self.ready:
+            file_id = (file_id if file_id
+                else self.hdu_columns['file_id']
+                if self.hdu_columns
+                and 'file_id' in self.hdu_columns
+                else None)
+            if file_id:
+                self.all_hdus = Hdu.load_all(file_id=file_id) if file_id else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_all_hdus. ' +
+                                  'file_id: {}, '.format(file_id))
+
     def update_hdu_row(self):
         '''Update row in hdu table.'''
         if self.ready:
@@ -1087,6 +1103,22 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_data. ' +
+                                  'hdu_id: {}, '.format(hdu_id))
+
+    def set_all_datas(self,hdu_id=None):
+        '''Load all rows from data table with given hdu_id.'''
+        self.all_datas = None
+        if self.ready:
+            hdu_id = (hdu_id if hdu_id
+                else self.data_columns['hdu_id']
+                if self.data_columns
+                and 'hdu_id' in self.data_columns
+                else None)
+            if hdu_id:
+                self.all_datas = Data.load_all(hdu_id=hdu_id) if hdu_id else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_all_datas. ' +
                                   'hdu_id: {}, '.format(hdu_id))
 
     def update_data_row(self):
@@ -1200,6 +1232,22 @@ class Database:
                 self.logger.error('Unable to set_column. ' +
                                   'data_id: {}, '.format(data_id))
 
+    def set_all_columns(self,data_id=None):
+        '''Load all rows from column table with given data_id.'''
+        self.all_columns = None
+        if self.ready:
+            data_id = (data_id if data_id
+                else self.column_columns['data_id']
+                if self.column_columns
+                and 'data_id' in self.column_columns
+                else None)
+            if data_id:
+                self.all_columns = Column.load_all(data_id=data_id) if data_id else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_all_datas. ' +
+                                  'data_id: {}, '.format(data_id))
+
     def update_column_row(self):
         '''Update row in column table.'''
         if self.ready:
@@ -1306,6 +1354,22 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_header. ' +
+                                  'hdu_id: {}, '.format(hdu_id))
+
+    def set_all_headers(self,hdu_id=None):
+        '''Load all rows from header table with given hdu_id.'''
+        self.all_headers = None
+        if self.ready:
+            hdu_id = (hdu_id if hdu_id
+                else self.header_columns['hdu_id']
+                if self.header_columns
+                and 'hdu_id' in self.header_columns
+                else None)
+            if hdu_id:
+                self.all_headers = Data.load_all(hdu_id=hdu_id) if hdu_id else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_all_datas. ' +
                                   'hdu_id: {}, '.format(hdu_id))
 
     def update_header_row(self):
@@ -1430,6 +1494,22 @@ class Database:
                                   'position: {}, '.format(position) +
                                   'self.keyword_columns: {}.'.format(self.keyword_columns)
                                   )
+
+    def set_all_keywords(self,header_id=None):
+        '''Load all rows from keyword table with given header_id.'''
+        self.all_keywords = None
+        if self.ready:
+            header_id = (header_id if header_id
+                else self.keyword_columns['header_id']
+                if self.keyword_columns
+                and 'header_id' in self.keyword_columns
+                else None)
+            if header_id:
+                self.all_keywords = Keyword.load_all(header_id=header_id) if header_id else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_all_datas. ' +
+                                  'header_id: {}, '.format(header_id))
 
     def update_keyword_row(self):
         '''Update row in keyword table.'''

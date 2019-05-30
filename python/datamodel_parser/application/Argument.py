@@ -8,6 +8,16 @@ class Argument:
         self.options = self.get_options() if self.get_options else None
         self.options._name = name if self.options else None
 
+def inverse_parse_html():
+    parser = ArgumentParser()
+    parser.add_argument("-p", "--path", help="file path", metavar="PATH")
+    parser.add_argument("-s", "--string", help="search string", metavar="STRING")
+    parser.add_argument("-l", "--level", help="set logging level", metavar="LEVEL", choices=['debug','info','warning','error','critical'], default='info')
+    parser.add_argument("-f", "--force", help="skip caveats", action="store_true")
+    parser.add_argument("-n", "--nolog", help="set nolog variable", action="store_true")
+    parser.add_argument("-v", "--verbose", help="set verbose logging", action="store_true")
+    return parser.parse_args()
+
 def parse_html():
     parser = ArgumentParser()
     parser.add_argument("-p", "--path", help="file path", metavar="PATH")

@@ -202,13 +202,13 @@ class Util:
                               )
         return (titles,descriptions)
 
-    def get_titles_and_descriptions_from_ps_2(self,node=None):
+    def get_titles_and_descriptions_from_ps_2(self,node=None,sibling_tag_name=None):
         '''From the given list of BeautifulSoup <p> tag objects,
         get Python lists for the associated titles and descriptions
         '''
         titles  = list()
         descriptions = list()
-        if self.ready:
+        if self.ready and sibling_tag_name:
             if node:
                 ps = node.find_all('p')
                 for p in ps:
@@ -219,9 +219,9 @@ class Util:
                         # Naming convention unordered list
                         next_siblings = [s for s in p.next_siblings if s and not str(s).isspace()]
                         if next_siblings:
-                            if next_siblings[0].name == 'ul':
-                                ul = p.find('ul')
-                                description = str(ul)
+                            if next_siblings[0].name == sibling_tag_name:
+                                sibling_tag = p.find(sibling_tag_name)
+                                description = str(sibling_tag)
                         else:
                             description = str() # just title with no description
                     elif not (title and description): # does not have <b> tag
@@ -232,7 +232,9 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_titles_and_descriptions_from_ps_2. ' +
-                                  'node: {}'.format(node))
+                                  'node: {}'.format(node) +
+                                  'node: {}'.format(node)
+                                  )
         if not (titles and descriptions) and len(titles)==len(descriptions):
             self.ready = False
             self.logger.error('Unable to get_titles_and_descriptions_from_ps_2. ' +
@@ -1250,7 +1252,7 @@ class Util:
                                   )
         return matches
 
-    def get_tables_1(self,node=None,table_tag=None):
+    def get_pre_tables_1(self,node=None,table_tag=None):
         '''Test if node contains two tables by table_tag
             and split them into a list of Beautiful soup objects'''
         tables = None
@@ -1280,29 +1282,29 @@ class Util:
                                               ]
                         else:
                             self.ready = False
-                            self.logger.error('Unable to get_tables_1. ' +
+                            self.logger.error('Unable to get_pre_tables_1. ' +
                                               'children: {}, '.format(children)
                                               )
                     else:
                         self.ready = False
-                        self.logger.error('Unable to get_tables_1. ' +
+                        self.logger.error('Unable to get_pre_tables_1. ' +
                                           'len(list(table_tags)) > 2, '
                                           'len(list(table_tags)): {}, '.format(len(list(table_tags)))
                                           )
                 else:
                     self.ready = False
-                    self.logger.error('Unable to get_tables_1. ' +
+                    self.logger.error('Unable to get_pre_tables_1. ' +
                                       'table_tags: {}, '.format(table_tags)
                                       )
             else:
                 self.ready = False
-                self.logger.error('Unable to get_tables_1. ' +
+                self.logger.error('Unable to get_pre_tables_1. ' +
                                   'node: {}, '.format(node) +
                                   'table_tag: {}, '.format(table_tag)
                                   )
             if tables is None:
                 self.ready = False
-                self.logger.error('Unable to get_tables_1. ' +
+                self.logger.error('Unable to get_pre_tables_1. ' +
                                   'tables: {}, '.format(tables)
                                   )
         return tables

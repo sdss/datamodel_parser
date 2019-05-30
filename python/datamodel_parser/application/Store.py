@@ -198,6 +198,24 @@ class Store:
             'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
             ]
 
+    def get_tag(self):
+        '''Populate tables comprised of file HTML text information.'''
+        if self.ready:
+            self.set_file_path_info()
+            self.set_html_text()
+            self.set_file()
+            if self.file_path_info and self.html_text and self.file:
+                self.file.set_file_path_info(file_path_info=self.file_path_info)
+                self.file.set_html_text(html_text=self.html_text)
+                self.file.set_body()
+                self.file.get_tag()
+            else:
+                self.ready = False
+                self.logger.error(
+                            'Unable to populate_file_html_tables. ' +
+                            'self.file_path_info: {}, '.format(self.file_path_info) +
+                            'self.html_text: {}, '.format(self.html_text) +
+                            'self.file: {}.'.format(self.file) )
 
     def populate_database(self):
         '''Populate the database with file information.'''

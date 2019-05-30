@@ -503,7 +503,7 @@ class Header(db.Model):
         return header
     
     @staticmethod
-    def load_all(hdus=None):
+    def load_all(hdus=None,hdu_id=None):
         '''Create a list of all header rows with id's in the given hdu list.'''
         if hdus:
             headers = dict()
@@ -514,6 +514,11 @@ class Header(db.Model):
                                     .one())
                     headers[header.hdu_number] = header
                 except: pass # do nothing
+        elif hdu_id:
+            try: headers = (Header.query.filter(Header.hdu_id==hdu_id)
+                                .order_by(Header.hdu_number)
+                                .all())
+            except: headers = None
         else:
             headers = None
         return headers
@@ -635,7 +640,7 @@ class Data(db.Model):
         return data
     
     @staticmethod
-    def load_all(hdus=None):
+    def load_all(hdus=None,hdu_id=None):
         '''Create a list of all data rows with id's in the given hdu list.'''
         if hdus:
             datas = dict()
@@ -645,7 +650,12 @@ class Data(db.Model):
                                 .filter(Data.hdu_id==hdu.id)
                                 .one())
                     datas[data.hdu_number] = data
-                except: pass # do nothing
+                except: pass
+        elif hdu_id:
+            try: datas = (Data.query.filter(Data.hdu_id==hdu_id)
+                              .order_by(Data.hdu_number)
+                              .all())
+            except: datas = None
         else:
             datas = None
         return datas

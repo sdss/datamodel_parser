@@ -73,6 +73,7 @@ class Intro:
                     elif self.intro_type == 7: self.parse_file_type_7(node=node)
                     elif self.intro_type == 8: self.parse_file_type_8(node=node)
                     elif self.intro_type == 9: self.parse_file_type_9(node=node)
+#                    elif self.intro_type == 10: self.parse_file_type_10(node=node) too broad
                     else:
                         self.ready = False
                         self.logger.error(
@@ -359,7 +360,7 @@ class Intro:
                 
                 # page intro
                 (titles,descriptions) = (
-                    self.util.get_titles_and_descriptions_from_ps_2(node=node))
+                    self.util.get_titles_and_descriptions_from_ps_2(node=node,sibling_tag_name='ul'))
                 # check if errors have occurred
                 self.ready = self.ready and self.util.ready
                 
@@ -539,6 +540,37 @@ class Intro:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_type_9. ' +
+                                  'node: {}'.format(node) )
+
+    def parse_file_type_10(self,node=None):
+        '''Parse the HTML of the given BeautifulSoup node.'''
+        if self.ready:
+            if node:
+                # page title
+                heading_tag_name = self.util.get_heading_tag_child_names(node=node)[0]
+                h = node.find(heading_tag_name) if heading_tag_name else None
+                title = self.util.get_string(node=h) if h else str()
+                description = str() # no description for page title
+                self.intro_heading_titles.append(title)
+                self.intro_descriptions.append(description)
+                
+                # page intro
+                (titles,descriptions) = (
+                    self.util.get_titles_and_descriptions_from_ps_2(node=node,sibling_tag_name='pre'))
+                # check if errors have occurred
+                self.ready = self.ready and self.util.ready
+                
+                # put it all together
+                if self.ready:
+                    self.intro_heading_titles.extend(titles)
+                    self.intro_descriptions.extend(descriptions)
+                    number_headings = len(self.intro_heading_titles)
+                    self.intro_positions = list(range(number_headings))
+                    self.intro_heading_levels = [1]
+                    self.intro_heading_levels.extend([4] * (number_headings - 1))
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_type_10. ' +
                                   'node: {}'.format(node) )
 
     def parse_file_h1_p_h3_ul_pre(self):
