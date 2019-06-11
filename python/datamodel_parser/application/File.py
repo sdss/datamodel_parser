@@ -117,7 +117,93 @@ class File:
                 self.logger.error('Unable to set_body. ' +
                                   'self.html_text: {}'.format(self.html_text))
 
-    def get_tag(self):
+    def get_db_column_tags(self):
+        '''Get each tag containing.'''
+        db_column_tags = list()
+        if self.ready:
+            self.set_all_hdus()
+            if self.all_hdus:
+                for hdu in self.all_hdus:
+                    self.database.set_all_datas(hdu_id=hdu.id)
+                    datas = self.database.all_datas
+                    if datas:
+                        for data in datas:
+                            self.database.set_all_columns(data_id=data.id)
+                            columns = self.database.all_columns
+                            if columns:
+                                for column in columns:
+                                    column_name = column.name if column else None
+                                    self.set_parent_tags(text=column_name)
+                                    db_column_tags.append(self.parent_tags)
+                            else:
+                                self.logger.info('Unable to get_db_column_tags. ' +
+                                                  'columns: {0}'.format(columns))
+                    else:
+                        self.logger.info('Unable to get_db_column_tags. ' +
+                                          'datas: {0}'.format(datas))
+            else:
+                self.logger.info('Unable to get_db_column_tags. ' +
+                                  'self.all_hdus: {0}'.format(self.all_hdus))
+        return db_column_tags
+
+    def get_db_keyword_tags(self):
+        '''Get each tag containing.'''
+        db_keyword_tags = list()
+        if self.ready:
+            self.set_all_hdus()
+            if self.all_hdus:
+                for hdu in self.all_hdus:
+                    self.database.set_all_headers(hdu_id=hdu.id)
+                    headers = self.database.all_headers
+                    if headers:
+                        for header in headers:
+                            self.database.set_all_keywords(header_id=header.id)
+                            keywords = self.database.all_keywords
+                            if keywords:
+                                for keyword in keywords:
+                                    keyword_keyword = keyword.keyword if keyword else None
+                                    self.set_parent_tags(text=keyword_keyword)
+                                    db_keyword_tags.append(self.parent_tags)
+                            else:
+                                self.logger.info('Unable to get_db_keyword_tags. ' +
+                                                  'keywords: {0}'.format(keywords))
+                    else:
+                        self.logger.info('Unable to get_db_keyword_tags. ' +
+                                          'headers: {0}'.format(headers))
+            else:
+                self.logger.info('Unable to get_db_keyword_tags. ' +
+                                  'self.all_hdus: {0}'.format(self.all_hdus))
+        return db_keyword_tags
+
+    def set_all_hdus(self):
+        self.all_hdus = None
+        if self.ready:
+            if self.database:
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
+                file_id = (self.database.file_id
+                           if self.database and self.database.ready else None)
+                self.database.set_all_hdus(file_id=file_id)
+                self.all_hdus = (self.database.all_hdus
+                                 if self.database and self.database.ready else None)
+
+    def set_parent_tags(self,text=None):
+        self.parent_tags = None
+        if self.ready:
+            if text and self.body:
+                self.parent_tags = list()
+                for elem in self.body(text=compile(text)):
+                    self.parent_tags.append(elem.parent)
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_sibling_names. ' +
+                                  'text: {0}'.format(text) +
+                                  'bool(self.body): {0}'.format(bool(self.body))
+                                  )
+
+    def get_keyword_tag0(self):
         '''Get tag containing the text in self.options.text.'''
         if self.ready:
             if self.body and self.options:
@@ -125,59 +211,67 @@ class File:
                                           env_variable  = self.env_variable,
                                           location_path = self.location_path,
                                           file_name     = self.file_name)
-                file_id = self.database.file_id if self.database else None
+                file_id = (self.database.file_id
+                           if self.database and self.database.ready else None)
                 self.database.set_all_hdus(file_id=file_id)
-                all_hdus = self.database.all_hdus
-                hdu = all_hdus[11] if all_hdus else None
-                hdu_id = hdu.id if hdu else None
-                self.database.set_all_datas(hdu_id=hdu_id)
-                all_datas = self.database.all_datas
-                data = all_datas[0]
-                data_id = data.id
-                self.database.set_all_headers(hdu_id=hdu_id)
-                all_headers = self.database.all_headers
-                header = all_headers[0]
-                header_id = header.id
-                self.database.set_all_columns(data_id=data_id)
-                all_columns = self.database.all_columns
-                column = all_columns[0]
-                column_name = column.name if column else None
-                self.database.set_all_keywords(header_id=header_id)
-                all_keywords = self.database.all_keywords
-                keyword = all_keywords[0]
-                keyword_keyword = keyword.keyword if keyword else None
+                hdus = self.database.all_hdus
+                if hdus:
+                    for hdu in hdus:
+                        hdu_id = hdu.id if hdu else None
+                        self.database.set_all_headers(hdu_id=hdu_id)
+                        headers = self.database.all_headers
+                        if headers:
+                            for header in headers:
+                                header_id = header.id
+                                self.database.set_all_keywords(header_id=header_id)
+                                keywords = self.database.all_keywords
+                                if keywords:
+                                    for keyword in keywords:
+                                        keyword_name = keyword.name if keyword else None
+                                        print('keyword_name: %r' % keyword_name)
+                                        input('pause')
 
-#                print('Hi get_tag')
-#                print('self.options.string: %r' % self.options.string)
-#                print('file_id: %r' % file_id)
-#                print('hdu_id: %r' % hdu_id)
-#                print('data_id: %r' % data_id)
-#                print('header_id: %r' % header_id)
-                print('column_name: %r' % column_name)
-                print('keyword_keyword: %r' % keyword_keyword)
 
-                keyword_parent = list()
-                keyword_parent_parent = list()
-                string = keyword_keyword
-                for elem in self.body(text=compile(string)):
-                    keyword_parent.append(elem.parent)
-                    keyword_parent_parent.append(elem.parent.parent)
-                    print('elem.parent: %r' % elem.parent)
-                    print('elem.parent.parent: %r' % elem.parent.parent)
-                print('keyword_parent: %r' % keyword_parent)
-                print('keyword_parent_parent: %r' % keyword_parent_parent)
-
-                column_parent = list()
-                column_parent_parent = list()
-                string = column_name
-                for elem in self.body(text=compile(string)):
-                    column_parent.append(elem.parent)
-                    column_parent_parent.append(elem.parent.parent)
-                    print('elem.parent: %r' % elem.parent)
-                    print('elem.parent.parent: %r' % elem.parent.parent)
-                print('column_parent: %r' % column_parent)
-                print('column_parent_parent: %r' % column_parent_parent)
-                input('pause')
+#                                self.database.set_all_headers(hdu_id=hdu_id)
+#                                all_headers = self.database.all_headers
+#                                header = all_headers[0]
+#                                header_id = header.id
+#                                self.database.set_all_keywords(header_id=header_id)
+#                                all_keywords = self.database.all_keywords
+#                                keyword = all_keywords[0]
+#                                keyword_keyword = keyword.keyword if keyword else None
+#
+##                print('Hi get_tag')
+##                print('self.options.string: %r' % self.options.string)
+##                print('file_id: %r' % file_id)
+##                print('hdu_id: %r' % hdu_id)
+##                print('data_id: %r' % data_id)
+##                print('header_id: %r' % header_id)
+#                print('column_name: %r' % column_name)
+#                print('keyword_keyword: %r' % keyword_keyword)
+#
+#                keyword_parent = list()
+#                keyword_parent_parent = list()
+#                string = keyword_keyword
+#                for elem in self.body(text=compile(string)):
+#                    keyword_parent.append(elem.parent)
+#                    keyword_parent_parent.append(elem.parent.parent)
+#                    print('elem.parent: %r' % elem.parent)
+#                    print('elem.parent.parent: %r' % elem.parent.parent)
+#                print('keyword_parent: %r' % keyword_parent)
+#                print('keyword_parent_parent: %r' % keyword_parent_parent)
+#
+#                column_parent = list()
+#                column_parent_parent = list()
+#                string = column_name
+#                for elem in self.body(text=compile(string)):
+#                    column_parent.append(elem.parent)
+#                    column_parent_parent.append(elem.parent.parent)
+#                    print('elem.parent: %r' % elem.parent)
+#                    print('elem.parent.parent: %r' % elem.parent.parent)
+#                print('column_parent: %r' % column_parent)
+#                print('column_parent_parent: %r' % column_parent_parent)
+#                input('pause')
 
     def populate_file_hdu_info_tables(self):
         '''Populate tables comprised of file HTML text information.'''

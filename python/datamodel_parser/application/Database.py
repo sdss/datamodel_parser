@@ -983,11 +983,8 @@ class Database:
         '''Load all rows from hdu table with given file_id.'''
         self.all_hdus = None
         if self.ready:
-            file_id = (file_id if file_id
-                else self.hdu_columns['file_id']
-                if self.hdu_columns
-                and 'file_id' in self.hdu_columns
-                else None)
+            file_id = (file_id if file_id else
+                       self.file_id if self.file_id else None)
             if file_id:
                 self.all_hdus = Hdu.load_all(file_id=file_id) if file_id else None
             else:

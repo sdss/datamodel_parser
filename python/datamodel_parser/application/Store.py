@@ -111,7 +111,7 @@ class Store:
                 self.ready = False
                 self.logger.error('Unable to set_tree_edition. ' +
                                   'self.tree_edition: {}'
-                                  .format(self.tree_edition))
+                                    .format(self.tree_edition))
 
     def set_datamodel_dir(self):
         '''Set the DATAMODEL_DIR file path on cypher.'''
@@ -198,8 +198,25 @@ class Store:
             'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
             ]
 
-    def get_tag(self):
+    def get_column_tag(self):
         '''Populate tables comprised of file HTML text information.'''
+        if self.ready:
+            self.set_file_body()
+            self.file.get_column_tag()
+
+    def get_db_column_tags(self):
+        '''Populate tables comprised of file HTML text information.'''
+        if self.ready:
+            self.set_file_body()
+            self.file.get_db_column_tags()
+
+    def get_db_keyword_tags(self):
+        '''Populate tables comprised of file HTML text information.'''
+        if self.ready:
+            self.set_file_body()
+            self.file.get_db_keyword_tags()
+
+    def set_file_body(self):
         if self.ready:
             self.set_file_path_info()
             self.set_html_text()
@@ -208,7 +225,6 @@ class Store:
                 self.file.set_file_path_info(file_path_info=self.file_path_info)
                 self.file.set_html_text(html_text=self.html_text)
                 self.file.set_body()
-                self.file.get_tag()
             else:
                 self.ready = False
                 self.logger.error(

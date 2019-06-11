@@ -17,7 +17,8 @@ else:
     store.set_tree_edition()
     store.set_path(path=options.path)
     store.split_path()
-    store.get_tag()
+    #store.get_db_column_tags()
+    store.get_db_keyword_tags()
     store.exit()
 
 
