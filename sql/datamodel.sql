@@ -116,7 +116,7 @@ CREATE TABLE sdss.data (
     id SERIAL NOT NULL PRIMARY KEY,
     hdu_id INT4 REFERENCES sdss.hdu(id) NOT NULL,
     hdu_number INT2 NOT NULL,
-    table_caption VARCHAR(512),
+    table_caption VARCHAR(1024),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

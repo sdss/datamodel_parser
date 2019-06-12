@@ -4,7 +4,7 @@ from datamodel_parser.application import Hdu
 from datamodel_parser.application import Database
 from datamodel_parser.application import Stub
 from datamodel_parser.application.Type import File_type
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 from flask import render_template
 from datamodel_parser import app
 from os import environ
@@ -111,6 +111,10 @@ class File:
         if self.ready:
             soup = (BeautifulSoup(self.html_text, 'html.parser')
                     if self.html_text else None)
+            # remove comments
+            comments = soup.findAll(text=lambda text:isinstance(text, Comment))
+            for comment in comments:
+                comment.extract()
             self.body = soup.body if soup else None
             if not self.body:
                 self.ready = False
@@ -203,75 +207,6 @@ class File:
                                   'bool(self.body): {0}'.format(bool(self.body))
                                   )
 
-    def get_keyword_tag0(self):
-        '''Get tag containing the text in self.options.text.'''
-        if self.ready:
-            if self.body and self.options:
-                self.database.set_file_id(tree_edition  = self.tree_edition,
-                                          env_variable  = self.env_variable,
-                                          location_path = self.location_path,
-                                          file_name     = self.file_name)
-                file_id = (self.database.file_id
-                           if self.database and self.database.ready else None)
-                self.database.set_all_hdus(file_id=file_id)
-                hdus = self.database.all_hdus
-                if hdus:
-                    for hdu in hdus:
-                        hdu_id = hdu.id if hdu else None
-                        self.database.set_all_headers(hdu_id=hdu_id)
-                        headers = self.database.all_headers
-                        if headers:
-                            for header in headers:
-                                header_id = header.id
-                                self.database.set_all_keywords(header_id=header_id)
-                                keywords = self.database.all_keywords
-                                if keywords:
-                                    for keyword in keywords:
-                                        keyword_name = keyword.name if keyword else None
-                                        print('keyword_name: %r' % keyword_name)
-                                        input('pause')
-
-
-#                                self.database.set_all_headers(hdu_id=hdu_id)
-#                                all_headers = self.database.all_headers
-#                                header = all_headers[0]
-#                                header_id = header.id
-#                                self.database.set_all_keywords(header_id=header_id)
-#                                all_keywords = self.database.all_keywords
-#                                keyword = all_keywords[0]
-#                                keyword_keyword = keyword.keyword if keyword else None
-#
-##                print('Hi get_tag')
-##                print('self.options.string: %r' % self.options.string)
-##                print('file_id: %r' % file_id)
-##                print('hdu_id: %r' % hdu_id)
-##                print('data_id: %r' % data_id)
-##                print('header_id: %r' % header_id)
-#                print('column_name: %r' % column_name)
-#                print('keyword_keyword: %r' % keyword_keyword)
-#
-#                keyword_parent = list()
-#                keyword_parent_parent = list()
-#                string = keyword_keyword
-#                for elem in self.body(text=compile(string)):
-#                    keyword_parent.append(elem.parent)
-#                    keyword_parent_parent.append(elem.parent.parent)
-#                    print('elem.parent: %r' % elem.parent)
-#                    print('elem.parent.parent: %r' % elem.parent.parent)
-#                print('keyword_parent: %r' % keyword_parent)
-#                print('keyword_parent_parent: %r' % keyword_parent_parent)
-#
-#                column_parent = list()
-#                column_parent_parent = list()
-#                string = column_name
-#                for elem in self.body(text=compile(string)):
-#                    column_parent.append(elem.parent)
-#                    column_parent_parent.append(elem.parent.parent)
-#                    print('elem.parent: %r' % elem.parent)
-#                    print('elem.parent.parent: %r' % elem.parent.parent)
-#                print('column_parent: %r' % column_parent)
-#                print('column_parent_parent: %r' % column_parent_parent)
-#                input('pause')
 
     def populate_file_hdu_info_tables(self):
         '''Populate tables comprised of file HTML text information.'''

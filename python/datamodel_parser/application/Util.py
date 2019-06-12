@@ -790,7 +790,12 @@ class Util:
         if self.ready:
             if node:
                 (intro,combined_hdus) = self.get_intro_and_combined_hdus_3(node=node)
-                hdus = self.get_split_hdus_3(node=combined_hdus) if combined_hdus else None
+                regex = ('(?i)hdu\s*\d+'             + '|' +
+                         '(?i)primary\s*(?i)header' + '|' +
+                         '(?i)primary\s*(?i)hdu'
+                         )
+                hdus = (self.get_split_hdus_3(node=combined_hdus,regex=regex)
+                        if combined_hdus and regex else None)
 #                print('/nintro: %r' % intro)
 #                print('/ncombined_hdus: %r' % combined_hdus)
 #                print('hdus: %r' % hdus)
@@ -866,7 +871,8 @@ class Util:
                     strings=list(heading_tag.strings) if heading_tag else list()
                     string = ' '.join(strings) if strings else str()
                     if string:
-                        regex = ('(?i)primary\s*hdu' + '|'
+                        regex = ('(?i)primary\s*header' + '|'
+                                 '(?i)primary\s*hdu' + '|'
                                  '(?i)primary\s*hdu\s*\d*' + '|'
                                  '(?i)hdu\s*\d+'
                                  )
@@ -927,8 +933,8 @@ class Util:
                                 (title,description) = (
                                     self.get_title_and_description_from_p(p=child))
                                 if title:
-                                    regex1 = ('(?i)Required(.*?)keywords' + '|'
-                                             '(?i)Required(.*?)column\s*names' )
+                                    regex1 = ('(?i)required(.*?)keywords' + '|'
+                                             '(?i)required(.*?)column' )
                                     regex2 = '(?i)hdu\s*\d+'
                                     match1 = (self.check_match(regex=regex1,string=title)
                                               if title else None)
@@ -1016,11 +1022,11 @@ class Util:
         return hdus
 
 
-    def get_split_hdus_3(self,node=None):
+    def get_split_hdus_3(self,node=None,regex=None):
         '''Split the node into a list of BeautifulSoup objects containing file HDUs.'''
         hdus = list()
         if self.ready:
-            if node:
+            if node and regex:
                 children = self.get_children(node=node)
                 if children:
                     first_title = True
@@ -1036,10 +1042,6 @@ class Util:
                                 # check only one string in tag
                                 string = (strings[0]
                                           if strings and len(strings) == 1 else None)
-                                regex = ('(?i)hdu\s*\d+'             + '|' +
-                                         '(?i)primary\s*(?i)header' + '|' +
-                                         '(?i)primary\s*(?i)hdu'
-                                         )
                                 title = (self.get_hdu_title(string=string,regex=regex)
                                          if string and regex else None)
                                 if title:
@@ -1095,7 +1097,9 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_split_hdus_3. ' +
-                                  'node: {}'.format(node))
+                                  'node: {}'.format(node) +
+                                  'regex: {}'.format(regex)
+                                  )
 #        print('hdus: %r' % hdus)
 #        input('pause')
         return hdus
@@ -1114,6 +1118,11 @@ class Util:
                 if len(titles) == 1:
                     hdu_title = titles[0]
                 else:
+                    
+                    print('string: %r'% string)
+                    print('regex: %r'% regex)
+                    print('titles: %r'% titles)
+#                    input('pase')
                     self.ready = False
                     self.logger.error('Unable to get_hdu_title. ' +
                                       'len(titles) != 1. ' +
@@ -1263,6 +1272,7 @@ class Util:
                     if len(list(table_tags)) == 1:
                         tables = [node]
                     elif len(list(table_tags)) == 2:
+                        # split tables based on table_tag, e.g., pre, ul, etc.
                         children = self.get_children(node=node)
                         if children:
                             previous_siblings = None
@@ -1381,6 +1391,130 @@ class Util:
             if tables is None:
                 self.ready = False
                 self.logger.error('Unable to get_tables_2. ' +
+                                  'tables: {}, '.format(tables)
+                                  )
+        return tables
+
+    def get_tables_3(self,node=None,regex=None):
+        '''Test if node contains two tables by table_title_tags with regex match
+            and split them into a list of Beautiful soup objects'''
+        tables = list()
+        if self.ready:
+            if node and regex:
+                # get all children of node with name 'p'
+                table_title_tags = self.get_children(node=node,names=['p'])
+                # get potential titles from
+                table_titles = list()
+                for tag in table_title_tags:
+                    strings = [s.strip() for s in tag.strings
+                               if str(s) and not str(s).isspace()]
+                    title = strings[0] if strings else None
+                    if title: table_titles.append(title)
+                # get titles with regex match
+                table_titles = [t for t in table_titles
+                                if self.check_match(regex=regex,string=t)]
+#                print('table_titles: %r' % table_titles)
+#                input('pause')
+                if table_titles:
+                    if len(list(table_titles)) == 1:
+                        tables = [node]
+                    else:
+                        children = self.get_children(node=node)
+                        if children:
+                            first_title = True
+                            table = list()
+                            for child in children:
+                                if self.ready:
+#                                    print('\n\n@@@@@@@ HI child @@@@@@@')
+#                                    print('child: %r'%  child)
+#                                    input('pause')
+                                    if child.name == 'p':
+                                        (title,description) = (
+                                            self.get_title_and_description_from_p(p=child))
+                                        if title:
+                                            match = (self.check_match(regex=regex,string=title)
+                                                      if title else None)
+                                            if match:
+                                                if first_title:
+                                                    first_title = False
+                                                    table.append(child)
+
+#                                                    print('\n\n^^^^^^^ HI first_title ^^^^^^^')
+#                                                    print('table: %r' %  table)
+#                                                    input('pause')
+                                                else:
+#                                                    print('\n\n****** HI Soup inside loop ******')
+#                                                    print('table: %r' %  table)
+#                                                    input('pause')
+                                                    # strip off tags before table title tag
+                                                    found_title = False
+                                                    for (idx,item) in enumerate(table):
+                                                        string=self.get_string(node=item)
+                                                        if self.check_match(regex=regex,
+                                                                            string=string):
+                                                            found_title = True
+                                                            break
+                                                    table = table[idx:] if found_title else None
+                                                    soup = (self.get_soup_from_iterator(table)
+                                                            if table else None)
+                                                    if soup:
+                                                        tables.append(soup)
+                                                        table = list()
+                                                        table.append(child)
+                                                    else:
+                                                        self.ready = False
+                                                        self.logger.error(
+                                                            'Unable to get_tables_3. ' +
+                                                            'In for loop. ' +
+                                                            'soup: {}.'.format(soup))
+                                            # append <p> tags without table title matching regex
+                                            else:
+                                                table.append(child)
+                                        
+#                                                print('\n\n^^^^^^^ HI not match ^^^^^^^')
+#                                                print('table: %r' %  table)
+#                                                input('pause')
+                                        # append <p> tags without table title
+                                        else:
+                                            table.append(child)
+
+#                                            print('\n\n^^^^^^^ HI not title ^^^^^^^')
+#                                            print('table: %r' %  table)
+#                                            input('pause')
+                                    # append non <p> tags
+                                    else:
+                                        table.append(child)
+
+#                                        print('\n\n&&&&& HI no title &&&&&')
+#                                        print('table: %r' % table)
+#                                        input('pause')
+                        soup = self.get_soup_from_iterator(table) if table else None
+                        if soup:
+#                            print('\n\n****** HI Soup outside loop ******')
+#                            print('table: %r' %  table)
+#                            input('pause')
+
+                            tables.append(soup)
+                        else:
+                            self.ready = False
+                            self.logger.error('Unable to get_tables_3. ' +
+                                              'Out of for loop. ' +
+                                              'soup: {}.'.format(soup))
+
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to get_tables_3. ' +
+                                      'table_titles: {}, '.format(table_titles)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_tables_3. ' +
+                                  'node: {}, '.format(node) +
+                                  'regex: {}, '.format(regex)
+                                  )
+            if tables is None:
+                self.ready = False
+                self.logger.error('Unable to get_tables_3. ' +
                                   'tables: {}, '.format(tables)
                                   )
         return tables
