@@ -294,7 +294,7 @@ class Util:
             if node:
                 children = self.get_children(node=node)
                 if children:
-                    first_title = True
+                    is_first_title = True
                     second_title = True
                     description_list = list()
                     for child in children:
@@ -304,8 +304,8 @@ class Util:
 #                            input('pause')
                             if child.name == 'div': break # don't add Sections div
                             elif child.name in self.heading_tag_names:
-                                if first_title:
-                                    first_title = False
+                                if is_first_title:
+                                    is_first_title = False
                                     continue
                                 elif second_title:
                                     second_title = False
@@ -320,7 +320,7 @@ class Util:
                                     if title: titles.append(title)
                                     if description: descriptions.append(description)
                             else:
-                                description_list.append(self.get_string(child))
+                                description_list.append(self.get_string(node=child))
                     if description_list:
                         description = '\n\n'.join(description_list)
                         descriptions.append(description)
@@ -735,6 +735,7 @@ class Util:
                 elif file_type == 3: (intro,hdus) = self.get_intro_and_hdus_3(node=node)
                 elif file_type == 4: (intro,hdus) = self.get_intro_and_hdus_4(node=node)
                 elif file_type == 5: (intro,hdus) = self.get_intro_and_hdus_4(node=node)
+                elif file_type == 6: (intro,hdus) = self.get_intro_and_hdus_5(node=node)
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_intro_and_hdus. '
@@ -767,10 +768,15 @@ class Util:
         (intro,hdus) = (None,None)
         if self.ready:
             if node:
-                (intro,combined_hdus) = self.get_intro_and_combined_hdus_2(node=node)
+                regex = ('(?i)required\s+header\s+keywords'     + '|'
+                         '(?i)required\s+column\s+names'        + '|'
+                         '(?i)required\s+hdu\s*\d*\s+keywords'  + '|'
+                         '(?i)required\s+hdu\s*\d*\s+column\s+names'
+                         )
+                (intro,combined_hdus) = self.get_intro_and_combined_hdus_2(node=node,regex=regex)
                 hdus = self.get_split_hdus_2(node=combined_hdus) if combined_hdus else None
-#                print('/nintro: %r' % intro)
-#                print('/ncombined_hdus: %r' % combined_hdus)
+#                print('\nintro: %r' % intro)
+#                print('\ncombined_hdus: %r' % combined_hdus)
 #                print('hdus: %r' % hdus)
 #                print('bool(intro): %r' % bool(intro))
 #                print('bool(combined_hdus): %r' % bool(combined_hdus))
@@ -789,15 +795,16 @@ class Util:
         (intro,hdus) = (None,None)
         if self.ready:
             if node:
-                (intro,combined_hdus) = self.get_intro_and_combined_hdus_3(node=node)
-                regex = ('(?i)hdu\s*\d+'             + '|' +
-                         '(?i)primary\s*(?i)header' + '|' +
-                         '(?i)primary\s*(?i)hdu'
+                regex = ('(?i)primary\s*header' + '|'
+                         '(?i)primary\s*hdu' + '|'
+                         '(?i)primary\s*hdu\s*\d*' + '|'
+                         '(?i)hdu\s*\d+'
                          )
+                (intro,combined_hdus) = self.get_intro_and_combined_hdus_3(node=node,regex=regex)
                 hdus = (self.get_split_hdus_3(node=combined_hdus,regex=regex)
                         if combined_hdus and regex else None)
-#                print('/nintro: %r' % intro)
-#                print('/ncombined_hdus: %r' % combined_hdus)
+#                print('\nintro: %r' % intro)
+#                print('\ncombined_hdus: %r' % combined_hdus)
 #                print('hdus: %r' % hdus)
 #                print('bool(intro): %r' % bool(intro))
 #                print('bool(combined_hdus): %r' % bool(combined_hdus))
@@ -825,23 +832,50 @@ class Util:
                                   )
         return (intro,hdus)
 
-    def get_intro_and_combined_hdus_2(self,node=None):
+    def get_intro_and_hdus_5(self,node=None):
+        '''Get new BeautifulSoup objects comprised of the intro tags and hdu tags
+            of the given BeautifulSoup node.'''
+        (intro,hdus) = (None,None)
+        if self.ready:
+            if node:
+                regex = ('(?i)required(.*?)keywords' + '|'
+                         '(?i)optional(.*?)keywords' + '|'
+                         '(?i)required(.*?)column'   + '|'
+                         '(?i)optional(.*?)column'   + '|'
+                         '(?i)sample(.*?)header'
+                         )
+                (intro,combined_hdus) = (self.get_intro_and_combined_hdus_2(node=node,regex=regex)
+                                         if node and regex else None)
+                hdus = (self.get_split_hdus_3(node=combined_hdus,regex=regex)
+                        if combined_hdus and regex else None)
+#                print('\nintro: %r' % intro)
+#                print('\ncombined_hdus: %r' % combined_hdus)
+#                print('hdus: %r' % hdus)
+#                print('bool(intro): %r' % bool(intro))
+#                print('bool(combined_hdus): %r' % bool(combined_hdus))
+#                print('bool(hdus): %r' % bool(hdus))
+#                input('pause')
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_intro_and_hdus_5. ' +
+                                  'node: {}, '.format(node)
+                                  )
+        return (intro,hdus)
+
+
+
+    def get_intro_and_combined_hdus_2(self,node=None,regex=None):
         '''Get a new BeautifulSoup object comprised of the intro tags
             of the given BeautifulSoup node.'''
         (intro,combined_hdus) = (None,None)
         if self.ready:
-            if node:
+            if node and regex:
                 previous_siblings = None
                 next_siblings = None
                 ps = node.find_all('p')
                 for p in ps:
                     (title,description) = self.get_title_and_description_from_p(p=p)
                     if title:
-                        regex = ('(?i)required\s+header\s+keywords'     + '|'
-                                 '(?i)required\s+column\s+names'        + '|'
-                                 '(?i)required\s+hdu\s*\d*\s+keywords'  + '|'
-                                 '(?i)required\s+hdu\s*\d*\s+column\s+names'
-                                 )
                         if self.check_match(regex=regex,string=title):
                             previous_siblings = p.previous_siblings
                             next_siblings = p.previous_sibling.next_siblings
@@ -855,15 +889,17 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_combined_hdus_2. ' +
-                                  'node: {}'.format(node))
+                                  'node: {}'.format(node) +
+                                  'regex: {}'.format(regex)
+                                  )
         return (intro,combined_hdus)
 
-    def get_intro_and_combined_hdus_3(self,node=None):
+    def get_intro_and_combined_hdus_3(self,node=None,regex=None):
         '''Get a new BeautifulSoup object comprised of the intro tags
             of the given BeautifulSoup node.'''
         (intro,combined_hdus) = (None,None)
         if self.ready:
-            if node:
+            if node and regex:
                 previous_siblings = None
                 next_siblings = None
                 heading_tags = self.get_heading_tag_children(node=node)
@@ -871,11 +907,6 @@ class Util:
                     strings=list(heading_tag.strings) if heading_tag else list()
                     string = ' '.join(strings) if strings else str()
                     if string:
-                        regex = ('(?i)primary\s*header' + '|'
-                                 '(?i)primary\s*hdu' + '|'
-                                 '(?i)primary\s*hdu\s*\d*' + '|'
-                                 '(?i)hdu\s*\d+'
-                                 )
                         if self.check_match(regex=regex,string=string):
                             previous_siblings = heading_tag.previous_siblings
                             next_siblings = heading_tag.previous_sibling.next_siblings
@@ -894,7 +925,9 @@ class Util:
             else:
                 self.ready = False
                 self.logger.error('Unable to get_intro_and_combined_hdus_3. ' +
-                                  'node: {}'.format(node))
+                                  'node: {}'.format(node) +
+                                  'regex: {}'.format(regex)
+                                  )
         return (intro,combined_hdus)
 
     def get_soup_from_iterator(self,iterator=None,reverse=False):
@@ -922,7 +955,7 @@ class Util:
             if node:
                 children = self.get_children(node=node)
                 if children:
-                    first_title = True
+                    is_first_title = True
                     hdu = list()
                     for child in children:
                         if self.ready:
@@ -934,7 +967,10 @@ class Util:
                                     self.get_title_and_description_from_p(p=child))
                                 if title:
                                     regex1 = ('(?i)required(.*?)keywords' + '|'
-                                             '(?i)required(.*?)column' )
+                                             '(?i)optional(.*?)keywords' + '|'
+                                             '(?i)required(.*?)column'   + '|'
+                                             '(?i)optional(.*?)column'
+                                             )
                                     regex2 = '(?i)hdu\s*\d+'
                                     match1 = (self.check_match(regex=regex1,string=title)
                                               if title else None)
@@ -943,12 +979,12 @@ class Util:
                                     match2 = matches2[0] if matches2 else 'no match'
 #                                    print('match2: %r' %  match2)
                                     if match1:
-                                        if first_title:
-                                            first_title = False
+                                        if is_first_title:
+                                            is_first_title = False
                                             previous_match2 = match2
                                             hdu.append(child)
 
-#                                            print('\n\n^^^^^^^ HI first_title ^^^^^^^')
+#                                            print('\n\n^^^^^^^ HI is_first_title ^^^^^^^')
 #                                            print('hdu: %r' %  hdu)
 #                                            input('pause')
                                         # when same hdu_k for header and data tables
@@ -1029,7 +1065,8 @@ class Util:
             if node and regex:
                 children = self.get_children(node=node)
                 if children:
-                    first_title = True
+                    is_first_title = True
+                    title = None
                     hdu = list()
                     for child in children:
                         if self.ready:
@@ -1045,8 +1082,8 @@ class Util:
                                 title = (self.get_hdu_title(string=string,regex=regex)
                                          if string and regex else None)
                                 if title:
-                                    if first_title:
-                                        first_title = False
+                                    if is_first_title:
+                                        is_first_title = False
                                         previous_title = title
                                         hdu.append(child)
                                     # when same title for header and data tables
@@ -1421,7 +1458,7 @@ class Util:
                     else:
                         children = self.get_children(node=node)
                         if children:
-                            first_title = True
+                            is_first_title = True
                             table = list()
                             for child in children:
                                 if self.ready:
@@ -1435,11 +1472,11 @@ class Util:
                                             match = (self.check_match(regex=regex,string=title)
                                                       if title else None)
                                             if match:
-                                                if first_title:
-                                                    first_title = False
+                                                if is_first_title:
+                                                    is_first_title = False
                                                     table.append(child)
 
-#                                                    print('\n\n^^^^^^^ HI first_title ^^^^^^^')
+#                                                    print('\n\n^^^^^^^ HI is_first_title ^^^^^^^')
 #                                                    print('table: %r' %  table)
 #                                                    input('pause')
                                                 else:

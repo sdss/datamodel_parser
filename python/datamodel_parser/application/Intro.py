@@ -442,7 +442,7 @@ class Intro:
                         if self.util.check_match(regex=regex,string=title):
                             ps = soup.find_all('p')
                             if ps:
-                                descriptions = [self.util.get_string(p) for p in ps
+                                descriptions = [self.util.get_string(node=p) for p in ps
                                                 if str(p) and not str(p).isspace()]
                                 description = '\n\n'.join(descriptions)
                                 self.intro_heading_titles.append(title)
