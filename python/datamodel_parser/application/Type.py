@@ -375,12 +375,13 @@ class Type(object):
                                 # check only one string in <b> tag
                                 string = strings[0] if strings and len(strings) == 1 else None
                                 if string:
-                                    regex = ('(?i)required(.*?)keywords' + '|'
-                                             '(?i)optional(.*?)keywords' + '|'
-                                             '(?i)required(.*?)column'   + '|'
-                                             '(?i)optional(.*?)column'   + '|'
-                                             '(?i)sample(.*?)header'
-                                             )
+                                    regex = self.util.get_table_title_regex_1()
+#                                    regex = ('(?i)required(.*?)keywords' + '|'
+#                                             '(?i)optional(.*?)keywords' + '|'
+#                                             '(?i)required(.*?)column'   + '|'
+#                                             '(?i)optional(.*?)column'   + '|'
+#                                             '(?i)sample(.*?)header'
+#                                             )
                                     match = self.util.check_match(regex=regex,string=string)
                                     if match: found_table_title = True
                     if toggle_found_table_title: found_table_title = not found_table_title
@@ -455,12 +456,13 @@ class Type(object):
                                 # check only one string in <b> tag
                                 string = strings[0] if strings and len(strings) == 1 else None
                                 if string:
-                                    regex = ('(?i)required(.*?)keywords' + '|'
-                                             '(?i)optional(.*?)keywords' + '|'
-                                             '(?i)required(.*?)column'   + '|'
-                                             '(?i)optional(.*?)column'   + '|'
-                                             '(?i)sample(.*?)header'
-                                             )
+                                    regex = self.util.get_table_title_regex_1()
+#                                    regex = ('(?i)required(.*?)keywords' + '|'
+#                                             '(?i)optional(.*?)keywords' + '|'
+#                                             '(?i)required(.*?)column'   + '|'
+#                                             '(?i)optional(.*?)column'   + '|'
+#                                             '(?i)sample(.*?)header'
+#                                             )
                                     match = self.util.check_match(regex=regex,string=string)
                                     if match: found_table_title = True
                     found_table_title = not found_table_title if toggle else found_table_title

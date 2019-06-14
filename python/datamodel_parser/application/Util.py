@@ -45,6 +45,34 @@ class Util:
             self.table_tags = {'table'}
             self.sections_strings = {'sections','file contents'}
             self.header_table_column_names = {}
+            
+
+    def get_table_title_regex_1(self):
+        '''Get regex for table title with required/optional keywords/column etc.'''
+        regex = ('(?i)required(.*?)keywords' + '|'
+                 '(?i)optional(.*?)keywords' + '|'
+                 '(?i)required(.*?)column'   + '|'
+                 '(?i)optional(.*?)column'   + '|'
+                 '(?i)column(.*?)name'       + '|'
+                 '(?i)sample(.*?)header'
+                 )
+        return regex
+
+    def get_table_title_regex_2(self):
+        '''Get regex for table title with required/optional keywords/column etc.'''
+        regex = ('(?i)required(.*?)keywords' + '|'
+                 '(?i)optional(.*?)keywords' + '|'
+                 '(?i)sample(.*?)header'
+                 )
+        return regex
+
+    def get_table_title_regex_3(self):
+        '''Get regex for table title with required/optional keywords/column etc.'''
+        regex = ('(?i)required(.*?)column' + '|'
+                 '(?i)optional(.*?)column' + '|'
+                 '(?i)column(.*?)name'
+                 )
+        return regex
 
     def get_string(self,node=None):
         string = None
@@ -506,8 +534,9 @@ class Util:
                 for p in node.find_all('p'):
                     (title,description) = self.get_title_and_description_from_p(p=p)
                     if title:
-                        regex1 = ('(?i)Required(.*?)keywords' + '|'
-                                 '(?i)Required(.*?)column\s*names' )
+                        regex1 = self.get_table_title_regex_1()
+#                        regex1 = ('(?i)Required(.*?)keywords' + '|'
+#                                 '(?i)Required(.*?)column\s*names' )
                         regex2 = '(?i)hdu\s*\d+'
                         match1 = (self.check_match(regex=regex1,string=title)
                                   if title else None)
@@ -835,12 +864,13 @@ class Util:
         (intro,hdus) = (None,None)
         if self.ready:
             if node:
-                regex = ('(?i)required(.*?)keywords' + '|'
-                         '(?i)optional(.*?)keywords' + '|'
-                         '(?i)required(.*?)column'   + '|'
-                         '(?i)optional(.*?)column'   + '|'
-                         '(?i)sample(.*?)header'
-                         )
+                regex = self.get_table_title_regex_1()
+#                regex = ('(?i)required(.*?)keywords' + '|'
+#                         '(?i)optional(.*?)keywords' + '|'
+#                         '(?i)required(.*?)column'   + '|'
+#                         '(?i)optional(.*?)column'   + '|'
+#                         '(?i)sample(.*?)header'
+#                         )
                 (intro,combined_hdus) = (self.get_intro_and_combined_hdus_2(node=node,regex=regex)
                                          if node and regex else None)
                 hdus = (self.get_split_hdus_3(node=combined_hdus,regex=regex)
@@ -980,11 +1010,12 @@ class Util:
                                 (title,description) = (
                                     self.get_title_and_description_from_p(p=child))
                                 if title:
-                                    regex1 = ('(?i)required(.*?)keywords' + '|'
-                                             '(?i)optional(.*?)keywords' + '|'
-                                             '(?i)required(.*?)column'   + '|'
-                                             '(?i)optional(.*?)column'
-                                             )
+                                    regex1 = self.get_table_title_regex_1()
+#                                    regex1 = ('(?i)required(.*?)keywords' + '|'
+#                                             '(?i)optional(.*?)keywords' + '|'
+#                                             '(?i)required(.*?)column'   + '|'
+#                                             '(?i)optional(.*?)column'
+#                                             )
                                     regex2 = '(?i)hdu\s*\d+'
                                     match1 = (self.check_match(regex=regex1,string=title)
                                               if title else None)
@@ -1261,14 +1292,16 @@ class Util:
                 if len(strings) > 1:
                     is_filename = False
                 else:
-                    extension_list=['txt','html']
+                    extension_list=['txt','html','fits']
                     string = strings[0] if strings else str()
                     split = string.split('.') if string else list()
-                    extension = split[1] if split and len(split) > 1 else str()
-                    if extension in extension_list:
-                        is_filename = True
-                    else:
-                        is_filename = False
+                    tail = ' '.join(split[1:]) if split and len(split) > 1 else str()
+                    is_filename = False
+                    for extension in extension_list:
+                        match = self.check_match(regex=extension,string=tail)
+                        if match:
+                            is_filename = True
+                            break
             else:
                 self.ready = False
                 self.logger.error('Unable to check_node_string_is_filename. ' +

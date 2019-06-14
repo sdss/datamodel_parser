@@ -407,12 +407,13 @@ class Hdu:
                 
                 # hdu_description
                 ps = node.find_all('p')
-                regex = ('(?i)required(.*?)keywords' + '|'
-                         '(?i)optional(.*?)keywords' + '|'
-                         '(?i)required(.*?)column'   + '|'
-                         '(?i)optional(.*?)column'   + '|'
-                         '(?i)sample(.*?)header'
-                         )
+                regex = self.util.get_table_title_regex_1()
+#                regex = ('(?i)required(.*?)keywords' + '|'
+#                         '(?i)optional(.*?)keywords' + '|'
+#                         '(?i)required(.*?)column'   + '|'
+#                         '(?i)optional(.*?)column'   + '|'
+#                         '(?i)sample(.*?)header'
+#                         )
                 hdu_descriptions = ([self.util.get_string(node=p) for p in ps
                                      if str(p) and not str(p).isspace()
                                      and not self.util.check_match(regex=regex,string=str(p))]
@@ -713,12 +714,13 @@ class Hdu:
         hdu_tables = list()
         if self.ready:
             if node:
-                regex = ('(?i)required(.*?)keywords' + '|'
-                         '(?i)optional(.*?)keywords' + '|'
-                         '(?i)required(.*?)column'   + '|'
-                         '(?i)optional(.*?)column'   + '|'
-                         '(?i)sample(.*?)header'
-                         )
+                regex = self.util.get_table_title_regex_1()
+#                regex = ('(?i)required(.*?)keywords' + '|'
+#                         '(?i)optional(.*?)keywords' + '|'
+#                         '(?i)required(.*?)column'   + '|'
+#                         '(?i)optional(.*?)column'   + '|'
+#                         '(?i)sample(.*?)header'
+#                         )
                 tables = self.util.get_tables_2(node=node,
                                                 table_title_tag_names = ['p'],
                                                 regex=regex)
@@ -741,20 +743,33 @@ class Hdu:
                             table_caption += ('. '.join(p_strings)
                                               if p_strings else str())
 
+#                            # is_header
+#                            is_header = (True if title and
+#                                            self.util.check_match(
+#                                                regex='(?i)required(.*?)keywords' + '|'
+#                                                      '(?i)optional(.*?)keywords',
+#                                                string=title)
+#                                        else False if title and
+#                                            self.util.check_match(
+#                                                regex='(?i)required(.*?)column' + '|'
+#                                                      '(?i)optional(.*?)column',
+#                                                string=title)
+#                                        else None
+#                                        )
+
                             # is_header
                             is_header = (True if title and
                                             self.util.check_match(
-                                                regex='(?i)required(.*?)keywords' + '|'
-                                                      '(?i)optional(.*?)keywords',
+                                                regex = self.util.get_table_title_regex_2(),
                                                 string=title)
                                         else False if title and
                                             self.util.check_match(
-                                                regex='(?i)required(.*?)column' + '|'
-                                                      '(?i)optional(.*?)column',
+                                                regex = self.util.get_table_title_regex_3(),
                                                 string=title)
                                         else None
                                         )
-                                        
+
+
                             # column_names
                             column_names = (['Key','Value','Type','Comment']
                                             if is_header == True else
@@ -799,12 +814,13 @@ class Hdu:
         hdu_tables = list()
         if self.ready:
             if node:
-                regex = ('(?i)required(.*?)keywords' + '|'
-                         '(?i)optional(.*?)keywords' + '|'
-                         '(?i)required(.*?)column'   + '|'
-                         '(?i)optional(.*?)column'   + '|'
-                         '(?i)sample(.*?)header'
-                         )
+                regex = self.util.get_table_title_regex_1()
+#                regex = ('(?i)required(.*?)keywords' + '|'
+#                         '(?i)optional(.*?)keywords' + '|'
+#                         '(?i)required(.*?)column'   + '|'
+#                         '(?i)optional(.*?)column'   + '|'
+#                         '(?i)sample(.*?)header'
+#                         )
                 tables = self.util.get_tables_3(node=node,regex=regex)
                 if tables:
                     for (table_number,table) in enumerate(tables):
@@ -828,17 +844,29 @@ class Hdu:
                             # is_header
                             is_header = (True if title and
                                             self.util.check_match(
-                                                regex='(?i)required(.*?)keywords' + '|'
-                                                      '(?i)optional(.*?)keywords' + '|'
-                                                      '(?i)sample(.*?)header',
+                                                regex = self.util.get_table_title_regex_2(),
                                                 string=title)
                                         else False if title and
                                             self.util.check_match(
-                                                regex='(?i)required(.*?)column\s*names' + '|'
-                                                      '(?i)optional(.*?)column\s*names',
+                                                regex = self.util.get_table_title_regex_3(),
                                                 string=title)
                                         else None
                                         )
+
+#                            # is_header
+#                            is_header = (True if title and
+#                                            self.util.check_match(
+#                                                regex='(?i)required(.*?)keywords' + '|'
+#                                                      '(?i)optional(.*?)keywords' + '|'
+#                                                      '(?i)sample(.*?)header',
+#                                                string=title)
+#                                        else False if title and
+#                                            self.util.check_match(
+#                                                regex='(?i)required(.*?)column\s*names' + '|'
+#                                                      '(?i)optional(.*?)column\s*names',
+#                                                string=title)
+#                                        else None
+#                                        )
 
                             # column_names
                             column_names = (['Key','Value','Type','Comment']
@@ -905,12 +933,13 @@ class Hdu:
         hdu_tables = list()
         if self.ready:
             if node:
-                regex = ('(?i)required(.*?)keywords' + '|'
-                         '(?i)optional(.*?)keywords' + '|'
-                         '(?i)required(.*?)column'   + '|'
-                         '(?i)optional(.*?)column'   + '|'
-                         '(?i)sample(.*?)header'
-                         )
+                regex = self.util.get_table_title_regex_1()
+#                regex = ('(?i)required(.*?)keywords' + '|'
+#                         '(?i)optional(.*?)keywords' + '|'
+#                         '(?i)required(.*?)column'   + '|'
+#                         '(?i)optional(.*?)column'   + '|'
+#                         '(?i)sample(.*?)header'
+#                         )
                 tables = self.util.get_tables_3(node=node,regex=regex)
                 if tables:
                     for (table_number,table) in enumerate(tables):
@@ -936,17 +965,29 @@ class Hdu:
                             # is_header
                             is_header = (True if title and
                                             self.util.check_match(
-                                                regex='(?i)required(.*?)keywords' + '|'
-                                                      '(?i)optional(.*?)keywords' + '|'
-                                                      '(?i)sample(.*?)header',
+                                                regex = self.util.get_table_title_regex_2(),
                                                 string=title)
                                         else False if title and
                                             self.util.check_match(
-                                                regex='(?i)required(.*?)column\s*names' + '|'
-                                                      '(?i)optional(.*?)column\s*names',
+                                                regex = self.util.get_table_title_regex_3(),
                                                 string=title)
                                         else None
                                         )
+
+#                            # is_header
+#                            is_header = (True if title and
+#                                            self.util.check_match(
+#                                                regex='(?i)required(.*?)keywords' + '|'
+#                                                      '(?i)optional(.*?)keywords' + '|'
+#                                                      '(?i)sample(.*?)header',
+#                                                string=title)
+#                                        else False if title and
+#                                            self.util.check_match(
+#                                                regex='(?i)required(.*?)column\s*names' + '|'
+#                                                      '(?i)optional(.*?)column\s*names',
+#                                                string=title)
+#                                        else None
+#                                        )
 
                             # column_names
                             column_names = (['Key','Value','Type','Comment']

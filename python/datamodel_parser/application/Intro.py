@@ -73,7 +73,6 @@ class Intro:
                     elif self.intro_type == 7: self.parse_file_type_7(node=node)
                     elif self.intro_type == 8: self.parse_file_type_8(node=node)
                     elif self.intro_type == 9: self.parse_file_type_9(node=node)
-#                    elif self.intro_type == 10: self.parse_file_type_10(node=node) too broad
                     else:
                         self.ready = False
                         self.logger.error(
