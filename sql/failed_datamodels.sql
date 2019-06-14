@@ -14,6 +14,6 @@ join env
 on pq.env_id = env.id
 )
 
-select concat('parse_html -l error -v --path datamodel/files/',variable,'/',path,'/',name)
+select concat('parse_html -l error -v --path ',variable,'/',path,'/',name)
 from ppq;
 

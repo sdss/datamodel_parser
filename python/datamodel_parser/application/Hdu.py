@@ -84,8 +84,11 @@ class Hdu:
                                     self.parse_file_hdu_intro_4(node=node)
                                     self.parse_file_hdu_tables_3(node=node)
                                 elif self.hdu_type == 7:
-                                    self.parse_file_hdu_intro_5(node=node)
-                                    self.parse_file_hdu_tables_5(node=node)
+                                    #### TO BE REMOVED
+#                                    self.parse_file_hdu_intro_5(node=node)
+#                                    self.parse_file_hdu_tables_5(node=node)
+                                    self.parse_file_hdu_intro_7(node=node)
+                                    self.parse_file_hdu_tables_7(node=node)
                                 elif self.hdu_type == 8:
                                     self.parse_file_hdu_intro_6(node=node)
                                     self.parse_file_hdu_tables_1(node=node)
@@ -98,6 +101,9 @@ class Hdu:
                                 elif self.hdu_type == 11:
                                     self.parse_file_hdu_intro_7(node=node)
                                     self.parse_file_hdu_tables_6(node=node)
+#                                elif self.hdu_type == 12: ### TO BE REMOVED
+#                                    self.parse_file_hdu_intro_7(node=node)
+#                                    self.parse_file_hdu_tables_7(node=node)
                                 else:
                                     self.ready = False
                                     self.logger.error('Unexpected self.hdu_type encountered ' +
@@ -115,102 +121,6 @@ class Hdu:
                 self.hdu_count = 0
                 self.logger.warning('Unable to parse_file. ' +
                                   'nodes: {}.'.format(nodes))
-
-
-#    def parse_file(self):
-#        '''Parse the HTML of the given BeautifulSoup object.'''
-#        self.hdu_count = None
-#        if self.ready:
-#            # process different hdu types
-#            if self.body:
-#                # self.body all div tags
-#                if self.util.children_all_one_tag_type(node = self.body,
-#                                                       tag_name = 'div'):
-#                    print('***** All divs *****')
-#                    hdu_divs = self.util.get_hdu_divs(node=self.body)
-##                    print('divs: %r' %  divs)
-##                    input('pause')
-#                    if hdu_divs:
-#                        for (self.hdu_number,hdu_div) in enumerate(hdu_divs):
-#                            if self.ready: self.parse_file_hdu_div(node=hdu_div)
-#                    else: pass # some files don't have div hdus
-#                else:
-#                    self.parse_file_hdus()
-#                self.set_hdu_count()
-#            else:
-#                self.ready = False
-#                self.logger.error('Unable to parse_file. ' +
-#                                  'self.body: {}.'.format(self.body))
-#
-#    def parse_file_hdu_div(self,node=None):
-#        '''Parse file hdu content from given BeautifulSoup division node.'''
-#        if self.ready:
-#            if node:
-#                type = Hdu_type(logger=self.logger,options=self.options)
-#                self.hdu_type = type.get_hdu_type(node=node)
-#
-##                print('self.hdu_type: %r' % self.hdu_type)
-##                input('pause')
-#
-#                if self.hdu_type:
-#                    if self.hdu_type == 1:
-#                        self.parse_file_hdu_intro_1(node=node)
-#                        self.parse_file_hdu_tables_1(node=node)
-#                    elif self.hdu_type == 2:
-#                        self.parse_file_hdu_intro_2(node=node)
-#                        self.parse_file_hdu_tables_1(node=node)
-#                    elif self.hdu_type == 3:
-#                        self.parse_file_hdu_intro_3(node=node)
-#                        self.parse_file_hdu_tables_2(node=node)
-#                    elif self.hdu_type == 4:
-#                        self.parse_file_hdu_intro_3(node=node)
-#                        self.parse_file_hdu_tables_3(node=node)
-#                    elif self.hdu_type == 5:
-#                        self.parse_file_hdu_intro_3(node=node)
-#                        self.parse_file_hdu_tables_4(node=node) # No table
-#                    elif self.hdu_type == 6:
-#                        self.parse_file_hdu_intro_4(node=node)
-#                        self.parse_file_hdu_tables_3(node=node)
-#                    else:
-#                        self.ready = False
-#                        self.logger.error('Unexpected self.hdu_type encountered ' +
-#                                          'in Hdu.parse_file_hdu_div().')
-#                else:
-#                    self.ready = False
-#                    self.logger.error('Unable to parse_file_hdu_div. ' +
-#                                      'self.hdu_type: {}, '.format(self.hdu_type) )
-#            else:
-#                self.ready = False
-#                self.logger.error('Unable to parse_file_hdu_div. ' +
-#                                  'node: {}.'.format(node))
-#
-#    def parse_file_hdus(self):
-#        '''Parse file hdu content from given BeautifulSoup node.'''
-#        if self.ready:
-#            node = self.body
-#            if node:
-#                child_names = set(self.util.get_child_names(node=node)) # REMOVE
-#                type = Hdu_type(logger=self.logger,options=self.options)
-#                self.hdu_type = type.get_hdu_type(node=node)
-#
-##                print('self.hdu_type: %r' % self.hdu_type)
-##                input('pause')
-#
-#                if self.hdu_type == 7:
-#                    self.parse_file_hdu_intro_type_5(node=node)
-#                    self.parse_file_hdu_tables_type_5(node=node)
-#
-#
-#                if child_names == {'h1','p','h3','ul','pre'}:
-#                    self.parse_file_h1_p_h3_ul_pre()
-#                else:
-#                    self.ready = False
-#                    self.logger.error('Unexpected HTML body type encountered ' +
-#                                      'in Hdu.parse_file.')
-#            else:
-#                self.ready = False
-#                self.logger.error('Unable to parse_file_hdus. ' +
-#                                  'node: {}.'.format(node))
 
     def set_hdu_count(self):
         '''Set the class attribute hdu_count.'''
@@ -510,8 +420,7 @@ class Hdu:
                                      if str(p) and not str(p).isspace()
                                      and not self.util.check_match(regex=regex,string=str(p))]
                                     if ps else list())
-                hdu_description = ' '.join(hdu_descriptions) if hdu_descriptions else str()
-
+                hdu_description = '\n\n'.join(hdu_descriptions) if hdu_descriptions else str()
                 # datatype and hdu_size
                 (datatype,hdu_size) = (None,None)
 
@@ -943,7 +852,7 @@ class Hdu:
                                             )
                             # table_rows
                             table_rows = (self.get_table_rows_pre(table=table)
-                                          if table and table.find('pre') else None)
+                                          if table and table.find('pre') else dict())
 
                             # check if errors have occurred
                             self.ready = self.ready and self.util.ready
@@ -990,6 +899,114 @@ class Hdu:
             else:
                 self.ready = False
                 self.logger.error('Unable to parse_file_hdu_tables_6. ' +
+                                  'node: {}, '.format(node)
+                                  )
+
+    def parse_file_hdu_tables_7(self,node=None):
+        '''Parse file hdu keyword/value/type/comment content
+        from given BeautifulSoup node.'''
+        hdu_tables = list()
+        if self.ready:
+            if node:
+                regex = ('(?i)required(.*?)keywords' + '|'
+                         '(?i)optional(.*?)keywords' + '|'
+                         '(?i)required(.*?)column'   + '|'
+                         '(?i)optional(.*?)column'   + '|'
+                         '(?i)sample(.*?)header'
+                         )
+                tables = self.util.get_tables_3(node=node,regex=regex)
+                if tables:
+                    for (table_number,table) in enumerate(tables):
+                        if self.ready:
+                            # table caption
+                            ps = self.util.get_children(node=table,names=['p'])
+                            p = ps[0] if ps else None
+                            ps = ps[1:] if ps and len(ps) > 1 else None
+                            (title,description) = (
+                                self.util.get_title_and_description_from_p(p=p)
+                                    if p else (None,None))
+                            p_strings = ([self.util.get_string(node=p) for p in ps if p]
+                                         if ps else list())
+                            p_strings = ([p for p in p_strings if not str(p).startswith('<b>')]
+                                         if p_strings else list())
+                            table_caption = (title.strip() + '. '
+                                             if title.strip() else str())
+                            table_caption += (description.strip() + '. '
+                                              if description.strip() else str())
+                            table_caption += ('. '.join(p_strings)
+                                              if p_strings else str())
+                                              
+                            # is_header
+                            is_header = (True if title and
+                                            self.util.check_match(
+                                                regex='(?i)required(.*?)keywords' + '|'
+                                                      '(?i)optional(.*?)keywords' + '|'
+                                                      '(?i)sample(.*?)header',
+                                                string=title)
+                                        else False if title and
+                                            self.util.check_match(
+                                                regex='(?i)required(.*?)column\s*names' + '|'
+                                                      '(?i)optional(.*?)column\s*names',
+                                                string=title)
+                                        else None
+                                        )
+
+                            # column_names
+                            column_names = (['Key','Value','Type','Comment']
+                                            if is_header == True else
+                                            ['Name','Type','Unit','Description']
+                                            if is_header == False
+                                            else None
+                                            )
+                            # table_rows
+                            table_rows = (self.get_table_rows_ul(table=table)
+                                          if table and table.find('ul') else dict())
+
+                            # check if errors have occurred
+                            self.ready = self.ready and self.util.ready
+
+                            # put it all together
+                            if self.ready:
+                                hdu_table = dict()
+                                previous_hdu_table = dict()
+                                # concatenate split tables
+                                if hdu_tables and hdu_tables[-1]['is_header'] == is_header:
+                                    previous_hdu_table = hdu_tables.pop()
+                                    previous_table_caption = previous_hdu_table['table_caption']
+                                    previous_table_rows = previous_hdu_table['table_rows']
+                                    hdu_table['is_header']          = is_header
+                                    hdu_table['table_caption']      = (previous_table_caption +
+                                                                       table_caption)
+                                    hdu_table['table_column_names'] = column_names
+                                    k = 0
+                                    hdu_table['table_rows'] = dict()
+                                    
+                                    for key, value in previous_table_rows.items():
+                                        hdu_table['table_rows'][k] = value
+                                        k += 1
+                                    for key, value in table_rows.items():
+                                        hdu_table['table_rows'][k] = value
+                                        k += 1
+                                else:
+                                    hdu_table['is_header']          = is_header
+                                    hdu_table['table_caption']      = table_caption
+                                    hdu_table['table_column_names'] = column_names
+                                    hdu_table['table_rows']         = table_rows
+                                hdu_tables.append(hdu_table)
+                    self.file_hdu_tables.append(hdu_tables)
+#                    print('\nhdu_table: %r' % hdu_table)
+#                    print('\nhdu_tables: %r' % hdu_tables)
+#                    print('\nself.file_hdu_tables: %r' % self.file_hdu_tables)
+#                    input('pause')
+
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to parse_file_hdu_tables_7. ' +
+                                      'tables: {}, '.format(tables)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to parse_file_hdu_tables_7. ' +
                                   'node: {}, '.format(node)
                                   )
 
@@ -1102,51 +1119,6 @@ class Hdu:
                                   )
         return is_header
 
-    def parse_file_h1_p_h3_ul_pre(self):
-        '''Parse the HTML of the given BeautifulSoup div tag object with
-            children: h1, h4 and p.'''
-        if self.ready:
-            assumptions = self.verify_assumptions_parse_file_h1_p_h3_ul_pre()
-            if self.body and assumptions:
-                self.set_hdu_tags()
-                self.set_hdu_headings_and_pres()
-                if (self.ready and
-                    self.hdu_headings and self.hdu_pres and
-                    len(self.hdu_headings) == len(self.hdu_pres)):
-                    intro_position = -1
-                    for (heading_tag,pre_tags) in list(zip(self.hdu_headings,
-                                                          self.hdu_pres)):
-                        hdu_title = (self.util.get_string(node=heading_tag)
-                                            .replace(':',str()))
-                        table_info = list()
-                        for pre_tag in pre_tags:
-                            string = self.util.get_string(node=pre_tag)
-                            table_info.append(string)
-                        table_info = '\n' + '\n\n'.join(table_info)
-                        # put it all together
-                        self.parse_file_hdu_info_h1_p_h3_ul_pre(
-                                                        hdu_title  = hdu_title,
-                                                        table_info = table_info)
-                        self.parse_file_hdu_tables_h1_p_h3_ul_pre(table_info=table_info)
-                else:
-                    self.ready = False
-                    self.logger.error(
-                        'Unable to parse_file_h1_p_h3_ul_pre. ' +
-                        'Possible unequal list lenghts. ' +
-                        'self.hdu_headings: {}'
-                            .format(self.hdu_headings) +
-                        'self.hdu_pres: {}'
-                            .format(self.hdu_pres) +
-                        'len(self.hdu_headings): {}'
-                            .format(len(self.hdu_headings)) +
-                        'len(self.hdu_pres): {}'
-                            .format(len(self.hdu_pres)))
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_h1_p_h3_ul_pre. ' +
-                                  'self.body: {}'.format(self.body) +
-                                  'assumptions: {}'.format(assumptions))
-
     def set_hdu_tags(self):
         '''Set hdus from given body tag.'''
         self.hdu_tags = None
@@ -1198,70 +1170,6 @@ class Hdu:
                 self.logger.error('Unable to set_hdu_headings_and_pres. ' +
                                   'self.hdu_tags: {}'
                                   .format(self.hdu_tags))
-
-    def parse_file_hdu_info_h1_p_h3_ul_pre(self,hdu_title=None,table_info=None):
-        '''Parse file description content from given hdu_titleision tag.'''
-        if self.ready:
-            if hdu_title and table_info:
-                if self.ready:
-                    # hdu.hdu_number and table_info.title
-                    hdu_number = (
-                        [int(s) for s in list(hdu_title) if s.isdigit()][0])
-                    # data.is_image
-                    rows = table_info.split('\n') if table_info else list()
-                    rows = [row for row in rows
-                            if row and 'XTENSION' in row and 'IMAGE' in row]
-                    is_image = bool(rows)
-                    is_image = None if not is_image and hdu_number == 0 else is_image
-                    hdu_info = dict()
-                    hdu_info['is_image']        = is_image
-                    hdu_info['hdu_number']      = hdu_number
-                    hdu_info['hdu_title']       = hdu_title if hdu_title else ' '
-                    hdu_info['hdu_size']        = None
-                    hdu_info['hdu_description'] = None
-                    hdu_info['hdu_type']        = self.hdu_type if self.hdu_type else None
-                    self.file_hdu_info.append(hdu_info)
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_hdu_info_h1_p_h3_ul_pre. ' +
-                                  'hdu_title: {}'.format(hdu_title) +
-                                  'table_info: {}'.format(table_info))
-
-    def parse_file_hdu_tables_h1_p_h3_ul_pre(self,table_info=None):
-        '''Parse file description content from given table_infoision tag.'''
-        hdu_table = dict()
-        hdu_tables = list()
-        if self.ready:
-            if table_info:
-                # table caption
-                table_caption = None
-                # table column table_infos
-                column_names = ['key','value','type','comment']
-                # table values
-                table_rows = dict()
-                rows = table_info.split('\n') if table_info else list()
-                rows = [row for row in rows if row]
-                if rows:
-                    for (position,row) in enumerate(rows):
-                        self.set_row_data(row=row)
-                        table_rows[position] = (self.row_data
-                                                 if self.row_data else None)
-                    
-                    hdu_table['is_header']          = True #DEBUG
-                    hdu_table['table_caption']      = table_caption
-                    hdu_table['table_column_names'] = column_names
-                    hdu_table['table_rows']         = table_rows
-                    hdu_tables.append(hdu_table)
-                    self.file_hdu_tables.append(hdu_tables)
-                else:
-                    self.ready = False
-                    self.logger.error(
-                                'Unable to parse_file_hdu_tables_h1_p_h3_ul_pre. ' +
-                                'rows: {}'.format(rows))
-            else:
-                self.ready = False
-                self.logger.error('Unable to parse_file_hdu_tables_h1_p_h3_ul_pre. ' +
-                                  'header: {}'.format(header))
 
     def set_row_data(self,row=None):
         '''Set the header keyword-value pairs for the given row.'''
@@ -1315,24 +1223,6 @@ class Hdu:
                 self.ready = False
                 self.logger.error('Unable to set_heading_tag_names. ' +
                                   'child_names: {}'.format(child_names))
-
-
-    def verify_assumptions_parse_file_h1_p_h3_ul_pre(self):
-        '''Verify assumptions made in parse_file_h1_h4_p_div.'''
-        assumptions = None
-        if self.body:
-            intro = (Intro(logger=self.logger,options=self.options,body=self.body)
-                     if self.logger and self.options and self.body else None)
-            assumptions = (
-                intro.verify_assumptions_parse_file_h1_p_h3_ul_pre(body=self.body)
-                if intro and self.body else None)
-        else:
-            self.ready = False
-            self.logger.error(
-                'Unable to verify_assumptions_parse_file_h1_p_h3_ul_pre. ' +
-                'self.body: {}.'.format(self.body))
-        if not assumptions: self.ready = False
-        return assumptions
 
     def get_table_rows_pre(self,table=None):
         '''Get table rows from the <table> tag.'''
@@ -1514,9 +1404,9 @@ class Hdu:
                         col2 = col2.replace('(',str()).replace(')',str()).strip() if col2 else None
                         col3 = col3[1:].strip() if col3 and col3.startswith(':') else col3
                         col3 = None if col3 and col3.strip() == '.' else col3
-                        table_row = [col0,None,col2,col3]
+                        table_row = [col0,col2,None,col3]
 
-#                        print('\n\nrow: %r' % row)
+#                        print('/\n\nrow: %r' % row)
 #                        print('col0: %r' % col0)
 #                        print('col23: %r' % col23)
 #                        print('matches: %r' % matches)

@@ -141,7 +141,7 @@ class Store:
         if self.ready:
             path = path if path else self.path
             if path:
-                path = path.replace('datamodel/files/',str())
+#                path = path.replace('datamodel/files/',str())
                 split = path.split('/')
                 self.env_variable  = split[0]              if split else None
                 self.file_name     = split[-1]             if split else None
@@ -430,7 +430,8 @@ class Store:
             if not self.datamodel_dir:
                 self.set_datamodel_dir()
             if self.path and not self.path.startswith('/'):
-                file =  join(self.datamodel_dir,self.path)
+#                file =  join(self.datamodel_dir,self.path)
+                file =  join(self.datamodel_dir,'datamodel/files',self.path)
                 if exists(file):
                     with open(file, 'r') as html_text:
                         self.html_text = html_text.read()

@@ -486,7 +486,7 @@ class Header(db.Model):
                              db.ForeignKey('sdss.hdu.id'),
                              nullable = False)
     hdu_number = db.Column(db.Integer, nullable = False)
-    table_caption = db.Column(db.String(512))
+    table_caption = db.Column(db.String(1024))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,

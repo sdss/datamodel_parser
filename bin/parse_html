@@ -24,22 +24,22 @@ else:
 Examples:
 
 ## div types ###
-parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
-parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
-parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
+parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html
+parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html
+parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
 
-parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
-parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
-parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
-parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
-parse_html -f -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
-parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/drpall.html
+parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
+parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
+parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html
+parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
+parse_html -f -l debug -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
+parse_html -l debug -v --path MANGA_SPECTRO_REDUX/DRPVER/drpall.html
 
-parse_html -l debug -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
+parse_html -l debug -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
 
-parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
-parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
-parse_html -l error -v --path datamodel/files/APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
+parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
+parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
+parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
 
 
 
@@ -56,10 +56,10 @@ file_type = 2
         'required column names'         or
         'required hdu k keywords'       or
         'required hdu k column names'   or
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAll.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAllLine.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/spAlldat.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platelist.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/spAll.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/spAllLine.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/spAlldat.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/platelist.html
 
 file_type = 3
 # Intro: h,p, table (sections with notes after)
@@ -69,8 +69,8 @@ file_type = 3
         'primary hdu'       or
         'hduk'              or
         'hdu k'
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html
+parse_html -l debug -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html
 
 # Intro: h,p
 # HDUs: h,p,pre (possibly no pre, like possibly no table in div types)
@@ -79,10 +79,10 @@ parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/sp
         'primary hdu'       or
         'hduk'              or
         'hdu k'             or
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spArc.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFlat.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxdistort.html
+parse_html -l debug -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spArc.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFlat.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxdistort.html
 
 # Intro: h,p,pre
 # HDUs: h,p,pre
@@ -91,9 +91,9 @@ parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/sp
         'primary hdu'       or
         'hduk'              or
         'hdu k'             or
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcalib.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spXYthrucorr.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcalib.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spXYthrucorr.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
 
 # Intro: h,p,ul
 # HDUs: h,p,pre
@@ -102,23 +102,23 @@ parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/sp
         'primary hdu'       or
         'hduk'              or
         'hdu k'             or
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_DATA/MJD/sdR.html
+parse_html -l debug -v --path BOSS_SPECTRO_DATA/MJD/sdR.html
 
 file_type = 4
 # Intro: one h,p, (ul or pre)
 #HDUs: No hdus
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/images/RUN2D/RUN1D/PLATE4-MJD/spec-image-PLATE4-MJD-FIBER4.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/platequality.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcorr.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFrame.html
-parse_html -l error -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spSN2d.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/images/RUN2D/RUN1D/PLATE4-MJD/spec-image-PLATE4-MJD-FIBER4.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/platequality.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcorr.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFrame.html
+parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spSN2d.html
 
 file_type = None)
-parse_html -l debug -v --path datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
+parse_html -l debug -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
 
 '''
 

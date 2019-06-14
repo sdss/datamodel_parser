@@ -23,5 +23,5 @@ else:
 
 
 '''
-inverse_parse_html -l error -v --path datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html --string VERSPLDS
+inverse_parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html --string VERSPLDS
 '''

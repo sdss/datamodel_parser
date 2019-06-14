@@ -173,7 +173,6 @@ class Util:
                                   'dl: {}.'.format(dl))
         return (dts,dds)
 
-
     def get_titles_and_descriptions_from_ps_1(self,node=None):
         '''From the given list of BeautifulSoup <p> tag objects,
         get Python lists for the associated titles and descriptions
@@ -208,20 +207,18 @@ class Util:
         '''
         titles  = list()
         descriptions = list()
-        if self.ready and sibling_tag_name:
-            if node:
+        if self.ready:
+            if node and sibling_tag_name:
                 ps = node.find_all('p')
                 for p in ps:
                     (title,description) = self.get_title_and_description_from_p(p=p)
                     if (title and description): # has <b> tag and other text
                         pass # we have both
                     elif title and not description: # has <b> tag and no other text
-                        # Naming convention unordered list
-                        next_siblings = [s for s in p.next_siblings if s and not str(s).isspace()]
-                        if next_siblings:
-                            if next_siblings[0].name == sibling_tag_name:
-                                sibling_tag = p.find(sibling_tag_name)
-                                description = str(sibling_tag)
+                        next_sibling = self.get_next_sibling(node=p)
+                        if next_sibling:
+                            if next_sibling.name == sibling_tag_name:
+                                description = str(next_sibling)
                         else:
                             description = str() # just title with no description
                     elif not (title and description): # does not have <b> tag
@@ -233,7 +230,7 @@ class Util:
                 self.ready = False
                 self.logger.error('Unable to get_titles_and_descriptions_from_ps_2. ' +
                                   'node: {}'.format(node) +
-                                  'node: {}'.format(node)
+                                  'sibling_tag_name: {}'.format(sibling_tag_name)
                                   )
         if not (titles and descriptions) and len(titles)==len(descriptions):
             self.ready = False
@@ -947,6 +944,23 @@ class Util:
                                 .format(isinstance(reverse,bool))
                               )
         return soup
+
+    def get_next_sibling(self,node=None):
+        '''Get the next sibling of the given BeautifulSoup node.'''
+        next_sibling = None
+        if self.ready:
+            if node:
+                next_siblings = [s for s in node.next_siblings
+                                 if s and not str(s).isspace()]
+                next_sibling = next_siblings[0] if next_siblings else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to get_next_sibling. ' +
+                                  'node: {}'.format(node)
+                                  )
+        return next_sibling
+
+
 
     def get_split_hdus_2(self,node=None):
         '''Split the node into a list of BeautifulSoup objects containing file HDUs.'''

@@ -34,7 +34,7 @@ else:
 
 '''
 Examples:
-parse_stub.py -l error -v -b /data-p datamodel/files/BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest-3606-55182.fits
+parse_stub.py -l error -v -b /data-p BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest-3606-55182.fits
 '''
 
 
