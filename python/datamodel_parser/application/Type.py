@@ -949,7 +949,6 @@ class Hdu_type(Type):
                 elif self.check_hdu_type_9(node=node): hdu_type = 9
                 elif self.check_hdu_type_10(node=node): hdu_type = 10
                 elif self.check_hdu_type_11(node=node): hdu_type = 11
-#                elif self.check_hdu_type_12(node=node): hdu_type = 12
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_hdu_type. '
@@ -1302,36 +1301,6 @@ class Hdu_type(Type):
                 self.logger.error('Unable to check_hdu_type_11. ' +
                                   'node: {}.'.format(node))
         return self.correct_type
-
-##### TO BE REMOVED ######
-#    def check_hdu_type_12(self,node=None):
-#        '''Determine class Hdu template type from the given BeautifulSoup node.'''
-#        self.correct_type = None
-#        if self.ready:
-#            if node:
-#                self.correct_type = True
-#                self.logger.debug("First inconsistency for check_hdu_type_12:")
-#                tag_names = set(self.util.get_child_names(node=node))
-#                # check tag_names = {h,p,ul} or {h,ul}
-#                if not (tag_names == (tag_names & self.heading_tag_names)
-#                                     | {'p','ul'}
-#                        or
-#                        tag_names == (tag_names & self.heading_tag_names)
-#                                     | {'ul'}
-#                        ):
-#                    self.correct_type = False
-#                    self.logger.debug("not tag_names = {h,p,ul} or {h,ul}")
-#                # check node has zero or one heading tag
-#                self.check_heading_tag_assumptions_3(node=node)
-#                # check there is a header table or data table title in a <p> tag
-#                self.check_p_tag_assumptions_6(node=node,toggle=False)
-#                # check ul tag is a string with rows separated by '\n'
-#                self.check_ul_tag_assumptions_1(node=node)
-#            else:
-#                self.ready = False
-#                self.logger.error('Unable to check_hdu_type_12. ' +
-#                                  'node: {}.'.format(node))
-#        return self.correct_type
 
     def check_hdu_dl_tag_assumptions_1(self,node=None):
         '''Check hdu <dl> tag assumptions.'''

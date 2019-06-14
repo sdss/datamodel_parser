@@ -101,9 +101,6 @@ class Hdu:
                                 elif self.hdu_type == 11:
                                     self.parse_file_hdu_intro_7(node=node)
                                     self.parse_file_hdu_tables_6(node=node)
-#                                elif self.hdu_type == 12: ### TO BE REMOVED
-#                                    self.parse_file_hdu_intro_7(node=node)
-#                                    self.parse_file_hdu_tables_7(node=node)
                                 else:
                                     self.ready = False
                                     self.logger.error('Unexpected self.hdu_type encountered ' +
