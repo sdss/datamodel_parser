@@ -3,6 +3,7 @@
 # $Id: parse_all 2019-03-14 n.benjamin.murphy $
 #
 
+ parse_html -l error -v --path BOSS_LSS_REDUX/random_DR14_QSO_NS.html
  parse_html -l error -v --path IRCAM_DATA/MJD/cR.html
  parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spArc.html
  parse_html -l error -v --path BOSS_PHOTOOBJ/astromqa/astromQAFields.html
@@ -336,3 +337,21 @@
  parse_html -l error -v --path PLATELIST_DIR/runs/PLATERUN/plDrillPos.html
  parse_html -l error -v --path PLATELIST_DIR/runs/PLATERUN/plObs.html
  parse_html -l error -v --path PLATELIST_DIR/inputs/plateInput.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/mask_DRX_SAMPLE_NS.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/data_DR14_LRG_NS.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/data_DR14_QSO_NS.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/dr11_patchy_mocks/Patchy-Mocks-DRXSAMPLENS-VERSION-IDNUM.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/dr11_patchy_mocks/PATCHY-Mocks-Randoms-DRXSAMPLENS-VERSION-xN.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/reject_mask/MASK.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/mask/MASK.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/random_DR14_QSO_NS.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/randomN_DRX_SAMPLE_NS.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/random_DR14_LRG_NS.html
+ parse_html -l error -v --path BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html
+ parse_html -l error -v --path SDSS_TARGET/sdss_target_paramlist.html
+ parse_html -l error -v --path SDSS_TARGET/sdss_target_params.html

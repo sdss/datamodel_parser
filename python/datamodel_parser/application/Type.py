@@ -56,7 +56,8 @@ class Type(object):
             if node and tag_names:
                 if self.correct_type:
                     # check heading tags have only text content
-                    for child in self.util.get_children(node=node):
+                    children = self.util.get_children(node=node)
+                    for child in children:
                         if self.correct_type and child.name in tag_names:
                             if not self.check_tag_has_only_text_content(tag=child):
                                 self.correct_type = False
@@ -99,8 +100,9 @@ class Type(object):
         if self.ready:
             if node:
                 # check heading tag only has text content
-                self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.heading_tag_names)
+                if self.correct_type:
+                    self.check_tags_have_only_text_content(node=node,
+                                                           tag_names=self.heading_tag_names)
                 # check first child of node is heading tag
                 if self.correct_type:
                     children = self.util.get_children(node=node)
@@ -111,19 +113,21 @@ class Type(object):
                 # check additional headings indicate header and binary table
                 if self.correct_type:
                     heading_tag_names = self.util.get_heading_tag_child_names(node=node)
-                    heading_nodes = node.find_all(heading_tag_names)
-                    heading_strings = [self.util.get_string(node=heading_node)
-                                       for heading_node in heading_nodes]
-                    found_binary_table = False
-                    for heading_string in heading_strings:
-                        regex = '(?i)Binary\s*' + '|' + '(?i)Field\s*'
-                        match = self.util.check_match(regex=regex,string=heading_string)
-                        if match:
-                            found_binary_table = True
-                            break
-                    if not found_binary_table:
-                        self.correct_type = False
-                        self.logger.debug("not additional headings indicate header and binary table")
+                    l = len(heading_tag_names)
+                    if l > 1:
+                        heading_nodes = node.find_all(heading_tag_names)
+                        heading_strings = [self.util.get_string(node=heading_node)
+                                           for heading_node in heading_nodes]
+                        found_binary_table = False
+                        for heading_string in heading_strings:
+                            regex = '(?i)Binary\s*' + '|' + '(?i)Field\s*'
+                            match = self.util.check_match(regex=regex,string=heading_string)
+                            if match:
+                                found_binary_table = True
+                                break
+                        if not found_binary_table:
+                            self.correct_type = False
+                            self.logger.debug("not additional headings indicate header and binary table")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_heading_tag_assumptions_1. ' +
@@ -133,8 +137,10 @@ class Type(object):
         '''Check heading tag assumptions.'''
         if self.ready:
             if node and isinstance(toggle_found_hdu,bool):
-                self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.heading_tag_names)
+                # check heading tag only has text content
+                if self.correct_type:
+                    self.check_tags_have_only_text_content(node=node,
+                                                           tag_names=self.heading_tag_names)
                 # check there is a heading tag with HDU title
                 if self.correct_type:
                     found_hdu = False
@@ -146,10 +152,11 @@ class Type(object):
                         string = strings[0] if strings and len(strings) == 1 else None
                         # check HDU title in heading tag
                         if string:
-                            regex = ('(?i)hdu\s*\d+' + '|'
-                                    '(?i)primary\s*header' + '|'
-                                    '(?i)sample\s*header' + '|'
-                                    '(?i)primary\s*hdu')
+                            regex = self.util.get_table_title_regex_4()
+#                            regex = ('(?i)hdu\s*\d+' + '|'
+#                                    '(?i)primary\s*header' + '|'
+#                                    '(?i)sample\s*header' + '|'
+#                                    '(?i)primary\s*hdu')
                             if self.util.check_match(regex=regex,string=string):
                                 found_hdu = True
                                 break
@@ -170,22 +177,29 @@ class Type(object):
         if self.ready:
             if node:
                 # check heading tag only has text content
-                self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.heading_tag_names)
+                if self.correct_type:
+                    self.check_tags_have_only_text_content(node=node,
+                                                           tag_names=self.heading_tag_names)
                 # check node has zero or one heading tag
                 if self.correct_type:
                     heading_tag_names = self.util.get_heading_tag_child_names(node=node)
                     l = len(heading_tag_names)
-                    if not (l == 0 or l == 1):
+                    if not (l == 0 or l == 1 or l == 2):
                         self.correct_type = False
                         self.logger.debug("not node has only one heading tag")
-            
-#                # check first child of node is heading tag
-#                if self.correct_type:
-#                    children = self.util.get_children(node=node)
-#                    if not children and children[0].name in self.heading_tag_names:
-#                        self.correct_type = False
-#                        self.logger.debug("not first child of node is heading tag")
+                # check first child of node is heading tag
+                if self.correct_type:
+                    children = self.util.get_children(node=node)
+                    if not children and children[0].name in self.heading_tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not first child of node is heading tag")
+                # if l ==2 check last child of node is heading tag
+                if self.correct_type:
+                    if l == 2:
+                        children = self.util.get_children(node=node)
+                        if not children and children[-1].name in self.heading_tag_names:
+                            self.correct_type = False
+                            self.logger.debug("not last child of node is heading tag")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_heading_tag_assumptions_3. ' +

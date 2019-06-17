@@ -144,6 +144,10 @@ class Hdu:
                         self.util.get_hdu_number_and_hdu_title_from_heading_tag(node=node))
                 else:
                     (hdu_number,hdu_title) = (0,' ')
+                if hdu_number is None:
+                    self.logger.error('Unable to parse_file_hdu_intro_1. ' +
+                                      'hdu_number cannot be None. ' +
+                                      'hdu_number: {}, '.format(hdu_number))
 
                 # hdu_description
                 ps = node.find_all('p')
@@ -189,6 +193,10 @@ class Hdu:
                         self.util.get_hdu_number_and_hdu_title_from_heading_tag(node=node))
                 else:
                     (hdu_number,hdu_title) = (0,' ')
+                if hdu_number is None:
+                    self.logger.error('Unable to parse_file_hdu_intro_2. ' +
+                                      'hdu_number cannot be None. ' +
+                                      'hdu_number: {}, '.format(hdu_number))
 
                 # hdu.description
                 ps = list()
@@ -242,6 +250,10 @@ class Hdu:
                         self.util.get_hdu_number_and_hdu_title_from_heading_tag(node=node))
                 else:
                     (hdu_number,hdu_title) = (0,' ')
+                if hdu_number is None:
+                    self.logger.error('Unable to parse_file_hdu_intro_3. ' +
+                                      'hdu_number cannot be None. ' +
+                                      'hdu_number: {}, '.format(hdu_number))
                 
                 # hdu_description
                 ps = node.find_all('p')
@@ -284,6 +296,10 @@ class Hdu:
                         self.util.get_hdu_number_and_hdu_title_from_heading_tag(node=node))
                 else:
                     (hdu_number,hdu_title) = (0,' ')
+                if hdu_number is None:
+                    self.logger.error('Unable to parse_file_hdu_intro_4. ' +
+                                      'hdu_number cannot be None. ' +
+                                      'hdu_number: {}, '.format(hdu_number))
 
                 # hdu_description
                 hdu_description = str()
@@ -364,6 +380,10 @@ class Hdu:
                         self.util.get_hdu_number_and_hdu_title_from_heading_tag(node=node))
                 else:
                     (hdu_number,hdu_title) = (0,' ')
+                if hdu_number is None:
+                    self.logger.error('Unable to parse_file_hdu_intro_6. ' +
+                                      'hdu_number cannot be None. ' +
+                                      'hdu_number: {}, '.format(hdu_number))
 
                 # hdu.description
                 hdu_description = self.util.get_string_from_middle_children_1(node=node)
@@ -404,7 +424,11 @@ class Hdu:
                         self.util.get_hdu_number_and_hdu_title_from_heading_tag(node=node))
                 else:
                     (hdu_number,hdu_title) = (0,' ')
-                
+                if hdu_number is None:
+                    self.logger.error('Unable to parse_file_hdu_intro_7. ' +
+                                      'hdu_number cannot be None. ' +
+                                      'hdu_number: {}, '.format(hdu_number))
+
                 # hdu_description
                 ps = node.find_all('p')
                 regex = self.util.get_table_title_regex_1()
@@ -542,7 +566,8 @@ class Hdu:
                                 hdu_table['table_rows']         = table_rows
                                 hdu_tables.append(hdu_table)
                     self.file_hdu_tables.append(hdu_tables)
-#                    print('hdu_tables: %r' % hdu_tables)
+#                    print('\n\nhdu_tables: \n' + dumps(hdu_tables,indent=1))
+#                    print('\n\nhdu_tables: %r' % hdu_tables)
 #                    input('pause')
                 else:
                     self.ready = False
@@ -1274,15 +1299,18 @@ class Hdu:
                 if rows:
                     for (position,row) in enumerate(rows):
                         if self.ready:
-                            table_row = self.get_table_row_1(row=row)
-                            if table_row:
-                                table_rows[position] = table_row
-                            else:
-                                self.ready = False
-                                self.logger.error('Unable to get_table_rows_pre. ' +
-                                                  'row: {}, '.format(row) +
-                                                  'table_row: {}, '.format(table_row)
-                                                  )
+                            if row: # skip empty rows
+                                table_row = self.get_table_row_1(row=row)
+                                if table_row:
+                                    table_rows[position] = table_row
+                                else:
+                                    print('row: %r'% row)
+#                                    input('pause')
+                                    self.ready = False
+                                    self.logger.error('Unable to get_table_rows_pre. ' +
+                                                      'row: {}, '.format(row) +
+                                                      'table_row: {}, '.format(table_row)
+                                                      )
             else:
                 self.ready = False
                 self.logger.error('Unable to get_table_rows_pre. ' +
@@ -1329,7 +1357,7 @@ class Hdu:
         if self.ready:
             if row:
                 regex0 = '^\s{5,}'  # starts with 5 or more spaces
-                regex1 = '^\*'      # starts with '*'
+                regex1 = '^\*' + '|' + '^\#'    # starts with '*' or '#'
                 regex2 = ('^[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*\s*\=\s*' + '|'
                           '^[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*\s*\=\s*'            + '|'
                           '^[A-Z]{2,}\d*\_[A-Z]{2,}\d*\s*\=\s*'                       + '|'
