@@ -58,3 +58,11 @@ def percent_complete():
     parser.add_argument("-n", "--nolog", help="set nolog variable", action="store_true")
     parser.add_argument("-v", "--verbose", help="set verbose logging", action="store_true")
     return parser.parse_args()
+
+def find_svn_products():
+    parser = ArgumentParser()
+    parser.add_argument("-l", "--level", help="set logging level", metavar="LEVEL", choices=['debug','info','warning','error','critical'], default='info')
+    parser.add_argument("-n", "--nolog", help="set nolog variable", action="store_true")
+    parser.add_argument("-v", "--verbose", help="set verbose logging", action="store_true")
+    return parser.parse_args()
+

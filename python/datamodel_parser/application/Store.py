@@ -1,10 +1,11 @@
 from datamodel_parser.application import File
 from datamodel_parser.application import Database
 from os import environ, walk
-from os.path import join, exists, basename
+from os.path import basename, dirname, exists, isdir, join
 from flask import render_template
 from datamodel_parser import app
 import logging
+from subprocess import Popen, PIPE
 from json import dumps
 
 class Store:
@@ -98,6 +99,7 @@ class Store:
             self.location_path    = None
             self.directory_names  = None
             self.directory_depths = None
+            self.svn_products     = None
 
     def set_tree_edition(self):
         '''Set the datamodel edition.'''
@@ -197,6 +199,68 @@ class Store:
             'datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html',
             'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
             ]
+
+    def set_svn_products(self,root_dir=None):
+        '''Set a list of all files for the current tree edition.'''
+        if self.ready:
+            if root_dir and self.svn_products is not None:
+                command = ['svn','list',root_dir]
+                (stdout,stderr,proc_returncode) = self.execute_command(command)
+                self.logger.info('Traversing directory: %r' % root_dir)
+#                print('proc_returncode: %r' % proc_returncode)
+                if proc_returncode == 0:
+                    basenames = ([d.replace('/',str())
+                                  for d in str(stdout.decode("utf-8")).split('\n')
+                                  if d and d.endswith('/')]
+                                 if stdout else None)
+#                    print('basenames: %r' % basenames)
+                    if basenames:
+                        if {'branches','tags','trunk'}.issubset(set(basenames)):
+                            self.svn_products.append(root_dir)
+                            root_dir = dirname(root_dir)
+#                            print('root_dir: %r' % root_dir)
+                        else:
+                            for basename in basenames:
+                                sub_dir = join(root_dir,basename)
+#                                print('sub_dir: %r' % sub_dir)
+                                self.set_svn_products(root_dir=sub_dir)
+#                        print('self.svn_products: %r' % self.svn_products)
+#                        input('pause')
+                else:
+                    self.ready = False
+                    self.logger.error(
+                        'Unable to get_svn_products. ' +
+                        'An error has occured while executing the command, ' +
+                        'command: {}, '.format(command) +
+                        'proc_returncode: {}, '.format(proc_returncode)
+                        )
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to get_svn_products. ' +
+                    'root_dir: {}'.format(root_dir) +
+                    'self.svn_product: {}'.format(self.svn_product)
+                    )
+
+    def execute_command(self, command=None):
+        '''Execute the passed terminal command.'''
+        (stdout,stderr,proc_returncode) = (None,None,None)
+        if command:
+            proc = Popen(command, stdout=PIPE, stderr=PIPE)
+            if proc:
+                (stdout, stderr) = proc.communicate() if proc else (None,None)
+                proc_returncode = proc.returncode if proc else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to execute_command. ' +
+                                  'proc: {}'.format(proc))
+        else:
+            self.ready = False
+            self.logger.error('Unable to execute_command. ' +
+                              'command: {}'.format(command))
+        return (stdout,stderr,proc_returncode)
+
+
 
     def get_column_tag(self):
         '''Populate tables comprised of file HTML text information.'''
