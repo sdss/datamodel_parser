@@ -107,7 +107,7 @@ CREATE TABLE sdss.keyword (
     keyword VARCHAR(64),
     value VARCHAR(256),
     datatype VARCHAR(80),
-    comment VARCHAR(2048),
+    comment VARCHAR(16384),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

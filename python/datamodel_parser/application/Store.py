@@ -198,34 +198,33 @@ class Store:
         self.file_path_skip_list = [
             'datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html',
             'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
+            'datamodel/files/PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html',
+            'datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html',
             ]
 
     def set_svn_products(self,root_dir=None):
-        '''Set a list of all files for the current tree edition.'''
+        '''Set a list of directories containing the subdirectories:
+            branches, tags, and trunk'''
         if self.ready:
             if root_dir and self.svn_products is not None:
                 command = ['svn','list',root_dir]
                 (stdout,stderr,proc_returncode) = self.execute_command(command)
                 self.logger.info('Traversing directory: %r' % root_dir)
-#                print('proc_returncode: %r' % proc_returncode)
                 if proc_returncode == 0:
                     basenames = ([d.replace('/',str())
                                   for d in str(stdout.decode("utf-8")).split('\n')
                                   if d and d.endswith('/')]
                                  if stdout else None)
-#                    print('basenames: %r' % basenames)
                     if basenames:
-                        if {'branches','tags','trunk'}.issubset(set(basenames)):
+#                        if {'branches','tags','trunk'}.issubset(set(basenames)):
+                        if 'trunk' in basenames:
                             self.svn_products.append(root_dir)
                             root_dir = dirname(root_dir)
-#                            print('root_dir: %r' % root_dir)
                         else:
                             for basename in basenames:
-                                sub_dir = join(root_dir,basename)
-#                                print('sub_dir: %r' % sub_dir)
-                                self.set_svn_products(root_dir=sub_dir)
-#                        print('self.svn_products: %r' % self.svn_products)
-#                        input('pause')
+                                if self.ready:
+                                    sub_dir = join(root_dir,basename)
+                                    self.set_svn_products(root_dir=sub_dir)
                 else:
                     self.ready = False
                     self.logger.error(

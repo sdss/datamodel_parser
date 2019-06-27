@@ -11,12 +11,9 @@
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/starprof_PLATENAME.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/star1d_PLATENAME.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html
- parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/TEMP/plPlugMapR.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/MJD/reduction1/processed_images/ft.fits.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/MJD/reduction1/whirls/ft.whrl.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/RESULTS/results_platename.html
- parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplanfile.html
- parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/PARAMS/fibretranslationtable.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplantable.html
  parse_html -l error -v --path SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoMatchPlate.html
  parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin_full.html
@@ -64,9 +61,7 @@
  parse_html -l error -v --path APOGEE_DATA/MJD5/apR.html
  parse_html -l error -v --path BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html
  parse_html -l error -v --path RAWDATA_DIR/MJD/frames.list.html
- parse_html -l error -v --path RAWDATA_DIR/MJD/sdR.html
  parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html
- parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFluxError.html
  parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFlux.html
  parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapParam.html
  parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapCova.html
@@ -82,30 +77,7 @@
  parse_html -l error -v --path MANGA_FIREFLY/FIREFLY_VER/manga_firefly-GLOBALPROP.html
  parse_html -l error -v --path MANGA_FIREFLY/FIREFLY_VER/manga_firefly-STELLARPOP.html
  parse_html -l error -v --path MANGA_FIREFLY/FIREFLY_VER/manga_firefly-INDICES.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpFieldStat.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpAtlas.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psField.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpM.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpBIN.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpObjc.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psCT.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/ssc/koCat.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/ssc/scPlan.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/astrom/asQA.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/astrom/asPlan.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/opConfig.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/opECalib.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/opCamera.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/idReport.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/idWeather.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/opBC.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/idFrameLog.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/photo/fpPlan.html
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/photo/psPlan.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlan.html
- parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/cal/detector/apDetector.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/cal/darkcorr/apDark.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/cal/flatcorr/apFlat.html
@@ -129,15 +101,11 @@
  parse_html -l error -v --path MANGACORE_DIR/apocomplete/bogey.html
  parse_html -l error -v --path SPECTRO_REDUX/photoMatchPlate.html
  parse_html -l error -v --path SPECTRO_REDUX/RUN2D/PLATE4/spZline.html
- parse_html -l error -v --path SPECTRO_REDUX/RUN2D/PLATE4/spPlancomb.html
  parse_html -l error -v --path SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html
- parse_html -l error -v --path SPECTRO_REDUX/RUN2D/PLATE4/spPlan2d.html
  parse_html -l error -v --path SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
- parse_html -l error -v --path SPINSPECT_DIR/data/NAME/spInspect.html
  parse_html -l error -v --path SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjSetAll.html
  parse_html -l error -v --path APOGEE_TARGET/apogeeObject/apogeeObject.html
  parse_html -l error -v --path PHOTO_DATA/RUN/gangs/idGang.html
- parse_html -l error -v --path PHOTO_DATA/RUN/fields/CAMCOL/idR.html
  parse_html -l error -v --path PHOTO_SWEEP/RERUN/calibObj.html
  parse_html -l error -v --path PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html
  parse_html -l error -v --path PLATELIST_DIR/runs/PLATERUN/plMeas.html

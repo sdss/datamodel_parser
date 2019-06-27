@@ -241,10 +241,10 @@ class Type(object):
                                   'node: {}.'.format(node) +
                                   'dl_child_names: {}.'.format(dl_child_names))
 
-    def check_ul_tag_assumptions_1(self,node=None):
+    def check_ul_tag_assumptions_1(self,node=None,toggle=False):
         '''Check hdu <ul> tag assumptions.'''
         if self.ready:
-            if node:
+            if node and isinstance(toggle,bool):
                 # check 'ul' in tag_names
                 if self.correct_type:
                     tag_names = set(self.util.get_child_names(node=node))
@@ -262,10 +262,12 @@ class Type(object):
                         if self.correct_type:
                             is_first_li = True
                             for li in ul.find_all('li'):
-                                # check <li> tag contains a bold tag
+                                # check <ul> <li> tags after first <li> tag contains a bold tag
                                 if self.correct_type:
                                     tag_names = set(self.util.get_child_names(node=li))
-                                    if not tag_names & {'b'}:
+                                    bold_in_tag_names = tag_names & {'b'}
+                                    if toggle: bold_in_tag_names = not bold_in_tag_names
+                                    if not bold_in_tag_names:
 #                                        print('li: %r'% li)
 #                                        input('pause')
                                         if is_first_li:
@@ -273,11 +275,13 @@ class Type(object):
                                         else:
                                             self.correct_type = False
                                             self.logger.debug(
-                                                "not <ul> <li> tag contains a bold tag.")
+                                                "not <ul> <li> tags after first <li> tag contains a bold tag.")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_ul_tag_assumptions_1. ' +
-                                  'ul: {}.'.format(ul))
+                                  'node: {}.'.format(node) +
+                                  'isinstance(toggle,bool): {}.'.format(isinstance(toggle,bool))
+                                  )
 
     def check_ul_tag_assumptions_2(self,node=None):
         '''Check hdu <ul> tag assumptions.'''
@@ -953,7 +957,6 @@ class Hdu_type(Type):
             if node:
                 # found in file_type=1, with divs
                 tag_names = set(self.util.get_child_names(node=node))
-                if 'pre' in tag_names: print("'pre' in tag_names")
                 if   self.check_hdu_type_1(node=node): hdu_type = 1
                 elif self.check_hdu_type_2(node=node): hdu_type = 2
                 elif self.check_hdu_type_3(node=node): hdu_type = 3
@@ -965,6 +968,7 @@ class Hdu_type(Type):
                 elif self.check_hdu_type_9(node=node): hdu_type = 9
                 elif self.check_hdu_type_10(node=node): hdu_type = 10
                 elif self.check_hdu_type_11(node=node): hdu_type = 11
+                elif self.check_hdu_type_12(node=node): hdu_type = 12
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_hdu_type. '
@@ -1139,6 +1143,8 @@ class Hdu_type(Type):
                 self.check_heading_tag_assumptions_3(node=node)
                 # check there is NOT a header table or data table title in a <p> tag
                 self.check_p_tag_assumptions_6(node=node,toggle=True)
+                # check <ul> <li> tags after first <li> tag DOES NOT contain a bold tag
+                self.check_ul_tag_assumptions_1(node=node,toggle=True)
                 if 'table' in tag_names:
                     # check <table> contains <caption> and <tbody>
                     self.check_table_tag_assumptions_2(node=node)
@@ -1169,40 +1175,13 @@ class Hdu_type(Type):
                 self.check_heading_tag_assumptions_3(node=node)
                 # check there is a header table or data table title in a <p> tag
                 self.check_p_tag_assumptions_6(node=node,toggle=False)
-                # check ul tag is a string with rows separated by '\n'
-                self.check_ul_tag_assumptions_1(node=node)
+                # check <ul> <li> tags after first <li> tag DOES NOT contain a bold tag
+                self.check_ul_tag_assumptions_1(node=node,toggle=False)
             else:
                 self.ready = False
                 self.logger.error('Unable to check_hdu_type_7. ' +
                                   'node: {}.'.format(node))
         return self.correct_type
-
-##### OLD VERSION #######
-#    def check_hdu_type_7(self,node=None):
-#        '''Determine class Hdu template type from the given BeautifulSoup node.'''
-#        self.correct_type = False
-#        if self.ready:
-#            if node:
-#                self.correct_type = True
-#                self.logger.debug("First inconsistency for check_hdu_type_7:")
-#                tag_names = set(self.util.get_child_names(node=node))
-#                # check tag_names = {h,p,ul} or {h,p}
-#                if not (tag_names == {'p','ul'}
-#                        or
-#                        tag_names == {'p'}
-#                        ):
-#                    self.correct_type = False
-#                    self.logger.debug("not tag_names = {h,p,ul} or {h,p}")
-#                # check a <p> tag contains a table title
-#                self.check_p_tag_assumptions_3(node=node)
-#                if 'ul' in tag_names:
-#                    # check all <ul> tags have only <li> tag children, containing a bold tag
-#                    self.check_ul_tag_assumptions_1(node=node)
-#            else:
-#                self.ready = False
-#                self.logger.error('Unable to check_hdu_type_7. ' +
-#                                  'node: {}.'.format(node))
-#        return self.correct_type
 
     def check_hdu_type_8(self,node=None):
         '''Determine class Hdu template type from the given BeautifulSoup node.'''
@@ -1315,6 +1294,32 @@ class Hdu_type(Type):
             else:
                 self.ready = False
                 self.logger.error('Unable to check_hdu_type_11. ' +
+                                  'node: {}.'.format(node))
+        return self.correct_type
+
+    def check_hdu_type_12(self,node=None):
+        '''Determine class Hdu template type from the given BeautifulSoup node.'''
+        self.correct_type = False
+        if self.ready:
+            if node:
+                self.correct_type = True
+                self.logger.debug("First inconsistency for check_hdu_type_12:")
+                tag_names = set(self.util.get_child_names(node=node))
+                # check tag_names = {h,p,ul,table}
+                if not (tag_names == (tag_names & self.heading_tag_names)
+                                     | {'p','ul'}
+                        ):
+                    self.correct_type = False
+                    self.logger.debug("not tag_names = {h,p,ul,table}")
+                # check node has zero or one heading tag
+                self.check_heading_tag_assumptions_3(node=node)
+                # check there is NOT a header table or data table title in a <p> tag
+                self.check_p_tag_assumptions_6(node=node,toggle=True)
+                # check <ul> <li> tags after first <li> tag does contain a bold tag
+                self.check_ul_tag_assumptions_1(node=node,toggle=False)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_hdu_type_12. ' +
                                   'node: {}.'.format(node))
         return self.correct_type
 

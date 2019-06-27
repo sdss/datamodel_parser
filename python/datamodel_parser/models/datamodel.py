@@ -560,7 +560,7 @@ class Keyword(db.Model):
     keyword = db.Column(db.String(64))
     value = db.Column(db.String(256))
     datatype = db.Column(db.String(80))
-    comment = db.Column(db.String(2048))
+    comment = db.Column(db.String(16384))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,

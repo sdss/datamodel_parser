@@ -2,7 +2,7 @@ from bs4 import Tag, NavigableString
 from datamodel_parser.application import Util
 from datamodel_parser.application import Intro
 from datamodel_parser.application.Type import Hdu_type
-
+import string
 from json import dumps
 
 
@@ -63,6 +63,7 @@ class Hdu:
                         if self.ready:
                             self.hdu_type = type.get_hdu_type(node=node)
 #                            print('node: %r'% node)
+#                            print('self.hdu_type: %r'% self.hdu_type)
 #                            input('pause')
                             if self.hdu_type:
                                 if self.hdu_type == 1:
@@ -101,6 +102,9 @@ class Hdu:
                                 elif self.hdu_type == 11:
                                     self.parse_file_hdu_intro_7(node=node)
                                     self.parse_file_hdu_tables_6(node=node)
+                                elif self.hdu_type == 12:
+                                    self.parse_file_hdu_intro_3(node=node)
+                                    self.parse_file_hdu_tables_5(node=node)
                                 else:
                                     self.ready = False
                                     self.logger.error('Unexpected self.hdu_type encountered ' +
@@ -215,15 +219,6 @@ class Hdu:
 
                 # check if an error has occurred
                 self.ready = self.util.ready
-
-#                print('hdu_number: %r' % hdu_number)
-#                print('hdu_title: %r' % hdu_title)
-#                print('datatype: %r' % datatype)
-#                print('hdu_size: %r' % hdu_size)
-#                print('is_image: %r' % is_image)
-#                print('self.ready: %r' % self.ready)
-#                input('pause')
-
 
                 # put it all together
                 hdu_info = dict()
@@ -432,12 +427,6 @@ class Hdu:
                 # hdu_description
                 ps = node.find_all('p')
                 regex = self.util.get_table_title_regex_1()
-#                regex = ('(?i)required(.*?)keywords' + '|'
-#                         '(?i)optional(.*?)keywords' + '|'
-#                         '(?i)required(.*?)column'   + '|'
-#                         '(?i)optional(.*?)column'   + '|'
-#                         '(?i)sample(.*?)header'
-#                         )
                 hdu_descriptions = ([self.util.get_string(node=p) for p in ps
                                      if str(p) and not str(p).isspace()
                                      and not self.util.check_match(regex=regex,string=str(p))]
@@ -525,7 +514,7 @@ class Hdu:
         hdu_tables = list()
         if self.ready:
             if node:
-                tables = self.util.get_pre_tables_1(node=node,table_tag='pre')
+                tables = self.util.get_tables_1(node=node,table_tag='pre')
                 if tables:
 #                    print('tables: %r' % tables)
 #                    input('pause')
@@ -739,61 +728,22 @@ class Hdu:
         hdu_tables = list()
         if self.ready:
             if node:
-                regex = self.util.get_table_title_regex_1()
-#                regex = ('(?i)required(.*?)keywords' + '|'
-#                         '(?i)optional(.*?)keywords' + '|'
-#                         '(?i)required(.*?)column'   + '|'
-#                         '(?i)optional(.*?)column'   + '|'
-#                         '(?i)sample(.*?)header'
-#                         )
-                tables = self.util.get_tables_2(node=node,
-                                                table_title_tag_names = ['p'],
-                                                regex=regex)
+                tables = self.util.get_tables_1(node=node,table_tag='ul')
                 if tables:
+#                    print('tables: %r' % tables)
+#                    input('pause')
                     for (table_number,table) in enumerate(tables):
                         if self.ready:
+#                            print('\n\ntable: %r' % table)
+#                            print('pre: %r' % table.find('pre'))
+#                            input('pause')
+
                             # table caption
-                            ps = self.util.get_children(node=table,names=['p'])
-                            p = ps[0] if ps else None
-                            ps = ps[1:] if ps and len(ps) > 1 else None
-                            (title,description) = (
-                                self.util.get_title_and_description_from_p(p=p)
-                                    if p else (None,None))
-                            p_strings = ([self.util.get_string(node=p) for p in ps if p]
-                                         if ps else list())
-                            table_caption = (title.strip() + '. '
-                                             if title.strip() else str())
-                            table_caption += (description.strip() + '. '
-                                              if description.strip() else str())
-                            table_caption += ('. '.join(p_strings)
-                                              if p_strings else str())
-
-#                            # is_header
-#                            is_header = (True if title and
-#                                            self.util.check_match(
-#                                                regex='(?i)required(.*?)keywords' + '|'
-#                                                      '(?i)optional(.*?)keywords',
-#                                                string=title)
-#                                        else False if title and
-#                                            self.util.check_match(
-#                                                regex='(?i)required(.*?)column' + '|'
-#                                                      '(?i)optional(.*?)column',
-#                                                string=title)
-#                                        else None
-#                                        )
-
+                            table_caption = None
+                            
                             # is_header
-                            is_header = (True if title and
-                                            self.util.check_match(
-                                                regex = self.util.get_table_title_regex_2(),
-                                                string=title)
-                                        else False if title and
-                                            self.util.check_match(
-                                                regex = self.util.get_table_title_regex_3(),
-                                                string=title)
-                                        else None
-                                        )
-
+                            is_header = self.get_is_header_2(table=table,
+                                                             table_number=table_number)
 
                             # column_names
                             column_names = (['Key','Value','Type','Comment']
@@ -805,7 +755,7 @@ class Hdu:
 
                             # table_rows
                             table_rows = (self.get_table_rows_ul(table=table)
-                                          if table and table.find('ul') else dict())
+                                          if table and table.find('ul') else None)
 
                             # check if errors have occurred
                             self.ready = self.ready and self.util.ready
@@ -819,9 +769,9 @@ class Hdu:
                                 hdu_table['table_rows']         = table_rows
                                 hdu_tables.append(hdu_table)
                     self.file_hdu_tables.append(hdu_tables)
-#                    print('self.file_hdu_tables: %r' % self.file_hdu_tables)
+#                    print('\n\nhdu_tables: \n' + dumps(hdu_tables,indent=1))
+#                    print('\n\nhdu_tables: %r' % hdu_tables)
 #                    input('pause')
-
                 else:
                     self.ready = False
                     self.logger.error('Unable to parse_file_hdu_tables_5. ' +
@@ -840,12 +790,6 @@ class Hdu:
         if self.ready:
             if node:
                 regex = self.util.get_table_title_regex_1()
-#                regex = ('(?i)required(.*?)keywords' + '|'
-#                         '(?i)optional(.*?)keywords' + '|'
-#                         '(?i)required(.*?)column'   + '|'
-#                         '(?i)optional(.*?)column'   + '|'
-#                         '(?i)sample(.*?)header'
-#                         )
                 tables = self.util.get_tables_3(node=node,regex=regex)
                 if tables:
                     for (table_number,table) in enumerate(tables):
@@ -877,21 +821,6 @@ class Hdu:
                                                 string=title)
                                         else None
                                         )
-
-#                            # is_header
-#                            is_header = (True if title and
-#                                            self.util.check_match(
-#                                                regex='(?i)required(.*?)keywords' + '|'
-#                                                      '(?i)optional(.*?)keywords' + '|'
-#                                                      '(?i)sample(.*?)header',
-#                                                string=title)
-#                                        else False if title and
-#                                            self.util.check_match(
-#                                                regex='(?i)required(.*?)column\s*names' + '|'
-#                                                      '(?i)optional(.*?)column\s*names',
-#                                                string=title)
-#                                        else None
-#                                        )
 
                             # column_names
                             column_names = (['Key','Value','Type','Comment']
@@ -936,11 +865,6 @@ class Hdu:
                                     hdu_table['table_rows']         = table_rows
                                 hdu_tables.append(hdu_table)
                     self.file_hdu_tables.append(hdu_tables)
-#                    print('\nhdu_table: %r' % hdu_table)
-#                    print('\nhdu_tables: %r' % hdu_tables)
-#                    print('\nself.file_hdu_tables: %r' % self.file_hdu_tables)
-#                    input('pause')
-
                 else:
                     self.ready = False
                     self.logger.error('Unable to parse_file_hdu_tables_6. ' +
@@ -959,12 +883,6 @@ class Hdu:
         if self.ready:
             if node:
                 regex = self.util.get_table_title_regex_1()
-#                regex = ('(?i)required(.*?)keywords' + '|'
-#                         '(?i)optional(.*?)keywords' + '|'
-#                         '(?i)required(.*?)column'   + '|'
-#                         '(?i)optional(.*?)column'   + '|'
-#                         '(?i)sample(.*?)header'
-#                         )
                 tables = self.util.get_tables_3(node=node,regex=regex)
                 if tables:
                     for (table_number,table) in enumerate(tables):
@@ -998,21 +916,6 @@ class Hdu:
                                                 string=title)
                                         else None
                                         )
-
-#                            # is_header
-#                            is_header = (True if title and
-#                                            self.util.check_match(
-#                                                regex='(?i)required(.*?)keywords' + '|'
-#                                                      '(?i)optional(.*?)keywords' + '|'
-#                                                      '(?i)sample(.*?)header',
-#                                                string=title)
-#                                        else False if title and
-#                                            self.util.check_match(
-#                                                regex='(?i)required(.*?)column\s*names' + '|'
-#                                                      '(?i)optional(.*?)column\s*names',
-#                                                string=title)
-#                                        else None
-#                                        )
 
                             # column_names
                             column_names = (['Key','Value','Type','Comment']
@@ -1057,11 +960,6 @@ class Hdu:
                                     hdu_table['table_rows']         = table_rows
                                 hdu_tables.append(hdu_table)
                     self.file_hdu_tables.append(hdu_tables)
-#                    print('\nhdu_table: %r' % hdu_table)
-#                    print('\nhdu_tables: %r' % hdu_tables)
-#                    print('\nself.file_hdu_tables: %r' % self.file_hdu_tables)
-#                    input('pause')
-
                 else:
                     self.ready = False
                     self.logger.error('Unable to parse_file_hdu_tables_7. ' +
@@ -1357,23 +1255,14 @@ class Hdu:
         if self.ready:
             if row:
                 regex0 = '^\s{5,}'  # starts with 5 or more spaces
-                regex1 = '^\*' + '|' + '^\#'    # starts with '*' or '#'
-                regex2 = ('^[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*\s*\=\s*' + '|'
-                          '^[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*\s*\=\s*'            + '|'
-                          '^[A-Z]{2,}\d*\_[A-Z]{2,}\d*\s*\=\s*'                       + '|'
-                          '^[A-Z]{2,}\d*\s*\=\s*'
-                          )
-                regex3 = ('^[A-Z]{2,}\d*\-[A-Z]{2,}\d*\-[A-Z]{2,}\d*\-[A-Z]{2,}\d*\s*\=\s*' + '|'
-                          '^[A-Z]{2,}\d*\-[A-Z]{2,}\d*\-[A-Z]{2,}\d*\s*\=\s*'            + '|'
-                          '^[A-Z]{2,}\d*\-[A-Z]{2,}\d*\s*\=\s*'                       + '|'
-                          )
-                regex4 = ('^[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*' + '|'
-                          '^[A-Z]{2,}\d*\_[A-Z]{2,}\d*\_[A-Z]{2,}\d*'            + '|'
-                          '^[A-Z]{2,}\d*\_[A-Z]{2,}\d*'                       + '|'
-                          '^[A-Z]{2,}\d*'
-                          )
+                # starts with '*', '#', '}', or a digit
+                regex1 = '^\*' + '|' + '^\#' + '|' + '^\}' + '|' + '^\{' + '|' + '^\d+' + '|' + '^\&+'
+                regex2 = '^([A-Z\d*]{1,}\_){0,20}([A-Z\d*]{1,})\s*\=\s*'
+                regex3 = '^([A-Z\d*]{1,}\-){0,20}([A-Z\d*]{1,})\s*\=\s*'
+                regex4 = '^([A-Z\d*]{1,}\_){0,20}([A-Z\d*]{1,})\s*'
                 regex5 = '^\s*<b>(.*?)</b>' # starts with bold tag
-                regex6 = '^\s*\w' # starts with word character MUST BE LAST regex !!!!
+                regex6 = '^([A-Za-z\d*]{1,}\_){0,20}([A-Za-z\d*]{1,})\s*'
+                regex7 = '^\s*\w' # starts with word character MUST BE LAST regex !!!!
                 match0 = self.util.check_match(regex=regex0,string=row)
                 match1 = self.util.check_match(regex=regex1,string=row.lstrip())
                 match2 = self.util.check_match(regex=regex2,string=row.lstrip())
@@ -1381,6 +1270,7 @@ class Hdu:
                 match4 = self.util.check_match(regex=regex4,string=row.lstrip())
                 match5 = self.util.check_match(regex=regex5,string=row.lstrip())
                 match6 = self.util.check_match(regex=regex6,string=row.lstrip())
+                match7 = self.util.check_match(regex=regex7,string=row.lstrip())
 #                print('row: %r' %row)
 #                print('match0: %r' % match0)
 #                print('match1: %r' % match1)
@@ -1389,16 +1279,20 @@ class Hdu:
 #                print('match4: %r' % match4)
 #                print('match5: %r' % match5)
 #                print('match6: %r' % match6)
+#                print('match7: %r' % match7)
 #                input('pause')
 
                 # header_table_columns = ['Key','Value','Type','Comment']
                 # binary_table_columns = ['Name','Type','Unit','Description']
                 if match0 or match1:
                     table_row = [None,None,None,row.strip()]
-                elif match2:
+                elif match2 or match3:
                     row = row.strip()
-                    matches = self.util.get_matches(regex=regex2,string=row)
-                    match = matches[0] if matches else None
+                    matches2 = self.util.get_matches(regex=regex2,string=row)
+                    match2 = matches2[0] if matches2 else None
+                    matches3 = self.util.get_matches(regex=regex3,string=row)
+                    match3 = matches3[0] if matches3 else None
+                    match = match2 if match2 else match3
                     col0 = match if row.startswith(match) else None
                     if col0:
                         col13 = row.split(col0)[1].strip() # = ['',row.replace(col0,'')]
@@ -1409,25 +1303,9 @@ class Hdu:
                         elif '/'    in col13: split_char = '/'
                         else:                 split_char = None
                         split = col13.split(split_char) if col13 and split_char else None
-                        col1  = split[0].strip() if split else None
-                        col3  = split[1].strip() if split else col13
-                        table_row = [col0,col1,None,col3]
-                elif match3:
-                    row = row.strip()
-                    matches = self.util.get_matches(regex=regex3,string=row)
-                    match = matches[0] if matches else None
-                    col0 = match if row.startswith(match) else None
-                    if col0:
-                        col13 = row.split(col0)[1].strip() # = ['',row.replace(col0,'')]
-                        col0 = col0.replace('=',str()).strip()
-                        if   ' / '  in col13: split_char = ' / '
-                        elif ' /'   in col13: split_char = ' /'
-                        elif '/ '   in col13: split_char = '/ '
-                        elif '/'    in col13: split_char = '/'
-                        else:                 split_char = None
-                        split = col13.split(split_char) if col13 and split_char else None
-                        col1  = split[0].strip() if split else None
+                        col1  = split[0].strip() if split else col13
                         col3  = split[1].strip() if split else None
+                        col1 = col1 if not col1 in set(string.punctuation) else None
                         table_row = [col0,col1,None,col3]
                 elif match4:
                     row = row.strip()
@@ -1481,6 +1359,23 @@ class Hdu:
 #                        print('table_row: %r' % table_row)
 #                        input('pause')
                 elif match6:
+                    row = row.strip()
+                    matches = self.util.get_matches(regex=regex6,string=row)
+                    match = matches[0] if matches else None
+                    col0 = match if row.startswith(match) else None
+                    if col0:
+                        col13 = row.split(col0)[1].strip() # = ['',row.replace(col0,'')]
+                        col0 = col0.replace('=',str()).strip()
+                        if   ' # '  in col13: split_char = ' # '
+                        elif ' #'   in col13: split_char = ' #'
+                        elif '# '   in col13: split_char = '# '
+                        elif '#'    in col13: split_char = '#'
+                        else:                 split_char = None
+                        split = col13.split(split_char) if col13 and split_char else None
+                        col1  = split[0].strip() if split else col13
+                        col3  = split[1].strip() if split else None
+                        table_row = [col0,col1,None,col3]
+                elif match7:
                     row = row.strip()
                     table_row = [None,None,None,row]
                 else:

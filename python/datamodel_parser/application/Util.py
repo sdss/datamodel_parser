@@ -55,6 +55,7 @@ class Util:
                  '(?i)required(.*?)column'   + '|'
                  '(?i)optional(.*?)column'   + '|'
                  '(?i)column(.*?)name'       + '|'
+                 '(?i)example\s*header'      + '|'
                  '(?i)sample(.*?)header'
                  )
         return regex
@@ -1361,7 +1362,7 @@ class Util:
                                   )
         return matches
 
-    def get_pre_tables_1(self,node=None,table_tag=None):
+    def get_tables_1(self,node=None,table_tag=None):
         '''Test if node contains two tables by table_tag
             and split them into a list of Beautiful soup objects'''
         tables = None
@@ -1392,29 +1393,29 @@ class Util:
                                               ]
                         else:
                             self.ready = False
-                            self.logger.error('Unable to get_pre_tables_1. ' +
+                            self.logger.error('Unable to get_tables_1. ' +
                                               'children: {}, '.format(children)
                                               )
                     else:
                         self.ready = False
-                        self.logger.error('Unable to get_pre_tables_1. ' +
+                        self.logger.error('Unable to get_tables_1. ' +
                                           'len(list(table_tags)) > 2, '
                                           'len(list(table_tags)): {}, '.format(len(list(table_tags)))
                                           )
                 else:
                     self.ready = False
-                    self.logger.error('Unable to get_pre_tables_1. ' +
+                    self.logger.error('Unable to get_tables_1. ' +
                                       'table_tags: {}, '.format(table_tags)
                                       )
             else:
                 self.ready = False
-                self.logger.error('Unable to get_pre_tables_1. ' +
+                self.logger.error('Unable to get_tables_1. ' +
                                   'node: {}, '.format(node) +
                                   'table_tag: {}, '.format(table_tag)
                                   )
             if tables is None:
                 self.ready = False
-                self.logger.error('Unable to get_pre_tables_1. ' +
+                self.logger.error('Unable to get_tables_1. ' +
                                   'tables: {}, '.format(tables)
                                   )
         return tables
