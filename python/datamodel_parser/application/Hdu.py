@@ -255,7 +255,7 @@ class Hdu:
                 hdu_descriptions = ([self.util.get_string(p) for p in ps
                                      if str(p) and not str(p).isspace()]
                                     if ps else list())
-                hdu_description = ' '.join(hdu_descriptions) if hdu_descriptions else str()
+                hdu_description = '\n'.join(hdu_descriptions) if hdu_descriptions else str()
 
                 # datatype and hdu_size
                 (datatype,hdu_size) = (None,None)
@@ -620,7 +620,7 @@ class Hdu:
                                         string = self.util.get_string(node=td)
                                         table_row.append(string)
                                 table_rows[position]  = table_row
-                    
+
                         # put it all together
                         if self.ready:
                             hdu_table = dict()
@@ -703,7 +703,9 @@ class Hdu:
         if table_row == [None,None,None,None]:
             self.ready = False
             self.logger.error('Unable to get_table_row_tr_1. ' +
-                              'table_row: {}, '.format(table_row)
+                              'column_names: {}, '.format(column_names) +
+                              'is_header: {}, '.format(is_header) +
+                              'node: {}, '.format(node)
                               )
         return table_row
 
@@ -807,7 +809,7 @@ class Hdu:
                                              if title.strip() else str())
                             table_caption += (description.strip() + '. '
                                               if description.strip() else str())
-                            table_caption += ('. '.join(p_strings)
+                            table_caption += ('\n'.join(p_strings)
                                               if p_strings else str())
                                               
                             # is_header
@@ -902,7 +904,7 @@ class Hdu:
                                              if title.strip() else str())
                             table_caption += (description.strip() + '. '
                                               if description.strip() else str())
-                            table_caption += ('. '.join(p_strings)
+                            table_caption += ('\n'.join(p_strings)
                                               if p_strings else str())
                                               
                             # is_header
@@ -1256,7 +1258,8 @@ class Hdu:
             if row:
                 regex0 = '^\s{5,}'  # starts with 5 or more spaces
                 # starts with '*', '#', '}', or a digit
-                regex1 = '^\*' + '|' + '^\#' + '|' + '^\}' + '|' + '^\{' + '|' + '^\d+' + '|' + '^\&+'
+                regex1 = ('^\s*\*' + '|' + '^\s*\#' + '|' + '^\s*\}' + '|' + '^\s*\{' +
+                          '|' + '^\s*\d+' + '|' + '^\s*\&+' + '|' + '^\s*\/+')
                 regex2 = '^([A-Z\d*]{1,}\_){0,20}([A-Z\d*]{1,})\s*\=\s*'
                 regex3 = '^([A-Z\d*]{1,}\-){0,20}([A-Z\d*]{1,})\s*\=\s*'
                 regex4 = '^([A-Z\d*]{1,}\_){0,20}([A-Z\d*]{1,})\s*'
@@ -1381,9 +1384,8 @@ class Hdu:
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_table_row_1. ' +
-                                      'no regex match.')
-
-
+                                      'no regex match. ' +
+                                      'row: {}'.format(row))
             else:
                 self.logger.debug('Unable to get_table_row_1. ' +
                                     'row: {}'.format(row)

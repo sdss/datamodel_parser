@@ -154,7 +154,6 @@ class Intro:
                 dl = node.find('dl')
                 (titles,descriptions) = self.util.get_dts_and_dds_from_dl(dl=dl)
                 if titles[-1].lower() == 'sections': titles.pop()
-                assert(len(titles)==len(descriptions))
                 
                 # check if errors have occurred
                 self.ready = self.ready and self.util.ready
@@ -192,7 +191,6 @@ class Intro:
                     ):
                     titles.pop()          # remove section title
                     descriptions.pop()    # remove section list
-                assert(len(titles)==len(descriptions))
 
                 # check if errors have occurred
                 self.ready = self.ready and self.util.ready

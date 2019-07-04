@@ -223,18 +223,6 @@ class Type(object):
                         self.correct_type = False
                         self.logger.debug("not children of dl are {}"
                                             .format(dl_child_names) )
-                # check <dt> and <dd> come in pairs
-                if self.correct_type:
-                    dts = list(dl.find_all('dt'))
-                    dds = list(dl.find_all('dd'))
-                    # Need to remove this from check_intro_2
-                    # remove sections dt from dts
-                    if (dl_child_names == {'dt','dd','ul'} and
-                        dts[-1].string.lower() == 'sections'):
-                        dts.pop()
-                    if not (len(dts) == len(dds)):
-                        self.correct_type = False
-                        self.logger.debug("not <dt> and <dd> come in pairs")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_dl_tag_assumptions_1. ' +

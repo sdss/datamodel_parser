@@ -200,17 +200,25 @@ class Util:
         dds = list()
         if self.ready:
             if dl:
-                dt_tags = dl.find_all('dt')
-                dd_tags = dl.find_all('dd')
-                for dt in dt_tags:
-                    string = self.get_string(node=dt).strip()
-                    dts.append(string)
-                for dd in dd_tags:
-                    string = self.get_string(node=dd).strip()
-                    # this way kills <code> and <a> tags
-#                    contents = [self.get_string(node=x).strip() for x in dd.contents]
-#                    string = str().join(contents) if len(contents) > 1 else contents[0]
-                    dds.append(string)
+                first_dt = True
+                dd = list()
+                children = self.get_children(node=dl)
+                for child in children:
+                    if self.ready:
+                        if child.name == 'dt':
+                            dts.append(self.get_string(node=child).strip())
+                            if first_dt:
+                                first_dt = False
+                            else:
+                                 dds.append('\n'.join(dd))
+                                 dd = list()
+                        elif child.name == 'dd':
+                            dd.append(self.get_string(node=child).strip())
+                        else:
+                            self.ready = False
+                            self.logger.error('Unable to get_dts_and_dds_from_dl. ' +
+                                              'Unexpected child.name: {} '.format(child.name))
+                dds.append('\n'.join(dd))
             else:
                 self.ready = False
                 self.logger.error('Unable to get_dts_and_dds_from_dl. ' +

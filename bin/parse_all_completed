@@ -3,6 +3,11 @@
 # $Id: parse_all 2019-03-14 n.benjamin.murphy $
 #
 
+ parse_html -l error -v --path PHOTO_SKY/RERUN/RUN/sky/skyframes.html
+ parse_html -l error -v --path PHOTO_SKY/RERUN/RUN/sky/skymodel.html
+ parse_html -l error -v --path PHOTO_SKY/RERUN/RUN/sky/skymask.html
+ parse_html -l error -v --path PHOTO_SKY/RERUN/RUN/sky/skyweights.html
+ parse_html -l error -v --path PHOTO_SKY/RERUN/RUN/qa/skyvals.html
  parse_html -l error -v --path APOGEE_TGAS/apogee_tgas.html
  parse_html -l error -v --path IRCAM_DATA/MJD/cR.html
  parse_html -l error -v --path IRCAM_DATA/MJD/irsc.html
@@ -84,6 +89,7 @@
  parse_html -l error -v --path EBOSS_FIREFLY/FIREFLY_VER/RUN2D/sdss_firefly.html
  parse_html -l error -v --path EBOSS_FIREFLY/FIREFLY_VER/RUN2D/eboss_firefly.html
  parse_html -l error -v --path EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFly.html
+ parse_html -l error -v --path EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html
  parse_html -l error -v --path SEGUE2_TARGET_ALL/RERUN/RUN/seguetsObjAll.html
  parse_html -l error -v --path SEGUE2_TARGET_ALL/RERUN/RUN/segue2TargetAll.html
  parse_html -l error -v --path SEGUE2_TARGET_ALL/RERUN/RUN/seguetsCasObj.html
@@ -95,7 +101,6 @@
  parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
  parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
  parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
- parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
  parse_html -l error -v --path ECAM_DATA/MJD/all_files.html
  parse_html -l error -v --path BOSS_PHOTOOBJ/photoRunAll.html
  parse_html -l error -v --path BOSS_PHOTOOBJ/astromqa/astromQAFields.html
@@ -119,6 +124,7 @@
  parse_html -l error -v --path BOSS_PHOTOOBJ/external/PM/RERUN/RUN/CAMCOL/photoPM.html
  parse_html -l error -v --path BOSS_PHOTOOBJ/external/RC3/RERUN/RUN/photoRC3Camcol.html
  parse_html -l error -v --path BOSS_PHOTOOBJ/external/RC3/RERUN/RUN/CAMCOL/photoRC3.html
+ parse_html -l error -v --path BOSS_PHOTOOBJ/external/WISEForcedTarget/RERUN/RUN/CAMCOL/photoWISEForcedTarget.html
  parse_html -l error -v --path BOSS_PHOTOOBJ/external/First/RERUN/RUN/photoFirstCamcol.html
  parse_html -l error -v --path BOSS_PHOTOOBJ/external/First/RERUN/RUN/CAMCOL/photoFirst.html
  parse_html -l error -v --path BOSS_PHOTOOBJ/external/USNOB/RERUN/RUN/photoUSNOBCamcol.html
@@ -177,6 +183,10 @@
  parse_html -l error -v --path RAWDATA_DIR/MJD/guider/gimg.html
  parse_html -l error -v --path MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html
  parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFluxError.html
+ parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFlux.html
+ parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapParam.html
+ parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapCova.html
+ parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/lib/aspcapSynth.html
  parse_html -l error -v --path SSPP_REDUX/ssppOut.html
  parse_html -l error -v --path SSPP_REDUX/ssppOut_lineindex.html
  parse_html -l error -v --path SSPP_REDUX/ssppPlates.html
@@ -189,8 +199,6 @@
  parse_html -l error -v --path MANGA_SPECZ/DRPVER/SPECZVER/speczall.html
  parse_html -l error -v --path MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-RSS.html
  parse_html -l error -v --path MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html
- parse_html -l error -v --path SPIDERS_ANALYSIS/spiders_quasar_bhmass.html
- parse_html -l error -v --path SPIDERS_ANALYSIS/VAC_spiders_2RXS.html
  parse_html -l error -v --path SPIDERS_ANALYSIS/VAC_spiders_XMMSL.html
  parse_html -l error -v --path SPIDERS_ANALYSIS/SpidersXclusterBCGs.html
  parse_html -l error -v --path PHOTO_RESOLVE/thingIndex.html
@@ -268,12 +276,10 @@
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html
- parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allVisit.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allPlates.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar_DR10.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonModel.html
- parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/allStarCannon.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonTrainingSet.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/LOCATION_ID/cannonStar.html
  parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/LOCATION_ID/cannonField.html
@@ -300,6 +306,20 @@
  parse_html -l error -v --path SDSS_TARGET/sdss_target_params.html
  parse_html -l error -v --path SDSS_TARGET/data/tsObjTargets.html
  parse_html -l error -v --path SDSS_TARGET/data/tsField.html
+ parse_html -l error -v --path MANGACORE_DIR/hdrfix/MJD/sdHdrFix.html
+ parse_html -l error -v --path MANGACORE_DIR/drill/PLATEID6XX/plateCMM.html
+ parse_html -l error -v --path MANGACORE_DIR/metrology/maXXX/ma.html
+ parse_html -l error -v --path MANGACORE_DIR/metrology/hexferrules/hexferrules.html
+ parse_html -l error -v --path MANGACORE_DIR/mapper/PLATEID6XX/PLATE/plPlugMapM.html
+ parse_html -l error -v --path MANGACORE_DIR/slitmaps/PLATEID6XX/PLATE/slitmap.html
+ parse_html -l error -v --path MANGACORE_DIR/cartmaps/cartmap.html
+ parse_html -l error -v --path MANGACORE_DIR/ifuflat/cartXX/MJD/ifuflat.html
+ parse_html -l error -v --path MANGACORE_DIR/platedesign/foregroundstars/foregroundstars.html
+ parse_html -l error -v --path MANGACORE_DIR/platedesign/platetargets/platetargets.html
+ parse_html -l error -v --path MANGACORE_DIR/platedesign/plateholes/PLATEID6XX/plateHolesSorted.html
+ parse_html -l error -v --path MANGACORE_DIR/platedesign/platemags/DESIGNID6XX/platemags.html
+ parse_html -l error -v --path MANGACORE_DIR/platedesign/targetfix/PLATEID6XX/targetfix.html
+ parse_html -l error -v --path MANGACORE_DIR/apocomplete/bogey.html
  parse_html -l error -v --path MANGACORE_DIR/apocomplete/PLATEID6XX/apocomp.html
  parse_html -l error -v --path MANGA_SPECTRO_DATA/MJD5/sdR.html
  parse_html -l error -v --path SPECTRO_REDUX/plates.html
@@ -335,6 +355,7 @@
  parse_html -l error -v --path APOGEE_TARGET/apogee2Design.html
  parse_html -l error -v --path APOGEE_TARGET/apogee2Field.html
  parse_html -l error -v --path APOGEE_TARGET/apogee2Plate.html
+ parse_html -l error -v --path APOGEE_TARGET/apogeeObject/apogeeObject.html
  parse_html -l error -v --path APOGEE_TARGET/apogee2Object/apogee2Object.html
  parse_html -l error -v --path PHOTO_DATA/RUN/fields/CAMCOL/idR.html
  parse_html -l error -v --path SPECLOG_DIR/MJD/plPlugMapM.html
