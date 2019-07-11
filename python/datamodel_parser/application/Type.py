@@ -294,13 +294,13 @@ class Type(object):
                         if not lis:
                             self.correct_type = False
                             self.logger.debug("not <ul> tag has only <li> tag children.")
-                        else:
-                            # check lis contain file names
-                            for li in lis:
-                                if self.correct_type:
-                                    if not self.util.check_node_string_is_filename(node=li):
-                                        self.correct_type = False
-                                        self.logger.debug("not <li> string is filename.")
+#                        else:
+#                            # check lis contain file names
+#                            for li in lis:
+#                                if self.correct_type:
+#                                    if not self.util.check_node_string_is_filename(node=li):
+#                                        self.correct_type = False
+#                                        self.logger.debug("not <li> string is filename.")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_ul_tag_assumptions_2. ' +
@@ -382,12 +382,6 @@ class Type(object):
                                 string = strings[0] if strings and len(strings) == 1 else None
                                 if string:
                                     regex = self.util.get_table_title_regex_1()
-#                                    regex = ('(?i)required(.*?)keywords' + '|'
-#                                             '(?i)optional(.*?)keywords' + '|'
-#                                             '(?i)required(.*?)column'   + '|'
-#                                             '(?i)optional(.*?)column'   + '|'
-#                                             '(?i)sample(.*?)header'
-#                                             )
                                     match = self.util.check_match(regex=regex,string=string)
                                     if match: found_table_title = True
                     if toggle_found_table_title: found_table_title = not found_table_title
@@ -535,6 +529,213 @@ class Type(object):
                 self.ready = False
                 self.logger.error('Unable to check_pre_tag_assumptions_2. ' +
                                   'node: {}.'.format(node))
+
+    def check_hdu_dl_tag_assumptions_1(self,node=None):
+        '''Check hdu <dl> tag assumptions.'''
+        if self.ready:
+            if node:
+                # check 'dl' in tag_names
+                if self.correct_type:
+                    tag_names = set(self.util.get_child_names(node=node))
+                    if not 'dl' in tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not 'dl' in tag_names")
+                # check 'hdu', 'type' and 'size' are in the list elements of dts
+                if self.correct_type:
+                    dl = node.find('dl')
+                    (dts,dds) = self.util.get_dts_and_dds_from_dl(dl=dl)
+                    in_dt = lambda s: bool([dt for dt in dts if s in dt.lower()])
+                    if not (in_dt('hdu') and in_dt('type') and in_dt('size')):
+                        self.correct_type = False
+                        self.logger.debug("not 'hdu', 'type' and 'size' " +
+                                          "are in the list elements of dts")
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_hdu_dl_tag_assumptions_1. ' +
+                                  'dl: {}.'.format(dl))
+
+    def check_table_tag_assumptions_1(self,node=None):
+        '''Check table tag assumptions for the given BeautifulSoup node.'''
+        if self.ready:
+            if node:
+                # check <table> in node
+                if self.correct_type:
+                    tag_names = set(self.util.get_child_names(node=node))
+                    if not 'table' in tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not 'table' in tag_names")
+                # check <table> contains <caption>, <thead> and <tbody>
+                if self.correct_type:
+                    tables = node.find_all('table')
+                    for table in tables:
+                        child_names = set(self.util.get_child_names(node=table))
+                        if not (child_names == {'caption','thead','tbody'}
+                                or
+                                child_names == {'thead','tbody'}
+                            ):
+                            self.correct_type = False
+                            self.logger.debug(
+                                "not table.children = {caption,thead,tbody}"
+                                " or {thead,tbody}")
+                        # check <thead> has only one child <tr>,
+                        # and all children of the <tr> tag are <th> tags
+                        self.check_thead_tag_assumptions_1(table=table)
+                        # check all children of the <tbody> tag are <tr> tags,
+                        # all children of the <tr> tag are <td> tags,
+                        # and each <tr> tag as exactly 4 <td> tag children
+                        self.check_tbody_tag_assumptions_1(table=table)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_table_tag_assumptions_1. ' +
+                                  'node: {}.'.format(node))
+
+    def check_table_tag_assumptions_2(self,node=None):
+        '''Check table tag assumptions for the given BeautifulSoup node.'''
+        if self.ready:
+            if node:
+                # check <table> in node
+                if self.correct_type:
+                    tag_names = set(self.util.get_child_names(node=node))
+                    if not 'table' in tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not 'table' in tag_names")
+                # check <table> contains <caption> and <tbody>
+                if self.correct_type:
+                    tables = node.find_all('table')
+                    for table in tables:
+                        child_names = set(self.util.get_child_names(node=table))
+                        if not (child_names == {'caption','tr'}         or
+                                child_names == {'tr'}                   or
+                                child_names == {'caption','tr','tfoot'} or
+                                child_names == {'tr','tfoot'}
+                            ):
+                            self.correct_type = False
+                            self.logger.debug(
+                                "not table.children = {caption,tr}")
+                        # check all <tr> tag children are <th> or <td> tags
+                        self.check_tr_tag_assumptions_1(table=table)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_table_tag_assumptions_2. ' +
+                                  'node: {}.'.format(node))
+
+    def check_thead_tag_assumptions_1(self,table=None):
+        '''Check thead tag assumptions for the given BeautifulSoup table.'''
+        if self.ready:
+            if table:
+                # check <thead> in <table>
+                if self.correct_type:
+                    tag_names = set(self.util.get_child_names(node=table))
+                    if not 'thead' in tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not 'thead' in tag_names")
+                # check <thead> has only one child <tr>
+                if self.correct_type:
+                    thead = table.find('thead')
+                    child_names = self.util.get_child_names(node=thead)
+                    if not child_names == ['tr']:
+                        self.correct_type = False
+                        self.logger.debug("not <thead> has only one child <tr>")
+                # check all children of the <tr> tag are <th> tags
+                if self.correct_type:
+                    tr = thead.find('tr')
+                    if not self.util.children_all_one_tag_type(node=tr,tag_name='th'):
+                        self.correct_type = False
+                        self.logger.debug("not all children of the tr tag are th tags")
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_thead_tag_assumptions_1. ' +
+                                  'table: {}.'.format(table))
+
+    def check_tbody_tag_assumptions_1(self,table=None):
+        '''Check tbody tag assumptions for the given BeautifulSoup table.'''
+        if self.ready:
+            if table:
+                # check <tbody> in <table>
+                if self.correct_type:
+                    tag_names = set(self.util.get_child_names(node=table))
+                    if not 'tbody' in tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not 'tbody' in tag_names")
+                # check all children of the <tbody> tag are <tr> tags
+                if self.correct_type:
+                    tbody = table.find('tbody')
+                    if not self.util.children_all_one_tag_type(node=tbody,
+                                                               tag_name='tr'):
+                        self.correct_type = False
+                        self.logger.debug("not all children of the <tbody> tag are <tr> tags")
+                # check all children of the <tr> tag are <td> tags
+                if self.correct_type:
+                    for tr in [tr for tr in tbody.children
+                               if not self.util.get_string(node=tr).isspace()]:
+                        if not self.util.children_all_one_tag_type(node=tr,
+                                                                   tag_name='td'):
+                            self.correct_type = False
+                            self.logger.debug("not all children of the <tr> tag are <td> tags")
+                # check each <tr> tag as exactly 4 <td> tag children
+                if self.correct_type:
+                    for tr in [tr for tr in tbody.children
+                               if not self.util.get_string(node=tr).isspace()]:
+                        if self.correct_type:
+                            if not len(tr.find_all('td')) == 4:
+#                                print('tr: %r' % tr)
+#                                input('pause')
+                                self.correct_type = False
+                                self.logger.debug("not each <tr> tag as exactly 4 <td> tag children")
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_tbody_tag_assumptions_1. ' +
+                                  'table: {}.'.format(table))
+
+    def check_tbody_tag_assumptions_2(self,table=None):
+        '''Check tbody tag assumptions for the given BeautifulSoup table.'''
+        if self.ready:
+            if table:
+                # check <tbody> in <table>
+                if self.correct_type:
+                    tag_names = set(self.util.get_child_names(node=table))
+                    if not 'tbody' in tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not 'tbody' in tag_names")
+                # check all children of the <tbody> tag are <tr> tags
+                if self.correct_type:
+                    tbody = table.find('tbody')
+                    if not self.util.children_all_one_tag_type(node=tbody,
+                                                               tag_name='tr'):
+                        self.correct_type = False
+                        self.logger.debug("not all children of the <tbody> tag are <tr> tags")
+                # check all children of the <tr> tag are <td> tags
+                if self.correct_type:
+                    for tr in [tr for tr in tbody.children
+                               if not self.util.get_string(node=tr).isspace()]:
+                        if not self.util.children_all_one_tag_type(node=tr,
+                                                                   tag_name='td'):
+                            self.correct_type = False
+                            self.logger.debug("not all children of the <tr> tag are <td> tags")
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_tbody_tag_assumptions_2. ' +
+                                  'table: {}.'.format(table))
+
+    def check_tr_tag_assumptions_1(self,table=None):
+        '''Check tbody tag assumptions for the given BeautifulSoup table.'''
+        if self.ready:
+            if table:
+                # check all <tr> tag children are <th> or <td> tags
+                if self.correct_type:
+                    for node in [node for node in table.find_all('tr')
+                                 if not self.util.get_string(node=node).isspace()]:
+                        if self.correct_type:
+                            tag_names = set(self.util.get_child_names(node=node))
+                            if not (tag_names == {'td'} or tag_names == {'th'}):
+                                self.correct_type = False
+                                self.logger.debug("not all <tr> tag children are " +
+                                                  "<th> or <td> tags" )
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_tr_tag_assumptions_1. ' +
+                                  'table: {}.'.format(table))
+
 
 class Intro_type(Type):
     '''Determine the class Intro type of the given node.'''
@@ -703,6 +904,11 @@ class Intro_type(Type):
                 self.correct_type = True
                 self.logger.debug("First inconsistency for check_intro_type_5:")
                 tag_names = self.util.get_child_names(node=node)
+                # check tag_names is non-empty
+                if self.correct_type:
+                    if not tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not tag_names is non-empty")
                 # check tag_names = {h,p,pre,table}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
@@ -711,13 +917,14 @@ class Intro_type(Type):
                             ):
                         self.correct_type = False
                         self.logger.debug("not tag_names = {h,p,pre,table}")
-                # check heading tag only has text content
-                self.check_tags_have_only_text_content(node=node,
-                                                       tag_names=self.heading_tag_names)
+                # check node has zero or one heading tag
+                self.check_heading_tag_assumptions_3(node=node)
                 # check two or less pre tags -- strings with rows separated by '\n'
                 self.check_pre_tag_assumptions_1(node=node)
-                # check all <p> tags before File Contents table have <b> tag children
-                self.check_p_tag_assumptions_4(node=node)
+                # check <p> tag has zero or one <b> tag child
+                self.check_p_tag_assumptions_5(node=node)
+                # check <table> contains <tbody>,
+                self.check_table_tag_assumptions_4(node=node)
             else:
                 self.ready = False
                 self.logger.error('Unable to check_intro_type_5. ' +
@@ -789,14 +996,14 @@ class Intro_type(Type):
                 self.correct_type = True
                 self.logger.debug("First inconsistency for check_intro_type_8:")
                 tag_names = self.util.get_child_names(node=node)
-                # check tag_names = {h,p,pre,table}
+                # check tag_names = {h,p,table}
                 if self.correct_type:
                     set_tag_names = set(tag_names)
                     if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'p','table'}
                             ):
                         self.correct_type = False
-                        self.logger.debug("not tag_names = {h,p,pre,table}")
+                        self.logger.debug("not tag_names = {h,p,table}")
                 # check heading tag only has text content
                 self.check_tags_have_only_text_content(node=node,
                                                        tag_names=self.heading_tag_names)
@@ -931,6 +1138,35 @@ class Intro_type(Type):
                 self.ready = False
                 self.logger.error('Unable to check_table_tag_assumptions_3. ' +
                                   'node: {}.'.format(node))
+
+    def check_table_tag_assumptions_4(self,node=None):
+        '''Check table tag assumptions for the given BeautifulSoup node.'''
+        if self.ready:
+            if node:
+                # check <table> in node
+                if self.correct_type:
+                    tag_names = set(self.util.get_child_names(node=node))
+                    if not 'table' in tag_names:
+                        self.correct_type = False
+                        self.logger.debug("not 'table' in tag_names")
+                # check <table> contains <caption>, <thead> and <tbody>
+                if self.correct_type:
+                    tables = node.find_all('table')
+                    for table in tables:
+                        child_names = set(self.util.get_child_names(node=table))
+                        if not (child_names == {'tr'}
+                            ):
+                            self.correct_type = False
+                            self.logger.debug(
+                                "not table.children = {caption,thead,tbody}"
+                                " or {thead,tbody}")
+                        # check all <tr> tag children are <th> or <td> tags
+                        self.check_tr_tag_assumptions_1(table=table)
+            else:
+                self.ready = False
+                self.logger.error('Unable to check_table_tag_assumptions_4. ' +
+                                  'node: {}.'.format(node))
+
 
 
 class Hdu_type(Type):
@@ -1310,181 +1546,6 @@ class Hdu_type(Type):
                 self.logger.error('Unable to check_hdu_type_12. ' +
                                   'node: {}.'.format(node))
         return self.correct_type
-
-    def check_hdu_dl_tag_assumptions_1(self,node=None):
-        '''Check hdu <dl> tag assumptions.'''
-        if self.ready:
-            if node:
-                # check 'dl' in tag_names
-                if self.correct_type:
-                    tag_names = set(self.util.get_child_names(node=node))
-                    if not 'dl' in tag_names:
-                        self.correct_type = False
-                        self.logger.debug("not 'dl' in tag_names")
-                # check 'hdu', 'type' and 'size' are in the list elements of dts
-                if self.correct_type:
-                    dl = node.find('dl')
-                    (dts,dds) = self.util.get_dts_and_dds_from_dl(dl=dl)
-                    in_dt = lambda s: bool([dt for dt in dts if s in dt.lower()])
-                    if not (in_dt('hdu') and in_dt('type') and in_dt('size')):
-                        self.correct_type = False
-                        self.logger.debug("not 'hdu', 'type' and 'size' " +
-                                          "are in the list elements of dts")
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_hdu_dl_tag_assumptions_1. ' +
-                                  'dl: {}.'.format(dl))
-
-    def check_table_tag_assumptions_1(self,node=None):
-        '''Check table tag assumptions for the given BeautifulSoup node.'''
-        if self.ready:
-            if node:
-                # check <table> in node
-                if self.correct_type:
-                    tag_names = set(self.util.get_child_names(node=node))
-                    if not 'table' in tag_names:
-                        self.correct_type = False
-                        self.logger.debug("not 'table' in tag_names")
-                # check <table> contains <caption>, <thead> and <tbody>
-                if self.correct_type:
-                    tables = node.find_all('table')
-                    for table in tables:
-                        child_names = set(self.util.get_child_names(node=table))
-                        if not (child_names == {'caption','thead','tbody'}
-                                or
-                                child_names == {'thead','tbody'}
-                            ):
-                            self.correct_type = False
-                            self.logger.debug(
-                                "not table.children = {caption,thead,tbody}"
-                                " or {thead,tbody}")
-                        # check <thead> has only one child <tr>,
-                        # and all children of the <tr> tag are <th> tags
-                        self.check_thead_tag_assumptions_1(table=table)
-                        # check all children of the <tbody> tag are <tr> tags,
-                        # all children of the <tr> tag are <td> tags,
-                        # and each <tr> tag as exactly 4 <td> tag children
-                        self.check_tbody_tag_assumptions_1(table=table)
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_table_tag_assumptions_1. ' +
-                                  'node: {}.'.format(node))
-
-    def check_table_tag_assumptions_2(self,node=None):
-        '''Check table tag assumptions for the given BeautifulSoup node.'''
-        if self.ready:
-            if node:
-                # check <table> in node
-                if self.correct_type:
-                    tag_names = set(self.util.get_child_names(node=node))
-                    if not 'table' in tag_names:
-                        self.correct_type = False
-                        self.logger.debug("not 'table' in tag_names")
-                # check <table> contains <caption> and <tbody>
-                if self.correct_type:
-                    tables = node.find_all('table')
-                    for table in tables:
-                        child_names = set(self.util.get_child_names(node=table))
-                        if not (child_names == {'caption','tr'}         or
-                                child_names == {'tr'}                   or
-                                child_names == {'caption','tr','tfoot'} or
-                                child_names == {'tr','tfoot'}
-                            ):
-                            self.correct_type = False
-                            self.logger.debug(
-                                "not table.children = {caption,tr}")
-                        self.check_tr_tag_assumptions_1(table=table)
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_table_tag_assumptions_2. ' +
-                                  'node: {}.'.format(node))
-
-    def check_thead_tag_assumptions_1(self,table=None):
-        '''Check thead tag assumptions for the given BeautifulSoup table.'''
-        if self.ready:
-            if table:
-                # check <thead> in <table>
-                if self.correct_type:
-                    tag_names = set(self.util.get_child_names(node=table))
-                    if not 'thead' in tag_names:
-                        self.correct_type = False
-                        self.logger.debug("not 'thead' in tag_names")
-                # check <thead> has only one child <tr>
-                if self.correct_type:
-                    thead = table.find('thead')
-                    child_names = self.util.get_child_names(node=thead)
-                    if not child_names == ['tr']:
-                        self.correct_type = False
-                        self.logger.debug("not <thead> has only one child <tr>")
-                # check all children of the <tr> tag are <th> tags
-                if self.correct_type:
-                    tr = thead.find('tr')
-                    if not self.util.children_all_one_tag_type(node=tr,tag_name='th'):
-                        self.correct_type = False
-                        self.logger.debug("not all children of the tr tag are th tags")
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_thead_tag_assumptions_1. ' +
-                                  'table: {}.'.format(table))
-
-    def check_tbody_tag_assumptions_1(self,table=None):
-        '''Check tbody tag assumptions for the given BeautifulSoup table.'''
-        if self.ready:
-            if table:
-                # check <tbody> in <table>
-                if self.correct_type:
-                    tag_names = set(self.util.get_child_names(node=table))
-                    if not 'tbody' in tag_names:
-                        self.correct_type = False
-                        self.logger.debug("not 'tbody' in tag_names")
-                # check all children of the <tbody> tag are <tr> tags
-                if self.correct_type:
-                    tbody = table.find('tbody')
-                    if not self.util.children_all_one_tag_type(node=tbody,
-                                                               tag_name='tr'):
-                        self.correct_type = False
-                        self.logger.debug("not all children of the <tbody> tag are <tr> tags")
-                # check all children of the <tr> tag are <td> tags
-                if self.correct_type:
-                    for tr in [tr for tr in tbody.children
-                               if not self.util.get_string(node=tr).isspace()]:
-                        if not self.util.children_all_one_tag_type(node=tr,
-                                                                   tag_name='td'):
-                            self.correct_type = False
-                            self.logger.debug("not all children of the <tr> tag are <td> tags")
-                # check each <tr> tag as exactly 4 <td> tag children
-                if self.correct_type:
-                    for tr in [tr for tr in tbody.children
-                               if not self.util.get_string(node=tr).isspace()]:
-                        if self.correct_type:
-                            if not len(tr.find_all('td')) == 4:
-#                                print('tr: %r' % tr)
-#                                input('pause')
-                                self.correct_type = False
-                                self.logger.debug("not each <tr> tag as exactly 4 <td> tag children")
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_tbody_tag_assumptions_1. ' +
-                                  'table: {}.'.format(table))
-
-    def check_tr_tag_assumptions_1(self,table=None):
-        '''Check tbody tag assumptions for the given BeautifulSoup table.'''
-        if self.ready:
-            if table:
-                # check all <tr> tag children are <th> or <td> tags
-                if self.correct_type:
-                    for node in [node for node in table.find_all('tr')
-                                 if not self.util.get_string(node=node).isspace()]:
-                        if self.correct_type:
-                            tag_names = set(self.util.get_child_names(node=node))
-                            if not (tag_names == {'td'} or tag_names == {'th'}):
-                                self.correct_type = False
-                                self.logger.debug("not all <tr> tag children are " +
-                                                  "<th> or <td> tags" )
-            else:
-                self.ready = False
-                self.logger.error('Unable to check_tr_tag_assumptions_1. ' +
-                                  'table: {}.'.format(table))
 
 class File_type(Type):
     '''Determine the class File type of the given node.'''

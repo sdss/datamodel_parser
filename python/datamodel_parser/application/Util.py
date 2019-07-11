@@ -50,22 +50,25 @@ class Util:
     def get_table_title_regex_1(self):
         '''Get regex for table title with required/optional keywords/column etc,
             typically found in <p> tags.'''
-        regex = ('(?i)required(.*?)keywords' + '|'
-                 '(?i)optional(.*?)keywords' + '|'
-                 '(?i)required(.*?)column'   + '|'
-                 '(?i)optional(.*?)column'   + '|'
-                 '(?i)column(.*?)name'       + '|'
-                 '(?i)example\s*header'      + '|'
-                 '(?i)sample(.*?)header'
+        regex = ('(?i)required(.*?)keywords'            + '|'
+                 '(?i)optional(.*?)keywords'            + '|'
+                 '(?i)example\s*header'                 + '|'
+                 '(?i)sample(.*?)header'                + '|'
+                 '(?i)example(.*?)configuration file'   + '|'
+                 '(?i)required(.*?)column'              + '|'
+                 '(?i)optional(.*?)column'              + '|'
+                 '(?i)column(.*?)name'
                  )
         return regex
 
     def get_table_title_regex_2(self):
         '''Get regex for table title with required/optional keywords and sample header,
             typically found in <p> tags.'''
-        regex = ('(?i)required(.*?)keywords' + '|'
-                 '(?i)optional(.*?)keywords' + '|'
-                 '(?i)sample(.*?)header'
+        regex = ('(?i)required(.*?)keywords'            + '|'
+                 '(?i)optional(.*?)keywords'            + '|'
+                 '(?i)example\s*header'                 + '|'
+                 '(?i)sample(.*?)header'                + '|'
+                 '(?i)example(.*?)configuration file'
                  )
         return regex
 
@@ -253,36 +256,46 @@ class Util:
                               )
         return (titles,descriptions)
 
-    def get_titles_and_descriptions_from_ps_2(self,node=None,sibling_tag_name=None):
+    def get_titles_and_descriptions_from_ps_2(self,node=None,sibling_tag_names=None):
         '''From the given list of BeautifulSoup <p> tag objects,
         get Python lists for the associated titles and descriptions
         '''
         titles  = list()
         descriptions = list()
         if self.ready:
-            if node and sibling_tag_name:
-                ps = node.find_all('p')
-                for p in ps:
-                    (title,description) = self.get_title_and_description_from_p(p=p)
-                    if (title and description): # has <b> tag and other text
-                        pass # we have both
-                    elif title and not description: # has <b> tag and no other text
-                        next_sibling = self.get_next_sibling(node=p)
-                        if next_sibling:
-                            if next_sibling.name == sibling_tag_name:
-                                description = str(next_sibling)
+            if node and sibling_tag_names:
+                children = self.get_children(node=node)
+                is_first_title = True
+                desc = list()
+                for child in children:
+#                    print('\nchild: %r' % child)
+#                    input('pause')
+                    if child.name in self.heading_tag_names:
+                        title = self.get_string(node=child)
+                        titles.append(title)
+                        descriptions.append(str())
+                    elif child.name == 'p':
+                        (title,description) = self.get_title_and_description_from_p(p=child)
+                        titles.append(title)
+                        if is_first_title:
+                            is_first_title = False
+                            desc.append(description)
                         else:
-                            description = str() # just title with no description
-                    elif not (title and description): # does not have <b> tag
-                        title = str()
-                        description = self.get_string(node=p)
-                    titles.append(title)
-                    descriptions.append(description)
+                            descriptions.append('\n'.join(desc))
+                            desc=list()
+                            desc.append(description)
+                    elif child.name in sibling_tag_names:
+                        desc.append(str(child))
+#                    print('titles: %r' % titles)
+#                    print('desc: %r' % desc)
+#                    print('descriptions: %r' % descriptions)
+#                    input('pause')
+                descriptions.append('\n'.join(desc))
             else:
                 self.ready = False
                 self.logger.error('Unable to get_titles_and_descriptions_from_ps_2. ' +
                                   'node: {}'.format(node) +
-                                  'sibling_tag_name: {}'.format(sibling_tag_name)
+                                  'sibling_tag_names: {}'.format(sibling_tag_names)
                                   )
         if not (titles and descriptions) and len(titles)==len(descriptions):
             self.ready = False
