@@ -75,8 +75,9 @@ CREATE TABLE filespec.filespec (
     file_id INT4 REFERENCES filespec.file(id) NOT NULL,
     env_label VARCHAR(32),
     location VARCHAR(512),
-    name VARCHAR(32),
+    name VARCHAR(128),
     ext VARCHAR(16),
+    note VARCHAR(512),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

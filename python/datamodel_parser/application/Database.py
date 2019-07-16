@@ -954,6 +954,7 @@ class Database:
                              location = None,
                              name = None,
                              ext   = None,
+                             note = None,
                              ):
         '''Set columns of the filespec table.'''
         self.filespec_columns = dict()
@@ -964,6 +965,7 @@ class Database:
 #                location is not None and
                 name         and
                 ext
+#                note is not None and
                 ):
                 self.filespec_columns = {
                     'file_id'       : file_id
@@ -976,6 +978,8 @@ class Database:
                                       if name             else None,
                     'ext'   : ext
                                       if ext               else None,
+                    'note' : note
+                                      if note is not None else None,
                     }
             else:
                 self.ready = False
@@ -985,7 +989,9 @@ class Database:
                     'env_label: {}, '.format(env_label) +
 #                    'location: {}, '.format(location) +
                     'name: {}, '.format(name) +
-                    'ext: {}.'.format(ext))
+                    'ext: {}.'.format(ext)
+#                    'note: {}, '.format(note) +
+                    )
 
     def populate_filespec_table(self):
         '''Update/Create filespec table row.'''
@@ -1048,6 +1054,8 @@ class Database:
                         if columns and 'name' in columns else None,
                     ext = columns['ext']
                         if columns and 'ext' in columns else None,
+                    note = columns['note']
+                        if columns and 'note' in columns else None,
                                   )
                 if filespec:
                     filespec.add()

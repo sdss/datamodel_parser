@@ -119,6 +119,7 @@ class Store:
                     yaml_str += '   name: " "\n'
                     yaml_str += '   ext: " "\n'
                     yaml_str += '   fits_path_example: "${}/"\n'.format(self.env_variable)
+                    yaml_str += '   note: " "\n'
                     yaml_str += '\n'
 
                 # write yaml file
@@ -143,7 +144,7 @@ class Store:
         if self.ready:
             self.set_yaml_dir()
             yaml_file = join(self.yaml_dir,filename) if self.yaml_dir else None
-            if exists(yaml_file):
+            if yaml_file and exists(yaml_file):
                 with open(yaml_file,'r') as filespec:
                     try: self.filespec = yaml.safe_load(filespec)
                     except yaml.YAMLError as e:
@@ -185,11 +186,15 @@ class Store:
                                      'name' in datamodel else None)
                         ext =       (datamodel['ext'] if datamodel and
                                      'ext' in datamodel else None)
+                        note =  (datamodel['note'] if datamodel and
+                                     'note' in datamodel else None)
 
                         self.database.set_filespec_columns(env_label = env_label,
                                                            location  = location,
                                                            name      = name,
-                                                           ext       = ext)
+                                                           ext       = ext,
+                                                           note      = note,
+                                                           )
                         self.database.populate_filespec_table()
                         self.ready = self.database.ready
                 else:

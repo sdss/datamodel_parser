@@ -375,8 +375,9 @@ class Filespec(db.Model):
                         nullable = False)
     env_label = db.Column(db.String(32))
     location = db.Column(db.String(512))
-    name = db.Column(db.String(32))
+    name = db.Column(db.String(128))
     ext = db.Column(db.String(16))
+    note = db.Column(db.String(512))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,
                          default=datetime.now,
