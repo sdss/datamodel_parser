@@ -118,7 +118,7 @@ class Store:
                     yaml_str += '   location: ""\n'
                     yaml_str += '   name: " "\n'
                     yaml_str += '   ext: " "\n'
-                    yaml_str += '   fits_path_example: " "\n'
+                    yaml_str += '   fits_path_example: "${}/"\n'.format(self.env_variable)
                     yaml_str += '\n'
 
                 # write yaml file
