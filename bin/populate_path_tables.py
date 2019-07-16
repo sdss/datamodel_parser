@@ -20,9 +20,9 @@ else:
     store.set_datamodel_dir()
     store.set_tree_edition()
     store.set_database()
-    file_paths = store.get_file_paths() # DEBUG
+    store.set_file_paths() 
     file_list = list()
-    for path in store.get_file_paths():
+    for path in store.file_paths:
         if store.ready:
 #            if ('BOSS_SPECTRO_REDUX'     in path or
 #                'MANGA_SPECTRO_REDUX'    in path or

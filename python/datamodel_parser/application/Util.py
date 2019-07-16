@@ -126,7 +126,7 @@ class Util:
                         if descendant: number_descendants += 1
             else:
                 self.ready = False
-                self.logger.error('Unable to get_number_descendants.' +
+                self.logger.error('Unable to get_number_descendants. ' +
                                   'node: {}'.format(node))
         return number_descendants
 

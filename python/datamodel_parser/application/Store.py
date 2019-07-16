@@ -6,6 +6,7 @@ from flask import render_template
 from datamodel_parser import app
 import logging
 from subprocess import Popen, PIPE
+import yaml
 from json import dumps
 
 class Store:
@@ -101,6 +102,115 @@ class Store:
             self.directory_depths = None
             self.svn_products     = None
 
+    def init_yaml(self,filename='filespec.yaml'):
+        '''Write a yaml file containing datamodel file paths.'''
+        if self.ready:
+            if self.file_paths:
+                # create yaml file contents
+                yaml_str = 'datamodels:\n'
+                for path in self.file_paths:
+                    path = path.replace('datamodel/files/',str())
+                    self.set_path(path=path)
+                    self.split_path()
+
+                    yaml_str += ' - path: "{}"\n'.format(path)
+                    yaml_str += '   env_label: "{}"\n'.format(self.env_variable)
+                    yaml_str += '   location: ""\n'
+                    yaml_str += '   name: " "\n'
+                    yaml_str += '   ext: " "\n'
+                    yaml_str += '   fits_path_example: " "\n'
+                    yaml_str += '\n'
+
+                # write yaml file
+                self.set_yaml_dir()
+                yaml_file = join(self.yaml_dir,filename) if self.yaml_dir else None
+                if not exists(yaml_file):
+                    with open(yaml_file,'w') as filespec:
+                        filespec.write(yaml_str)
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to init_yaml. ' +
+                                      'The file already exists: {}. '.format(yaml_file) +
+                                      'If you wish to replace this file please first delete it.')
+            else:
+                self.ready = False
+                self.logger.error('Unable to write_yaml. ' +
+                                  'self.file_paths: {}'.format(self.file_paths))
+
+    def set_filespec(self,filename='filespec.yaml'):
+        '''Create a dictionary from the filespec.yaml file'''
+        self.filespec = None
+        if self.ready:
+            self.set_yaml_dir()
+            yaml_file = join(self.yaml_dir,filename) if self.yaml_dir else None
+            if exists(yaml_file):
+                with open(yaml_file,'r') as filespec:
+                    try: self.filespec = yaml.safe_load(filespec)
+                    except yaml.YAMLError as e:
+                        self.ready = False
+                        self.logger.error('Unable to set_filespec. ' +
+                                          'An error occurred diring yaml.safe_load(). ' +
+                                          'Exception: {}'.format(e))
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_filespec. ' +
+                                  'yaml_file: {}'.format(yaml_file))
+
+    def populate_filespec_table(self):
+        '''Populate the filespec table.'''
+        if self.ready:
+            datamodels = (self.filespec['datamodels'] if self.filespec and
+                          'datamodels' in self.filespec else None)
+            for datamodel in datamodels:
+                path = datamodel['path'] if datamodel and 'path' in datamodel else None
+                self.set_path(path=path)
+                self.split_path()
+                self.populate_file_path_tables()
+                if (self.tree_edition         and
+                    self.env_variable         and
+    #               self.location_path # can be None
+                    self.file_name            and
+                    datamodel
+                    ):
+                    self.database.set_file_id(tree_edition  = self.tree_edition,
+                                              env_variable  = self.env_variable,
+                                              location_path = self.location_path,
+                                              file_name     = self.file_name)
+                    if self.database.file_id:
+                        env_label = (datamodel['env_label'] if datamodel and
+                                     'env_label' in datamodel else None)
+                        location =  (datamodel['location'] if datamodel and
+                                     'location' in datamodel else None)
+                        name =      (datamodel['name'] if datamodel and
+                                     'name' in datamodel else None)
+                        ext =       (datamodel['ext'] if datamodel and
+                                     'ext' in datamodel else None)
+
+                        self.database.set_filespec_columns(env_label = env_label,
+                                                           location  = location,
+                                                           name      = name,
+                                                           ext       = ext)
+                        self.database.populate_filespec_table()
+                        self.ready = self.database.ready
+                else:
+                    self.ready = False
+                    self.logger.error(
+                        'Unable to populate_filespec_table. '                     +
+                        'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                        'self.env_variable: {}, ' .format(self.env_variable)  +
+                        'self.file_name: {}, '    .format(self.file_name)     +
+                        'datamodel: {}.'.format(datamodel)
+                        )
+
+
+    def set_yaml_dir(self):
+        '''Set DATAMODEL_PARSER_YAML_DIR'''
+        self.yaml_dir = None
+        try: self.yaml_dir = environ['DATAMODEL_PARSER_YAML_DIR']
+        except Exception as e:
+            self.ready = False
+            self.logger.error('Unable to set_yaml_dir. exception: {}'.format(e))
+
     def set_tree_edition(self):
         '''Set the datamodel edition.'''
         self.tree_edition = None
@@ -143,7 +253,7 @@ class Store:
         if self.ready:
             path = path if path else self.path
             if path:
-#                path = path.replace('datamodel/files/',str())
+                path = path.replace('datamodel/files/',str())
                 split = path.split('/')
                 self.env_variable  = split[0]              if split else None
                 self.file_name     = split[-1]             if split else None
@@ -158,9 +268,9 @@ class Store:
                 self.logger.error('Unable to split_path. ' +
                                   'path: {}'.format(path))
 
-    def get_file_paths(self):
+    def set_file_paths(self):
         '''Set a list of all files for the current tree edition.'''
-        file_paths = list()
+        self.file_paths = list()
         if self.ready:
             self.set_file_path_skip_list()
             if not self.datamodel_dir:
@@ -180,7 +290,7 @@ class Store:
                                     if (file_path and
                                         file_path not in self.file_path_skip_list
                                         ):
-                                        file_paths.append(file_path)
+                                        self.file_paths.append(file_path)
                                 else:
                                     self.ready = False
                                     self.logger.error('File does not exist: '
@@ -188,10 +298,12 @@ class Store:
                     else: pass # it's okay to have empty filenames
             else:
                 self.ready = False
-                self.logger.error(
-                    'Unable to get_file_paths. ' +
-                    'self.datamodel_dir: {}'.format(self.datamodel_dir))
-        return file_paths
+                self.logger.error('Unable to set_file_paths. ' +
+                                  'self.datamodel_dir: {}'.format(self.datamodel_dir))
+        if not self.file_paths:
+            self.ready = False
+            self.logger.error('Unable to set_file_paths. ' +
+                              'self.file_paths: {}'.format(self.file_paths))
 
     def set_file_path_skip_list(self):
         '''Set a list of file paths that don't conform to the database schema.'''
@@ -258,8 +370,6 @@ class Store:
             self.logger.error('Unable to execute_command. ' +
                               'command: {}'.format(command))
         return (stdout,stderr,proc_returncode)
-
-
 
     def get_column_tag(self):
         '''Populate tables comprised of file HTML text information.'''
@@ -540,7 +650,7 @@ class Store:
                             % self.options.path)
             else:
                 self.ready = False
-                self.logger.error('Unable to render_template.' +
+                self.logger.error('Unable to render_template. ' +
                                   'template: {}'.format(template) +
                                   'self.database: {}'.format(self.database)
                                   )

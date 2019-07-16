@@ -4,41 +4,37 @@ from datamodel_parser.models.datamodel import Location
 from datamodel_parser.models.datamodel import Directory
 from datamodel_parser.models.datamodel import File
 from datamodel_parser.models.datamodel import Intro
+from datamodel_parser.models.datamodel import Filespec
 from datamodel_parser.models.datamodel import Section
 from datamodel_parser.models.datamodel import Hdu
 from datamodel_parser.models.datamodel import Data
 from datamodel_parser.models.datamodel import Column
 from datamodel_parser.models.datamodel import Header
 from datamodel_parser.models.datamodel import Keyword
+from datamodel_parser.application import Util
+from os.path import join
 from json import dumps
 
 class Database:
 
     def __init__(self, logger=None, options=None):
-        self.set_logger(logger=logger)
-        self.set_options(options=options)
+        self.initialize(logger=logger,options=options)
         self.set_ready()
         self.set_attributes()
 
-    def set_logger(self, logger=None):
-        '''Set class logger.'''
-        self.logger = logger if logger else None
-        self.ready = bool(self.logger)
-        if not self.ready: print('ERROR: Unable to set_logger.')
-
-    def set_options(self, options=None):
-        '''Set the options class attribute.'''
-        self.options = None
-        if self.ready:
-            self.options = options if options else None
-            if not self.options:
-                self.ready = False
-                self.logger.error('Unable to set_options')
+    def initialize(self,logger=None,options=None):
+        '''Initialize utility class, logger, and command line options.'''
+        self.util = Util(logger=logger,options=options)
+        self.logger  = self.util.logger  if self.util.logger  else None
+        self.options = self.util.options if self.util.options else None
+        self.ready   = self.util and self.util.ready if self.util else None
 
     def set_ready(self):
         '''Set error indicator.'''
-        self.ready = bool(self.logger and
-                          self.options)
+        self.ready = bool(self.ready   and
+                          self.util    and
+                          self.logger  and
+                          self.options )
 
     def set_attributes(self):
         '''Set class attributes.'''
@@ -53,6 +49,48 @@ class Database:
             self.file_hdu_info        = None
             self.file_hdu_tables      = None
             self.location_columns     = None
+
+    def set_db_fits_datamodels(self):
+        '''Set a dictionary'''
+        if self.ready:
+            # get all intros with a description string containing '.fits'
+            intros = Intro.load_all(description_substring='.fits')
+            yaml = '---\n'
+            yaml += 'datamodel:\n'
+            for intro in intros:
+                if intro and intro.heading_title.lower() == 'naming convention':
+                    file     = File.load(file_id=intro.file_id)             if intro    else None
+                    location = Location.load(location_id=file.location_id)  if file     else None
+                    env      = Env.load(env_id=location.env_id)             if location else None
+                    tree     = Tree.load(tree_id=env.tree_id)               if env      else None
+                    
+                    # extract fits file pattern
+                    regex = '(^)(.*?)(.fits.gz)' + '|' + '(^)(.*?)(.fits)'
+                    naming_convention = intro.description.strip()
+                    matches = (self.util.get_matches(regex=regex,string=naming_convention)
+                                if naming_convention else list())
+                    naming_convention = matches[0].strip() if matches else naming_convention
+                    
+                    # remove beginning tag from naming_convention if present
+                    if naming_convention.startswith('<'):
+                        pos = naming_convention.find('>')
+                        if pos != -1:
+                            tag = naming_convention[:pos+1]
+                            naming_convention = (naming_convention.replace(tag,str())
+                                                    if tag else naming_convention)
+
+                    yaml += ('    tree_edition: {}\n'.format(tree.edition))
+                    yaml += ('    env_variable: {}\n'.format(env.variable))
+                    yaml += ('    location_path: {}\n'.format(location.path))
+                    yaml += ('    html_file_name: {}\n'.format(file.name))
+                    yaml += ('    fits_naming_convention: {}\n'.format(naming_convention))
+                    yaml += ('    example_fits_path: {}\n'.format(str()))
+                    yaml += ('    example_fits_name: {}\n'.format(str()))
+
+#                    print('\n\nintro: %r' %intro)
+#                    print('naming_convention: %r' %naming_convention)
+                    print('yaml: \n%s' %yaml)
+                    input('pause')
 
     def get_file_percent_complete(self):
         '''Get the percentage of all file table rows with status='complete.'
@@ -92,12 +130,12 @@ class Database:
                                  
                 if not intros: # hdus and hdu_info_dict can be empty
                     self.ready = False
-                    self.logger.error('Unable to get_intros_sections_hdus.' +
+                    self.logger.error('Unable to get_intros_sections_hdus. ' +
                                       'intros: {}, '.format(intros)
                                       )
             else:
                 self.ready = False
-                self.logger.error('Unable to get_intros_sections_hdus.' +
+                self.logger.error('Unable to get_intros_sections_hdus. ' +
                                   'self.file_id: {}.'.format(self.file_id))
         return (intros,hdu_info_dict)
 
@@ -433,7 +471,7 @@ class Database:
                     }
             else:
                 self.ready = False
-                self.logger.error('Unable to set_env_columns.' +
+                self.logger.error('Unable to set_env_columns. ' +
                                   'tree_id: {}.'.format(tree_id) +
                                   'variable: {}.'.format(variable))
 
@@ -523,7 +561,7 @@ class Database:
                     }
             else:
                 self.ready = False
-                self.logger.error('Unable to set_location_columns.' +
+                self.logger.error('Unable to set_location_columns. ' +
                                   'env_id: {}, '.format(env_id) )
 
     def populate_location_table(self):
@@ -713,7 +751,7 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error(
-                                'Unable to set_file_columns.' +
+                                'Unable to set_file_columns. ' +
                                 'location_id: {}, '.format(location_id) +
                                 'name: {}, '.format(name))
 
@@ -909,6 +947,120 @@ class Database:
             else:
                 self.ready = False
                 self.logger.error('Unable to create_intro_row. ' +
+                                  'columns: {}.'.format(columns))
+
+    def set_filespec_columns(self,
+                             env_label = None,
+                             location = None,
+                             name = None,
+                             ext   = None,
+                             ):
+        '''Set columns of the filespec table.'''
+        self.filespec_columns = dict()
+        if self.ready:
+            file_id = self.file_id if self.file_id else None
+            if (file_id   and
+                env_label and
+#                location is not None and
+                name         and
+                ext
+                ):
+                self.filespec_columns = {
+                    'file_id'       : file_id
+                                      if file_id                   else None,
+                    'env_label' : env_label
+                                      if env_label else None,
+                    'location' : location
+                                      if location is not None else None,
+                    'name' : name
+                                      if name             else None,
+                    'ext'   : ext
+                                      if ext               else None,
+                    }
+            else:
+                self.ready = False
+                self.logger.error(
+                    'Unable to set_filespec_columns. ' +
+                    'file_id: {}, '.format(file_id) +
+                    'env_label: {}, '.format(env_label) +
+#                    'location: {}, '.format(location) +
+                    'name: {}, '.format(name) +
+                    'ext: {}.'.format(ext))
+
+    def populate_filespec_table(self):
+        '''Update/Create filespec table row.'''
+        if self.ready:
+            self.set_filespec()
+            if self.filespec: self.update_filespec_row()
+            else:          self.create_filespec_row()
+
+    def set_filespec(self,file_id=None):
+        '''Load row from filespec table.'''
+        self.filespec = None
+        if self.ready:
+            file_id = (file_id if file_id
+                    else self.filespec_columns['file_id']
+                    if self.filespec_columns and 'file_id' in self.filespec_columns
+                    else None)
+            if file_id:
+                self.filespec = (Filespec.load(file_id=file_id)
+                              if file_id else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_filespec. ' +
+                                  'file_id: {}, '.format(file_id) )
+
+    def update_filespec_row(self):
+        '''Update row in filespec table.'''
+        if self.ready:
+            columns = self.filespec_columns if self.filespec_columns else None
+            if columns:
+                self.logger.debug('Updating row in filespec table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                skip_keys = []
+                self.filespec.update_if_needed(columns=columns,skip_keys=skip_keys)
+                if self.filespec.updated:
+                    self.logger.info('Updated Filespec[id={0}], env_label: {1}.'
+                                     .format(self.filespec.id,
+                                             self.filespec.env_label))
+            else:
+                self.ready = False
+                self.logger.error('Unable to update_filespec_row. ' +
+                                  'columns: {}.'.format(columns))
+
+    def create_filespec_row(self):
+        '''Create row in filespec table.'''
+        if self.ready:
+            columns = self.filespec_columns if self.filespec_columns else None
+            if columns:
+                self.logger.debug('Adding new row to filespec table.')
+                if self.verbose: self.logger.debug('columns:\n' +
+                                                   dumps(columns,indent=1))
+                filespec = Filespec(
+                    file_id = columns['file_id']
+                        if columns and 'file_id' in columns else None,
+                    env_label = columns['env_label']
+                        if columns and 'env_label' in columns else None,
+                    location = columns['location']
+                        if columns and 'location' in columns else None,
+                    name = columns['name']
+                        if columns and 'name' in columns else None,
+                    ext = columns['ext']
+                        if columns and 'ext' in columns else None,
+                                  )
+                if filespec:
+                    filespec.add()
+                    filespec.commit()
+                    self.logger.info('Added Filespec[id={0}], env_label: {1}.'
+                                     .format(filespec.id,filespec.env_label))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to create_filespec_row. ' +
+                                      'filespec = \n{}.'.format(filespec))
+            else:
+                self.ready = False
+                self.logger.error('Unable to create_filespec_row. ' +
                                   'columns: {}.'.format(columns))
 
     def set_hdu_columns(self,

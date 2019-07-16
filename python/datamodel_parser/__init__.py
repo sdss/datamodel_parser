@@ -58,3 +58,8 @@ db = SQLAlchemy(app)
 
 #####
 
+try:
+    schema = os.environ['DATAMODEL_PARSER_SCHEMA']
+except:
+    schema = 'sdss'
+

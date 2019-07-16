@@ -1,11 +1,11 @@
-from datamodel_parser import db, logger
+from datamodel_parser import db, logger, schema
 from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 from pytz import timezone
 
 class Tree(db.Model):
     __tablename__ = 'tree'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     edition = db.Column(db.String(32), nullable = False, unique = True)
     created = db.Column(db.DateTime, default=datetime.now)
@@ -14,9 +14,12 @@ class Tree(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(edition=None):
+    def load(edition=None,tree_id=None):
         if edition:
             try: tree = Tree.query.filter(Tree.edition==edition).one()
+            except: tree = None
+        elif tree_id:
+            try: tree = Tree.query.filter(Tree.id==tree_id).one()
             except: tree = None
         else:
             tree = None
@@ -50,10 +53,10 @@ class Tree(db.Model):
 
 class Env(db.Model):
     __tablename__ = 'env'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     tree_id = db.Column(db.Integer,
-                        db.ForeignKey('sdss.tree.id'),
+                        db.ForeignKey(schema + '.tree.id'),
                         nullable = False)
     variable = db.Column(db.String(32), nullable = False)
     created = db.Column(db.DateTime, default=datetime.now)
@@ -62,11 +65,16 @@ class Env(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(tree_id=None,variable=None):
+    def load(tree_id=None,variable=None,env_id=None):
         if tree_id and variable:
             try: env = (Env.query
                            .filter(Env.tree_id==tree_id)
                            .filter(Env.variable==variable)
+                           .one())
+            except: env = None
+        elif env_id:
+            try: env = (Env.query
+                           .filter(Env.id==env_id)
                            .one())
             except: env = None
         else:
@@ -101,10 +109,10 @@ class Env(db.Model):
 
 class Location(db.Model):
     __tablename__ = 'location'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     env_id = db.Column(db.Integer,
-                       db.ForeignKey('sdss.env.id'),
+                       db.ForeignKey(schema + '.env.id'),
                        nullable = False)
     path = db.Column(db.String(128))
     created = db.Column(db.DateTime, default=datetime.now)
@@ -113,12 +121,19 @@ class Location(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(env_id=None,path=None):
-        if env_id:
-            try: location = (Location.query
+    def load(env_id=None,path=None,location_id=None):
+        if env_id: # path can be None
+            try:
+                location = (Location.query
                                     .filter(Location.env_id==env_id)
                                     .filter(Location.path==path)
                                     .one())
+            except:
+                location = None
+        elif location_id:
+            try: location = (Location.query
+                                     .filter(Location.id==location_id)
+                                     .one())
             except:
                 location = None
         else:
@@ -153,10 +168,10 @@ class Location(db.Model):
 
 class Directory(db.Model):
     __tablename__ = 'directory'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     location_id = db.Column(db.Integer,
-                            db.ForeignKey('sdss.location.id'),
+                            db.ForeignKey(schema + '.location.id'),
                             nullable = False)
     name = db.Column(db.String(64), nullable = False)
     depth = db.Column(db.Integer, nullable = False)
@@ -223,10 +238,10 @@ class Directory(db.Model):
 
 class File(db.Model):
     __tablename__ = 'file'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     location_id = db.Column(db.Integer,
-                            db.ForeignKey('sdss.location.id'),
+                            db.ForeignKey(schema + '.location.id'),
                             nullable = False)
     name = db.Column(db.String(64), nullable = False)
     status = db.Column(db.String(16), nullable = False,default='pending')
@@ -238,11 +253,16 @@ class File(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(location_id=None,name=None):
+    def load(location_id=None,name=None,file_id=None):
         if location_id and name:
             try: file = (File.query
                             .filter(File.location_id==location_id)
                             .filter(File.name==name)
+                            .one())
+            except: file = None
+        elif file_id:
+            try: file = (File.query
+                            .filter(File.id==file_id)
                             .one())
             except: file = None
         else:
@@ -277,10 +297,10 @@ class File(db.Model):
 
 class Intro(db.Model):
     __tablename__ = 'intro'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     file_id = db.Column(db.Integer,
-                        db.ForeignKey('sdss.file.id'),
+                        db.ForeignKey(schema + '.file.id'),
                         nullable = False)
     position = db.Column(db.Integer, nullable = False)
     heading_level = db.Column(db.Integer)
@@ -306,10 +326,14 @@ class Intro(db.Model):
         return intro
     
     @staticmethod
-    def load_all(file_id=None):
+    def load_all(file_id=None,description_substring=None):
         if file_id:
             try: intros = (Intro.query.filter(Intro.file_id==file_id)
                                 .order_by(Intro.position)
+                                .all())
+            except: intros = None
+        elif description_substring:
+            try: intros = (Intro.query.filter(Intro.description.contains(description_substring))
                                 .all())
             except: intros = None
         else:
@@ -341,12 +365,74 @@ class Intro(db.Model):
                                         getattr(self,column.key))
                                         for column in self.__table__.columns])
 
-class Section(db.Model):
-    __tablename__ = 'section'
-    __table_args__ = {'schema':'sdss'}
+
+class Filespec(db.Model):
+    __tablename__ = 'filespec'
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     file_id = db.Column(db.Integer,
-                        db.ForeignKey('sdss.file.id'),
+                        db.ForeignKey(schema + '.file.id'),
+                        nullable = False)
+    env_label = db.Column(db.String(32))
+    location = db.Column(db.String(512))
+    name = db.Column(db.String(32))
+    ext = db.Column(db.String(16))
+    created = db.Column(db.DateTime, default=datetime.now)
+    modified = db.Column(db.DateTime,
+                         default=datetime.now,
+                         onupdate=datetime.now)
+
+    @staticmethod
+    def load(file_id=None):
+        if file_id:
+            try: filespec = (Filespec.query.filter(Filespec.file_id==file_id).one())
+            except: filespec = None
+        else:
+            filespec = None
+        return filespec
+    
+    @staticmethod
+    def load_all(file_id=None):
+        if file_id:
+            try: filespecs = (Filespec.query.filter(Filespec.file_id==file_id)
+                                .order_by(Filespec.file_id)
+                                .all())
+            except: filespecs = None
+        else:
+            filespecs = None
+        return filespecs
+    
+    def update_if_needed(self, columns = None, skip_keys = []):
+        self.updated = False
+        for key,column in columns.items():
+            if key not in skip_keys:
+                if getattr(self,key) != column:
+                    setattr(self,key,column)
+                    if not self.updated: self.updated = True
+        if self.updated: self.commit()
+
+    def add(self):
+        try: db.session.add(self)
+        except Exception as e:
+            print("{0} ADD> {1}".format(self.__tablename__, e))
+    
+    def commit(self):
+        try: db.session.commit()
+        except Exception as e:
+            print("{0} COMMIT> {1}".format(self.__tablename__, e))
+    
+    def __repr__(self): # representation (pretty print)
+        return "\n".join(["{0}: {1}".format(
+                                        column.key,
+                                        getattr(self,column.key))
+                                        for column in self.__table__.columns])
+
+class Section(db.Model):
+    __tablename__ = 'section'
+    __table_args__ = {'schema':schema}
+    id = db.Column(db.Integer, primary_key = True)
+    file_id = db.Column(db.Integer,
+                        db.ForeignKey(schema + '.file.id'),
                         nullable = False)
     hdu_number = db.Column(db.Integer)
     hdu_title = db.Column(db.String(32))
@@ -410,10 +496,10 @@ class Section(db.Model):
 
 class Hdu(db.Model):
     __tablename__ = 'hdu'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     file_id = db.Column(db.Integer,
-                        db.ForeignKey('sdss.file.id'),
+                        db.ForeignKey(schema + '.file.id'),
                         nullable = False)
     is_image = db.Column(db.Boolean)
     number = db.Column(db.Integer)
@@ -480,10 +566,10 @@ class Hdu(db.Model):
 
 class Header(db.Model):
     __tablename__ = 'header'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     hdu_id = db.Column(db.Integer,
-                             db.ForeignKey('sdss.hdu.id'),
+                             db.ForeignKey(schema + '.hdu.id'),
                              nullable = False)
     hdu_number = db.Column(db.Integer, nullable = False)
     table_caption = db.Column(db.String(1024))
@@ -551,10 +637,10 @@ class Header(db.Model):
 
 class Keyword(db.Model):
     __tablename__ = 'keyword'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     header_id = db.Column(db.Integer,
-                          db.ForeignKey('sdss.header.id'),
+                          db.ForeignKey(schema + '.header.id'),
                           nullable = False)
     position = db.Column(db.Integer, nullable = False)
     keyword = db.Column(db.String(64))
@@ -618,10 +704,10 @@ class Keyword(db.Model):
 
 class Data(db.Model):
     __tablename__ = 'data'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     hdu_id = db.Column(db.Integer,
-                             db.ForeignKey('sdss.hdu.id'),
+                             db.ForeignKey(schema + '.hdu.id'),
                              nullable = False)
     hdu_number = db.Column(db.Integer, nullable = False)
     table_caption = db.Column(db.String(1024))
@@ -688,10 +774,10 @@ class Data(db.Model):
 
 class Column(db.Model):
     __tablename__ = 'column'
-    __table_args__ = {'schema':'sdss'}
+    __table_args__ = {'schema':schema}
     id = db.Column(db.Integer, primary_key = True)
     data_id = db.Column(db.Integer,
-                        db.ForeignKey('sdss.data.id'),
+                        db.ForeignKey(schema + '.data.id'),
                         nullable = False)
     position = db.Column(db.Integer, nullable = False)
     name = db.Column(db.String(128))
