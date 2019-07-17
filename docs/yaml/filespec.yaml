@@ -5,7 +5,7 @@ datamodels:
    name: "apogee_tgas-{tree}.fits"
    ext: "fits"
    fits_path_example: "$APOGEE_TGAS/apogee_tgas-DR14.fits"
-   note: " "
+   note: ""
 
  - path: "IRCAM_DATA/MJD/cR.html"
    env_label: "IRCAM_DATA"
@@ -13,7 +13,7 @@ datamodels:
    name: "cR{????}.fit.gz"
    ext: "fit.gz"
    fits_path_example: "$IRCAM_DATA/57580/cR140000.fit.gz"
-   note: " "
+   note: ""
 
  - path: "IRCAM_DATA/MJD/irsc.html"
    env_label: "IRCAM_DATA"
@@ -21,7 +21,7 @@ datamodels:
    name: "irsc.log.gz"
    ext: "log.gz"
    fits_path_example: "$IRCAM_DATA/57580/irsc.log.gz"
-   note: " "
+   note: ""
 
  - path: "EBOSS_ELG/composite/ELG_COMPOSITE_VER/eBOSS_ELG_composite.html"
    env_label: "EBOSS_ELG"
@@ -29,7 +29,7 @@ datamodels:
    name: "eBOSS_ELG_composite.fits"
    ext: "fits"
    fits_path_example: "$EBOSS_ELG/composite/v1_0/eBOSS_ELG_composite.fits"
-   note: " "
+   note: ""
 
  - path: "EBOSS_ELG/composite/ELG_COMPOSITE_VER/eBOSS_ELG_NUV_composite.html"
    env_label: "EBOSS_ELG"
@@ -37,7 +37,7 @@ datamodels:
    name: "eBOSS_ELG_NUV_composite.fits"
    ext: "fits"
    fits_path_example: "$EBOSS_ELG/composite/v1_0/eBOSS_ELG_NUV_composite.fits"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html"
    env_label: "MARVELS_REDUX"
@@ -45,7 +45,7 @@ datamodels:
    name: "KEPLER4_S120_TYC-3544-01401-1_BEAM2.csv ???? what are the {} here????"
    ext: "csv"
    fits_path_example: "$MARVELS_REDUX/v003.06/ASCII/KEPLER4/KEPLER4_S120_TYC-3544-01401-1_BEAM2.csv"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/tio1d_PLATENAME.html"
    env_label: "MARVELS_REDUX"
@@ -53,7 +53,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/tioprof_PLATENAME.html"
    env_label: "MARVELS_REDUX"
@@ -61,7 +61,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/starrv_PLATENAME.html"
    env_label: "MARVELS_REDUX"
@@ -69,7 +69,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/exposureinfo_PLATENAME.html"
    env_label: "MARVELS_REDUX"
@@ -77,7 +77,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/starprof_PLATENAME.html"
    env_label: "MARVELS_REDUX"
@@ -85,7 +85,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/star1d_PLATENAME.html"
    env_label: "MARVELS_REDUX"
@@ -93,7 +93,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html"
    env_label: "MARVELS_REDUX"
@@ -101,7 +101,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/TEMP/plPlugMapR.html"
    env_label: "MARVELS_REDUX"
@@ -109,7 +109,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/MJD/reduction1/processed_images/ft.fits.html"
    env_label: "MARVELS_REDUX"
@@ -117,7 +117,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/MJD/reduction1/whirls/ft.whrl.html"
    env_label: "MARVELS_REDUX"
@@ -125,7 +125,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/RESULTS/results_platename.html"
    env_label: "MARVELS_REDUX"
@@ -133,7 +133,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplanfile.html"
    env_label: "MARVELS_REDUX"
@@ -141,7 +141,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/PARAMS/fibretranslationtable.html"
    env_label: "MARVELS_REDUX"
@@ -149,7 +149,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplantable.html"
    env_label: "MARVELS_REDUX"
@@ -157,7 +157,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoMatchPlate.html"
    env_label: "SPECTRO_MATCH"
@@ -165,7 +165,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_MATCH/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoPlate.html"
    env_label: "SPECTRO_MATCH"
@@ -173,7 +173,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_MATCH/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoPosPlate.html"
    env_label: "SPECTRO_MATCH"
@@ -181,7 +181,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_MATCH/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin_full.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -189,7 +189,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -197,7 +197,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_stellarmass.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -205,7 +205,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/granada_fsps.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -213,7 +213,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/wisconsin_pca.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -221,7 +221,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/wisconsin/pca/wisconsin_pca.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -229,7 +229,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_stellarmass.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -237,7 +237,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_masspdf.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -245,7 +245,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/emlinekin/portsmouth_emlinekin.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -253,7 +253,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/granada/fsps/granada_fsps.html"
    env_label: "BOSS_GALAXY_REDUX"
@@ -261,7 +261,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_GALAXY_REDUX/"
-   note: " "
+   note: ""
 
  - path: "REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/redmonsterAll.html"
    env_label: "REDMONSTER_SPECTRO_REDUX"
@@ -269,7 +269,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$REDMONSTER_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html"
    env_label: "REDMONSTER_SPECTRO_REDUX"
@@ -277,7 +277,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$REDMONSTER_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_TARGET/TARGET_RUN/bosstarget.html"
    env_label: "BOSS_TARGET"
@@ -285,7 +285,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LYA/mocks/rawlite_VERS.html"
    env_label: "BOSS_LYA"
@@ -293,7 +293,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LYA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LYA/mocks/VERS/rawlite/PLATE4/mock_lya.html"
    env_label: "BOSS_LYA"
@@ -301,7 +301,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LYA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LYA/mocks/VERS/rawlite/PLATE4/mockrawShort_lya.html"
    env_label: "BOSS_LYA"
@@ -309,7 +309,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LYA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LYA/cat/speclya.html"
    env_label: "BOSS_LYA"
@@ -317,7 +317,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LYA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LYA/cat/BOSSLyaDR9_spectra.html"
    env_label: "BOSS_LYA"
@@ -325,7 +325,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LYA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LYA/cat/BOSSLyaDR9_cat.html"
    env_label: "BOSS_LYA"
@@ -333,7 +333,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LYA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LYA/cat/residcorr_v5_4_45.html"
    env_label: "BOSS_LYA"
@@ -341,7 +341,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LYA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/platelist.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -349,7 +349,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/platequality.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -357,7 +357,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spAlldat.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -365,7 +365,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spAllLine.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -373,7 +373,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spAll.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -381,7 +381,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcorr.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -389,7 +389,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -397,7 +397,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -405,7 +405,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlan.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -413,7 +413,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -421,7 +421,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spArc.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -429,7 +429,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxdistort.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -437,7 +437,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFlat.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -445,7 +445,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcalib.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -453,7 +453,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFrame.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -461,7 +461,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -469,7 +469,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spXYthrucorr.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -477,7 +477,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spSN2d.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -485,7 +485,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -493,7 +493,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -501,7 +501,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -509,7 +509,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -517,7 +517,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spectra/spAll-SUBSET.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -525,7 +525,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spectra/specfiles.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -533,7 +533,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -541,7 +541,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spectra/lite/PLATE4/spec.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -549,7 +549,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_REDUX/images/RUN2D/RUN1D/PLATE4-MJD/spec-image-PLATE4-MJD-FIBER4.html"
    env_label: "BOSS_SPECTRO_REDUX"
@@ -557,7 +557,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skyymodel.html"
    env_label: "PHOTO_SKY"
@@ -565,7 +565,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SKY/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skyframes.html"
    env_label: "PHOTO_SKY"
@@ -573,7 +573,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SKY/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skymodel.html"
    env_label: "PHOTO_SKY"
@@ -581,7 +581,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SKY/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skymask.html"
    env_label: "PHOTO_SKY"
@@ -589,7 +589,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SKY/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skyweights.html"
    env_label: "PHOTO_SKY"
@@ -597,7 +597,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SKY/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/qa/skyvals.html"
    env_label: "PHOTO_SKY"
@@ -605,7 +605,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SKY/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/qa/skyqa.html"
    env_label: "PHOTO_SKY"
@@ -613,7 +613,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SKY/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_DATA_1M/MJD5/apR.html"
    env_label: "APOGEE_DATA_1M"
@@ -621,15 +621,15 @@ datamodels:
    name: "apR-c-19810052.apz"
    ext: "apz"
    fits_path_example: "$APOGEE_DATA_1M/57543/apR-c-19810052.apz"
-   note: " "
+   note: "There's no apR*.fits files, though the datamodel File type is FITS --- the apz files can be opened as a fits file."
 
  - path: "APOGEE_DATA_1M/MJD5/MJD5.html"
    env_label: "APOGEE_DATA_1M"
-   location: ""
-   name: " "
-   ext: " "
-   fits_path_example: "$APOGEE_DATA_1M/"
-   note: " "
+   location: "{mjd}"
+   name: "{mjd}.log.html"
+   ext: "log.html"
+   fits_path_example: "$APOGEE_DATA_1M/57543/57543.log.html"
+   note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/idSysLog.html"
    env_label: "APO_ROOT"
@@ -637,7 +637,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APO_ROOT/"
-   note: " "
+   note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/idCCDLog.html"
    env_label: "APO_ROOT"
@@ -645,7 +645,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APO_ROOT/"
-   note: " "
+   note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/sdReport.html"
    env_label: "APO_ROOT"
@@ -653,7 +653,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APO_ROOT/"
-   note: " "
+   note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/idReport.html"
    env_label: "APO_ROOT"
@@ -661,7 +661,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APO_ROOT/"
-   note: " "
+   note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/mdReport.html"
    env_label: "APO_ROOT"
@@ -669,7 +669,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APO_ROOT/"
-   note: " "
+   note: ""
 
  - path: "APO_ROOT/murmurlog/MJD5/murmur.html"
    env_label: "APO_ROOT"
@@ -677,7 +677,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APO_ROOT/"
-   note: " "
+   note: ""
 
  - path: "APO_ROOT/bias/MJD5/idB.html"
    env_label: "APO_ROOT"
@@ -685,7 +685,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APO_ROOT/"
-   note: " "
+   note: ""
 
  - path: "STAGING_DATA/oplogs/MJD/idCCDLog.html"
    env_label: "STAGING_DATA"
@@ -693,7 +693,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$STAGING_DATA/"
-   note: " "
+   note: ""
 
  - path: "STAGING_DATA/oplogs/MJD/sdReport.html"
    env_label: "STAGING_DATA"
@@ -701,7 +701,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$STAGING_DATA/"
-   note: " "
+   note: ""
 
  - path: "STAGING_DATA/oplogs/MJD/idReport.html"
    env_label: "STAGING_DATA"
@@ -709,7 +709,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$STAGING_DATA/"
-   note: " "
+   note: ""
 
  - path: "STAGING_DATA/oplogs/MJD/mdReport.html"
    env_label: "STAGING_DATA"
@@ -717,7 +717,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$STAGING_DATA/"
-   note: " "
+   note: ""
 
  - path: "STAGING_DATA/gangs/MJD/gangs.list.html"
    env_label: "STAGING_DATA"
@@ -725,7 +725,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$STAGING_DATA/"
-   note: " "
+   note: ""
 
  - path: "GCAM_DATA/MJD/proc-gimg.html"
    env_label: "GCAM_DATA"
@@ -733,7 +733,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$GCAM_DATA/"
-   note: " "
+   note: ""
 
  - path: "GCAM_DATA/MJD/gimg.html"
    env_label: "GCAM_DATA"
@@ -741,7 +741,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$GCAM_DATA/"
-   note: " "
+   note: ""
 
  - path: "GCAM_DATA/MJD/dark.html"
    env_label: "GCAM_DATA"
@@ -749,7 +749,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$GCAM_DATA/"
-   note: " "
+   note: ""
 
  - path: "GCAM_DATA/MJD/flat.html"
    env_label: "GCAM_DATA"
@@ -757,7 +757,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$GCAM_DATA/"
-   note: " "
+   note: ""
 
  - path: "GCAM_DATA/MJD/movie.html"
    env_label: "GCAM_DATA"
@@ -765,7 +765,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$GCAM_DATA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/randomN_DRX_SAMPLE_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -773,7 +773,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/galaxy_DR10v8_SAMPLE_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -781,7 +781,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html"
    env_label: "BOSS_LSS_REDUX"
@@ -789,7 +789,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/mask_DRX_SAMPLE_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -797,7 +797,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/data_DR14_LRG_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -805,7 +805,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html"
    env_label: "BOSS_LSS_REDUX"
@@ -813,7 +813,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html"
    env_label: "BOSS_LSS_REDUX"
@@ -821,7 +821,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html"
    env_label: "BOSS_LSS_REDUX"
@@ -829,7 +829,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/random_DR14_LRG_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -837,7 +837,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/randoms_DR9_CMASS_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -845,7 +845,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-specObj.html"
    env_label: "BOSS_LSS_REDUX"
@@ -853,7 +853,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-photoObj.html"
    env_label: "BOSS_LSS_REDUX"
@@ -861,7 +861,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/data_DR14_QSO_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -869,7 +869,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html"
    env_label: "BOSS_LSS_REDUX"
@@ -877,7 +877,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html"
    env_label: "BOSS_LSS_REDUX"
@@ -885,7 +885,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/random_DR14_QSO_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -893,7 +893,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -901,7 +901,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/galaxies_DR9_CMASS_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -909,7 +909,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/randomN_DR10v8_SAMPLE_NS.html"
    env_label: "BOSS_LSS_REDUX"
@@ -917,7 +917,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_patchy_mocks/Patchy-Mocks-DRXSAMPLENS-VERSION-IDNUM.html"
    env_label: "BOSS_LSS_REDUX"
@@ -925,7 +925,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_patchy_mocks/PATCHY-Mocks-Randoms-DRXSAMPLENS-VERSION-xN.html"
    env_label: "BOSS_LSS_REDUX"
@@ -933,7 +933,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/reject_mask/MASK.html"
    env_label: "BOSS_LSS_REDUX"
@@ -941,7 +941,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/mask/MASK.html"
    env_label: "BOSS_LSS_REDUX"
@@ -949,7 +949,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html"
    env_label: "BOSS_LSS_REDUX"
@@ -957,7 +957,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html"
    env_label: "BOSS_LSS_REDUX"
@@ -965,7 +965,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html"
    env_label: "BOSS_LSS_REDUX"
@@ -973,7 +973,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html"
    env_label: "BOSS_LSS_REDUX"
@@ -981,7 +981,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_LSS_REDUX/"
-   note: " "
+   note: ""
 
  - path: "EBOSS_FIREFLY/FIREFLY_VER/sdss_eboss_firefly.html"
    env_label: "EBOSS_FIREFLY"
@@ -989,7 +989,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$EBOSS_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "EBOSS_FIREFLY/FIREFLY_VER/RUN2D/sdss_firefly.html"
    env_label: "EBOSS_FIREFLY"
@@ -997,7 +997,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$EBOSS_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "EBOSS_FIREFLY/FIREFLY_VER/RUN2D/eboss_firefly.html"
    env_label: "EBOSS_FIREFLY"
@@ -1005,7 +1005,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$EBOSS_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFly.html"
    env_label: "EBOSS_FIREFLY"
@@ -1013,7 +1013,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$EBOSS_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html"
    env_label: "EBOSS_FIREFLY"
@@ -1021,7 +1021,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$EBOSS_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "SEGUE2_TARGET_ALL/RERUN/RUN/seguetsObjAll.html"
    env_label: "SEGUE2_TARGET_ALL"
@@ -1029,7 +1029,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SEGUE2_TARGET_ALL/"
-   note: " "
+   note: ""
 
  - path: "SEGUE2_TARGET_ALL/RERUN/RUN/segue2TargetAll.html"
    env_label: "SEGUE2_TARGET_ALL"
@@ -1037,7 +1037,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SEGUE2_TARGET_ALL/"
-   note: " "
+   note: ""
 
  - path: "SEGUE2_TARGET_ALL/RERUN/RUN/seguetsCasObj.html"
    env_label: "SEGUE2_TARGET_ALL"
@@ -1045,7 +1045,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SEGUE2_TARGET_ALL/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastar-goodspec-DRPVER-MPROCVER.html"
    env_label: "MANGA_SPECTRO_MASTAR"
@@ -1053,7 +1053,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_MASTAR/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastarall-DRPVER-MPROCVER.html"
    env_label: "MANGA_SPECTRO_MASTAR"
@@ -1061,7 +1061,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_MASTAR/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/drpall.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1069,7 +1069,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1077,7 +1077,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1085,7 +1085,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1093,7 +1093,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1101,7 +1101,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1109,7 +1109,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1117,7 +1117,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1125,7 +1125,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html"
    env_label: "MANGA_SPECTRO_REDUX"
@@ -1133,7 +1133,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "ECAM_DATA/MJD/all_files.html"
    env_label: "ECAM_DATA"
@@ -1141,7 +1141,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$ECAM_DATA/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/photoRunAll.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1149,7 +1149,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/astromQAFields.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1157,7 +1157,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/astromqa.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1165,7 +1165,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/astromQAImage.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1173,7 +1173,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQASummary.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1181,7 +1181,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQAFieldSummary.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1189,7 +1189,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQAImage.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1197,7 +1197,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQAFieldFlag.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1205,7 +1205,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/CAMCOL/astromQA.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1213,7 +1213,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/starastro/starastro.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1221,7 +1221,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/plots/RERUN/RUN/astromQA-offsets.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1229,7 +1229,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/RERUN/RUN/photoRun.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1237,7 +1237,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/RERUN/RUN/photoField.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1245,7 +1245,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/RERUN/RUN/CAMCOL/photoObj.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1253,7 +1253,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/frames/RERUN/RUN/CAMCOL/frame.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1261,7 +1261,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/xdqso/xdqso_index.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1269,7 +1269,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/xdqso/xdcore/xdcore_RUN6.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1277,7 +1277,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1285,7 +1285,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1293,7 +1293,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/photoz-weight/pofz.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1301,7 +1301,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoMatchPlate.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1309,7 +1309,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoPlate.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1317,7 +1317,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoPosPlate.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1325,7 +1325,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/PM/RERUN/RUN/photoPM.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1333,7 +1333,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/PM/RERUN/RUN/CAMCOL/photoPM.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1341,7 +1341,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/RC3/RERUN/RUN/photoRC3Camcol.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1349,7 +1349,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/RC3/RERUN/RUN/CAMCOL/photoRC3.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1357,7 +1357,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/WISEForcedTarget/RERUN/RUN/CAMCOL/photoWISEForcedTarget.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1365,7 +1365,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/First/RERUN/RUN/photoFirstCamcol.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1373,7 +1373,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/First/RERUN/RUN/CAMCOL/photoFirst.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1381,7 +1381,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/USNOB/RERUN/RUN/photoUSNOBCamcol.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1389,7 +1389,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/USNOB/RERUN/RUN/CAMCOL/photoUSNOB.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1397,7 +1397,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/ROSAT/RERUN/RUN/photoROSATCamcol.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1405,7 +1405,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/ROSAT/RERUN/RUN/CAMCOL/photoROSAT.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1413,7 +1413,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/2MASS/RERUN/RUN/photo2MASSCamcol.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1421,7 +1421,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/2MASS/RERUN/RUN/CAMCOL/photo2MASS.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1429,7 +1429,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/WISE/RERUN/RUN/CAMCOL/photoWISE.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1437,7 +1437,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/2MASSXSC/RERUN/RUN/photo2MASSXSCCamcol.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1445,7 +1445,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "BOSS_PHOTOOBJ/external/2MASSXSC/RERUN/RUN/CAMCOL/photo2MASSXSC.html"
    env_label: "BOSS_PHOTOOBJ"
@@ -1453,7 +1453,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_PHOTOOBJ/"
-   note: " "
+   note: ""
 
  - path: "MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html"
    env_label: "MANGAPREIM_DIR"
@@ -1461,23 +1461,23 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGAPREIM_DIR/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_DATA/MJD5/apR.html"
    env_label: "APOGEE_DATA"
-   location: ""
-   name: " "
-   ext: " "
-   fits_path_example: "$APOGEE_DATA/"
-   note: " "
+   location: "{mjd}"
+   name: "apR-c-15210030.fits"
+   ext: "fits"
+   fits_path_example: "$APOGEE_DATA/57083/apR-c-15210030.fits"
+   note: ""
 
  - path: "APOGEE_DATA/MJD5/MJD5.html"
    env_label: "APOGEE_DATA"
-   location: ""
-   name: " "
-   ext: " "
-   fits_path_example: "$APOGEE_DATA/"
-   note: " "
+   location: "{mjd}"
+   name: "{mjd}.log.html"
+   ext: "log.html"
+   fits_path_example: "$APOGEE_DATA//57583/57583.log.html"
+   note: ""
 
  - path: "SDSS_TILING/final/sdss_tiling_polygons.html"
    env_label: "SDSS_TILING"
@@ -1485,7 +1485,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SDSS_TILING/"
-   note: " "
+   note: ""
 
  - path: "SDSS_TILING/final/sdss_tiles.html"
    env_label: "SDSS_TILING"
@@ -1493,7 +1493,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SDSS_TILING/"
-   note: " "
+   note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/csv_ready.html"
    env_label: "CAS_LOAD"
@@ -1501,7 +1501,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$CAS_LOAD/"
-   note: " "
+   note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlField.html"
    env_label: "CAS_LOAD"
@@ -1509,7 +1509,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$CAS_LOAD/"
-   note: " "
+   note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoProfile.html"
    env_label: "CAS_LOAD"
@@ -1517,7 +1517,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$CAS_LOAD/"
-   note: " "
+   note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlFieldProfile.html"
    env_label: "CAS_LOAD"
@@ -1525,7 +1525,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$CAS_LOAD/"
-   note: " "
+   note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlRun.html"
    env_label: "CAS_LOAD"
@@ -1533,7 +1533,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$CAS_LOAD/"
-   note: " "
+   note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoObjAll.html"
    env_label: "CAS_LOAD"
@@ -1541,7 +1541,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$CAS_LOAD/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/bosschunks.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1549,7 +1549,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/bosstiles.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1557,7 +1557,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/geometry/boss_sector2tile.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1565,7 +1565,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/geometry/boss_locations.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1573,7 +1573,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/geometry/boss_sectors.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1581,7 +1581,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/geometry/boss_geometry.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1589,7 +1589,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/final-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1597,7 +1597,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/platePlans-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1605,7 +1605,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/sector-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1613,7 +1613,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/tiles-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1621,7 +1621,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/stpair-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1629,7 +1629,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/geometry-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1637,7 +1637,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/plugtest-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1645,7 +1645,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1653,7 +1653,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/inputs/bossN/targets-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1661,7 +1661,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-targets.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1669,7 +1669,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-bossN.html"
    env_label: "BOSSTILELIST_DIR"
@@ -1677,7 +1677,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTILELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATEDESIGN_DIR/defaults/plateDefault.html"
    env_label: "PLATEDESIGN_DIR"
@@ -1685,7 +1685,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATEDESIGN_DIR/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetClusters.html"
    env_label: "SPIDERS_TARGET"
@@ -1693,7 +1693,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetSequelsClus.html"
    env_label: "SPIDERS_TARGET"
@@ -1701,7 +1701,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetAGN-SPIDERS_XMMSL_AGN.html"
    env_label: "SPIDERS_TARGET"
@@ -1709,7 +1709,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetAGN-SPIDERS_RASS_AGN.html"
    env_label: "SPIDERS_TARGET"
@@ -1717,7 +1717,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetSequelsAGN.html"
    env_label: "SPIDERS_TARGET"
@@ -1725,7 +1725,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/dapall.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1733,7 +1733,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/manga-MAPS-DAPTYPE.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1741,7 +1741,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/manga-LOGCUBE-DAPTYPE.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1749,7 +1749,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1757,7 +1757,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELMKEY.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1765,7 +1765,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1773,7 +1773,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1781,7 +1781,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-SIKEY.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1789,7 +1789,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-ELMKEY.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1797,7 +1797,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-BINKEY.html"
    env_label: "MANGA_SPECTRO_ANALYSIS"
@@ -1805,7 +1805,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "RAWDATA_DIR/MJD/frames.list.html"
    env_label: "RAWDATA_DIR"
@@ -1813,7 +1813,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$RAWDATA_DIR/"
-   note: " "
+   note: ""
 
  - path: "RAWDATA_DIR/MJD/MJD.md5sum.html"
    env_label: "RAWDATA_DIR"
@@ -1821,7 +1821,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$RAWDATA_DIR/"
-   note: " "
+   note: ""
 
  - path: "RAWDATA_DIR/MJD/sdR.html"
    env_label: "RAWDATA_DIR"
@@ -1829,7 +1829,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$RAWDATA_DIR/"
-   note: " "
+   note: ""
 
  - path: "RAWDATA_DIR/MJD/guider/gimg.html"
    env_label: "RAWDATA_DIR"
@@ -1837,7 +1837,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$RAWDATA_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html"
    env_label: "MANGA_TARGET"
@@ -1845,7 +1845,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html"
    env_label: "APOGEE_OBSOLETE"
@@ -1853,7 +1853,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_OBSOLETE/"
-   note: " "
+   note: "???? There's no environmental variable $APOGEE_OBSOLETE ????"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFluxError.html"
    env_label: "APOGEE_OBSOLETE"
@@ -1861,7 +1861,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_OBSOLETE/"
-   note: " "
+   note: "???? There's no environmental variable $APOGEE_OBSOLETE ????"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFlux.html"
    env_label: "APOGEE_OBSOLETE"
@@ -1869,7 +1869,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_OBSOLETE/"
-   note: " "
+   note: "???? There's no environmental variable $APOGEE_OBSOLETE ????"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapParam.html"
    env_label: "APOGEE_OBSOLETE"
@@ -1877,7 +1877,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_OBSOLETE/"
-   note: " "
+   note: "???? There's no environmental variable $APOGEE_OBSOLETE ????"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapCova.html"
    env_label: "APOGEE_OBSOLETE"
@@ -1885,7 +1885,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_OBSOLETE/"
-   note: " "
+   note: "???? There's no environmental variable $APOGEE_OBSOLETE ????"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/lib/aspcapSynth.html"
    env_label: "APOGEE_OBSOLETE"
@@ -1893,7 +1893,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_OBSOLETE/"
-   note: " "
+   note: "???? There's no environmental variable $APOGEE_OBSOLETE ????"
 
  - path: "SSPP_REDUX/ssppOut.html"
    env_label: "SSPP_REDUX"
@@ -1901,7 +1901,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/ssppOut_lineindex.html"
    env_label: "SSPP_REDUX"
@@ -1909,7 +1909,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/ssppPlates.html"
    env_label: "SSPP_REDUX"
@@ -1917,7 +1917,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/ssppTargets.html"
    env_label: "SSPP_REDUX"
@@ -1925,7 +1925,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/targets/PLATE4/segueTargetPlate.html"
    env_label: "SSPP_REDUX"
@@ -1933,7 +1933,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/targets/all/plate2targetfile.html"
    env_label: "SSPP_REDUX"
@@ -1941,7 +1941,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/targets/all/segueTarget.html"
    env_label: "SSPP_REDUX"
@@ -1949,7 +1949,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/RERUN/plate_mjds_done.html"
    env_label: "SSPP_REDUX"
@@ -1957,7 +1957,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/RERUN/plate_mjds_sspp.html"
    env_label: "SSPP_REDUX"
@@ -1965,7 +1965,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut.html"
    env_label: "SSPP_REDUX"
@@ -1973,7 +1973,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut_lineindex.html"
    env_label: "SSPP_REDUX"
@@ -1981,7 +1981,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SSPP_REDUX/duplicates/dup.html"
    env_label: "SSPP_REDUX"
@@ -1989,7 +1989,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SSPP_REDUX/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECZ/DRPVER/SPECZVER/speczall.html"
    env_label: "MANGA_SPECZ"
@@ -1997,7 +1997,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECZ/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-RSS.html"
    env_label: "MANGA_SPECZ"
@@ -2005,7 +2005,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECZ/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html"
    env_label: "MANGA_SPECZ"
@@ -2013,7 +2013,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECZ/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_CALIB/RERUN/RUN/nfcalib/calibPhotomGlobal.html"
    env_label: "PHOTO_CALIB"
@@ -2021,7 +2021,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_CALIB/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_ANALYSIS/spiders_quasar_bhmass.html"
    env_label: "SPIDERS_ANALYSIS"
@@ -2029,7 +2029,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_ANALYSIS/VAC_spiders_2RXS.html"
    env_label: "SPIDERS_ANALYSIS"
@@ -2037,7 +2037,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_ANALYSIS/VAC_spiders_XMMSL.html"
    env_label: "SPIDERS_ANALYSIS"
@@ -2045,7 +2045,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_ANALYSIS/catCluster-SPIDERS_RASS_CLUS.html"
    env_label: "SPIDERS_ANALYSIS"
@@ -2053,7 +2053,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "SPIDERS_ANALYSIS/SpidersXclusterBCGs.html"
    env_label: "SPIDERS_ANALYSIS"
@@ -2061,7 +2061,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPIDERS_ANALYSIS/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/thingIndex.html"
    env_label: "PHOTO_RESOLVE"
@@ -2069,7 +2069,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/window_unified.html"
    env_label: "PHOTO_RESOLVE"
@@ -2077,7 +2077,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/window_blist_noindx.html"
    env_label: "PHOTO_RESOLVE"
@@ -2085,7 +2085,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/thingList.html"
    env_label: "PHOTO_RESOLVE"
@@ -2093,7 +2093,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/window_bcaps.html"
    env_label: "PHOTO_RESOLVE"
@@ -2101,7 +2101,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/window_bindx.html"
    env_label: "PHOTO_RESOLVE"
@@ -2109,7 +2109,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/window_flist.html"
    env_label: "PHOTO_RESOLVE"
@@ -2117,7 +2117,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/window_findx.html"
    env_label: "PHOTO_RESOLVE"
@@ -2125,7 +2125,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/window_blist.html"
    env_label: "PHOTO_RESOLVE"
@@ -2133,7 +2133,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/window_findx_unsorted.html"
    env_label: "PHOTO_RESOLVE"
@@ -2141,7 +2141,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_RESOLVE/RERUN/RUN/resolve/CAMCOL/reObjGlobal.html"
    env_label: "PHOTO_RESOLVE"
@@ -2149,23 +2149,23 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_RESOLVE/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_OCCAM/occam_member.html"
    env_label: "APOGEE_OCCAM"
    location: ""
-   name: " "
-   ext: " "
-   fits_path_example: "$APOGEE_OCCAM/"
-   note: " "
+   name: "occam_member-{tree}.fits"
+   ext: "fits"
+   fits_path_example: "$APOGEE_OCCAM/occam_member-DR14.fits"
+   note: ""
 
  - path: "APOGEE_OCCAM/occam_cluster.html"
    env_label: "APOGEE_OCCAM"
    location: ""
-   name: " "
-   ext: " "
-   fits_path_example: "$APOGEE_OCCAM/"
-   note: " "
+   name: "occam_cluster-{tree}.fits"
+   ext: "fits"
+   fits_path_example: "$APOGEE_OCCAM/occam_cluster-DR14.fits"
+   note: ""
 
  - path: "MANGA_MORPHOLOGY/deep_learning/DL_VER/manga-morphology-dl.html"
    env_label: "MANGA_MORPHOLOGY"
@@ -2173,7 +2173,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_MORPHOLOGY/"
-   note: " "
+   note: ""
 
  - path: "MANGA_MORPHOLOGY/galaxyzoo/MaNGA_gz.html"
    env_label: "MANGA_MORPHOLOGY"
@@ -2181,7 +2181,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_MORPHOLOGY/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_DATA/MJD/done.html"
    env_label: "MARVELS_DATA"
@@ -2189,7 +2189,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_DATA/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_DATA/MJD/MJD.md5sum.html"
    env_label: "MARVELS_DATA"
@@ -2197,7 +2197,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_DATA/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_DATA/MJD/logs_qualityassurance/MARVELS1_QALOG.html"
    env_label: "MARVELS_DATA"
@@ -2205,7 +2205,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_DATA/"
-   note: " "
+   note: ""
 
  - path: "MARVELS_DATA/MJD/et1/MARVELS1.html"
    env_label: "MARVELS_DATA"
@@ -2213,7 +2213,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MARVELS_DATA/"
-   note: " "
+   note: ""
 
  - path: "BOSSTARGET_DIR/data/geometry/boss_survey.html"
    env_label: "BOSSTARGET_DIR"
@@ -2221,23 +2221,23 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSSTARGET_DIR/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_RC/cat/apogee-rc-DR14.html"
    env_label: "APOGEE_RC"
-   location: ""
-   name: " "
-   ext: " "
-   fits_path_example: "$APOGEE_RC/"
-   note: " "
+   location: "cat"
+   name: "apogee-rc-{tree}.fits"
+   ext: "fits"
+   fits_path_example: "$APOGEE_RC/cat/apogee-rc-DR14.fits"
+   note: ""
 
  - path: "APOGEE_RC/cat/apogee-rc-DR13.html"
    env_label: "APOGEE_RC"
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_RC/"
-   note: " "
+   fits_path_example: ""
+   note: "Does not exist in dr15: $APOGEE_RC/cat/apogee-rc-DR13.fits"
 
  - path: "APOGEE_RC/cat/apogee-rc-DR12.html"
    env_label: "APOGEE_RC"
@@ -2245,7 +2245,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_RC/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_RC/cat/apogee-rc-DR11.html"
    env_label: "APOGEE_RC"
@@ -2253,7 +2253,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_RC/"
-   note: " "
+   note: ""
 
  - path: "MANGA_FIREFLY/FIREFLY_VER/manga_firefly.html"
    env_label: "MANGA_FIREFLY"
@@ -2261,7 +2261,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "MANGA_FIREFLY/FIREFLY_VER/manga_firefly-GLOBALPROP.html"
    env_label: "MANGA_FIREFLY"
@@ -2269,7 +2269,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "MANGA_FIREFLY/FIREFLY_VER/manga_firefly-STELLARPOP.html"
    env_label: "MANGA_FIREFLY"
@@ -2277,7 +2277,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "MANGA_FIREFLY/FIREFLY_VER/manga_firefly-INDICES.html"
    env_label: "MANGA_FIREFLY"
@@ -2285,7 +2285,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_FIREFLY/"
-   note: " "
+   note: ""
 
  - path: "APOLOGS_DIR/LOG_NAME/apologs.html"
    env_label: "APOLOGS_DIR"
@@ -2293,7 +2293,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOLOGS_DIR/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/runList.html"
    env_label: "PHOTO_REDUX"
@@ -2301,7 +2301,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpFieldStat.html"
    env_label: "PHOTO_REDUX"
@@ -2309,7 +2309,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psBB.html"
    env_label: "PHOTO_REDUX"
@@ -2317,7 +2317,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpAtlas.html"
    env_label: "PHOTO_REDUX"
@@ -2325,7 +2325,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psField.html"
    env_label: "PHOTO_REDUX"
@@ -2333,7 +2333,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpM.html"
    env_label: "PHOTO_REDUX"
@@ -2341,7 +2341,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpBIN.html"
    env_label: "PHOTO_REDUX"
@@ -2349,7 +2349,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psFF.html"
    env_label: "PHOTO_REDUX"
@@ -2357,7 +2357,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpObjc.html"
    env_label: "PHOTO_REDUX"
@@ -2365,7 +2365,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psCT.html"
    env_label: "PHOTO_REDUX"
@@ -2373,7 +2373,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/ssc/koCat.html"
    env_label: "PHOTO_REDUX"
@@ -2381,7 +2381,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/ssc/scParam.html"
    env_label: "PHOTO_REDUX"
@@ -2389,7 +2389,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/ssc/scPlan.html"
    env_label: "PHOTO_REDUX"
@@ -2397,7 +2397,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/resolve/CAMCOL/reObjRun.html"
    env_label: "PHOTO_REDUX"
@@ -2405,7 +2405,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/astrom/asParam.html"
    env_label: "PHOTO_REDUX"
@@ -2413,7 +2413,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/astrom/asQA.html"
    env_label: "PHOTO_REDUX"
@@ -2421,7 +2421,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/astrom/asPlan.html"
    env_label: "PHOTO_REDUX"
@@ -2429,7 +2429,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/opConfig.html"
    env_label: "PHOTO_REDUX"
@@ -2437,7 +2437,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/opECalib.html"
    env_label: "PHOTO_REDUX"
@@ -2445,7 +2445,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/opCamera.html"
    env_label: "PHOTO_REDUX"
@@ -2453,7 +2453,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/idReport.html"
    env_label: "PHOTO_REDUX"
@@ -2461,7 +2461,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/idWeather.html"
    env_label: "PHOTO_REDUX"
@@ -2469,7 +2469,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/opBC.html"
    env_label: "PHOTO_REDUX"
@@ -2477,7 +2477,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/idFrameLog.html"
    env_label: "PHOTO_REDUX"
@@ -2485,7 +2485,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/nfcalib/calibMatch.html"
    env_label: "PHOTO_REDUX"
@@ -2493,7 +2493,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/nfcalib/calibPhotom.html"
    env_label: "PHOTO_REDUX"
@@ -2501,7 +2501,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/window/wiField.html"
    env_label: "PHOTO_REDUX"
@@ -2509,7 +2509,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/window/wiScanline.html"
    env_label: "PHOTO_REDUX"
@@ -2517,7 +2517,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/window/wiRun.html"
    env_label: "PHOTO_REDUX"
@@ -2525,7 +2525,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/window/wiTrimRun.html"
    env_label: "PHOTO_REDUX"
@@ -2533,7 +2533,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/fpPlan.html"
    env_label: "PHOTO_REDUX"
@@ -2541,7 +2541,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/psPlan.html"
    env_label: "PHOTO_REDUX"
@@ -2549,7 +2549,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/psParam.html"
    env_label: "PHOTO_REDUX"
@@ -2557,7 +2557,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/fpParam.html"
    env_label: "PHOTO_REDUX"
@@ -2565,7 +2565,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/calib/idB.html"
    env_label: "PHOTO_REDUX"
@@ -2573,7 +2573,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SEGUE_TARGET/segue1TargetObjSetAllDup.html"
    env_label: "SEGUE_TARGET"
@@ -2581,7 +2581,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SEGUE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APO_SPECTRO_DATA/MJD5/sdR.html"
    env_label: "APO_SPECTRO_DATA"
@@ -2589,7 +2589,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APO_SPECTRO_DATA/"
-   note: " "
+   note: ""
 
  - path: "MANGA_HI/HIPVER/mangaHIall.html"
    env_label: "MANGA_HI"
@@ -2597,7 +2597,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_HI/"
-   note: " "
+   note: ""
 
  - path: "MANGA_HI/HIPVER/mangaHIbonus.html"
    env_label: "MANGA_HI"
@@ -2605,7 +2605,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_HI/"
-   note: " "
+   note: ""
 
  - path: "MANGA_HI/HIPVER/spectra/HIPROP/mangaHI.html"
    env_label: "MANGA_HI"
@@ -2613,7 +2613,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_HI/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cat.fits.html"
    env_label: "APOGEE_REDUX"
@@ -2621,7 +2621,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apCframe.html"
    env_label: "APOGEE_REDUX"
@@ -2629,7 +2629,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlan.html"
    env_label: "APOGEE_REDUX"
@@ -2637,7 +2637,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlate.html"
    env_label: "APOGEE_REDUX"
@@ -2645,7 +2645,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apVisit.html"
    env_label: "APOGEE_REDUX"
@@ -2653,7 +2653,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html"
    env_label: "APOGEE_REDUX"
@@ -2661,7 +2661,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/flux/apFlux.html"
    env_label: "APOGEE_REDUX"
@@ -2669,7 +2669,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/bpm/apBPM.html"
    env_label: "APOGEE_REDUX"
@@ -2677,7 +2677,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/detector/apDetector.html"
    env_label: "APOGEE_REDUX"
@@ -2685,7 +2685,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/darkcorr/apDark.html"
    env_label: "APOGEE_REDUX"
@@ -2693,7 +2693,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/flatcorr/apFlat.html"
    env_label: "APOGEE_REDUX"
@@ -2701,7 +2701,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/wave/apWave.html"
    env_label: "APOGEE_REDUX"
@@ -2709,7 +2709,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/lsf/apLSF.html"
    env_label: "APOGEE_REDUX"
@@ -2717,7 +2717,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/red/MJD5/ap1D.html"
    env_label: "APOGEE_REDUX"
@@ -2725,7 +2725,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/red/MJD5/ap2Dmodel.html"
    env_label: "APOGEE_REDUX"
@@ -2733,7 +2733,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/red/MJD5/ap2D.html"
    env_label: "APOGEE_REDUX"
@@ -2741,7 +2741,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allVisit.html"
    env_label: "APOGEE_REDUX"
@@ -2749,7 +2749,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar.html"
    env_label: "APOGEE_REDUX"
@@ -2757,7 +2757,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allPlates.html"
    env_label: "APOGEE_REDUX"
@@ -2765,7 +2765,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar_DR10.html"
    env_label: "APOGEE_REDUX"
@@ -2773,7 +2773,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonModel.html"
    env_label: "APOGEE_REDUX"
@@ -2781,7 +2781,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/allStarCannon.html"
    env_label: "APOGEE_REDUX"
@@ -2789,7 +2789,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonTrainingSet.html"
    env_label: "APOGEE_REDUX"
@@ -2797,7 +2797,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/LOCATION_ID/cannonStar.html"
    env_label: "APOGEE_REDUX"
@@ -2805,7 +2805,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/LOCATION_ID/cannonField.html"
    env_label: "APOGEE_REDUX"
@@ -2813,7 +2813,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/LOCATION_ID/aspcapField.html"
    env_label: "APOGEE_REDUX"
@@ -2821,7 +2821,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/LOCATION_ID/aspcapStar.html"
    env_label: "APOGEE_REDUX"
@@ -2829,7 +2829,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.mdl.html"
    env_label: "APOGEE_REDUX"
@@ -2837,7 +2837,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.ipf.html"
    env_label: "APOGEE_REDUX"
@@ -2845,7 +2845,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.err.html"
    env_label: "APOGEE_REDUX"
@@ -2853,7 +2853,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.wav.html"
    env_label: "APOGEE_REDUX"
@@ -2861,7 +2861,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.spm.html"
    env_label: "APOGEE_REDUX"
@@ -2869,7 +2869,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.frd.html"
    env_label: "APOGEE_REDUX"
@@ -2877,7 +2877,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.err.html"
    env_label: "APOGEE_REDUX"
@@ -2885,7 +2885,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.wav.html"
    env_label: "APOGEE_REDUX"
@@ -2893,7 +2893,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.ipf.html"
    env_label: "APOGEE_REDUX"
@@ -2901,7 +2901,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.frd.html"
    env_label: "APOGEE_REDUX"
@@ -2909,7 +2909,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.spm.html"
    env_label: "APOGEE_REDUX"
@@ -2917,7 +2917,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.mdl.html"
    env_label: "APOGEE_REDUX"
@@ -2925,7 +2925,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apStarLSF.html"
    env_label: "APOGEE_REDUX"
@@ -2933,7 +2933,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apFieldVisits.html"
    env_label: "APOGEE_REDUX"
@@ -2941,7 +2941,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apStar.html"
    env_label: "APOGEE_REDUX"
@@ -2949,7 +2949,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apField.html"
    env_label: "APOGEE_REDUX"
@@ -2957,7 +2957,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.dat.html"
    env_label: "APOGEE_REDUX"
@@ -2965,7 +2965,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.unf.html"
    env_label: "APOGEE_REDUX"
@@ -2973,7 +2973,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.hdr.html"
    env_label: "APOGEE_REDUX"
@@ -2981,7 +2981,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/aXXXcXXXnXXXvXXX.html"
    env_label: "APOGEE_REDUX"
@@ -2989,7 +2989,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SDSS_TARGET/sdss_target_geometry.html"
    env_label: "SDSS_TARGET"
@@ -2997,7 +2997,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SDSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SDSS_TARGET/sdss_target_paramlist.html"
    env_label: "SDSS_TARGET"
@@ -3005,7 +3005,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SDSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SDSS_TARGET/sdss_target_params.html"
    env_label: "SDSS_TARGET"
@@ -3013,7 +3013,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SDSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SDSS_TARGET/data/tsObjTargets.html"
    env_label: "SDSS_TARGET"
@@ -3021,7 +3021,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SDSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SDSS_TARGET/data/tsField.html"
    env_label: "SDSS_TARGET"
@@ -3029,7 +3029,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SDSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/hdrfix/MJD/sdHdrFix.html"
    env_label: "MANGACORE_DIR"
@@ -3037,7 +3037,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/drill/PLATEID6XX/plateCMM.html"
    env_label: "MANGACORE_DIR"
@@ -3045,7 +3045,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/metrology/maXXX/ma.html"
    env_label: "MANGACORE_DIR"
@@ -3053,7 +3053,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/metrology/hexferrules/hexferrules.html"
    env_label: "MANGACORE_DIR"
@@ -3061,7 +3061,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/mapper/PLATEID6XX/PLATE/plPlugMapM.html"
    env_label: "MANGACORE_DIR"
@@ -3069,7 +3069,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/slitmaps/PLATEID6XX/PLATE/slitmap.html"
    env_label: "MANGACORE_DIR"
@@ -3077,7 +3077,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/cartmaps/cartmap.html"
    env_label: "MANGACORE_DIR"
@@ -3085,7 +3085,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/ifuflat/cartXX/MJD/ifuflat.html"
    env_label: "MANGACORE_DIR"
@@ -3093,7 +3093,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/platedesign/foregroundstars/foregroundstars.html"
    env_label: "MANGACORE_DIR"
@@ -3101,7 +3101,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/platedesign/platetargets/platetargets.html"
    env_label: "MANGACORE_DIR"
@@ -3109,7 +3109,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/platedesign/plateholes/PLATEID6XX/plateHolesSorted.html"
    env_label: "MANGACORE_DIR"
@@ -3117,7 +3117,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/platedesign/platemags/DESIGNID6XX/platemags.html"
    env_label: "MANGACORE_DIR"
@@ -3125,7 +3125,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/platedesign/targetfix/PLATEID6XX/targetfix.html"
    env_label: "MANGACORE_DIR"
@@ -3133,7 +3133,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/apocomplete/bogey.html"
    env_label: "MANGACORE_DIR"
@@ -3141,7 +3141,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGACORE_DIR/apocomplete/PLATEID6XX/apocomp.html"
    env_label: "MANGACORE_DIR"
@@ -3149,7 +3149,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGACORE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGA_SPECTRO_DATA/MJD5/sdR.html"
    env_label: "MANGA_SPECTRO_DATA"
@@ -3157,7 +3157,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_SPECTRO_DATA/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/plates.html"
    env_label: "SPECTRO_REDUX"
@@ -3165,7 +3165,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galSpecExtra.html"
    env_label: "SPECTRO_REDUX"
@@ -3173,7 +3173,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/photoMatchPlate.html"
    env_label: "SPECTRO_REDUX"
@@ -3181,7 +3181,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galSpecInfo.html"
    env_label: "SPECTRO_REDUX"
@@ -3189,7 +3189,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/photoPlate.html"
    env_label: "SPECTRO_REDUX"
@@ -3197,7 +3197,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galSpecIndx.html"
    env_label: "SPECTRO_REDUX"
@@ -3205,7 +3205,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/specObj.html"
    env_label: "SPECTRO_REDUX"
@@ -3213,7 +3213,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galSpecLine.html"
    env_label: "SPECTRO_REDUX"
@@ -3221,7 +3221,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/photoPosPlate.html"
    env_label: "SPECTRO_REDUX"
@@ -3229,7 +3229,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spZline.html"
    env_label: "SPECTRO_REDUX"
@@ -3237,7 +3237,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spZbest.html"
    env_label: "SPECTRO_REDUX"
@@ -3245,7 +3245,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html"
    env_label: "SPECTRO_REDUX"
@@ -3253,7 +3253,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spPlancomb.html"
    env_label: "SPECTRO_REDUX"
@@ -3261,7 +3261,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html"
    env_label: "SPECTRO_REDUX"
@@ -3269,7 +3269,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/tsObj.html"
    env_label: "SPECTRO_REDUX"
@@ -3277,7 +3277,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spZall.html"
    env_label: "SPECTRO_REDUX"
@@ -3285,7 +3285,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/knownMissing.html"
    env_label: "SPECTRO_REDUX"
@@ -3293,7 +3293,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spPlan2d.html"
    env_label: "SPECTRO_REDUX"
@@ -3301,7 +3301,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html"
    env_label: "SPECTRO_REDUX"
@@ -3309,7 +3309,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html"
    env_label: "SPECTRO_REDUX"
@@ -3317,7 +3317,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/spectra/lite/PLATE4/spec.html"
    env_label: "SPECTRO_REDUX"
@@ -3325,7 +3325,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_emlinekin_full.html"
    env_label: "SPECTRO_REDUX"
@@ -3333,7 +3333,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_emlinekin.html"
    env_label: "SPECTRO_REDUX"
@@ -3341,7 +3341,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_stellarmass.html"
    env_label: "SPECTRO_REDUX"
@@ -3349,7 +3349,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/granada_fsps.html"
    env_label: "SPECTRO_REDUX"
@@ -3357,7 +3357,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/wisconsin_pca.html"
    env_label: "SPECTRO_REDUX"
@@ -3365,7 +3365,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECTRO_REDUX/"
-   note: " "
+   note: ""
 
  - path: "SPINSPECT_DIR/data/NAME/spInspect.html"
    env_label: "SPINSPECT_DIR"
@@ -3373,7 +3373,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPINSPECT_DIR/"
-   note: " "
+   note: ""
 
  - path: "SEGUE2_TARGET/seguetsObjSetAllDup.html"
    env_label: "SEGUE2_TARGET"
@@ -3381,7 +3381,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SEGUE2_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPlate.html"
    env_label: "SEGUE2_TARGET"
@@ -3389,7 +3389,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SEGUE2_TARGET/"
-   note: " "
+   note: ""
 
  - path: "SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjSetAll.html"
    env_label: "SEGUE2_TARGET"
@@ -3397,7 +3397,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SEGUE2_TARGET/"
-   note: " "
+   note: ""
 
  - path: "MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/manga.Pipe3D.html"
    env_label: "MANGA_PIPE3D"
@@ -3405,7 +3405,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_PIPE3D/"
-   note: " "
+   note: ""
 
  - path: "MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/QC_MaNGA.html"
    env_label: "MANGA_PIPE3D"
@@ -3413,7 +3413,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_PIPE3D/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_TARGET/apogeeDesign.html"
    env_label: "APOGEE_TARGET"
@@ -3421,7 +3421,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_TARGET/apogeeField.html"
    env_label: "APOGEE_TARGET"
@@ -3429,7 +3429,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_TARGET/apogeePlate.html"
    env_label: "APOGEE_TARGET"
@@ -3437,7 +3437,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_TARGET/apogee2Design.html"
    env_label: "APOGEE_TARGET"
@@ -3445,7 +3445,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_TARGET/apogee2Field.html"
    env_label: "APOGEE_TARGET"
@@ -3453,7 +3453,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_TARGET/apogee2Plate.html"
    env_label: "APOGEE_TARGET"
@@ -3461,7 +3461,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_TARGET/apogeeObject/apogeeObject.html"
    env_label: "APOGEE_TARGET"
@@ -3469,7 +3469,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_TARGET/apogee2Object/apogee2Object.html"
    env_label: "APOGEE_TARGET"
@@ -3477,7 +3477,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_TARGET/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_DATA/RUN/gangs/idGang.html"
    env_label: "PHOTO_DATA"
@@ -3485,7 +3485,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_DATA/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_DATA/RUN/fields/CAMCOL/idR.html"
    env_label: "PHOTO_DATA"
@@ -3493,7 +3493,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_DATA/"
-   note: " "
+   note: ""
 
  - path: "SPECLOG_DIR/MJD/plPlugMapM.html"
    env_label: "SPECLOG_DIR"
@@ -3501,7 +3501,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECLOG_DIR/"
-   note: " "
+   note: ""
 
  - path: "SPECLOG_DIR/MJD/sdhdrfix.html"
    env_label: "SPECLOG_DIR"
@@ -3509,7 +3509,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECLOG_DIR/"
-   note: " "
+   note: ""
 
  - path: "SPECLOG_DIR/MJD/guidermon.html"
    env_label: "SPECLOG_DIR"
@@ -3517,7 +3517,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$SPECLOG_DIR/"
-   note: " "
+   note: ""
 
  - path: "ATLAS_DATA/ATLAS_MAJOR_VERSION/nsa.html"
    env_label: "ATLAS_DATA"
@@ -3525,7 +3525,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$ATLAS_DATA/"
-   note: " "
+   note: ""
 
  - path: "APOGEE_DISTANCES/apogee_distances.html"
    env_label: "APOGEE_DISTANCES"
@@ -3533,7 +3533,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$APOGEE_DISTANCES/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SWEEP/datasweep-index.html"
    env_label: "PHOTO_SWEEP"
@@ -3541,7 +3541,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SWEEP/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SWEEP/RERUN/calibObj.html"
    env_label: "PHOTO_SWEEP"
@@ -3549,7 +3549,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SWEEP/"
-   note: " "
+   note: ""
 
  - path: "PHOTO_SWEEP/external/WISE/wisematch.html"
    env_label: "PHOTO_SWEEP"
@@ -3557,7 +3557,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PHOTO_SWEEP/"
-   note: " "
+   note: ""
 
  - path: "MANGA_PHOTO/pymorph/PYMORPH_VER/manga-pymorph.html"
    env_label: "MANGA_PHOTO"
@@ -3565,7 +3565,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_PHOTO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR12Q/DR12Q_sup.html"
    env_label: "BOSS_QSO"
@@ -3573,7 +3573,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR12Q/DR12Q_superset.html"
    env_label: "BOSS_QSO"
@@ -3581,7 +3581,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR12Q/DR12Q_BAL.html"
    env_label: "BOSS_QSO"
@@ -3589,7 +3589,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR12Q/DR12Q.html"
    env_label: "BOSS_QSO"
@@ -3597,7 +3597,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/composite/harris15_correction.html"
    env_label: "BOSS_QSO"
@@ -3605,7 +3605,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/composite/harris15_composite.html"
    env_label: "BOSS_QSO"
@@ -3613,7 +3613,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/composite/binned/QSO_comps.html"
    env_label: "BOSS_QSO"
@@ -3621,7 +3621,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/composite/binned/QSO_data.html"
    env_label: "BOSS_QSO"
@@ -3629,7 +3629,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR14Q/DR14Q_v3_1.html"
    env_label: "BOSS_QSO"
@@ -3637,7 +3637,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR14Q/DR14Q_v3_0.html"
    env_label: "BOSS_QSO"
@@ -3645,7 +3645,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR14Q/DR14Q_v4_4.html"
    env_label: "BOSS_QSO"
@@ -3653,7 +3653,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/variability/qsoVarPTF.html"
    env_label: "BOSS_QSO"
@@ -3661,7 +3661,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/variability/qsoVarStripe.html"
    env_label: "BOSS_QSO"
@@ -3669,7 +3669,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR9Q/DR9Q.html"
    env_label: "BOSS_QSO"
@@ -3677,7 +3677,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "BOSS_QSO/DR10Q/DR10Q.html"
    env_label: "BOSS_QSO"
@@ -3685,7 +3685,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_QSO/"
-   note: " "
+   note: ""
 
  - path: "EBOSS_TARGET/elg/fisher-selection/eBOSS_ELG_UgrizW.html"
    env_label: "EBOSS_TARGET"
@@ -3693,7 +3693,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$EBOSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "EBOSS_TARGET/elg/fisher-selection/eBOSS_ELG_griW.html"
    env_label: "EBOSS_TARGET"
@@ -3701,7 +3701,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$EBOSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "EBOSS_TARGET/elg/decals/ELG_targets_SGC.html"
    env_label: "EBOSS_TARGET"
@@ -3709,7 +3709,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$EBOSS_TARGET/"
-   note: " "
+   note: ""
 
  - path: "CALIBPLATE_DIR/calibPlateP.html"
    env_label: "CALIBPLATE_DIR"
@@ -3717,7 +3717,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$CALIBPLATE_DIR/"
-   note: " "
+   note: ""
 
  - path: "MANGA_GEMA/GEMA_VER/GEMA.html"
    env_label: "MANGA_GEMA"
@@ -3725,7 +3725,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$MANGA_GEMA/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/platePlans.html"
    env_label: "PLATELIST_DIR"
@@ -3733,7 +3733,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateStandard.html"
    env_label: "PLATELIST_DIR"
@@ -3741,7 +3741,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateGuide.html"
    env_label: "PLATELIST_DIR"
@@ -3749,7 +3749,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateTrap.html"
    env_label: "PLATELIST_DIR"
@@ -3757,7 +3757,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateDesign.html"
    env_label: "PLATELIST_DIR"
@@ -3765,7 +3765,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateInput-output.html"
    env_label: "PLATELIST_DIR"
@@ -3773,7 +3773,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html"
    env_label: "PLATELIST_DIR"
@@ -3781,7 +3781,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideAdjust.html"
    env_label: "PLATELIST_DIR"
@@ -3789,7 +3789,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideOffsets.html"
    env_label: "PLATELIST_DIR"
@@ -3797,7 +3797,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHoles.html"
    env_label: "PLATELIST_DIR"
@@ -3805,7 +3805,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plPlugMapP.html"
    env_label: "PLATELIST_DIR"
@@ -3813,7 +3813,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHolesSorted.html"
    env_label: "PLATELIST_DIR"
@@ -3821,7 +3821,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/definitions/DESIGNID6XX/plateDefinition.html"
    env_label: "PLATELIST_DIR"
@@ -3829,7 +3829,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plParam.html"
    env_label: "PLATELIST_DIR"
@@ -3837,7 +3837,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plMeas.html"
    env_label: "PLATELIST_DIR"
@@ -3845,7 +3845,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plOverlay.html"
    env_label: "PLATELIST_DIR"
@@ -3853,7 +3853,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plPlan.html"
    env_label: "PLATELIST_DIR"
@@ -3861,7 +3861,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plFanuc.html"
    env_label: "PLATELIST_DIR"
@@ -3869,7 +3869,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plPlugMap.html"
    env_label: "PLATELIST_DIR"
@@ -3877,7 +3877,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plDrillPos.html"
    env_label: "PLATELIST_DIR"
@@ -3885,7 +3885,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plObs.html"
    env_label: "PLATELIST_DIR"
@@ -3893,7 +3893,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "PLATELIST_DIR/inputs/plateInput.html"
    env_label: "PLATELIST_DIR"
@@ -3901,7 +3901,7 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$PLATELIST_DIR/"
-   note: " "
+   note: ""
 
  - path: "BOSS_SPECTRO_DATA/MJD/sdR.html"
    env_label: "BOSS_SPECTRO_DATA"
@@ -3909,5 +3909,5 @@ datamodels:
    name: " "
    ext: " "
    fits_path_example: "$BOSS_SPECTRO_DATA/"
-   note: " "
+   note: ""
 
