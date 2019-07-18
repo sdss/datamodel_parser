@@ -163,49 +163,64 @@ class Store:
             datamodels = (self.filespec['datamodels'] if self.filespec and
                           'datamodels' in self.filespec else None)
             for datamodel in datamodels:
-                path = datamodel['path'] if datamodel and 'path' in datamodel else None
-                self.set_path(path=path)
-                self.split_path()
-                self.populate_file_path_tables()
-                if (self.tree_edition         and
-                    self.env_variable         and
-    #               self.location_path # can be None
-                    self.file_name            and
-                    datamodel
-                    ):
-                    self.database.set_file_id(tree_edition  = self.tree_edition,
-                                              env_variable  = self.env_variable,
-                                              location_path = self.location_path,
-                                              file_name     = self.file_name)
-                    if self.database.file_id:
-                        env_label = (datamodel['env_label'] if datamodel and
-                                     'env_label' in datamodel else None)
-                        location =  (datamodel['location'] if datamodel and
-                                     'location' in datamodel else None)
-                        name =      (datamodel['name'] if datamodel and
-                                     'name' in datamodel else None)
-                        ext =       (datamodel['ext'] if datamodel and
-                                     'ext' in datamodel else None)
-                        note =  (datamodel['note'] if datamodel and
-                                     'note' in datamodel else None)
+                if self.ready:
+                    path = datamodel['path'] if datamodel and 'path' in datamodel else None
+                    self.set_path(path=path)
+                    self.split_path()
+                    self.populate_file_path_tables()
+                    if (self.tree_edition         and
+                        self.env_variable         and
+        #               self.location_path # can be None
+                        self.file_name            and
+                        datamodel
+                        ):
+                        # set filespec_tree_id
+                        filespec_tree_edition = (datamodel['tree_edition'] if datamodel and
+                                                 'tree_edition' in datamodel else None)
+                        self.populate_tree_table(tree_edition=filespec_tree_edition)
+                        self.database.set_tree_id(tree_edition=filespec_tree_edition)
+                        filespec_tree_id = self.database.tree_id if self.database.ready else None
 
-                        self.database.set_filespec_columns(env_label = env_label,
-                                                           location  = location,
-                                                           name      = name,
-                                                           ext       = ext,
-                                                           note      = note,
-                                                           )
-                        self.database.populate_filespec_table()
-                        self.ready = self.database.ready
-                else:
-                    self.ready = False
-                    self.logger.error(
-                        'Unable to populate_filespec_table. '                     +
-                        'self.tree_edition: {}, ' .format(self.tree_edition)  +
-                        'self.env_variable: {}, ' .format(self.env_variable)  +
-                        'self.file_name: {}, '    .format(self.file_name)     +
-                        'datamodel: {}.'.format(datamodel)
-                        )
+                        if filespec_tree_id:
+                            # populate filespec table
+                            self.database.set_file_id(tree_edition  = self.tree_edition,
+                                                      env_variable  = self.env_variable,
+                                                      location_path = self.location_path,
+                                                      file_name     = self.file_name)
+                            if self.database.file_id:
+                                env_label = (datamodel['env_label'] if datamodel and
+                                             'env_label' in datamodel else None)
+                                location =  (datamodel['location'] if datamodel and
+                                             'location' in datamodel else None)
+                                name =      (datamodel['name'] if datamodel and
+                                             'name' in datamodel else None)
+                                ext =       (datamodel['ext'] if datamodel and
+                                             'ext' in datamodel else None)
+                                note =      (datamodel['note'] if datamodel and
+                                             'note' in datamodel else None)
+
+                                self.database.set_filespec_columns(tree_id   = filespec_tree_id,
+                                                                   env_label = env_label,
+                                                                   location  = location,
+                                                                   name      = name,
+                                                                   ext       = ext,
+                                                                   note      = note,
+                                                                   )
+                                self.database.populate_filespec_table()
+                                self.ready = self.database.ready
+                        else:
+                            self.ready = False
+                            self.logger.error('Unable to populate_filespec_table. ' +
+                                              'filespec_tree_id: {}, '.format(filespec_tree_id))
+                    else:
+                        self.ready = False
+                        self.logger.error(
+                            'Unable to populate_filespec_table. '                     +
+                            'self.tree_edition: {}, ' .format(self.tree_edition)  +
+                            'self.env_variable: {}, ' .format(self.env_variable)  +
+                            'self.file_name: {}, '    .format(self.file_name)     +
+                            'datamodel: {}.'.format(datamodel)
+                            )
 
 
     def set_yaml_dir(self):
@@ -433,11 +448,12 @@ class Store:
             self.populate_directory_table()
             self.populate_file_table()
 
-    def populate_tree_table(self):
+    def populate_tree_table(self,tree_edition=None):
         '''Populate the tree table.'''
         if self.ready:
-            if self.database and self.tree_edition:
-                self.database.set_tree_columns(edition=self.tree_edition)
+            tree_edition = tree_edition if tree_edition else self.tree_edition
+            if self.database and tree_edition:
+                self.database.set_tree_columns(edition=tree_edition)
                 self.database.populate_tree_table()
                 self.ready = self.database.ready
             else:
@@ -445,7 +461,7 @@ class Store:
                 self.logger.error(
                     'Unable to populate_tree_table. ' +
                     'self.database: {}.'.format(self.database) +
-                    'self.tree_edition: {}.'.format(self.tree_edition))
+                    'tree_edition: {}.'.format(tree_edition))
 
     def populate_env_table(self):
         '''Populate the env table.'''

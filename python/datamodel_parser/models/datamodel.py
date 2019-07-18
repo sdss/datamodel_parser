@@ -368,8 +368,12 @@ class Intro(db.Model):
 
 class Filespec(db.Model):
     __tablename__ = 'filespec'
-    __table_args__ = {'schema':schema}
+#    __table_args__ = {'schema':schema}
+    __table_args__ = (db.UniqueConstraint("tree_id","file_id"), {'schema':schema})
     id = db.Column(db.Integer, primary_key = True)
+    tree_id = db.Column(db.Integer,
+                        db.ForeignKey(schema + '.tree.id'),
+                        nullable = False)
     file_id = db.Column(db.Integer,
                         db.ForeignKey(schema + '.file.id'),
                         nullable = False)
@@ -384,9 +388,12 @@ class Filespec(db.Model):
                          onupdate=datetime.now)
 
     @staticmethod
-    def load(file_id=None):
-        if file_id:
-            try: filespec = (Filespec.query.filter(Filespec.file_id==file_id).one())
+    def load(tree_id=None,file_id=None):
+        if tree_id and file_id:
+            try: filespec = (Filespec.query
+                                     .filter(Filespec.tree_id==tree_id)
+                                     .filter(Filespec.file_id==file_id)
+                                     .one())
             except: filespec = None
         else:
             filespec = None

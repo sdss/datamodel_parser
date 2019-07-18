@@ -950,6 +950,7 @@ class Database:
                                   'columns: {}.'.format(columns))
 
     def set_filespec_columns(self,
+                             tree_id = None,
                              env_label = None,
                              location = None,
                              name = None,
@@ -960,7 +961,8 @@ class Database:
         self.filespec_columns = dict()
         if self.ready:
             file_id = self.file_id if self.file_id else None
-            if (file_id   and
+            if (tree_id   and
+                file_id   and
                 env_label and
 #                location is not None and
                 name         and
@@ -968,23 +970,26 @@ class Database:
 #                note is not None and
                 ):
                 self.filespec_columns = {
-                    'file_id'       : file_id
-                                      if file_id                   else None,
+                    'tree_id'   : tree_id
+                                    if tree_id              else None,
+                    'file_id'   : file_id
+                                    if file_id              else None,
                     'env_label' : env_label
-                                      if env_label else None,
-                    'location' : location
-                                      if location is not None else None,
-                    'name' : name
-                                      if name             else None,
-                    'ext'   : ext
-                                      if ext               else None,
-                    'note' : note
-                                      if note is not None else None,
+                                    if env_label            else None,
+                    'location'  : location
+                                    if location is not None else None,
+                    'name'      : name
+                                    if name                 else None,
+                    'ext'       : ext
+                                    if ext                  else None,
+                    'note'      : note
+                                    if note is not None     else None,
                     }
             else:
                 self.ready = False
                 self.logger.error(
                     'Unable to set_filespec_columns. ' +
+                    'tree_id: {}, '.format(tree_id) +
                     'file_id: {}, '.format(file_id) +
                     'env_label: {}, '.format(env_label) +
 #                    'location: {}, '.format(location) +
@@ -998,23 +1003,29 @@ class Database:
         if self.ready:
             self.set_filespec()
             if self.filespec: self.update_filespec_row()
-            else:          self.create_filespec_row()
+            else:             self.create_filespec_row()
 
-    def set_filespec(self,file_id=None):
+    def set_filespec(self,tree_id=None,file_id=None):
         '''Load row from filespec table.'''
         self.filespec = None
         if self.ready:
+            tree_id = (tree_id if tree_id
+                    else self.filespec_columns['tree_id']
+                    if self.filespec_columns and 'tree_id' in self.filespec_columns
+                    else None)
             file_id = (file_id if file_id
                     else self.filespec_columns['file_id']
                     if self.filespec_columns and 'file_id' in self.filespec_columns
                     else None)
-            if file_id:
-                self.filespec = (Filespec.load(file_id=file_id)
-                              if file_id else None)
+            if tree_id and file_id:
+                self.filespec = (Filespec.load(tree_id=tree_id,file_id=file_id)
+                              if tree_id and file_id else None)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_filespec. ' +
-                                  'file_id: {}, '.format(file_id) )
+                                  'tree_id: {}, '.format(tree_id) +
+                                  'file_id: {}, '.format(file_id)
+                                  )
 
     def update_filespec_row(self):
         '''Update row in filespec table.'''
@@ -1044,6 +1055,8 @@ class Database:
                 if self.verbose: self.logger.debug('columns:\n' +
                                                    dumps(columns,indent=1))
                 filespec = Filespec(
+                    tree_id = columns['tree_id']
+                        if columns and 'tree_id' in columns else None,
                     file_id = columns['file_id']
                         if columns and 'file_id' in columns else None,
                     env_label = columns['env_label']
@@ -1057,6 +1070,9 @@ class Database:
                     note = columns['note']
                         if columns and 'note' in columns else None,
                                   )
+                print('filespec: %r' % filespec)
+                input('pause')
+
                 if filespec:
                     filespec.add()
                     filespec.commit()

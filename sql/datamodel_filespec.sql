@@ -72,6 +72,7 @@ CREATE TABLE filespec.intro (
 
 CREATE TABLE filespec.filespec (
     id SERIAL NOT NULL PRIMARY KEY,
+    tree_id INT4 REFERENCES filespec.tree(id) NOT NULL,
     file_id INT4 REFERENCES filespec.file(id) NOT NULL,
     env_label VARCHAR(32),
     location VARCHAR(512),
