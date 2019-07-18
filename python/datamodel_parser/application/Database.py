@@ -87,11 +87,6 @@ class Database:
                     yaml += ('    example_fits_path: {}\n'.format(str()))
                     yaml += ('    example_fits_name: {}\n'.format(str()))
 
-#                    print('\n\nintro: %r' %intro)
-#                    print('naming_convention: %r' %naming_convention)
-                    print('yaml: \n%s' %yaml)
-                    input('pause')
-
     def get_file_percent_complete(self):
         '''Get the percentage of all file table rows with status='complete.'
         '''
@@ -1070,9 +1065,6 @@ class Database:
                     note = columns['note']
                         if columns and 'note' in columns else None,
                                   )
-                print('filespec: %r' % filespec)
-                input('pause')
-
                 if filespec:
                     filespec.add()
                     filespec.commit()

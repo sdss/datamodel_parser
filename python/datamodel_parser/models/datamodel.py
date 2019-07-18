@@ -368,8 +368,8 @@ class Intro(db.Model):
 
 class Filespec(db.Model):
     __tablename__ = 'filespec'
-#    __table_args__ = {'schema':schema}
-    __table_args__ = (db.UniqueConstraint("tree_id","file_id"), {'schema':schema})
+    __table_args__ = {'schema':schema}
+#    __table_args__ = (db.UniqueConstraint("tree_id","file_id"), {'schema':schema})
     id = db.Column(db.Integer, primary_key = True)
     tree_id = db.Column(db.Integer,
                         db.ForeignKey(schema + '.tree.id'),
