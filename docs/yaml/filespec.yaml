@@ -335,7 +335,7 @@ datamodels:
  - path: "BOSS_LYA/mocks/VERS/rawlite/PLATE4/mock_lya.html"
    tree_edition: "dr11"
    env_label: "BOSS_LYA"
-   location: "mocks/{vers}
+   location: "mocks/{vers}"
    name: "boss_lya_mocks_{vers}.sha1sum"
    ext: "sha1sum"
    fits_path_example: "$BOSS_LYA/mocks/M3_0/boss_lya_mocks_M3_0.sha1sum"
