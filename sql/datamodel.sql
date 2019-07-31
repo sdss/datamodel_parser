@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS sdss.keyword;
 DROP TABLE IF EXISTS sdss.header;
 DROP TABLE IF EXISTS sdss.hdu;
 DROP TABLE IF EXISTS sdss.section;
-DROP TABLE IF EXISTS filespec.filespec;
+DROP TABLE IF EXISTS sdss.filespec;
 DROP TABLE IF EXISTS sdss.intro;
 DROP TABLE IF EXISTS sdss.file;
 DROP TABLE IF EXISTS sdss.directory;
@@ -70,14 +70,15 @@ CREATE TABLE sdss.intro (
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TABLE filespec.filespec (
+CREATE TABLE sdss.filespec (
     id SERIAL NOT NULL PRIMARY KEY,
-    tree_id INT4 REFERENCES filespec.tree(id) NOT NULL,
-    file_id INT4 REFERENCES filespec.file(id) NOT NULL,
+    tree_id INT4 REFERENCES sdss.tree(id) NOT NULL,
+    file_id INT4 REFERENCES sdss.file(id) NOT NULL,
     env_label VARCHAR(32),
     location VARCHAR(512),
     name VARCHAR(128),
     ext VARCHAR(16),
+    path_example VARCHAR(512),
     note VARCHAR(512),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()

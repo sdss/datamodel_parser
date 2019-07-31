@@ -381,6 +381,7 @@ class Filespec(db.Model):
     location = db.Column(db.String(512))
     name = db.Column(db.String(128))
     ext = db.Column(db.String(16))
+    path_example = db.Column(db.String(512))
     note = db.Column(db.String(512))
     created = db.Column(db.DateTime, default=datetime.now)
     modified = db.Column(db.DateTime,

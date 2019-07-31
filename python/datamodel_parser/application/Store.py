@@ -188,23 +188,26 @@ class Store:
                                                       location_path = self.location_path,
                                                       file_name     = self.file_name)
                             if self.database.file_id:
-                                env_label = (datamodel['env_label'] if datamodel and
-                                             'env_label' in datamodel else None)
-                                location =  (datamodel['location'] if datamodel and
-                                             'location' in datamodel else None)
-                                name =      (datamodel['name'] if datamodel and
-                                             'name' in datamodel else None)
-                                ext =       (datamodel['ext'] if datamodel and
-                                             'ext' in datamodel else None)
-                                note =      (datamodel['note'] if datamodel and
-                                             'note' in datamodel else None)
+                                env_label    = (datamodel['env_label'] if datamodel and
+                                                'env_label' in datamodel else None)
+                                location     = (datamodel['location'] if datamodel and
+                                                'location' in datamodel else None)
+                                name         = (datamodel['name'] if datamodel and
+                                                'name' in datamodel else None)
+                                ext          = (datamodel['ext'] if datamodel and
+                                                'ext' in datamodel else None)
+                                path_example = (datamodel['path_example'] if datamodel and
+                                                'path_example' in datamodel else None)
+                                note         = (datamodel['note'] if datamodel and
+                                                'note' in datamodel else None)
 
-                                self.database.set_filespec_columns(tree_id   = filespec_tree_id,
-                                                                   env_label = env_label,
-                                                                   location  = location,
-                                                                   name      = name,
-                                                                   ext       = ext,
-                                                                   note      = note,
+                                self.database.set_filespec_columns(tree_id      = filespec_tree_id,
+                                                                   env_label    = env_label,
+                                                                   location     = location,
+                                                                   name         = name,
+                                                                   ext          = ext,
+                                                                   path_example = path_example,
+                                                                   note         = note,
                                                                    )
                                 self.database.populate_filespec_table()
                                 self.ready = self.database.ready

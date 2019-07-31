@@ -950,6 +950,7 @@ class Database:
                              location = None,
                              name = None,
                              ext   = None,
+                             path_example = None,
                              note = None,
                              ):
         '''Set columns of the filespec table.'''
@@ -960,25 +961,28 @@ class Database:
                 file_id   and
                 env_label and
 #                location is not None and
-                name         and
-                ext
+                name        and
+                ext         and
+                path_example
 #                note is not None and
                 ):
                 self.filespec_columns = {
-                    'tree_id'   : tree_id
-                                    if tree_id              else None,
-                    'file_id'   : file_id
-                                    if file_id              else None,
-                    'env_label' : env_label
-                                    if env_label            else None,
-                    'location'  : location
-                                    if location is not None else None,
-                    'name'      : name
-                                    if name                 else None,
-                    'ext'       : ext
-                                    if ext                  else None,
+                    'tree_id'       : tree_id
+                                        if tree_id              else None,
+                    'file_id'       : file_id
+                                        if file_id              else None,
+                    'env_label'     : env_label
+                                        if env_label            else None,
+                    'location'      : location
+                                        if location is not None else None,
+                    'name'          : name
+                                        if name                 else None,
+                    'ext'           : ext
+                                        if ext                  else None,
+                    'path_example'  : path_example
+                                        if path_example         else None,
                     'note'      : note
-                                    if note is not None     else None,
+                                    if note is not None         else None,
                     }
             else:
                 self.ready = False
@@ -989,7 +993,8 @@ class Database:
                     'env_label: {}, '.format(env_label) +
 #                    'location: {}, '.format(location) +
                     'name: {}, '.format(name) +
-                    'ext: {}.'.format(ext)
+                    'ext: {}.'.format(ext) +
+                    'path_example: {}.'.format(path_example)
 #                    'note: {}, '.format(note) +
                     )
 
@@ -1062,6 +1067,8 @@ class Database:
                         if columns and 'name' in columns else None,
                     ext = columns['ext']
                         if columns and 'ext' in columns else None,
+                    path_example = columns['path_example']
+                        if columns and 'path_example' in columns else None,
                     note = columns['note']
                         if columns and 'note' in columns else None,
                                   )

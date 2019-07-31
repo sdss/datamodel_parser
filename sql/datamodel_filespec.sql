@@ -78,6 +78,7 @@ CREATE TABLE filespec.filespec (
     location VARCHAR(512),
     name VARCHAR(128),
     ext VARCHAR(16),
+    path_example VARCHAR(512),
     note VARCHAR(512),
     created TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     modified TIMESTAMP WITH TIME ZONE DEFAULT NOW()

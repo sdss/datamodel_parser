@@ -5,7 +5,7 @@ datamodels:
    location: ""
    name: "apogee_tgas-DR14.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_TGAS/apogee_tgas-DR14.fits"
+   path_example: "$APOGEE_TGAS/apogee_tgas-DR14.fits"
    note: ""
 
  - path: "IRCAM_DATA/MJD/cR.html"
@@ -14,7 +14,7 @@ datamodels:
    location: "{mjd}"
    name: "cR{?}.fit.gz"
    ext: "fit.gz"
-   fits_path_example: "$IRCAM_DATA/57580/cR140000.fit.gz"
+   path_example: "$IRCAM_DATA/57580/cR140000.fit.gz"
    note: ""
 
  - path: "IRCAM_DATA/MJD/irsc.html"
@@ -23,7 +23,7 @@ datamodels:
    location: "{mjd}"
    name: "irsc.log.gz"
    ext: "log.gz"
-   fits_path_example: "$IRCAM_DATA/57580/irsc.log.gz"
+   path_example: "$IRCAM_DATA/57580/irsc.log.gz"
    note: ""
 
  - path: "EBOSS_ELG/composite/ELG_COMPOSITE_VER/eBOSS_ELG_composite.html"
@@ -32,7 +32,7 @@ datamodels:
    location: "composite/{ver}"
    name: "eBOSS_ELG_composite.fits"
    ext: "fits"
-   fits_path_example: "$EBOSS_ELG/composite/v1_0/eBOSS_ELG_composite.fits"
+   path_example: "$EBOSS_ELG/composite/v1_0/eBOSS_ELG_composite.fits"
    note: ""
 
  - path: "EBOSS_ELG/composite/ELG_COMPOSITE_VER/eBOSS_ELG_NUV_composite.html"
@@ -41,7 +41,7 @@ datamodels:
    location: "composite/{ver}"
    name: "eBOSS_ELG_NUV_composite.fits"
    ext: "fits"
-   fits_path_example: "$EBOSS_ELG/composite/v1_0/eBOSS_ELG_NUV_composite.fits"
+   path_example: "$EBOSS_ELG/composite/v1_0/eBOSS_ELG_NUV_composite.fits"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html"
@@ -50,7 +50,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/tio1d_PLATENAME.html"
@@ -59,7 +59,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/tioprof_PLATENAME.html"
@@ -68,7 +68,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/starrv_PLATENAME.html"
@@ -77,7 +77,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/exposureinfo_PLATENAME.html"
@@ -86,7 +86,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/starprof_PLATENAME.html"
@@ -95,7 +95,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/star1d_PLATENAME.html"
@@ -104,7 +104,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html"
@@ -113,7 +113,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/TEMP/plPlugMapR.html"
@@ -122,7 +122,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/MJD/reduction1/processed_images/ft.fits.html"
@@ -131,7 +131,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/MJD/reduction1/whirls/ft.whrl.html"
@@ -140,7 +140,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/RESULTS/results_platename.html"
@@ -149,7 +149,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplanfile.html"
@@ -158,7 +158,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/PARAMS/fibretranslationtable.html"
@@ -167,7 +167,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplantable.html"
@@ -176,7 +176,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_REDUX/"
+   path_example: "$MARVELS_REDUX/"
    note: ""
 
  - path: "SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoMatchPlate.html"
@@ -185,7 +185,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_MATCH/"
+   path_example: "$SPECTRO_MATCH/"
    note: ""
 
  - path: "SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoPlate.html"
@@ -194,7 +194,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_MATCH/"
+   path_example: "$SPECTRO_MATCH/"
    note: ""
 
  - path: "SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoPosPlate.html"
@@ -203,7 +203,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_MATCH/"
+   path_example: "$SPECTRO_MATCH/"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin_full.html"
@@ -212,7 +212,7 @@ datamodels:
    location: "{galaxy_version}"
    name: "portsmouth_emlinekin_full-{run2d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/portsmouth_emlinekin_full-v5_7_0.fits.gz"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/portsmouth_emlinekin_full-v5_7_0.fits.gz"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin.html"
@@ -221,7 +221,7 @@ datamodels:
    location: "{galaxy_version}"
    name: "portsmouth_emlinekin-{run2d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/portsmouth_emlinekin-v5_7_2.fits.gz"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/portsmouth_emlinekin-v5_7_2.fits.gz"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_stellarmass.html"
@@ -230,7 +230,7 @@ datamodels:
    location: "{galaxy_version}"
    name: "portsmouth_stellarmass_{configname}-{run2d}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/portsmouth_stellarmass_starforming_salp-v5_7_2.fits.gz"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/portsmouth_stellarmass_starforming_salp-v5_7_2.fits.gz"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/granada_fsps.html"
@@ -239,7 +239,7 @@ datamodels:
    location: "{galaxy_version}"
    name: "granada_fsps_{configname}-{run2d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/granada_fsps_salp_wideform_nodust-v5_7_2.fits.gz"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/granada_fsps_salp_wideform_nodust-v5_7_2.fits.gz"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/wisconsin_pca.html"
@@ -248,7 +248,7 @@ datamodels:
    location: "{galaxy_version}"
    name: "wisconsin_pca_{configname}-{run2d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/wisconsin_pca_m11-v5_7_2.fits.gz"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/wisconsin_pca_m11-v5_7_2.fits.gz"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/wisconsin/pca/wisconsin_pca.html"
@@ -257,7 +257,7 @@ datamodels:
    location: "{galaxy_version}/{run2d}/{plate4}/{run1d}/wisconsin/pca"
    name: "wisconsin_pca_m11-{plate4}-{mjd}.fits"
    ext: " "
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/wisconsin/pca/wisconsin_pca_m11-7565-56809.fits"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/wisconsin/pca/wisconsin_pca_m11-7565-56809.fits"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_stellarmass.html"
@@ -266,7 +266,7 @@ datamodels:
    location: "{galaxy_version}/{run2d}/{plate4}/{run1d}/portsmouth/stellarmass"
    name: "portsmouth_stellarmass_starforming_salp_red0-{plate4}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/portsmouth/stellarmass/portsmouth_stellarmass_starforming_salp_red0-7565-56809.fits"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/portsmouth/stellarmass/portsmouth_stellarmass_starforming_salp_red0-7565-56809.fits"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_masspdf.html"
@@ -275,7 +275,7 @@ datamodels:
    location: "{galaxy_version}/{run2d}/{plate4}/{run1d}/portsmouth/stellarmass"
    name: "portsmouth_masspdf_massloss_y_starforming_salp_red0-{plate4}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/portsmouth/stellarmass/portsmouth_masspdf_massloss_y_starforming_salp_red0-7565-56809.fits"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/portsmouth/stellarmass/portsmouth_masspdf_massloss_y_starforming_salp_red0-7565-56809.fits"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/emlinekin/portsmouth_emlinekin.html"
@@ -284,7 +284,7 @@ datamodels:
    location: "{galaxy_version}/{run2d}/{plate4}/{run1d}/portsmouth/emlinekin"
    name: "portsmouth_emlinekin-{plate4}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/portsmouth/emlinekin/portsmouth_emlinekin-7565-56809.fits"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/portsmouth/emlinekin/portsmouth_emlinekin-7565-56809.fits"
    note: ""
 
  - path: "BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/granada/fsps/granada_fsps.html"
@@ -293,7 +293,7 @@ datamodels:
    location: "{galaxy_version}/{run2d}/{plate4}/{run1d}/granada/fsps"
    name: "granada_fsps_{configname}-{plate4}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/granada/fsps/granada_fsps_salp_wideform_nodust-7565-56809.fits"
+   path_example: "$BOSS_GALAXY_REDUX/v1_1/v5_7_2/7565/v5_7_2/granada/fsps/granada_fsps_salp_wideform_nodust-7565-56809.fits"
    note: ""
 
  - path: "REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/redmonsterAll.html"
@@ -302,7 +302,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$REDMONSTER_SPECTRO_REDUX/"
+   path_example: "$REDMONSTER_SPECTRO_REDUX/"
    note: ""
 
  - path: "REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html"
@@ -311,7 +311,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$REDMONSTER_SPECTRO_REDUX/"
+   path_example: "$REDMONSTER_SPECTRO_REDUX/"
    note: ""
 
  - path: "BOSS_TARGET/TARGET_RUN/bosstarget.html"
@@ -320,7 +320,7 @@ datamodels:
    location: "{target_run}"
    name: "bosstarget-{target_type}-{target_run}-colate-{chunk}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_TARGET/main016/bosstarget-qso-main016-collate-380.fits"
+   path_example: "$BOSS_TARGET/main016/bosstarget-qso-main016-collate-380.fits"
    note: ""
 
  - path: "BOSS_LYA/mocks/rawlite_VERS.html"
@@ -329,7 +329,7 @@ datamodels:
    location: "mocks/{M3_0}"
    name: "rawlite_M3_0_{0_9}.tar.gz"
    ext: "tar.gz"
-   fits_path_example: "$BOSS_LYA/mocks/M3_0/rawlite_M3_0_9.tar.gz"
+   path_example: "$BOSS_LYA/mocks/M3_0/rawlite_M3_0_9.tar.gz"
    note: ""
 
  - path: "BOSS_LYA/mocks/VERS/rawlite/PLATE4/mock_lya.html"
@@ -338,7 +338,7 @@ datamodels:
    location: ""
    name: ""
    ext: ""
-   fits_path_example: "$BOSS_LYA/"
+   path_example: "$BOSS_LYA/"
    note: "Why does <find . -name  '*mock-*'> return nothing in $BOSS_LYA for d[7-15] ?"
 
  - path: "BOSS_LYA/mocks/VERS/rawlite/PLATE4/mockrawShort_lya.html"
@@ -347,7 +347,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_LYA/"
+   path_example: "$BOSS_LYA/"
    note: "Why does <find . -name  '*mockrawShort-*'> return nothing in $BOSS_LYA for d[7-15] ?"
 
  - path: "BOSS_LYA/cat/speclya.html"
@@ -356,7 +356,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_LYA/"
+   path_example: "$BOSS_LYA/"
    note: "Why does <find . -name  '*speclya-*'> return nothing in $BOSS_LYA for d[7-15] ?"
 
  - path: "BOSS_LYA/cat/BOSSLyaDR9_spectra.html"
@@ -365,7 +365,7 @@ datamodels:
    location: "cat"
    name: "BOSSLyaDR9_spectra.tar.gz"
    ext: "tar.gz"
-   fits_path_example: "$BOSS_LYA/cat/BOSSLyaDR9_spectra.tar.gz"
+   path_example: "$BOSS_LYA/cat/BOSSLyaDR9_spectra.tar.gz"
    note: ""
 
  - path: "BOSS_LYA/cat/BOSSLyaDR9_cat.html"
@@ -374,7 +374,7 @@ datamodels:
    location: "cat"
    name: "BOSSLyaDR9_cat.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_LYA/cat/BOSSLyaDR9_cat.fits"
+   path_example: "$BOSS_LYA/cat/BOSSLyaDR9_cat.fits"
    note: ""
 
  - path: "BOSS_LYA/cat/residcorr_v5_4_45.html"
@@ -383,7 +383,7 @@ datamodels:
    location: "cat"
    name: "residcorr_v5_4_45.dat"
    ext: "dat"
-   fits_path_example: "$BOSS_LYA/cat/residcorr_v5_4_45.dat"
+   path_example: "$BOSS_LYA/cat/residcorr_v5_4_45.dat"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/platelist.html"
@@ -392,7 +392,7 @@ datamodels:
    location: ""
    name: "platelist.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/platelist.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/platelist.fits"
    note: "Prior to DR10 (v5_5_12), platelist was in the top level BOSS_SPECTRO_REDUX directory instead of in the RUN2D subdirectory."
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/platequality.html"
@@ -401,7 +401,7 @@ datamodels:
    location: "{run2d}"
    name: "platequality.txt"
    ext: "txt"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/platequality.txt"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/platequality.txt"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spAllLine.html"
@@ -410,7 +410,7 @@ datamodels:
    location: "{run2d}"
    name: "spAllLine-{run2d}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spAllLine-v5_10_0.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spAllLine-v5_10_0.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spAll.html"
@@ -419,7 +419,7 @@ datamodels:
    location: "{run2d}"
    name: "spAll-{run2d}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spAll-v5_10_0.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spAll-v5_10_0.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcorr.html"
@@ -428,7 +428,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spFluxcorr-{spectrograph}-{exposure}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spFluxcorr-r2-00218918.fits.gz"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spFluxcorr-r2-00218918.fits.gz"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/redux.html"
@@ -437,7 +437,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "redux-{plate4}-{mjd}.o"
    ext: "o"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/8793/redux-8793-57391.o"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/8793/redux-8793-57391.o"
    note: "redux files are scripts and logs from running the BOSS pipeline."
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html"
@@ -446,7 +446,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spPlate-{plate4}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spPlate-9003-57488.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spPlate-9003-57488.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlan.html"
@@ -455,7 +455,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spPlancomb-{plate4}-{mjd}.par"
    ext: "par"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spPlancomb-9003-57488.par"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spPlancomb-9003-57488.par"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html"
@@ -464,7 +464,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spDiag2d-{plate4}-{mjd}.log"
    ext: "log"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spDiag1d-9003-57488.log"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spDiag1d-9003-57488.log"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spArc.html"
@@ -473,7 +473,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spArc-{spectrograph}-{frame}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spArc-r2-00218916.fits.gz"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spArc-r2-00218916.fits.gz"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxdistort.html"
@@ -482,7 +482,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spFluxdistort-{plate4}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spFluxdistort-9003-57488.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spFluxdistort-9003-57488.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFlat.html"
@@ -491,7 +491,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spFlat-{spectrograph}-{frame}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spFlat-r1-00218673.fits.gz"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spFlat-r1-00218673.fits.gz"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcalib.html"
@@ -500,7 +500,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spFluxcalib-{spectrograph}-{exposure}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_9_0/7434/spFluxcalib-r2-00200257.fits.gz"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_9_0/7434/spFluxcalib-r2-00200257.fits.gz"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFrame.html"
@@ -509,7 +509,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spFrame-{spectrograph}-{frame}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_9_0/7434/spFrame-r2-00200257.fits.gz"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_9_0/7434/spFrame-r2-00200257.fits.gz"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html"
@@ -518,7 +518,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spCFrame-{spectrograph}-{frame}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spCFrame-r2-00218919.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spCFrame-r2-00218919.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spSN2d.html"
@@ -527,7 +527,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spSN2d-{plate4}-{mjd}.ps"
    ext: ".ps"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spSN2d-9003-57488.ps"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spSN2d-9003-57488.ps"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html"
@@ -536,7 +536,7 @@ datamodels:
    location: "{run2d}/{plate4}"
    name: "spZline-{plate4}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spZline-9003-57488.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spZline-9003-57488.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest.html"
@@ -545,7 +545,7 @@ datamodels:
    location: "{run2d}/{plate4}/{run1d}"
    name: "spZbest-{plate4}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spZbest-9003-57488.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spZbest-9003-57488.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZall.html"
@@ -554,7 +554,7 @@ datamodels:
    location: "{run2d}/{plate4}/{run1d}"
    name: "spZall-{plate4}-{mjd}.fits"
    ext: " "
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spZall-9003-57488.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spZall-9003-57488.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spDiag1d.html"
@@ -563,7 +563,7 @@ datamodels:
    location: "{run2d}/{plate4}/{run1d}"
    name: "spDiag1d-{plate4}-{mjd}.log"
    ext: "log"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spDiag1d-9003-57488.log"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/v5_10_0/spDiag1d-9003-57488.log"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spectra/spAll-SUBSET.html"
@@ -572,7 +572,7 @@ datamodels:
    location: "{run2d}"
    name: "spAll-{run2d}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spAll-v5_10_0.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spAll-v5_10_0.fits"
    note: "What is SUBSET in spAll-SUBSET the SUBSET options in the datamodel don't seem to correspond to a files."
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spectra/specfiles.html"
@@ -581,7 +581,7 @@ datamodels:
    location: "{run2d}/spectra"
    name: "specfiles-lya-{run2d}.txt"
    ext: "txt"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_6_5/spectra/specfiles-lya-v5_6_5.txt"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_6_5/spectra/specfiles-lya-v5_6_5.txt"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html"
@@ -590,7 +590,7 @@ datamodels:
    location: "{run2d}/spectra"
    name: "spec-{plate4}-{mjd}-{fiber}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spectra/9003/spec-9003-57488-1000.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spectra/9003/spec-9003-57488-1000.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/RUN2D/spectra/lite/PLATE4/spec.html"
@@ -599,7 +599,7 @@ datamodels:
    location: "{run2d}/spectra/lite"
    name: "spec-{plate4}-{mjd}-{fiber}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spectra/lite/9003/spec-9003-57488-0999.fits"
+   path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/spectra/lite/9003/spec-9003-57488-0999.fits"
    note: ""
 
  - path: "BOSS_SPECTRO_REDUX/images/RUN2D/RUN1D/PLATE4-MJD/spec-image-PLATE4-MJD-FIBER4.html"
@@ -608,7 +608,7 @@ datamodels:
    location: "images/{run2d}/{run1d}/{plate4}-{mjd}"
    name: "spec-image-8764-57332-0343.png"
    ext: "png"
-   fits_path_example: "$BOSS_SPECTRO_REDUX/images/v5_10_0/v5_10_0/8764-57332/spec-image-8764-57332-0343.png"
+   path_example: "$BOSS_SPECTRO_REDUX/images/v5_10_0/v5_10_0/8764-57332/spec-image-8764-57332-0343.png"
    note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skyymodel.html"
@@ -617,7 +617,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SKY/"
+   path_example: "$PHOTO_SKY/"
    note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skyframes.html"
@@ -626,7 +626,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SKY/"
+   path_example: "$PHOTO_SKY/"
    note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skymodel.html"
@@ -635,7 +635,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SKY/"
+   path_example: "$PHOTO_SKY/"
    note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skymask.html"
@@ -644,7 +644,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SKY/"
+   path_example: "$PHOTO_SKY/"
    note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/sky/skyweights.html"
@@ -653,7 +653,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SKY/"
+   path_example: "$PHOTO_SKY/"
    note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/qa/skyvals.html"
@@ -662,7 +662,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SKY/"
+   path_example: "$PHOTO_SKY/"
    note: ""
 
  - path: "PHOTO_SKY/RERUN/RUN/qa/skyqa.html"
@@ -671,7 +671,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SKY/"
+   path_example: "$PHOTO_SKY/"
    note: ""
 
  - path: "APOGEE_DATA_1M/MJD5/apR.html"
@@ -680,7 +680,7 @@ datamodels:
    location: "{mjd}"
    name: "apR-{chip}-{exposure}.apz"
    ext: "apz"
-   fits_path_example: "$APOGEE_DATA_1M/57543/apR-c-19810052.apz"
+   path_example: "$APOGEE_DATA_1M/57543/apR-c-19810052.apz"
    note: "There's no apR*.fits files, though the datamodel File type is FITS --- the apz files can be opened as a fits file."
 
  - path: "APOGEE_DATA_1M/MJD5/MJD5.html"
@@ -689,7 +689,7 @@ datamodels:
    location: "{mjd}"
    name: "{mjd}.log.html"
    ext: "log.html"
-   fits_path_example: "$APOGEE_DATA_1M/57543/57543.log.html"
+   path_example: "$APOGEE_DATA_1M/57543/57543.log.html"
    note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/idSysLog.html"
@@ -698,7 +698,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APO_ROOT/"
+   path_example: "$APO_ROOT/"
    note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/idCCDLog.html"
@@ -707,7 +707,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APO_ROOT/"
+   path_example: "$APO_ROOT/"
    note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/sdReport.html"
@@ -716,7 +716,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APO_ROOT/"
+   path_example: "$APO_ROOT/"
    note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/idReport.html"
@@ -725,7 +725,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APO_ROOT/"
+   path_example: "$APO_ROOT/"
    note: ""
 
  - path: "APO_ROOT/oplogs/MJD5/mdReport.html"
@@ -734,7 +734,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APO_ROOT/"
+   path_example: "$APO_ROOT/"
    note: ""
 
  - path: "APO_ROOT/murmurlog/MJD5/murmur.html"
@@ -743,7 +743,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APO_ROOT/"
+   path_example: "$APO_ROOT/"
    note: ""
 
  - path: "APO_ROOT/bias/MJD5/idB.html"
@@ -752,7 +752,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APO_ROOT/"
+   path_example: "$APO_ROOT/"
    note: ""
 
  - path: "STAGING_DATA/oplogs/MJD/idCCDLog.html"
@@ -761,7 +761,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$STAGING_DATA/"
+   path_example: "$STAGING_DATA/"
    note: ""
 
  - path: "STAGING_DATA/oplogs/MJD/sdReport.html"
@@ -770,7 +770,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$STAGING_DATA/"
+   path_example: "$STAGING_DATA/"
    note: ""
 
  - path: "STAGING_DATA/oplogs/MJD/idReport.html"
@@ -779,7 +779,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$STAGING_DATA/"
+   path_example: "$STAGING_DATA/"
    note: ""
 
  - path: "STAGING_DATA/oplogs/MJD/mdReport.html"
@@ -788,7 +788,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$STAGING_DATA/"
+   path_example: "$STAGING_DATA/"
    note: ""
 
  - path: "STAGING_DATA/gangs/MJD/gangs.list.html"
@@ -797,7 +797,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$STAGING_DATA/"
+   path_example: "$STAGING_DATA/"
    note: ""
 
  - path: "GCAM_DATA/MJD/proc-gimg.html"
@@ -806,7 +806,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$GCAM_DATA/"
+   path_example: "$GCAM_DATA/"
    note: ""
 
  - path: "GCAM_DATA/MJD/gimg.html"
@@ -815,7 +815,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$GCAM_DATA/"
+   path_example: "$GCAM_DATA/"
    note: ""
 
  - path: "GCAM_DATA/MJD/dark.html"
@@ -824,7 +824,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$GCAM_DATA/"
+   path_example: "$GCAM_DATA/"
    note: ""
 
  - path: "GCAM_DATA/MJD/flat.html"
@@ -833,7 +833,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$GCAM_DATA/"
+   path_example: "$GCAM_DATA/"
    note: ""
 
  - path: "GCAM_DATA/MJD/movie.html"
@@ -842,7 +842,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$GCAM_DATA/"
+   path_example: "$GCAM_DATA/"
    note: ""
 
  - path: "BOSS_LSS_REDUX/randomN_DRX_SAMPLE_NS.html"
@@ -851,7 +851,7 @@ datamodels:
    location: ""
    name: "random{catalog}-DR{X}{version}-{sample}-{North_South}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/random1_DR12v5_CMASSLOWZTOT_South.fits.gz"
+   path_example: "$BOSS_LSS_REDUX/random1_DR12v5_CMASSLOWZTOT_South.fits.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/galaxy_DR10v8_SAMPLE_NS.html"
@@ -860,7 +860,7 @@ datamodels:
    location: ""
    name: "galaxy_-DR{X}{version}-{sample}-{North_South}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/galaxy_DR12v5_CMASS_South.fits.gz"
+   path_example: "$BOSS_LSS_REDUX/galaxy_DR12v5_CMASS_South.fits.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html"
@@ -869,7 +869,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_LSS_REDUX/"
+   path_example: "$BOSS_LSS_REDUX/"
    note: "Why does <find . -name '*trimmed*'> return nothing for dr[7-15] in $BOSS_LSS_REDUX ?"
 
  - path: "BOSS_LSS_REDUX/mask_DRX_SAMPLE_NS.html"
@@ -878,7 +878,7 @@ datamodels:
    location: "catalogs"
    name: "mask_DR{X}_QSO_{N_S}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_LSS_REDUX/catalogs/mask_DR14_QSO_S.fits"
+   path_example: "$BOSS_LSS_REDUX/catalogs/mask_DR14_QSO_S.fits"
    note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html"
@@ -887,7 +887,7 @@ datamodels:
    location: "inputfiles"
    name: "bosstile-final-collated-boss2-boss{N}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/inputfiles/bosstile-final-collated-boss2-boss38.fits.gz"
+   path_example: "$BOSS_LSS_REDUX/inputfiles/bosstile-final-collated-boss2-boss38.fits.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html"
@@ -896,7 +896,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_LSS_REDUX/"
+   path_example: "$BOSS_LSS_REDUX/"
    note: "Why is there no photoObj versions of the bosstile-final-collated-boss2-bossN-* files? This file type has been found in dr12, dr11, dr10, and dr9. An unaccounted for example is  $BOSS_LSS_REDUX/inputfiles/bosstile-final-collated-boss2-boss32-magnitudes.fits.gz"
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html"
@@ -905,7 +905,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_LSS_REDUX/"
+   path_example: "$BOSS_LSS_REDUX/"
    note: "Why is there no specObj versions of the bosstile-final-collated-boss2-bossN-* files? This file type has been found in dr12, dr11, dr10, and dr9. An unaccounted for example is  $BOSS_LSS_REDUX/inputfiles/bosstile-final-collated-boss2-boss32-magnitudes.fits.gz"
 
  - path: "BOSS_LSS_REDUX/randoms_DR9_CMASS_NS.html"
@@ -914,7 +914,7 @@ datamodels:
    location: ""
    name: "randoms_DR9_CMASS_{North_South}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_LSS_REDUX/randoms_DR9_CMASS_South.fits"
+   path_example: "$BOSS_LSS_REDUX/randoms_DR9_CMASS_South.fits"
    note: ""
 
  - path: "BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-specObj.html"
@@ -923,7 +923,7 @@ datamodels:
    location: ""
    name: "galaxies_DR{X}_CMASS_{North_South}-specObj.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/galaxies_DR9_CMASS_North-specObj.fits"
+   path_example: "$BOSS_LSS_REDUX/galaxies_DR9_CMASS_North-specObj.fits"
    note: ""
 
  - path: "BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-photoObj.html"
@@ -932,7 +932,7 @@ datamodels:
    location: ""
    name: "galaxies_DR{X}_CMASS_{North_South}-photoObj.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/galaxies_DR9_CMASS_South-photoObj.fits"
+   path_example: "$BOSS_LSS_REDUX/galaxies_DR9_CMASS_South-photoObj.fits"
    note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html"
@@ -941,7 +941,7 @@ datamodels:
    location: "inputfiles"
    name: "bosstile-final-collated-boss2-boss{N}-galimaging.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/inputfiles/bosstile-final-collated-boss2-boss38-galimaging.fits.gz"
+   path_example: "$BOSS_LSS_REDUX/inputfiles/bosstile-final-collated-boss2-boss38-galimaging.fits.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html"
@@ -950,7 +950,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_LSS_REDUX/"
+   path_example: "$BOSS_LSS_REDUX/"
    note: "Why is there no photoObj-specObj versions of the bosstile-final-collated-boss2-bossN-* files? This file type has been found in dr12, dr11, dr10, and dr9. An unaccounted for example is  $BOSS_LSS_REDUX/inputfiles/bosstile-final-collated-boss2-boss32-magnitudes.fits.gz"
 
  - path: "BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS.html"
@@ -959,7 +959,7 @@ datamodels:
    location: ""
    name: "galaxy_DR{X}{version}_{sample}_{North_South}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/galaxy_DR12v5_LOWZ_South.fits.gz"
+   path_example: "$BOSS_LSS_REDUX/galaxy_DR12v5_LOWZ_South.fits.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/galaxies_DR9_CMASS_NS.html"
@@ -968,7 +968,7 @@ datamodels:
    location: ""
    name: "galaxies_DR{X}_CMASS_{North_South}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_LSS_REDUX/galaxies_DR9_CMASS_North.fits"
+   path_example: "$BOSS_LSS_REDUX/galaxies_DR9_CMASS_North.fits"
    note: ""
 
  - path: "BOSS_LSS_REDUX/randomN_DR10v8_SAMPLE_NS.html"
@@ -977,7 +977,7 @@ datamodels:
    location: ""
    name: "random{N}_DR{X}{version}_{sample}_{North_South}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/random1_DR12v5_CMASS_South.fits.gz"
+   path_example: "$BOSS_LSS_REDUX/random1_DR12v5_CMASS_South.fits.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_patchy_mocks/Patchy-Mocks-DRXSAMPLENS-VERSION-IDNUM.html"
@@ -986,7 +986,7 @@ datamodels:
    location: "dr12_multidark_patchy_mocks"
    name: "Patchy-Mocks-DR{X}{sample}-{version}_{idnum}.tar.gz"
    ext: "tar.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/dr12_multidark_patchy_mocks/Patchy-Mocks-DR12NGC-COMPSAM_V6C.tar.gz"
+   path_example: "$BOSS_LSS_REDUX/dr12_multidark_patchy_mocks/Patchy-Mocks-DR12NGC-COMPSAM_V6C.tar.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_patchy_mocks/PATCHY-Mocks-Randoms-DRXSAMPLENS-VERSION-xN.html"
@@ -995,7 +995,7 @@ datamodels:
    location: "dr12_multidark_patchy_mocks"
    name: "Patchy-Mocks-Randoms-DR{X}{sample}-COMPSAM_{version}_x{randoms}.tar.gz"
    ext: "tar.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/dr12_multidark_patchy_mocks/Patchy-Mocks-Randoms-DR12NGC-COMPSAM_V6C_x10.tar.gz"
+   path_example: "$BOSS_LSS_REDUX/dr12_multidark_patchy_mocks/Patchy-Mocks-Randoms-DR12NGC-COMPSAM_V6C_x10.tar.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/reject_mask/MASK.html"
@@ -1004,7 +1004,7 @@ datamodels:
    location: "geometry"
    name: "allsky_bright_star_mask_pix.ply"
    ext: "ply"
-   fits_path_example: "$BOSS_LSS_REDUX/geometry/allsky_bright_star_mask_pix.ply"
+   path_example: "$BOSS_LSS_REDUX/geometry/allsky_bright_star_mask_pix.ply"
    note: ""
 
  - path: "BOSS_LSS_REDUX/mask/MASK.html"
@@ -1013,7 +1013,7 @@ datamodels:
    location: "catalogs"
    name: "mask_DR14_{sample}_{N_S}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_LSS_REDUX/catalogs/mask_DR14_LRG_N.fits"
+   path_example: "$BOSS_LSS_REDUX/catalogs/mask_DR14_LRG_N.fits"
    note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html"
@@ -1022,7 +1022,7 @@ datamodels:
    location: "qpm_mocks"
    name: "mock_galaxy_DR{X}_{sample}_{N_S}_QPM_allmocks.tar.gz"
    ext: "tar.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/qpm_mocks/mock_galaxy_DR12_CMASS_N_QPM_allmocks.tar.gz"
+   path_example: "$BOSS_LSS_REDUX/qpm_mocks/mock_galaxy_DR12_CMASS_N_QPM_allmocks.tar.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html"
@@ -1031,7 +1031,7 @@ datamodels:
    location: "qpm_mocks"
    name: "mock_random_DR{X}_{sample}_{N_S}_{nrandoms}x{realization}.rdzw.gz"
    ext: "rdzw.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/qpm_mocks/mock_random_DR12_CMASS_N_50x1.rdzw.gz"
+   path_example: "$BOSS_LSS_REDUX/qpm_mocks/mock_random_DR12_CMASS_N_50x1.rdzw.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html"
@@ -1040,7 +1040,7 @@ datamodels:
    location: "dr11_pthalos_mocks"
    name: "mock_galaxy_DR{X}_{sample}_{N_S}_PTHALOS_allmocks.tar.gz"
    ext: "tar.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DR11_LOWZ_S_PTHALOS_allmocks.tar.gz"
+   path_example: "$BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DR11_LOWZ_S_PTHALOS_allmocks.tar.gz"
    note: ""
 
  - path: "BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html"
@@ -1049,7 +1049,7 @@ datamodels:
    location: "dr11_pthalos_mocks"
    name: "mock_galaxy_DR{X}_{sample}_{N_S}_PTHALOS_allmocks.tar.gz"
    ext: "tar.gz"
-   fits_path_example: "$BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DR11_CMASS_N_PTHALOS_allmocks.tar.gz"
+   path_example: "$BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DR11_CMASS_N_PTHALOS_allmocks.tar.gz"
    note: ""
 
  - path: "EBOSS_FIREFLY/FIREFLY_VER/firefly_galaxy_sdss.html"
@@ -1058,7 +1058,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$EBOSS_FIREFLY/"
+   path_example: "$EBOSS_FIREFLY/"
    note: ""
 
  - path: "EBOSS_FIREFLY/FIREFLY_VER/firefly_galaxy_eboss.html"
@@ -1067,7 +1067,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$EBOSS_FIREFLY/"
+   path_example: "$EBOSS_FIREFLY/"
    note: ""
 
  - path: "APOGEE_SPECLIB/synth/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.dat.html"
@@ -1076,7 +1076,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_SPECLIB/"
+   path_example: "$APOGEE_SPECLIB/"
    note: "There's fits files of the forms
    $APOGEE_SPECLIB/turbospec/kurucz/giantisotopes/tgGK_150714_lsfa_l31c/am03cm03nm05vp05.fits
    $APOGEE_SPECLIB/turbospec/marcs/giantisotopes/tgM_150714_lsfcombo5_l31c/ap10cp05np10vp20.fits
@@ -1089,7 +1089,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_SPECLIB/"
+   path_example: "$APOGEE_SPECLIB/"
    note: ""
 
  - path: "APOGEE_SPECLIB/synth/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.hdr.html"
@@ -1098,7 +1098,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_SPECLIB/"
+   path_example: "$APOGEE_SPECLIB/"
    note: ""
 
  - path: "APOGEE_SPECLIB/synth/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/aXXXcXXXnXXXvXXX.html"
@@ -1107,7 +1107,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_SPECLIB/"
+   path_example: "$APOGEE_SPECLIB/"
    note: ""
 
  - path: "SEGUE2_TARGET_ALL/RERUN/RUN/seguetsObjAll.html"
@@ -1116,7 +1116,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SEGUE2_TARGET_ALL/"
+   path_example: "$SEGUE2_TARGET_ALL/"
    note: ""
 
  - path: "SEGUE2_TARGET_ALL/RERUN/RUN/segue2TargetAll.html"
@@ -1125,7 +1125,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SEGUE2_TARGET_ALL/"
+   path_example: "$SEGUE2_TARGET_ALL/"
    note: ""
 
  - path: "SEGUE2_TARGET_ALL/RERUN/RUN/seguetsCasObj.html"
@@ -1134,7 +1134,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SEGUE2_TARGET_ALL/"
+   path_example: "$SEGUE2_TARGET_ALL/"
    note: ""
 
  - path: "MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastar-goodspec-DRPVER-MPROCVER.html"
@@ -1143,7 +1143,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_MASTAR/"
+   path_example: "$MANGA_SPECTRO_MASTAR/"
    note: ""
 
  - path: "MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastarall-DRPVER-MPROCVER.html"
@@ -1152,7 +1152,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_MASTAR/"
+   path_example: "$MANGA_SPECTRO_MASTAR/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/drpall.html"
@@ -1161,7 +1161,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-CUBE.html"
@@ -1170,7 +1170,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/stack/manga-RSS.html"
@@ -1179,7 +1179,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.html"
@@ -1188,7 +1188,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html"
@@ -1197,7 +1197,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html"
@@ -1206,7 +1206,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html"
@@ -1215,7 +1215,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html"
@@ -1224,7 +1224,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html"
@@ -1233,7 +1233,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_REDUX/"
+   path_example: "$MANGA_SPECTRO_REDUX/"
    note: ""
 
  - path: "ECAM_DATA/MJD/all_files.html"
@@ -1242,7 +1242,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$ECAM_DATA/"
+   path_example: "$ECAM_DATA/"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/photoRunAll.html"
@@ -1251,7 +1251,7 @@ datamodels:
    location: "plates/2013-07-29/11705"
    name: "photoRunAll-dr{X}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/photoRunAll-dr14.fits"
+   path_example: "$BOSS_PHOTOOBJ/photoRunAll-dr14.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/astromQAFields.html"
@@ -1260,7 +1260,7 @@ datamodels:
    location: "astromqa"
    name: "astromQAFields.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/astromQAFields.fits"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/astromQAFields.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/astromqa.html"
@@ -1269,7 +1269,7 @@ datamodels:
    location: "astromqa"
    name: "astromqa-{nra}-{ndec}.html"
    ext: "html"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/astromqa-500-250.html"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/astromqa-500-250.html"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/astromQAImage.html"
@@ -1278,7 +1278,7 @@ datamodels:
    location: "astromqa/{cat}"
    name: "astromQAImage-{cat}-{type}-{nra}-{ndec}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/astromQAImage-xdqso-dra-500-250.fits"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/astromQAImage-xdqso-dra-500-250.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQASummary.html"
@@ -1287,7 +1287,7 @@ datamodels:
    location: "astromqa/{cat}/{rerun}/{run}"
    name: "astromQASummary-{cat}-{run}-{camcol}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/301/994/astromQASummary-xdqso-994-6.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/301/994/astromQASummary-xdqso-994-6.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQAFieldSummary.html"
@@ -1296,7 +1296,7 @@ datamodels:
    location: "astromqa/{cat}/{rerun}/{camcol}"
    name: "astromQAFieldSummary-{cat}-{run}-{camcol}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/301/994/astromQAFieldSummary-xdqso-994-6.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/301/994/astromQAFieldSummary-xdqso-994-6.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQAImage.html"
@@ -1305,7 +1305,7 @@ datamodels:
    location: "astromqa/{cat}"
    name: "astromQAImage-{cat}-{type}-{run}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/astromQAImage-xdqso-dra-500-250.fits"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/astromQAImage-xdqso-dra-500-250.fits"
    note: "What's the 250 in $BOSS_PHOTOOBJ/astromqa/xdqso/astromQAImage-xdqso-dra-500-250.fits ?"
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/astromQAFieldFlag.html"
@@ -1314,7 +1314,7 @@ datamodels:
    location: "astromqa/{cat}/{rerun}/{run}"
    name: "astromQAFieldFlag-{cat}-{run}-{camcol}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/301/994/astromQAFieldFlag-xdqso-994-5.fits"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/xdqso/301/994/astromQAFieldFlag-xdqso-994-5.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/CAMCOL/astromQA.html"
@@ -1323,7 +1323,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_PHOTOOBJ/"
+   path_example: "$BOSS_PHOTOOBJ/"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/CAT/starastro/starastro.html"
@@ -1332,7 +1332,7 @@ datamodels:
    location: "astromqa/DR7/starastro"
    name: "starastro-{run:0>6d}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/DR7/starastro/starastro-003830.fits"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/DR7/starastro/starastro-003830.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/astromqa/plots/RERUN/RUN/astromQA-offsets.html"
@@ -1341,7 +1341,7 @@ datamodels:
    location: "astromqa/plots/{rerun}/{run}"
    name: "astromQA-{cat}-offsets-{run:0>6d}-{camcol}.png"
    ext: "png"
-   fits_path_example: "$BOSS_PHOTOOBJ/astromqa/plots/301/994/astromQA-usnob-offsets-000994-6.png"
+   path_example: "$BOSS_PHOTOOBJ/astromqa/plots/301/994/astromQA-usnob-offsets-000994-6.png"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/RERUN/RUN/photoRun.html"
@@ -1350,7 +1350,7 @@ datamodels:
    location: "{rerun}/{run}"
    name: "photoRun-{run:0>6d}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/301/994/photoRun-000994.fits"
+   path_example: "$BOSS_PHOTOOBJ/301/994/photoRun-000994.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/RERUN/RUN/photoField.html"
@@ -1359,7 +1359,7 @@ datamodels:
    location: "{rerun}/{run}"
    name: "photoField-{run:0>6d}-{camcol}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/301/5814/photoField-005814-6.fits"
+   path_example: "$BOSS_PHOTOOBJ/301/5814/photoField-005814-6.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/RERUN/RUN/CAMCOL/photoObj.html"
@@ -1368,7 +1368,7 @@ datamodels:
    location: "{rerun}/{run}/{camcol}"
    name: "photoObj-{run:0>6d}-{camcol}-{frame}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/301/3559/6/photoObj-003559-6-0085.fits"
+   path_example: "$BOSS_PHOTOOBJ/301/3559/6/photoObj-003559-6-0085.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/frames/RERUN/RUN/CAMCOL/frame.html"
@@ -1377,7 +1377,7 @@ datamodels:
    location: "frames/{rerun}/{run}/{camcol}"
    name: "frame-{ugriz}-{run:0>6d}-{camcol}-{frame}.fits.bz2"
    ext: "fits.bz2"
-   fits_path_example: "$BOSS_PHOTOOBJ/frames/301/1043/1/frame-u-001043-1-0036.fits.bz2"
+   path_example: "$BOSS_PHOTOOBJ/frames/301/1043/1/frame-u-001043-1-0036.fits.bz2"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/xdqso/xdqso_index.html"
@@ -1386,7 +1386,7 @@ datamodels:
    location: "xdqso"
    name: "xdqso_index.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/xdqso/xdqso_index.fits"
+   path_example: "$BOSS_PHOTOOBJ/xdqso/xdqso_index.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/xdqso/xdcore/xdcore_RUN6.html"
@@ -1395,7 +1395,7 @@ datamodels:
    location: "xdqso/xdcore"
    name: "xdcore_{run:0>6d}.fits"
    ext: " "
-   fits_path_example: "$BOSS_PHOTOOBJ/xdqso/xdcore/xdcore_008162.fits"
+   path_example: "$BOSS_PHOTOOBJ/xdqso/xdcore/xdcore_008162.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html"
@@ -1404,7 +1404,7 @@ datamodels:
    location: "atlasOutline/{rerun}/{run}/{camcol}"
    name: "primary-mask-{filter}-{run:0>6d}-{camcol}-{field4}.par"
    ext: "par"
-   fits_path_example: "$BOSS_PHOTOOBJ/atlasOutline/301/1009/2/primary-mask-z-001009-2-0178.par"
+   path_example: "$BOSS_PHOTOOBJ/atlasOutline/301/1009/2/primary-mask-z-001009-2-0178.par"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html"
@@ -1413,7 +1413,7 @@ datamodels:
    location: "atlasOutline/301/{run}/{camcol}"
    name: "mask-{filter}-{run:0>6d}-{camcol}-{field4}.par"
    ext: "par"
-   fits_path_example: "$BOSS_PHOTOOBJ/atlasOutline/301/1009/3/mask-g-001009-3-0035.par"
+   path_example: "$BOSS_PHOTOOBJ/atlasOutline/301/1009/3/mask-g-001009-3-0035.par"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/photoz-weight/pofz.html"
@@ -1422,7 +1422,7 @@ datamodels:
    location: "photoz-weight"
    name: "pofz-{pofzrun}-{run:0>6d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/photoz-weight/pofz-12-008158.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/photoz-weight/pofz-12-008158.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoMatchPlate.html"
@@ -1431,7 +1431,7 @@ datamodels:
    location: "plates/2013-07-29/{plate4}"
    name: "photoMatchPlate-{plate4}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/plates/2013-07-29/9003/photoMatchPlate-9003.fits"
+   path_example: "$BOSS_PHOTOOBJ/plates/2013-07-29/9003/photoMatchPlate-9003.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoPlate.html"
@@ -1440,7 +1440,7 @@ datamodels:
    location: "plates/2013-07-29/{plate4}"
    name: "photoPlate-{plate4}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/plates/2013-07-29/9003/photoPlate-9003.fits"
+   path_example: "$BOSS_PHOTOOBJ/plates/2013-07-29/9003/photoPlate-9003.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoPosPlate.html"
@@ -1449,7 +1449,7 @@ datamodels:
    location: "plates/2013-07-29/{plate4}"
    name: "photoPosPlate-{plate4}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/plates/2013-07-29/9003/photoPosPlate-9003.fits"
+   path_example: "$BOSS_PHOTOOBJ/plates/2013-07-29/9003/photoPosPlate-9003.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/PM/RERUN/RUN/photoPM.html"
@@ -1458,7 +1458,7 @@ datamodels:
    location: "external/PM/{rerun}/{run}"
    name: "photoPM-{run:0>6d}-{field4}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/PM/301/994/photoPM-000994-6.fits"
+   path_example: "$BOSS_PHOTOOBJ/external/PM/301/994/photoPM-000994-6.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/PM/RERUN/RUN/CAMCOL/photoPM.html"
@@ -1467,7 +1467,7 @@ datamodels:
    location: "external/PM/{rerun}/{run}/{camcol}"
    name: "photoPM-{run:0>6d}-{camcol}-{field:0>4d}.fits"
    ext: " "
-   fits_path_example: "$BOSS_PHOTOOBJ/external/PM/301/994/6/photoPM-000994-6-0132.fits"
+   path_example: "$BOSS_PHOTOOBJ/external/PM/301/994/6/photoPM-000994-6-0132.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/RC3/RERUN/RUN/photoRC3Camcol.html"
@@ -1476,7 +1476,7 @@ datamodels:
    location: "external/RC3/{rerun}/{run}"
    name: "photoRC3Camcol-{run:0>6d}-{camcol}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/RC3/301/994/photoRC3Camcol-000994-6.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/RC3/301/994/photoRC3Camcol-000994-6.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/RC3/RERUN/RUN/CAMCOL/photoRC3.html"
@@ -1485,7 +1485,7 @@ datamodels:
    location: "external/RC3/{rerun}/{run}/{camcol}"
    name: "photoRC3-{run:0>6d}-{camcol}-{field:0>4d}.fits.gz"
    ext: " "
-   fits_path_example: "$BOSS_PHOTOOBJ/external/RC3/301/994/6/photoRC3-000994-6-0133.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/RC3/301/994/6/photoRC3-000994-6-0133.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/WISEForcedTarget/RERUN/RUN/CAMCOL/photoWISEForcedTarget.html"
@@ -1494,7 +1494,7 @@ datamodels:
    location: "WISEForcedTarget/{rerun}/{run}/{camcol}"
    name: "photoWISEForcedTarget-{run:0>6d}-{camcol}-{field:0>4d}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/WISEForcedTarget/301/994/6/photoWISEForcedTarget-000994-6-0108.fits"
+   path_example: "$BOSS_PHOTOOBJ/external/WISEForcedTarget/301/994/6/photoWISEForcedTarget-000994-6-0108.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/First/RERUN/RUN/photoFirstCamcol.html"
@@ -1503,7 +1503,7 @@ datamodels:
    location: "external/First-2003/{rerun}/{run}"
    name: "photoFirstCamcol-{run:0>6d}-{camcol}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/First-2003/301/994/photoFirstCamcol-000994-5.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/First-2003/301/994/photoFirstCamcol-000994-5.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/First/RERUN/RUN/CAMCOL/photoFirst.html"
@@ -1512,7 +1512,7 @@ datamodels:
    location: "external/First-2003/{rerun}/{run}/{camcol}"
    name: "photoFirst-{run:0>6d}-{camcol}-{field:0>4d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/First-2003/301/994/6/photoFirst-000994-6-0133.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/First-2003/301/994/6/photoFirst-000994-6-0133.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/USNOB/RERUN/RUN/photoUSNOBCamcol.html"
@@ -1521,7 +1521,7 @@ datamodels:
    location: "external/USNOB/{rerun}/7757"
    name: "photoUSNOBCamcol-{run:0>6d}-{camcol}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/USNOB/301/7757/photoUSNOBCamcol-007757-5.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/USNOB/301/7757/photoUSNOBCamcol-007757-5.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/USNOB/RERUN/RUN/CAMCOL/photoUSNOB.html"
@@ -1530,7 +1530,7 @@ datamodels:
    location: "external/USNOB/{rerun}/{run}/{camcol}"
    name: "photoUSNOB-{run:0>6d}-{camcol}-{field:0>4d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/USNOB/301/7127/1/photoUSNOB-007127-1-0815.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/USNOB/301/7127/1/photoUSNOB-007127-1-0815.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/ROSAT/RERUN/RUN/photoROSATCamcol.html"
@@ -1539,7 +1539,7 @@ datamodels:
    location: "external/ROSAT/{rerun}/{run}"
    name: "photoROSATCamcol-{run:0>6d}-{camcol}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/ROSAT/301/994/photoROSATCamcol-000994-4.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/ROSAT/301/994/photoROSATCamcol-000994-4.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/ROSAT/RERUN/RUN/CAMCOL/photoROSAT.html"
@@ -1548,7 +1548,7 @@ datamodels:
    location: "external/ROSAT/{rerun}/{run}/{camcol}"
    name: "photoROSAT-{run:0>6d}-{camcol}-{field:0>4d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/ROSAT/301/994/6/photoROSAT-000994-6-0132.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/ROSAT/301/994/6/photoROSAT-000994-6-0132.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/2MASS/RERUN/RUN/photo2MASSCamcol.html"
@@ -1557,7 +1557,7 @@ datamodels:
    location: "external/2MASS/{rerun}/{run}"
    name: "photo2MASSCamcol-{run:0>6d}-{camcol}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/2MASS/301/994/photo2MASSCamcol-000994-5.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/2MASS/301/994/photo2MASSCamcol-000994-5.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/2MASS/RERUN/RUN/CAMCOL/photo2MASS.html"
@@ -1566,7 +1566,7 @@ datamodels:
    location: "external/2MASS/{rerun}/{run}/{camcol}"
    name: "photo2MASS-{run:0>6d}-{camcol}-{field:0>4d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/2MASS/301/994/6/photo2MASS-000994-6-0127.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/2MASS/301/994/6/photo2MASS-000994-6-0127.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/WISE/RERUN/RUN/CAMCOL/photoWISE.html"
@@ -1575,7 +1575,7 @@ datamodels:
    location: "external/WISE/{rerun}/{run}/{camcol}"
    name: "photoWISE-{run:0>6d}-{camcol}.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/WISE/301/994/6/photoWISE-000994-6.fits"
+   path_example: "$BOSS_PHOTOOBJ/external/WISE/301/994/6/photoWISE-000994-6.fits"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/2MASSXSC/RERUN/RUN/photo2MASSXSCCamcol.html"
@@ -1584,7 +1584,7 @@ datamodels:
    location: "external/2MASSXSC/{rerun}/{run}"
    name: "photo2MASSXSCCamcol-{run:0>6d}-{camcol}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/2MASSXSC/301/994/photo2MASSXSCCamcol-000994-6.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/2MASSXSC/301/994/photo2MASSXSCCamcol-000994-6.fits.gz"
    note: ""
 
  - path: "BOSS_PHOTOOBJ/external/2MASSXSC/RERUN/RUN/CAMCOL/photo2MASSXSC.html"
@@ -1593,7 +1593,7 @@ datamodels:
    location: "external/2MASSXSC/{rerun}/{run}/{camcol}"
    name: "photo2MASSXSC-{run:0>6d}-{camcol}-{field:0>4d}.fits.gz"
    ext: "fits.gz"
-   fits_path_example: "$BOSS_PHOTOOBJ/external/2MASSXSC/301/994/6/photo2MASSXSC-000994-6-0133.fits.gz"
+   path_example: "$BOSS_PHOTOOBJ/external/2MASSXSC/301/994/6/photo2MASSXSC-000994-6-0133.fits.gz"
    note: ""
 
  - path: "MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html"
@@ -1602,7 +1602,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGAPREIM_DIR/"
+   path_example: "$MANGAPREIM_DIR/"
    note: ""
 
  - path: "APOGEE_DATA/MJD5/apR.html"
@@ -1611,7 +1611,7 @@ datamodels:
    location: "{mjd}"
    name: "apR-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_DATA/57083/apR-c-15210030.fits"
+   path_example: "$APOGEE_DATA/57083/apR-c-15210030.fits"
    note: ""
 
  - path: "APOGEE_DATA/MJD5/MJD5.html"
@@ -1620,7 +1620,7 @@ datamodels:
    location: "{mjd}"
    name: "{mjd}.log.html"
    ext: "log.html"
-   fits_path_example: "$APOGEE_DATA/57583/57583.log.html"
+   path_example: "$APOGEE_DATA/57583/57583.log.html"
    note: ""
 
  - path: "SDSS_TILING/final/sdss_tiling_polygons.html"
@@ -1629,7 +1629,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SDSS_TILING/"
+   path_example: "$SDSS_TILING/"
    note: ""
 
  - path: "SDSS_TILING/final/sdss_tiles.html"
@@ -1638,7 +1638,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SDSS_TILING/"
+   path_example: "$SDSS_TILING/"
    note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/csv_ready.html"
@@ -1647,7 +1647,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$CAS_LOAD/"
+   path_example: "$CAS_LOAD/"
    note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlField.html"
@@ -1656,7 +1656,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$CAS_LOAD/"
+   path_example: "$CAS_LOAD/"
    note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoProfile.html"
@@ -1665,7 +1665,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$CAS_LOAD/"
+   path_example: "$CAS_LOAD/"
    note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlFieldProfile.html"
@@ -1674,7 +1674,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$CAS_LOAD/"
+   path_example: "$CAS_LOAD/"
    note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlRun.html"
@@ -1683,7 +1683,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$CAS_LOAD/"
+   path_example: "$CAS_LOAD/"
    note: ""
 
  - path: "CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoObjAll.html"
@@ -1692,7 +1692,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$CAS_LOAD/"
+   path_example: "$CAS_LOAD/"
    note: ""
 
  - path: "BOSSTILELIST_DIR/bosschunks.html"
@@ -1701,7 +1701,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/bosstiles.html"
@@ -1710,7 +1710,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/geometry/boss_sector2tile.html"
@@ -1719,7 +1719,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/geometry/boss_locations.html"
@@ -1728,7 +1728,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/geometry/boss_sectors.html"
@@ -1737,7 +1737,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/geometry/boss_geometry.html"
@@ -1746,7 +1746,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/final-bossN.html"
@@ -1755,7 +1755,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/platePlans-bossN.html"
@@ -1764,7 +1764,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/sector-bossN.html"
@@ -1773,7 +1773,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/tiles-bossN.html"
@@ -1782,7 +1782,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/stpair-bossN.html"
@@ -1791,7 +1791,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/geometry-bossN.html"
@@ -1800,7 +1800,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/plugtest-bossN.html"
@@ -1809,7 +1809,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html"
@@ -1818,7 +1818,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/inputs/bossN/targets-bossN.html"
@@ -1827,7 +1827,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-targets.html"
@@ -1836,7 +1836,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-bossN.html"
@@ -1845,7 +1845,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTILELIST_DIR/"
+   path_example: "$BOSSTILELIST_DIR/"
    note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "PLATEDESIGN_DIR/defaults/plateDefault.html"
@@ -1854,7 +1854,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATEDESIGN_DIR/"
+   path_example: "$PLATEDESIGN_DIR/"
    note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetClusters.html"
@@ -1863,7 +1863,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_TARGET/"
+   path_example: "$SPIDERS_TARGET/"
    note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetSequelsClus.html"
@@ -1872,7 +1872,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_TARGET/"
+   path_example: "$SPIDERS_TARGET/"
    note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetAGN-SPIDERS_XMMSL_AGN.html"
@@ -1881,7 +1881,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_TARGET/"
+   path_example: "$SPIDERS_TARGET/"
    note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetAGN-SPIDERS_RASS_AGN.html"
@@ -1890,7 +1890,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_TARGET/"
+   path_example: "$SPIDERS_TARGET/"
    note: ""
 
  - path: "SPIDERS_TARGET/spiderstargetSequelsAGN.html"
@@ -1899,7 +1899,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_TARGET/"
+   path_example: "$SPIDERS_TARGET/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/dapall.html"
@@ -1908,7 +1908,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/manga-MAPS-DAPTYPE.html"
@@ -1917,7 +1917,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/manga-LOGCUBE-DAPTYPE.html"
@@ -1926,7 +1926,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY.html"
@@ -1935,7 +1935,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELMKEY.html"
@@ -1944,7 +1944,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY.html"
@@ -1953,7 +1953,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE.html"
@@ -1962,7 +1962,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-SIKEY.html"
@@ -1971,7 +1971,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYPE-ELFKEY-ELMKEY.html"
@@ -1980,7 +1980,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-BINKEY.html"
@@ -1989,7 +1989,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_ANALYSIS/"
+   path_example: "$MANGA_SPECTRO_ANALYSIS/"
    note: ""
 
  - path: "RAWDATA_DIR/MJD/frames.list.html"
@@ -1998,7 +1998,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$RAWDATA_DIR/"
+   path_example: "$RAWDATA_DIR/"
    note: ""
 
  - path: "RAWDATA_DIR/MJD/MJD.md5sum.html"
@@ -2007,7 +2007,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$RAWDATA_DIR/"
+   path_example: "$RAWDATA_DIR/"
    note: ""
 
  - path: "RAWDATA_DIR/MJD/sdR.html"
@@ -2016,7 +2016,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$RAWDATA_DIR/"
+   path_example: "$RAWDATA_DIR/"
    note: ""
 
  - path: "RAWDATA_DIR/MJD/guider/gimg.html"
@@ -2025,7 +2025,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$RAWDATA_DIR/"
+   path_example: "$RAWDATA_DIR/"
    note: ""
 
  - path: "MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html"
@@ -2034,7 +2034,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_TARGET/"
+   path_example: "$MANGA_TARGET/"
    note: ""
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html"
@@ -2043,7 +2043,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_OBSOLETE/"
+   path_example: "$APOGEE_OBSOLETE/"
    note: "Why is there no tree/dr15 environment variable $APOGEE_OBSOLETE ?"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFluxError.html"
@@ -2052,7 +2052,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_OBSOLETE/"
+   path_example: "$APOGEE_OBSOLETE/"
    note: "Why is there no tree/dr15 environment variable $APOGEE_OBSOLETE ?"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFlux.html"
@@ -2061,7 +2061,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_OBSOLETE/"
+   path_example: "$APOGEE_OBSOLETE/"
    note: "Why is there no tree/dr15 environment variable $APOGEE_OBSOLETE ?"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapParam.html"
@@ -2070,7 +2070,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_OBSOLETE/"
+   path_example: "$APOGEE_OBSOLETE/"
    note: "Why is there no tree/dr15 environment variable $APOGEE_OBSOLETE ?"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapCova.html"
@@ -2079,7 +2079,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_OBSOLETE/"
+   path_example: "$APOGEE_OBSOLETE/"
    note: "Why is there no tree/dr15 environment variable $APOGEE_OBSOLETE ?"
 
  - path: "APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/lib/aspcapSynth.html"
@@ -2088,7 +2088,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOGEE_OBSOLETE/"
+   path_example: "$APOGEE_OBSOLETE/"
    note: "Why is there no tree/dr15 environment variable $APOGEE_OBSOLETE ?"
 
  - path: "SSPP_REDUX/ssppOut.html"
@@ -2097,7 +2097,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/ssppOut_lineindex.html"
@@ -2106,7 +2106,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/ssppPlates.html"
@@ -2115,7 +2115,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/ssppTargets.html"
@@ -2124,7 +2124,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/targets/PLATE4/segueTargetPlate.html"
@@ -2133,7 +2133,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/targets/all/plate2targetfile.html"
@@ -2142,7 +2142,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/targets/all/segueTarget.html"
@@ -2151,7 +2151,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/RERUN/plate_mjds_done.html"
@@ -2160,7 +2160,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/RERUN/plate_mjds_sspp.html"
@@ -2169,7 +2169,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut.html"
@@ -2178,7 +2178,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut_lineindex.html"
@@ -2187,7 +2187,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "SSPP_REDUX/duplicates/dup.html"
@@ -2196,7 +2196,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SSPP_REDUX/"
+   path_example: "$SSPP_REDUX/"
    note: ""
 
  - path: "MANGA_SPECZ/DRPVER/SPECZVER/speczall.html"
@@ -2205,7 +2205,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECZ/"
+   path_example: "$MANGA_SPECZ/"
    note: ""
 
  - path: "MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-RSS.html"
@@ -2214,7 +2214,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECZ/"
+   path_example: "$MANGA_SPECZ/"
    note: ""
 
  - path: "MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html"
@@ -2223,7 +2223,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECZ/"
+   path_example: "$MANGA_SPECZ/"
    note: ""
 
  - path: "PHOTO_CALIB/RERUN/RUN/nfcalib/calibPhotomGlobal.html"
@@ -2232,7 +2232,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_CALIB/"
+   path_example: "$PHOTO_CALIB/"
    note: ""
 
  - path: "SPIDERS_ANALYSIS/catCluster-SPIDERS_RASS_CLUS-v-dr13.html"
@@ -2241,7 +2241,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_ANALYSIS/"
+   path_example: "$SPIDERS_ANALYSIS/"
    note: ""
 
  - path: "SPIDERS_ANALYSIS/catCluster-SPIDERS_RASS_CLUS-v-dr14.html"
@@ -2250,7 +2250,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_ANALYSIS/"
+   path_example: "$SPIDERS_ANALYSIS/"
    note: ""
 
  - path: "SPIDERS_ANALYSIS/VAC_spiders_2RXS.html"
@@ -2259,7 +2259,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_ANALYSIS/"
+   path_example: "$SPIDERS_ANALYSIS/"
    note: ""
 
  - path: "SPIDERS_ANALYSIS/VAC_spiders_XMMSL.html"
@@ -2268,7 +2268,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_ANALYSIS/"
+   path_example: "$SPIDERS_ANALYSIS/"
    note: ""
 
  - path: "SPIDERS_ANALYSIS/catCluster-SPIDERS_RASS_CLUS.html"
@@ -2277,7 +2277,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPIDERS_ANALYSIS/"
+   path_example: "$SPIDERS_ANALYSIS/"
    note: ""
 
  - path: "PHOTO_RESOLVE/thingIndex.html"
@@ -2286,7 +2286,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/window_unified.html"
@@ -2295,7 +2295,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/window_blist_noindx.html"
@@ -2304,7 +2304,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/thingList.html"
@@ -2313,7 +2313,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/window_bcaps.html"
@@ -2322,7 +2322,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/window_bindx.html"
@@ -2331,7 +2331,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/window_flist.html"
@@ -2340,7 +2340,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/window_findx.html"
@@ -2349,7 +2349,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/window_blist.html"
@@ -2358,7 +2358,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/window_findx_unsorted.html"
@@ -2367,7 +2367,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "PHOTO_RESOLVE/RERUN/RUN/resolve/CAMCOL/reObjGlobal.html"
@@ -2376,7 +2376,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_RESOLVE/"
+   path_example: "$PHOTO_RESOLVE/"
    note: ""
 
  - path: "APOGEE_OCCAM/APOGEE_OCCAM_DR14_cluster.html"
@@ -2385,7 +2385,7 @@ datamodels:
    location: ""
    name: "occam_cluster-DR14.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_OCCAM/occam_cluster-DR14.fits"
+   path_example: "$APOGEE_OCCAM/occam_cluster-DR14.fits"
    note: ""
 
  - path: "APOGEE_OCCAM/APOGEE_OCCAM_DR14_members.html"
@@ -2394,7 +2394,7 @@ datamodels:
    location: ""
    name: "occam_member-DR14.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_OCCAM/occam_member-DR14.fits"
+   path_example: "$APOGEE_OCCAM/occam_member-DR14.fits"
    note: ""
 
  - path: "MANGA_MORPHOLOGY/deep_learning/DL_VER/manga-morphology-dl.html"
@@ -2403,7 +2403,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_MORPHOLOGY/"
+   path_example: "$MANGA_MORPHOLOGY/"
    note: ""
 
  - path: "MANGA_MORPHOLOGY/galaxyzoo/MaNGA_gz.html"
@@ -2412,7 +2412,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_MORPHOLOGY/"
+   path_example: "$MANGA_MORPHOLOGY/"
    note: ""
 
  - path: "MARVELS_DATA/MJD/done.html"
@@ -2421,7 +2421,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_DATA/"
+   path_example: "$MARVELS_DATA/"
    note: ""
 
  - path: "MARVELS_DATA/MJD/MJD.md5sum.html"
@@ -2430,7 +2430,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_DATA/"
+   path_example: "$MARVELS_DATA/"
    note: ""
 
  - path: "MARVELS_DATA/MJD/logs_qualityassurance/MARVELS1_QALOG.html"
@@ -2439,7 +2439,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_DATA/"
+   path_example: "$MARVELS_DATA/"
    note: ""
 
  - path: "MARVELS_DATA/MJD/et1/MARVELS1.html"
@@ -2448,7 +2448,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MARVELS_DATA/"
+   path_example: "$MARVELS_DATA/"
    note: ""
 
  - path: "BOSSTARGET_DIR/data/geometry/boss_survey.html"
@@ -2457,7 +2457,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSSTARGET_DIR/"
+   path_example: "$BOSSTARGET_DIR/"
    note: "Why does $BOSSTARGET_DIR not exist on elmo for dr[7-15] ?"
 
  - path: "APOGEE_RC/cat/apogee-rc-DR13.html"
@@ -2466,7 +2466,7 @@ datamodels:
    location: "cat"
    name: "apogee-rc-DR13.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_RC/cat/apogee-rc-DR13.fits"
+   path_example: "$APOGEE_RC/cat/apogee-rc-DR13.fits"
    note: ""
 
  - path: "APOGEE_RC/cat/apogee-rc-DR12.html"
@@ -2475,7 +2475,7 @@ datamodels:
    location: "cat"
    name: "apogee-rc-DR12.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_RC/cat/apogee-rc-DR12.fits"
+   path_example: "$APOGEE_RC/cat/apogee-rc-DR12.fits"
    note: ""
 
  - path: "APOGEE_RC/cat/apogee-rc-DR11.html"
@@ -2484,7 +2484,7 @@ datamodels:
    location: "cat"
    name: "apogee-rc-DR11.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_RC/cat/apogee-rc-DR11.fits"
+   path_example: "$APOGEE_RC/cat/apogee-rc-DR11.fits"
    note: ""
 
  - path: "MANGA_FIREFLY/FIREFLY_VER/manga_firefly.html"
@@ -2493,7 +2493,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_FIREFLY/"
+   path_example: "$MANGA_FIREFLY/"
    note: ""
 
  - path: "MANGA_FIREFLY/FIREFLY_VER/manga_firefly-GLOBALPROP.html"
@@ -2502,7 +2502,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_FIREFLY/"
+   path_example: "$MANGA_FIREFLY/"
    note: ""
 
  - path: "MANGA_FIREFLY/FIREFLY_VER/manga_firefly-STELLARPOP.html"
@@ -2511,7 +2511,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_FIREFLY/"
+   path_example: "$MANGA_FIREFLY/"
    note: ""
 
  - path: "MANGA_FIREFLY/FIREFLY_VER/manga_firefly-INDICES.html"
@@ -2520,7 +2520,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_FIREFLY/"
+   path_example: "$MANGA_FIREFLY/"
    note: ""
 
  - path: "APOLOGS_DIR/LOG_NAME/apologs.html"
@@ -2529,7 +2529,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APOLOGS_DIR/"
+   path_example: "$APOLOGS_DIR/"
    note: ""
 
  - path: "PHOTO_REDUX/runList.html"
@@ -2538,7 +2538,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpFieldStat.html"
@@ -2547,7 +2547,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psBB.html"
@@ -2556,7 +2556,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpAtlas.html"
@@ -2565,7 +2565,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psField.html"
@@ -2574,7 +2574,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpM.html"
@@ -2583,7 +2583,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpBIN.html"
@@ -2592,7 +2592,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psFF.html"
@@ -2601,7 +2601,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpObjc.html"
@@ -2610,7 +2610,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psCT.html"
@@ -2619,7 +2619,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/ssc/koCat.html"
@@ -2628,7 +2628,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/ssc/scParam.html"
@@ -2637,7 +2637,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/ssc/scPlan.html"
@@ -2646,7 +2646,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/resolve/CAMCOL/reObjRun.html"
@@ -2655,7 +2655,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/astrom/asParam.html"
@@ -2664,7 +2664,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/astrom/asQA.html"
@@ -2673,7 +2673,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/astrom/asPlan.html"
@@ -2682,7 +2682,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/opConfig.html"
@@ -2691,7 +2691,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/opECalib.html"
@@ -2700,7 +2700,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/opCamera.html"
@@ -2709,7 +2709,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/idReport.html"
@@ -2718,7 +2718,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/idWeather.html"
@@ -2727,7 +2727,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/opBC.html"
@@ -2736,7 +2736,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/logs/idFrameLog.html"
@@ -2745,7 +2745,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/nfcalib/calibMatch.html"
@@ -2754,7 +2754,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/nfcalib/calibPhotom.html"
@@ -2763,7 +2763,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/window/wiField.html"
@@ -2772,7 +2772,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/window/wiScanline.html"
@@ -2781,7 +2781,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/window/wiRun.html"
@@ -2790,7 +2790,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/window/wiTrimRun.html"
@@ -2799,7 +2799,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/fpPlan.html"
@@ -2808,7 +2808,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/psPlan.html"
@@ -2817,7 +2817,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/psParam.html"
@@ -2826,7 +2826,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/fpParam.html"
@@ -2835,7 +2835,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "PHOTO_REDUX/RERUN/RUN/photo/calib/idB.html"
@@ -2844,7 +2844,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_REDUX/"
+   path_example: "$PHOTO_REDUX/"
    note: ""
 
  - path: "SEGUE_TARGET/segue1TargetObjSetAllDup.html"
@@ -2853,7 +2853,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SEGUE_TARGET/"
+   path_example: "$SEGUE_TARGET/"
    note: ""
 
  - path: "APO_SPECTRO_DATA/MJD5/sdR.html"
@@ -2862,7 +2862,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$APO_SPECTRO_DATA/"
+   path_example: "$APO_SPECTRO_DATA/"
    note: ""
 
  - path: "MANGA_HI/HIPVER/mangaHIall.html"
@@ -2871,7 +2871,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_HI/"
+   path_example: "$MANGA_HI/"
    note: ""
 
  - path: "MANGA_HI/HIPVER/mangaHIbonus.html"
@@ -2880,7 +2880,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_HI/"
+   path_example: "$MANGA_HI/"
    note: ""
 
  - path: "MANGA_HI/HIPVER/spectra/HIPROP/mangaHI.html"
@@ -2889,7 +2889,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_HI/"
+   path_example: "$MANGA_HI/"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap1D.html"
@@ -2898,7 +2898,7 @@ datamodels:
    location: "{apred_vers}/red/{mjd}"
    name: "ap1D-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/red/56657/ap1D-c-10950037.fits"
+   path_example: "$APOGEE_REDUX/r8/red/56657/ap1D-c-10950037.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap2Dmodel.html"
@@ -2907,7 +2907,7 @@ datamodels:
    location: "{apred_vers}/red/{mjd}"
    name: "ap2Dmodel-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/red/56656/ap2Dmodel-a-10940084.fits"
+   path_example: "$APOGEE_REDUX/r8/red/56656/ap2Dmodel-a-10940084.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/exposures/INSTRUMENT/MJD5/ap2D.html"
@@ -2916,7 +2916,7 @@ datamodels:
    location: "{apred_vers}/red/{mjd}"
    name: "ap2D-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/red/56657/ap2D-a-10950025.fits"
+   path_example: "$APOGEE_REDUX/r8/red/56657/ap2D-a-10950025.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/visit/TELESCOPE/FIELD/PLATE_ID/MJD5/apCframe.html"
@@ -2925,7 +2925,7 @@ datamodels:
    location: "{apred_vers}/{telescope}/{plateid:0>6}/{mjd}"
    name: "apCframe-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/apo25m/5095/55821/apCframe-c-02590044.fits"
+   path_example: "$APOGEE_REDUX/r8/apo25m/5095/55821/apCframe-c-02590044.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/visit/TELESCOPE/FIELD/PLATE_ID/MJD5/apPlan.html"
@@ -2934,7 +2934,7 @@ datamodels:
    location: "{apred_vers}/{telescope}/{plateid:0>6}/{mjd}"
    name: "apPlan-{plateid:0>6}-{mjd}.par"
    ext: "par"
-   fits_path_example: "$APOGEE_REDUX/r8/apo25m/4824/55723/apPlan-4824-55723.par"
+   path_example: "$APOGEE_REDUX/r8/apo25m/4824/55723/apPlan-4824-55723.par"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/visit/TELESCOPE/FIELD/PLATE_ID/MJD5/apPlate.html"
@@ -2943,7 +2943,7 @@ datamodels:
    location: "{apred_vers}/{telescope}/{plateid:0>6}/{mjd}"
    name: "apPlate-{chip}-{plateid:0>6}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/apo25m/6763/56313/apPlate-c-6763-56313.fits"
+   path_example: "$APOGEE_REDUX/r8/apo25m/6763/56313/apPlate-c-6763-56313.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/visit/TELESCOPE/FIELD/PLATE_ID/MJD5/apVisit.html"
@@ -2952,7 +2952,7 @@ datamodels:
    location: "{apred_vers}/{telescope}/{plateid:0>6}/{mjd}"
    name: "apVisit-{apred_vers}-{plateid:0>6}-{mjd}-{fiberid}.fits"
    ext: " "
-   fits_path_example: "$APOGEE_REDUX/r8/apo25m/5568/55874/apVisit-r8-5568-55874-014.fits"
+   path_example: "$APOGEE_REDUX/r8/apo25m/5568/55874/apVisit-r8-5568-55874-014.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html"
@@ -2961,7 +2961,7 @@ datamodels:
    location: "{apred_vers}/cal/trace"
    name: "apETrace-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/cal/trace/apETrace-c-20180070.fits"
+   path_example: "$APOGEE_REDUX/r8/cal/trace/apETrace-c-20180070.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/flux/apFlux.html"
@@ -2970,7 +2970,7 @@ datamodels:
    location: "{apred_vers}/cal/flux"
    name: "apFlux-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/cal/flux/apFlux-c-20180070.fits"
+   path_example: "$APOGEE_REDUX/r8/cal/flux/apFlux-c-20180070.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/bpm/apBPM.html"
@@ -2979,7 +2979,7 @@ datamodels:
    location: "{apred_vers}/cal/bpm"
    name: "apBPM-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/cal/bpm/apBPM-c-15640002.fits"
+   path_example: "$APOGEE_REDUX/r8/cal/bpm/apBPM-c-15640002.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/detector/apDetector.html"
@@ -2988,7 +2988,7 @@ datamodels:
    location: "{apred_vers}/cal/detector"
    name: "apDetector-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/cal/detector/apDetector-c-13390003.fits"
+   path_example: "$APOGEE_REDUX/r8/cal/detector/apDetector-c-13390003.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/darkcorr/apDark.html"
@@ -2997,7 +2997,7 @@ datamodels:
    location: "{apred_vers}/cal/darkcorr"
    name: "apDark-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/cal/darkcorr/apDark-c-15640002.fits"
+   path_example: "$APOGEE_REDUX/r8/cal/darkcorr/apDark-c-15640002.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/flatcorr/apFlat.html"
@@ -3006,7 +3006,7 @@ datamodels:
    location: "{apred_vers}/cal/flatcorr"
    name: "apFlat-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/cal/flatcorr/apFlat-c-13360054.fits"
+   path_example: "$APOGEE_REDUX/r8/cal/flatcorr/apFlat-c-13360054.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/wave/apWave.html"
@@ -3015,7 +3015,7 @@ datamodels:
    location: "{apred_vers}/cal/wave"
    name: "apWave-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/cal/wave/apWave-c-13400053.fits"
+   path_example: "$APOGEE_REDUX/r8/cal/wave/apWave-c-13400053.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/cal/lsf/apLSF.html"
@@ -3024,7 +3024,7 @@ datamodels:
    location: "{apred_vers}/cal/lsf"
    name: "apLSF-{chip}-{exposure}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/cal/lsf/apLSF-c-13400033.fits"
+   path_example: "$APOGEE_REDUX/r8/cal/lsf/apLSF-c-13400033.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apStarLSF.html"
@@ -3033,7 +3033,7 @@ datamodels:
    location: "{apred_vers}/{apstar}/{telescope}/{location}"
    name: "apStar-{apred_vers}-{obj}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/stars/apo25m/5203/apStar-r8-2M18462953-0514150-57556.fits"
+   path_example: "$APOGEE_REDUX/r8/stars/apo25m/5203/apStar-r8-2M18462953-0514150-57556.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apFieldVisits.html"
@@ -3042,7 +3042,7 @@ datamodels:
    location: "{apred_vers}/{apstar}/{telescope}/{location}"
    name: "apFieldVisits-{location}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/stars/apo25m/5203/apFieldVisits-5203.fits"
+   path_example: "$APOGEE_REDUX/r8/stars/apo25m/5203/apFieldVisits-5203.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apStar.html"
@@ -3051,7 +3051,7 @@ datamodels:
    location: "{apred_vers}/{apstar}/{telescope}/{location}"
    name: "apStar-{apred_vers}-{obj}-{mjd}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/stars/apo25m/5203/apStar-r8-2M18463070-0517261-57556.fits"
+   path_example: "$APOGEE_REDUX/r8/stars/apo25m/5203/apStar-r8-2M18463070-0517261-57556.fits"
    note: ""
 
  - path: "APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apField.html"
@@ -3060,7 +3060,7 @@ datamodels:
    location: "{apred_vers}/{apstar}/{telescope}/{location}"
    name: "apField-{location}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/stars/apo25m/5203/apField-5203.fits"
+   path_example: "$APOGEE_REDUX/r8/stars/apo25m/5203/apField-5203.fits"
    note: ""
 
  - path: "SDSS_TARGET/sdss_target_geometry.html"
@@ -3069,7 +3069,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SDSS_TARGET/"
+   path_example: "$SDSS_TARGET/"
    note: ""
 
  - path: "SDSS_TARGET/sdss_target_paramlist.html"
@@ -3078,7 +3078,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SDSS_TARGET/"
+   path_example: "$SDSS_TARGET/"
    note: ""
 
  - path: "SDSS_TARGET/sdss_target_params.html"
@@ -3087,7 +3087,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SDSS_TARGET/"
+   path_example: "$SDSS_TARGET/"
    note: ""
 
  - path: "SDSS_TARGET/data/tsObjTargets.html"
@@ -3096,7 +3096,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SDSS_TARGET/"
+   path_example: "$SDSS_TARGET/"
    note: ""
 
  - path: "SDSS_TARGET/data/tsField.html"
@@ -3105,7 +3105,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SDSS_TARGET/"
+   path_example: "$SDSS_TARGET/"
    note: ""
 
  - path: "MANGACORE_DIR/hdrfix/MJD/sdHdrFix.html"
@@ -3114,7 +3114,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/drill/PLATEID6XX/plateCMM.html"
@@ -3123,7 +3123,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/metrology/maXXX/ma.html"
@@ -3132,7 +3132,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/metrology/hexferrules/hexferrules.html"
@@ -3141,7 +3141,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/mapper/PLATEID6XX/PLATE/plPlugMapM.html"
@@ -3150,7 +3150,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/slitmaps/PLATEID6XX/PLATE/slitmap.html"
@@ -3159,7 +3159,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/cartmaps/cartmap.html"
@@ -3168,7 +3168,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/ifuflat/cartXX/MJD/ifuflat.html"
@@ -3177,7 +3177,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/platedesign/foregroundstars/foregroundstars.html"
@@ -3186,7 +3186,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/platedesign/platetargets/platetargets.html"
@@ -3195,7 +3195,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/platedesign/plateholes/PLATEID6XX/plateHolesSorted.html"
@@ -3204,7 +3204,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/platedesign/platemags/DESIGNID6XX/platemags.html"
@@ -3213,7 +3213,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/platedesign/targetfix/PLATEID6XX/targetfix.html"
@@ -3222,7 +3222,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/apocomplete/bogey.html"
@@ -3231,7 +3231,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGACORE_DIR/apocomplete/PLATEID6XX/apocomp.html"
@@ -3240,7 +3240,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGACORE_DIR/"
+   path_example: "$MANGACORE_DIR/"
    note: ""
 
  - path: "MANGA_SPECTRO_DATA/MJD5/sdR.html"
@@ -3249,7 +3249,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_SPECTRO_DATA/"
+   path_example: "$MANGA_SPECTRO_DATA/"
    note: ""
 
  - path: "SPECTRO_REDUX/plates.html"
@@ -3258,7 +3258,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galSpecExtra.html"
@@ -3267,7 +3267,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/photoMatchPlate.html"
@@ -3276,7 +3276,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galSpecInfo.html"
@@ -3285,7 +3285,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/photoPlate.html"
@@ -3294,7 +3294,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galSpecIndx.html"
@@ -3303,7 +3303,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/specObj.html"
@@ -3312,7 +3312,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galSpecLine.html"
@@ -3321,7 +3321,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/photoPosPlate.html"
@@ -3330,7 +3330,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spZline.html"
@@ -3339,7 +3339,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spZbest.html"
@@ -3348,7 +3348,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spPlate.html"
@@ -3357,7 +3357,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spPlancomb.html"
@@ -3366,7 +3366,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html"
@@ -3375,7 +3375,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/tsObj.html"
@@ -3384,7 +3384,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spZall.html"
@@ -3393,7 +3393,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/knownMissing.html"
@@ -3402,7 +3402,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spPlan2d.html"
@@ -3411,7 +3411,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html"
@@ -3420,7 +3420,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html"
@@ -3429,7 +3429,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/RUN2D/spectra/lite/PLATE4/spec.html"
@@ -3438,7 +3438,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_emlinekin_full.html"
@@ -3447,7 +3447,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_emlinekin.html"
@@ -3456,7 +3456,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/portsmouth_stellarmass.html"
@@ -3465,7 +3465,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/granada_fsps.html"
@@ -3474,7 +3474,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "SPECTRO_REDUX/galaxy/GALAXY_VERSION/wisconsin_pca.html"
@@ -3483,7 +3483,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECTRO_REDUX/"
+   path_example: "$SPECTRO_REDUX/"
    note: ""
 
  - path: "APOGEE_ASPCAP/APRED_VERS/ASPCAP_VERS/TELESCOPE/FIELD/aspcapField.html"
@@ -3492,7 +3492,7 @@ datamodels:
    location: "{apred_vers}/{aspcap_vers}/{telescope}/{field}/{location}"
    name: "aspcapField-{location}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/stars/l31c/l31c.2/2284/aspcapField-2284.fits"
+   path_example: "$APOGEE_REDUX/r8/stars/l31c/l31c.2/2284/aspcapField-2284.fits"
    note: "The tree/dr15 env_variable $APOGEE_ASPCAP exist, but there's no such directory. Instead, it's in the $APOGEE_REDUX directory as shown above."
 
  - path: "APOGEE_ASPCAP/APRED_VERS/ASPCAP_VERS/TELESCOPE/FIELD/aspcapStar.html"
@@ -3501,7 +3501,7 @@ datamodels:
    location: "{apred_vers}/{aspcap_vers}/{telescope}/{field}/{location}"
    name: "aspcapStar-{apred_vers}-{field}-{obj}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_REDUX/r8/stars/l31c/l31c.2/2284/aspcapStar-r8-l31c.2-2M09081085+5735565.fits"
+   path_example: "$APOGEE_REDUX/r8/stars/l31c/l31c.2/2284/aspcapStar-r8-l31c.2-2M09081085+5735565.fits"
    note: "The tree/dr15 env_variable $APOGEE_ASPCAP exist, but there's no such directory. Instead, it's in the $APOGEE_REDUX directory as shown above."
 
  - path: "SPINSPECT_DIR/data/NAME/spInspect.html"
@@ -3510,7 +3510,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPINSPECT_DIR/"
+   path_example: "$SPINSPECT_DIR/"
    note: ""
 
  - path: "SEGUE2_TARGET/seguetsObjSetAllDup.html"
@@ -3519,7 +3519,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SEGUE2_TARGET/"
+   path_example: "$SEGUE2_TARGET/"
    note: ""
 
  - path: "SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPlate.html"
@@ -3528,7 +3528,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SEGUE2_TARGET/"
+   path_example: "$SEGUE2_TARGET/"
    note: ""
 
  - path: "SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjSetAll.html"
@@ -3537,7 +3537,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SEGUE2_TARGET/"
+   path_example: "$SEGUE2_TARGET/"
    note: ""
 
  - path: "MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/manga.Pipe3D.html"
@@ -3546,7 +3546,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_PIPE3D/"
+   path_example: "$MANGA_PIPE3D/"
    note: ""
 
  - path: "MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/QC_MaNGA.html"
@@ -3555,7 +3555,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_PIPE3D/"
+   path_example: "$MANGA_PIPE3D/"
    note: ""
 
  - path: "APOGEE_TARGET/apogeeDesign.html"
@@ -3564,7 +3564,7 @@ datamodels:
    location: ""
    name: "apogeeDesign.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_TARGET/apogeeDesign.fits"
+   path_example: "$APOGEE_TARGET/apogeeDesign.fits"
    note: ""
 
  - path: "APOGEE_TARGET/apogeeField.html"
@@ -3573,7 +3573,7 @@ datamodels:
    location: ""
    name: "apogeeField.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_TARGET/apogeeField.fits"
+   path_example: "$APOGEE_TARGET/apogeeField.fits"
    note: ""
 
  - path: "APOGEE_TARGET/apogeePlate.html"
@@ -3582,7 +3582,7 @@ datamodels:
    location: ""
    name: "apogeePlate.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_TARGET/apogeePlate.fits"
+   path_example: "$APOGEE_TARGET/apogeePlate.fits"
    note: ""
 
  - path: "APOGEE_TARGET/apogeeObject.html"
@@ -3591,7 +3591,7 @@ datamodels:
    location: "apogeeObject"
    name: "apogeeObject_{foo}.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_TARGET/apogeeObject/apogeeObject_VOD3.fits"
+   path_example: "$APOGEE_TARGET/apogeeObject/apogeeObject_VOD3.fits"
    note: "Why are there many different {foo} apogeeObject_{foo}.fits ? The filename patterns don't fit the datamodel Naming Convention."
 
  - path: "PHOTO_DATA/RUN/gangs/idGang.html"
@@ -3600,7 +3600,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_DATA/"
+   path_example: "$PHOTO_DATA/"
    note: ""
 
  - path: "PHOTO_DATA/RUN/fields/CAMCOL/idR.html"
@@ -3609,7 +3609,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_DATA/"
+   path_example: "$PHOTO_DATA/"
    note: ""
 
  - path: "SPECLOG_DIR/MJD/plPlugMapM.html"
@@ -3618,7 +3618,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECLOG_DIR/"
+   path_example: "$SPECLOG_DIR/"
    note: ""
 
  - path: "SPECLOG_DIR/MJD/sdhdrfix.html"
@@ -3627,7 +3627,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECLOG_DIR/"
+   path_example: "$SPECLOG_DIR/"
    note: ""
 
  - path: "SPECLOG_DIR/MJD/guidermon.html"
@@ -3636,7 +3636,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$SPECLOG_DIR/"
+   path_example: "$SPECLOG_DIR/"
    note: ""
 
  - path: "ATLAS_DATA/ATLAS_MAJOR_VERSION/nsa.html"
@@ -3645,7 +3645,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$ATLAS_DATA/"
+   path_example: "$ATLAS_DATA/"
    note: ""
 
  - path: "APOGEE_DISTANCES/APOGEE_DVAC_DR14_Data_Model.html"
@@ -3654,7 +3654,7 @@ datamodels:
    location: ""
    name: "apogee_distances-DR14.fits"
    ext: "fits"
-   fits_path_example: "$APOGEE_DISTANCES/apogee_distances-DR14.fits"
+   path_example: "$APOGEE_DISTANCES/apogee_distances-DR14.fits"
    note: ""
 
  - path: "PHOTO_SWEEP/datasweep-index.html"
@@ -3663,7 +3663,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SWEEP/"
+   path_example: "$PHOTO_SWEEP/"
    note: ""
 
  - path: "PHOTO_SWEEP/RERUN/calibObj.html"
@@ -3672,7 +3672,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SWEEP/"
+   path_example: "$PHOTO_SWEEP/"
    note: ""
 
  - path: "PHOTO_SWEEP/external/WISE/wisematch.html"
@@ -3681,7 +3681,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PHOTO_SWEEP/"
+   path_example: "$PHOTO_SWEEP/"
    note: ""
 
  - path: "MANGA_PHOTO/pymorph/PYMORPH_VER/manga-pymorph.html"
@@ -3690,7 +3690,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_PHOTO/"
+   path_example: "$MANGA_PHOTO/"
    note: ""
 
  - path: "BOSS_QSO/DR12Q/DR12Q_sup.html"
@@ -3699,7 +3699,7 @@ datamodels:
    location: "DR12Q"
    name: "DR12Q_sup.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_QSO/DR12Q/DR12Q_sup.fits"
+   path_example: "$BOSS_QSO/DR12Q/DR12Q_sup.fits"
    note: ""
 
  - path: "BOSS_QSO/DR12Q/DR12Q_superset.html"
@@ -3708,7 +3708,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: "Why does <find . -name '*DR12Q_superset*'> not return anything in $BOSS_QSO for d[7-15] ?"
 
  - path: "BOSS_QSO/DR12Q/DR12Q_BAL.html"
@@ -3717,7 +3717,7 @@ datamodels:
    location: "DR12Q"
    name: "DR12Q_BAL.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_QSO/DR12Q/DR12Q_BAL.fits"
+   path_example: "$BOSS_QSO/DR12Q/DR12Q_BAL.fits"
    note: ""
 
  - path: "BOSS_QSO/DR12Q/DR12Q.html"
@@ -3726,7 +3726,7 @@ datamodels:
    location: "DR12Q"
    name: "DR12Q.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_QSO/DR12Q/DR12Q.fits"
+   path_example: "$BOSS_QSO/DR12Q/DR12Q.fits"
    note: ""
 
  - path: "BOSS_QSO/composite/harris15_correction.html"
@@ -3735,16 +3735,16 @@ datamodels:
    location: "composite"
    name: "harris15_correction.fits"
    ext: "fits"
-   fits_path_example: "$BOSS_QSO/composite/harris15_correction.fits"
+   path_example: "$BOSS_QSO/composite/harris15_correction.fits"
    note: ""
 
  - path: "BOSS_QSO/composite/harris15_composite.html"
-   tree_edition: "temp"
+   tree_edition: "dr12"
    env_label: "BOSS_QSO"
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/composite/binned/QSO_comps.html"
@@ -3753,7 +3753,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/composite/binned/QSO_data.html"
@@ -3762,7 +3762,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/DR14Q/DR14Q_v3_1.html"
@@ -3771,7 +3771,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/DR14Q/DR14Q_v3_0.html"
@@ -3780,7 +3780,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/DR14Q/DR14Q_v4_4.html"
@@ -3789,7 +3789,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/variability/qsoVarPTF.html"
@@ -3798,7 +3798,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/variability/qsoVarStripe.html"
@@ -3807,7 +3807,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/DR9Q/DR9Q.html"
@@ -3816,7 +3816,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "BOSS_QSO/DR10Q/DR10Q.html"
@@ -3825,7 +3825,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_QSO/"
+   path_example: "$BOSS_QSO/"
    note: ""
 
  - path: "EBOSS_TARGET/elg/fisher-selection/eBOSS_ELG_UgrizW.html"
@@ -3834,7 +3834,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$EBOSS_TARGET/"
+   path_example: "$EBOSS_TARGET/"
    note: ""
 
  - path: "EBOSS_TARGET/elg/fisher-selection/eBOSS_ELG_griW.html"
@@ -3843,7 +3843,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$EBOSS_TARGET/"
+   path_example: "$EBOSS_TARGET/"
    note: ""
 
  - path: "EBOSS_TARGET/elg/decals/ELG_targets_SGC.html"
@@ -3852,7 +3852,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$EBOSS_TARGET/"
+   path_example: "$EBOSS_TARGET/"
    note: ""
 
  - path: "CALIBPLATE_DIR/calibPlateP.html"
@@ -3861,7 +3861,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$CALIBPLATE_DIR/"
+   path_example: "$CALIBPLATE_DIR/"
    note: ""
 
  - path: "MANGA_GEMA/GEMA_VER/GEMA.html"
@@ -3870,7 +3870,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$MANGA_GEMA/"
+   path_example: "$MANGA_GEMA/"
    note: ""
 
  - path: "PLATELIST_DIR/platePlans.html"
@@ -3879,7 +3879,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateStandard.html"
@@ -3888,7 +3888,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateGuide.html"
@@ -3897,7 +3897,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateTrap.html"
@@ -3906,7 +3906,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateDesign.html"
@@ -3915,7 +3915,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateInput-output.html"
@@ -3924,7 +3924,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html"
@@ -3933,7 +3933,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideAdjust.html"
@@ -3942,7 +3942,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideOffsets.html"
@@ -3951,7 +3951,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHoles.html"
@@ -3960,7 +3960,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plPlugMapP.html"
@@ -3969,7 +3969,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHolesSorted.html"
@@ -3978,7 +3978,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/definitions/DESIGNID6XX/plateDefinition.html"
@@ -3987,7 +3987,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plParam.html"
@@ -3996,7 +3996,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plMeas.html"
@@ -4005,7 +4005,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plOverlay.html"
@@ -4014,7 +4014,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plPlan.html"
@@ -4023,7 +4023,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plFanuc.html"
@@ -4032,7 +4032,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plPlugMap.html"
@@ -4041,7 +4041,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plDrillPos.html"
@@ -4050,7 +4050,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/runs/PLATERUN/plObs.html"
@@ -4059,7 +4059,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "PLATELIST_DIR/inputs/plateInput.html"
@@ -4068,7 +4068,7 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$PLATELIST_DIR/"
+   path_example: "$PLATELIST_DIR/"
    note: ""
 
  - path: "BOSS_SPECTRO_DATA/MJD/sdR.html"
@@ -4077,6 +4077,6 @@ datamodels:
    location: ""
    name: " "
    ext: " "
-   fits_path_example: "$BOSS_SPECTRO_DATA/"
+   path_example: "$BOSS_SPECTRO_DATA/"
    note: ""
 
