@@ -214,7 +214,9 @@ class Store:
                         else:
                             self.ready = False
                             self.logger.error('Unable to populate_filespec_table. ' +
-                                              'filespec_tree_id: {}, '.format(filespec_tree_id))
+                                              'datamodel: {}, '.format(datamodel) +
+                                              'filespec_tree_id: {}, '.format(filespec_tree_id)
+                                              )
                     else:
                         self.ready = False
                         self.logger.error(

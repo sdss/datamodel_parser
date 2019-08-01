@@ -4,7 +4,7 @@ from datamodel_parser.application import Store
 
 from json import dumps
 
-print('Creating yaml file with datamodel file paths')
+print('Populating filespec table.')
 arg = Argument('parse_paths')
 options = arg.options if arg else None
 store = Store(options=options) if options else None
