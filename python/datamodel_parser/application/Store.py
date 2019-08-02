@@ -114,12 +114,13 @@ class Store:
                     self.split_path()
 
                     yaml_str += ' - path: "{}"\n'.format(path)
+                    yaml_str += '   tree_edition: "temp"\n'
                     yaml_str += '   env_label: "{}"\n'.format(self.env_variable)
                     yaml_str += '   location: ""\n'
                     yaml_str += '   name: " "\n'
                     yaml_str += '   ext: " "\n'
-                    yaml_str += '   fits_path_example: "${}/"\n'.format(self.env_variable)
-                    yaml_str += '   note: " "\n'
+                    yaml_str += '   path_example: "${}/"\n'.format(self.env_variable)
+                    yaml_str += '   note: ""\n'
                     yaml_str += '\n'
 
                 # write yaml file
