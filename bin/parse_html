@@ -19,3 +19,9 @@ else:
     store.split_path()
     store.populate_database()
     store.exit()
+
+'''
+Examples:
+parse_html -l error -v --path APOGEE_TGAS/apogee_tgas.html
+
+'''

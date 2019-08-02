@@ -57,7 +57,9 @@ class Util:
                  '(?i)example(.*?)configuration file'   + '|'
                  '(?i)required(.*?)column'              + '|'
                  '(?i)optional(.*?)column'              + '|'
-                 '(?i)column(.*?)name'
+                 '(?i)column(.*?)name'                  + '|'
+                 '(?i)example(.*?)contents'             + '|'
+                 '(?i)example(.*?)file'
                  )
         return regex
 
@@ -68,7 +70,9 @@ class Util:
                  '(?i)optional(.*?)keywords'            + '|'
                  '(?i)example\s*header'                 + '|'
                  '(?i)sample(.*?)header'                + '|'
-                 '(?i)example(.*?)configuration file'
+                 '(?i)example(.*?)configuration file'   + '|'
+                 '(?i)example(.*?)contents'             + '|'
+                 '(?i)example(.*?)file'
                  )
         return regex
 
