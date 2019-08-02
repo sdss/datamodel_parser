@@ -405,3 +405,28 @@
  parse_html -l error -v --path EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html
  parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/opCamera.html
  parse_html -l error -v --path MANGACORE_DIR/platedesign/foregroundstars/foregroundstars.html
+ parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html
+ parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlan.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFluxcalib.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spFrame.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spXYthrucorr.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZline.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/spectra/spAll-SUBSET.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/spectra/specfiles.html
+ parse_html -l error -v --path APOGEE_DATA_1M/MJD5/apR.html
+ parse_html -l error -v --path STAGING_DATA/oplogs/MJD/idCCDLog.html
+ parse_html -l error -v --path STAGING_DATA/oplogs/MJD/sdReport.html
+ parse_html -l error -v --path STAGING_DATA/oplogs/MJD/idReport.html
+ parse_html -l error -v --path APOGEE_DATA/MJD5/apR.html
+ parse_html -l error -v --path SSPP_REDUX/RERUN/plate_mjds_done.html
+ parse_html -l error -v --path SSPP_REDUX/RERUN/plate_mjds_sspp.html
+ parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlan.html
+ parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/cal/detector/apDetector.html
+ parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/cal/darkcorr/apDark.html
+ parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/cal/flatcorr/apFlat.html
+ parse_html -l error -v --path SPECTRO_REDUX/RUN2D/PLATE4/spZline.html
+ parse_html -l error -v --path SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html
+ parse_html -l error -v --path SPECTRO_REDUX/RUN2D/PLATE4/spCFrame.html
+ parse_html -l error -v --path PLATELIST_DIR/runs/PLATERUN/plMeas.html
