@@ -338,6 +338,7 @@ class Store:
             'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
             'datamodel/files/PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html',
             'datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html',
+            'BOSS_PHOTOOBJ/photoz-weight/pofz.html',
             ]
 
     def set_svn_products(self,root_dir=None):

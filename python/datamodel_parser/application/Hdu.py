@@ -85,9 +85,6 @@ class Hdu:
                                     self.parse_file_hdu_intro_4(node=node)
                                     self.parse_file_hdu_tables_3(node=node)
                                 elif self.hdu_type == 7:
-                                    #### TO BE REMOVED
-#                                    self.parse_file_hdu_intro_5(node=node)
-#                                    self.parse_file_hdu_tables_5(node=node)
                                     self.parse_file_hdu_intro_7(node=node)
                                     self.parse_file_hdu_tables_7(node=node)
                                 elif self.hdu_type == 8:

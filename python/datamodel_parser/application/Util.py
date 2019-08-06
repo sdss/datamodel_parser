@@ -58,8 +58,9 @@ class Util:
                  '(?i)required(.*?)column'              + '|'
                  '(?i)optional(.*?)column'              + '|'
                  '(?i)column(.*?)name'                  + '|'
-                 '(?i)example(.*?)contents'             + '|'
-                 '(?i)example(.*?)file'
+                 '(?i)example(.*?)contents'
+#                 + '|'
+#                 '(?i)example(.*?)file'
                  )
         return regex
 
@@ -71,8 +72,9 @@ class Util:
                  '(?i)example\s*header'                 + '|'
                  '(?i)sample(.*?)header'                + '|'
                  '(?i)example(.*?)configuration file'   + '|'
-                 '(?i)example(.*?)contents'             + '|'
-                 '(?i)example(.*?)file'
+                 '(?i)example(.*?)contents'
+#                 + '|'
+#                 '(?i)example(.*?)file'
                  )
         return regex
 
@@ -576,8 +578,6 @@ class Util:
                     (title,description) = self.get_title_and_description_from_p(p=p)
                     if title:
                         regex1 = self.get_table_title_regex_1()
-#                        regex1 = ('(?i)Required(.*?)keywords' + '|'
-#                                 '(?i)Required(.*?)column\s*names' )
                         regex2 = '(?i)hdu\s*\d+'
                         match1 = (self.check_match(regex=regex1,string=title)
                                   if title else None)
@@ -836,11 +836,6 @@ class Util:
         if self.ready:
             if node:
                 regex = self.get_table_title_regex_1()
-#                regex = ('(?i)required\s+header\s+keywords'     + '|'
-#                         '(?i)required\s+column\s+names'        + '|'
-#                         '(?i)required\s+hdu\s*\d*\s+keywords'  + '|'
-#                         '(?i)required\s+hdu\s*\d*\s+column\s+names'
-#                         )
                 (intro,combined_hdus) = self.get_intro_and_combined_hdus_2(node=node,regex=regex)
                 hdus = self.get_split_hdus_2(node=combined_hdus) if combined_hdus else None
 #                print('\nintro: %r' % intro)
@@ -909,12 +904,6 @@ class Util:
         if self.ready:
             if node:
                 regex = self.get_table_title_regex_1()
-#                regex = ('(?i)required(.*?)keywords' + '|'
-#                         '(?i)optional(.*?)keywords' + '|'
-#                         '(?i)required(.*?)column'   + '|'
-#                         '(?i)optional(.*?)column'   + '|'
-#                         '(?i)sample(.*?)header'
-#                         )
                 (intro,combined_hdus) = (self.get_intro_and_combined_hdus_2(node=node,regex=regex)
                                          if node and regex else None)
                 hdus = (self.get_split_hdus_3(node=combined_hdus,regex=regex)
@@ -1055,11 +1044,6 @@ class Util:
                                     self.get_title_and_description_from_p(p=child))
                                 if title:
                                     regex1 = self.get_table_title_regex_1()
-#                                    regex1 = ('(?i)required(.*?)keywords' + '|'
-#                                             '(?i)optional(.*?)keywords' + '|'
-#                                             '(?i)required(.*?)column'   + '|'
-#                                             '(?i)optional(.*?)column'
-#                                             )
                                     regex2 = '(?i)hdu\s*\d+'
                                     match1 = (self.check_match(regex=regex1,string=title)
                                               if title else None)
