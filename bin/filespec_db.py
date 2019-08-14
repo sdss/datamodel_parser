@@ -5,7 +5,7 @@ from datamodel_parser.application import Store
 from json import dumps
 
 print('Populating filespec table.')
-arg = Argument('parse_paths')
+arg = Argument('filespec_db')
 options = arg.options if arg else None
 store = Store(options=options) if options else None
 store.set_database()
@@ -18,7 +18,7 @@ if not ready:
 else:
     store.set_tree_edition()
     store.set_file_paths()
-    store.set_filespec()
-    store.populate_filespec_table()
+    store.set_filespec_dict_yaml()
+    store.populate_filespec_table_yaml()
     store.exit()
 

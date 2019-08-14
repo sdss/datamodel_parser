@@ -1,3 +1,4 @@
+from sdssdb.sqlalchemy.archive.sas import *
 from datamodel_parser.application import File
 from datamodel_parser.application import Database
 from os import environ, walk
@@ -9,7 +10,7 @@ from subprocess import Popen, PIPE
 import yaml
 from json import dumps
 
-class Store:
+class Store(object):
 
     def __init__(self, options=None):
         self.set_logger(options=options)
@@ -92,15 +93,47 @@ class Store:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.datamodel_dir    = None
-            self.path             = None
-            self.tree_edition     = None
-            self.env_variable     = None
-            self.file_name        = None
-            self.location_path    = None
-            self.directory_names  = None
-            self.directory_depths = None
-            self.svn_products     = None
+            self.datamodel_dir       = None
+            self.path                = None
+            self.tree_edition        = None
+            self.env_variable        = None
+            self.file_name           = None
+            self.location_path       = None
+            self.directory_names     = None
+            self.directory_depths    = None
+            self.svn_products        = None
+            self.filespec_dict_yaml  = None
+            self.file_path           = None
+
+    def populate_filespec_table_archive(self):
+        '''set self.filespec_dict for each datamodel path in self.file_paths'''
+        if self.ready:
+            if self.file_paths:
+                for self.file_path in self.file_paths:
+                    self.set_filespec_dict_archive()
+                    self.populate_filespec_table()
+            else:
+                self.ready = False
+                self.logger.error('Unable to populate_filespec_table_archive. ' +
+                                  'self.file_paths: {}'.format(self.file_paths))
+
+    def set_filespec_dict_archive(self):
+        '''Set filespec_dict from self.file_path using the archive database.'''
+        if self.ready:
+            self.initialize_filespec_dict_archive()
+            # Under construction
+
+    def initialize_filespec_dict_archive(self):
+        '''Set filespec_dict from self.file_path using the archive database.'''
+        self.filespec_dict = dict()
+        if self.ready:
+            if self.file_path:
+                self.filespec_dict['path'] = self.file_path if self.file_path else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to initialize_filespec_dict_archive. ' +
+                                  'self.file_path: {}'.format(self.file_path))
+
 
     def init_yaml(self,filename='filespec.yaml'):
         '''Write a yaml file containing datamodel file paths.'''
@@ -139,95 +172,96 @@ class Store:
                 self.logger.error('Unable to write_yaml. ' +
                                   'self.file_paths: {}'.format(self.file_paths))
 
-    def set_filespec(self,filename='filespec.yaml'):
+    def set_filespec_dict_yaml(self,filename='filespec.yaml'):
         '''Create a dictionary from the filespec.yaml file'''
-        self.filespec = None
+        self.filespec_dict_yaml = None
         if self.ready:
             self.set_yaml_dir()
             yaml_file = join(self.yaml_dir,filename) if self.yaml_dir else None
             if yaml_file and exists(yaml_file):
                 with open(yaml_file,'r') as filespec:
-                    try: self.filespec = yaml.safe_load(filespec)
+                    try: self.filespec_dict_yaml = yaml.safe_load(filespec)
                     except yaml.YAMLError as e:
                         self.ready = False
-                        self.logger.error('Unable to set_filespec. ' +
+                        self.logger.error('Unable to set_filespec_dict_yaml. ' +
                                           'An error occurred diring yaml.safe_load(). ' +
                                           'Exception: {}'.format(e))
             else:
                 self.ready = False
-                self.logger.error('Unable to set_filespec. ' +
+                self.logger.error('Unable to set_filespec_dict_yaml. ' +
                                   'yaml_file: {}'.format(yaml_file))
 
-    def populate_filespec_table(self):
-        '''Populate the filespec table.'''
+    def populate_filespec_table_yaml(self):
+        '''Populate the filespec table row for each dict in filespec_dicts.'''
         if self.ready:
-            datamodels = (self.filespec['datamodels'] if self.filespec and
-                          'datamodels' in self.filespec else None)
-            for datamodel in datamodels:
+            filespec_dicts = (self.filespec_dict_yaml['datamodels']
+                              if self.filespec_dict_yaml
+                              and 'datamodels' in self.filespec_dict_yaml
+                              else None)
+            for self.filespec_dict in filespec_dicts:
+                self.populate_filespec_table()
+                
+    def populate_filespec_table(self):
+        '''Populate Database.filespec table from self.filespec_dict'''
+        if self.ready:
+            if self.filespec_dict:
+                self.set_filespec_tree_id()
+                self.database.set_file_id(tree_edition  = self.tree_edition,
+                                          env_variable  = self.env_variable,
+                                          location_path = self.location_path,
+                                          file_name     = self.file_name)
+                self.ready = self.ready and self.database.ready
                 if self.ready:
-                    path = datamodel['path'] if datamodel and 'path' in datamodel else None
-                    self.set_path(path=path)
-                    self.split_path()
-                    self.populate_file_path_tables()
-                    if (self.tree_edition         and
-                        self.env_variable         and
-        #               self.location_path # can be None
-                        self.file_name            and
-                        datamodel
-                        ):
-                        # set filespec_tree_id
-                        filespec_tree_edition = (datamodel['tree_edition'] if datamodel and
-                                                 'tree_edition' in datamodel else None)
-                        self.populate_tree_table(tree_edition=filespec_tree_edition)
-                        self.database.set_tree_id(tree_edition=filespec_tree_edition)
-                        filespec_tree_id = self.database.tree_id if self.database.ready else None
+                    self.database.set_filespec_columns(
+                        tree_id      = self.filespec_tree_id,
+                        env_label    = self.filespec_dict['env_label'],
+                        location     = self.filespec_dict['location'],
+                        name         = self.filespec_dict['name'],
+                        ext          = self.filespec_dict['ext'],
+                        path_example = self.filespec_dict['path_example'],
+                        note         = self.filespec_dict['note'],
+                                       )
+                    self.database.populate_filespec_table()
+                    self.ready = self.database.ready
+            else:
+                self.ready = False
+                self.logger.error('Unable to populate_filespec_table_yaml. ' +
+                                  'self.filespec_dict: {}, '.format(self.filespec_dict)
+                                  )
 
-                        if filespec_tree_id:
-                            # populate filespec table
-                            self.database.set_file_id(tree_edition  = self.tree_edition,
-                                                      env_variable  = self.env_variable,
-                                                      location_path = self.location_path,
-                                                      file_name     = self.file_name)
-                            if self.database.file_id:
-                                env_label    = (datamodel['env_label'] if datamodel and
-                                                'env_label' in datamodel else None)
-                                location     = (datamodel['location'] if datamodel and
-                                                'location' in datamodel else None)
-                                name         = (datamodel['name'] if datamodel and
-                                                'name' in datamodel else None)
-                                ext          = (datamodel['ext'] if datamodel and
-                                                'ext' in datamodel else None)
-                                path_example = (datamodel['path_example'] if datamodel and
-                                                'path_example' in datamodel else None)
-                                note         = (datamodel['note'] if datamodel and
-                                                'note' in datamodel else None)
-
-                                self.database.set_filespec_columns(tree_id      = filespec_tree_id,
-                                                                   env_label    = env_label,
-                                                                   location     = location,
-                                                                   name         = name,
-                                                                   ext          = ext,
-                                                                   path_example = path_example,
-                                                                   note         = note,
-                                                                   )
-                                self.database.populate_filespec_table()
-                                self.ready = self.database.ready
-                        else:
-                            self.ready = False
-                            self.logger.error('Unable to populate_filespec_table. ' +
-                                              'datamodel: {}, '.format(datamodel) +
-                                              'filespec_tree_id: {}, '.format(filespec_tree_id)
-                                              )
-                    else:
-                        self.ready = False
-                        self.logger.error(
-                            'Unable to populate_filespec_table. '                     +
-                            'self.tree_edition: {}, ' .format(self.tree_edition)  +
-                            'self.env_variable: {}, ' .format(self.env_variable)  +
-                            'self.file_name: {}, '    .format(self.file_name)     +
-                            'datamodel: {}.'.format(datamodel)
-                            )
-
+    def set_filespec_tree_id(self):
+        '''Set filespec_tree_id from '''
+        self.filespec_tree_id = None
+        if self.ready:
+            if self.filespec_dict:
+                # split_path and populate_file_path_tables if necessary
+                path = (self.filespec_dict['path']
+                        if self.filespec_dict and 'path' in self.filespec_dict
+                        else None)
+                self.set_path(path=path)
+                self.split_path()
+                self.populate_file_path_tables()
+                
+                if self.ready:
+                    filespec_tree_edition = (self.filespec_dict['tree_edition']
+                                             if self.filespec_dict
+                                             and 'tree_edition' in self.filespec_dict
+                                             else None)
+                    self.populate_tree_table(tree_edition=filespec_tree_edition)
+                    self.database.set_tree_id(tree_edition=filespec_tree_edition)
+                    self.filespec_tree_id = (self.database.tree_id
+                                             if self.database.ready else None)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_filespec_tree_id. ' +
+                                  'self.filespec_dict: {}, '.format(self.filespec_dict)
+                                  )
+            if not self.filespec_tree_id:
+                self.ready = False
+                self.logger.error('Unable to set_filespec_tree_id. ' +
+                                  'self.filespec_tree_id: {}, '
+                                    .format(self.filespec_tree_id)
+                                  )
 
     def set_yaml_dir(self):
         '''Set DATAMODEL_PARSER_YAML_DIR'''
@@ -293,6 +327,19 @@ class Store:
                 self.ready = False
                 self.logger.error('Unable to split_path. ' +
                                   'path: {}'.format(path))
+        if not (
+            self.env_variable     and
+            self.file_name        
+            #self.location_path    # can be None
+            #self.directory_names  # can be None
+            #self.directory_depths # can be None
+            ):
+            self.ready = False
+            self.logger.error(
+                'Unable to split_path. '                     +
+                'self.env_variable: {}, ' .format(self.env_variable)  +
+                'self.file_name: {}, '    .format(self.file_name)
+                )
 
     def set_file_paths(self):
         '''Set a list of all files for the current tree edition.'''

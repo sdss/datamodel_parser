@@ -87,13 +87,13 @@ class Database:
                     yaml += ('    example_fits_path: {}\n'.format(str()))
                     yaml += ('    example_fits_name: {}\n'.format(str()))
 
-    def get_file_percent_complete(self):
+    def get_file_percent_completed(self):
         '''Get the percentage of all file table rows with status='complete.'
         '''
         numerator = File.query.filter(File.status=='completed').count()
         denominator = File.query.count()
-        percent_complete = 100*numerator/denominator
-        return percent_complete
+        percent_completed = 100*numerator/denominator
+        return percent_completed
 
     def update_file_table_status(self,ready=None,intro_type=None,file_type=None):
         '''Update the status of the file table.'''

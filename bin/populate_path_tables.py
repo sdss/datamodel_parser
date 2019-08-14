@@ -7,7 +7,7 @@ from datamodel_parser.application import Store
 from json import dumps
 
 print('Populating File Path Tables')
-arg = Argument('parse_paths')
+arg = Argument('populate_path_tables')
 options = arg.options if arg else None
 store = Store(options=options) if options else None
 logger = store.logger if store else None

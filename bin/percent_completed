@@ -14,5 +14,5 @@ if not ready:
     exit(1)
 else:
     store.set_database()
-    print(store.database.get_file_percent_complete())
+    print(store.database.get_file_percent_completed())
     store.exit()
