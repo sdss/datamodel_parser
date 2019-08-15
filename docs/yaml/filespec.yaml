@@ -544,7 +544,7 @@ datamodels:
    env_label: "BOSS_SPECTRO_REDUX"
    location: "{run2d}/{plate:0>4}"
    name: "spSN2d-{plate:0>4}-{mjd}.ps"
-   ext: ".ps"
+   ext: "ps"
    path_example: "$BOSS_SPECTRO_REDUX/v5_10_0/9003/spSN2d-9003-57488.ps"
    note: ""
 
