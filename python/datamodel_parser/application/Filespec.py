@@ -212,6 +212,11 @@ class Filespec:
                         name = directory_name
                     names.append(name)
                 self.species_location = join(*names)
+                
+                
+                ### 1) Validate that self.species_location has
+                ###     as many directories as self.example_location
+                ### 2) Create dictionary of {'actual directory' : 'text substitution string'}
             else:
                 self.ready = False
                 self.logger.error('Unable to set_species_location. ' +
@@ -304,7 +309,7 @@ class Filespec:
 #                    print('self.module.stderr: %r'% self.module.stdout)
 #                    print('self.module.returncode: %r'% self.module.returncode)
 #                    input('pause')
-                    self.ready = (self.ready and self.module.ready and
+                    self.ready = bool(self.ready and self.module.ready and
                                   self.module.returncode == 0 and self.module.stdout)
                 if self.ready:
 #                    self.set_datamodel_env_variable_dir() # DOESN'T WORK
@@ -345,33 +350,40 @@ class Filespec:
                                     .format(self.path_example_file_row))
 
     def set_species_ext(self):
-        '''Set the file extension for self.species_path_example'''
+        '''Set the file extension for self.example_name'''
         self.species_ext = None
         if self.ready:
-            path = self.path_example_file_row.path if self.path_example_file_row else None
-            split = path.split('.') if path else None
-            self.species_ext = split[-1] if split else None
+            if self.example_name:
+                split = self.example_name.split('.')
+                self.species_ext = split[-1] if split else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_species_ext. ' +
+                                  'self.example_name: {}'.format(self.example_name))
             if not self.species_ext:
                 self.ready = False
                 self.logger.error('Unable to set_species_ext. ' +
-                                  'self.species_ext: {}'
-                                    .format(self.species_ext))
+                                  'self.species_ext: {}'.format(self.species_ext))
 
     def set_species_name(self):
         '''Set the {text substitution} name for self.species_path_example'''
         self.species_name = None
         if self.ready:
-            file_row = self.path_example_file_row if self.path_example_file_row else None
-            file_path = file_row.path if file_row else None
-            split = file_path.split('/') if file_path else None
-            self.species_name  = split[-1] if split else None
-            # need to split the pre-{text sub} filespec_location off of file_row.location
-            # and use regex to fill in the file_path {text sub}
+            if self.example_name:
+                self.species_name = self.example_name
+                ### Process
+                ### 1) use dictionary of {'actual directory' : 'text substitution string'}
+                ###     in set_species_location to insert the text substitution strings
+                ### 2) Validate that all the text substitution strings were accounted for.
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_species_name. ' +
+                                  'self.example_name: {}'
+                                    .format(self.example_name))
             if not self.species_name:
                 self.ready = False
                 self.logger.error('Unable to set_species_name. ' +
-                                  'self.species_name: {}'
-                                    .format(self.species_name))
+                                  'self.species_name: {}'.format(self.species_name))
 
     def set_species_note(self):
         '''Set a note of any warnings or errors that occurred while running
