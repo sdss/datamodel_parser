@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
 from re import search, compile, match
+from subprocess import Popen, PIPE
 from string import punctuation
 from json import dumps
 
@@ -1629,46 +1630,22 @@ class Util:
                                   )
         return tables
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def execute_command(self, command=None):
+        '''Execute the passed terminal command.'''
+        (out,err,proc_returncode) = (None,None,None)
+        if command:
+            proc = Popen(command, stdout=PIPE, stderr=PIPE)
+            if proc:
+                (out, err) = proc.communicate() if proc else (None,None)
+                out = out.decode("utf-8") if isinstance(out,bytes) else out
+                err = err.decode("utf-8") if isinstance(err,bytes) else err
+                proc_returncode = proc.returncode if proc else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to execute_command. ' +
+                                  'proc: {}'.format(proc))
+        else:
+            self.ready = False
+            self.logger.error('Unable to execute_command. ' +
+                              'command: {}'.format(command))
+        return (out,err,proc_returncode)

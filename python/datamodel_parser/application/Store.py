@@ -438,7 +438,7 @@ class Store():
         if self.ready:
             if root_dir and self.svn_products is not None:
                 command = ['svn','list',root_dir]
-                (stdout,stderr,proc_returncode) = self.execute_command(command)
+                (stdout,stderr,proc_returncode) = self.util.execute_command(command)
                 self.logger.info('Traversing directory: %r' % root_dir)
                 if proc_returncode == 0:
                     basenames = ([d.replace('/',str())
@@ -470,24 +470,6 @@ class Store():
                     'root_dir: {}'.format(root_dir) +
                     'self.svn_product: {}'.format(self.svn_product)
                     )
-
-    def execute_command(self, command=None):
-        '''Execute the passed terminal command.'''
-        (stdout,stderr,proc_returncode) = (None,None,None)
-        if command:
-            proc = Popen(command, stdout=PIPE, stderr=PIPE)
-            if proc:
-                (stdout, stderr) = proc.communicate() if proc else (None,None)
-                proc_returncode = proc.returncode if proc else None
-            else:
-                self.ready = False
-                self.logger.error('Unable to execute_command. ' +
-                                  'proc: {}'.format(proc))
-        else:
-            self.ready = False
-            self.logger.error('Unable to execute_command. ' +
-                              'command: {}'.format(command))
-        return (stdout,stderr,proc_returncode)
 
     def get_column_tag(self):
         '''Populate tables comprised of file HTML text information.'''

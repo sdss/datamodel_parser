@@ -1,7 +1,9 @@
 from sdssdb.sqlalchemy.archive.sas import *
+from sdss_install.utils.module import Module
 from string import punctuation as string_punctuation
 from datamodel_parser.application import Util
 from os.path import basename, dirname, exists, isdir, join
+from os import environ
 from json import dumps
 
 
@@ -32,13 +34,32 @@ class Filespec:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.file_path              = None
-            self.dir_substitution       = None
-            self.species_location       = None
-            self.tree_id                = None
-            self.species_path_example   = None
-            self.species_name           = None
-            self.path_example_file_row  = None
+            self.datamodel_file_path       = None
+            self.datamodel_env_variable    = None
+            self.datamodel_file_name       = None
+            self.datamodel_file_name_start = None
+            self.datamodel_directory_names = None
+            self.dir_substitution          = None
+            self.species_location          = None
+            self.tree_id                   = None
+            self.species_path_example      = None
+            self.species_name              = None
+            self.path_example_file_row     = None
+
+    def set_datamodel_env_variable_dir(self):
+        '''Set the directory path associated with the datamodel environmental variable.'''
+        self.datamodel_env_variable_dir = None
+        print('self.datamodel_env_variable: %r' % self.datamodel_env_variable)
+        input('pause')
+        try: self.datamodel_env_variable_dir = environ[self.datamodel_env_variable]
+        except Exception as e:
+            self.ready = False
+            self.logger.error('Unable to set_datamodel_env_variable_dir. exception: {}'.format(e))
+        if not self.datamodel_env_variable_dir:
+            self.ready = False
+            self.logger.error('Unable to set_datamodel_env_variable_dir. '
+                              'self.datamodel_env_variable_dir: {} '
+                                .format(self.datamodel_env_variable_dir))
 
     def set_species(self,species=None):
         '''Set the species class attribute.'''
@@ -47,7 +68,8 @@ class Filespec:
             self.species = species if species else None
             if not self.species:
                 self.ready = False
-                self.logger.error('Unable to set_species.')
+                self.logger.error('Unable to set_species.'
+                                  'species: {} '.format(species))
 
     def set_path_info(self,path_info=None):
         '''Set the path_info class attribute.'''
@@ -58,18 +80,28 @@ class Filespec:
                 self.ready = False
                 self.logger.error('Unable to set_path_info.')
             else:
-                self.file_path        = path_info['file_path']
-                self.env_variable     = path_info['env_variable']
-                self.file_name        = path_info['file_name']
-                self.location_path    = path_info['location_path']
-                self.directory_names  = path_info['directory_names']
-                self.directory_depths = path_info['directory_depths']
+                self.datamodel_file_path        = path_info['file_path']
+                self.datamodel_env_variable     = path_info['env_variable']
+                self.datamodel_file_name        = path_info['file_name']
+                self.datamodel_location_path    = path_info['location_path']
+                self.datamodel_directory_names  = path_info['directory_names']
+                self.datamodel_directory_depths = path_info['directory_depths']
+
+    def set_module(self):
+        '''Set the module class attribute.'''
+        self.module = None
+        if self.ready:
+            self.module = Module(logger=self.logger,options=self.options)
+            if not self.module:
+                self.ready = False
+                self.logger.error('Unable to set_module.')
 
     def set_species_values(self):
         '''Determine and populate self.species values'''
         if self.ready:
             self.set_potential_path_example_file_rows() # this also sets self.tree_id
             self.set_path_example_file_row()
+            self.split_path()
             self.set_species_location()
             self.set_species_ext()
             self.set_species_name()
@@ -83,22 +115,22 @@ class Filespec:
                 self.species['note']          = self.species_note
 
     def set_potential_path_example_file_rows(self):
-        '''Set the list self.potential_path_example_file_rows from self.file_name'''
+        '''Set the list self.potential_path_example_file_rows from self.datamodel_file_name'''
         self.tree_id = None
         self.potential_path_example_file_rows = list()
         if self.ready:
             self.logger.info('Setting path_examples for {} from the archive database'
-                                .format(self.file_path))
+                                .format(self.datamodel_file_path))
             self.set_session()
             self.set_tree_id_range()
             self.set_file_name_start()
-            self.ready = bool(self.ready and self.env_variable and self.session and
-                              self.tree_id_range and self.file_name_start)
+            self.ready = bool(self.ready and self.datamodel_env_variable and self.session and
+                              self.tree_id_range and self.datamodel_file_name_start)
             if self.ready:
                 for self.tree_id in self.tree_id_range:
                     env = (self.session.query(Env)
                                        .filter(Env.tree_id == self.tree_id)
-                                       .filter(Env.label == self.env_variable)
+                                       .filter(Env.label == self.datamodel_env_variable)
                                        .one())
 
                     self.loc = 'manga/spectro/analysis/v2_4_3/2.2.1' ## DEBUG ##
@@ -110,11 +142,11 @@ class Filespec:
                     for directory in directories:
                         files = (self.session.query(File)
                                              .filter(File.directory_id == directory.id)
-                                             .filter(File.location.like('%' + self.file_name_start + '%'))
+                                             .filter(File.location.like('%' + self.datamodel_file_name_start + '%'))
                                              .all())
                         if files:
                             self.logger.debug('Files found with file.path like %{0}%: {1}'
-                                .format(self.file_name_start,files))
+                                .format(self.datamodel_file_name_start,files))
                             self.potential_path_example_file_rows.extend(files)
                     if self.potential_path_example_file_rows: break
             if not self.potential_path_example_file_rows and self.tree_id:
@@ -143,35 +175,37 @@ class Filespec:
 
     def set_file_name_start(self):
         '''Set the first part of the filename, up to the first punctuation character.'''
-        self.file_name_start = None
+        self.datamodel_file_name_start = None
         if self.ready:
-            if self.file_name:
+            if self.datamodel_file_name:
                 punctuation = str(string_punctuation).replace('_',str())
 #                regex = "[\w']+|[.,!?;]"
                 regex = "[\w']+|[" + punctuation + "]"
-                string = self.file_name.strip()
+                string = self.datamodel_file_name.strip()
                 matches = self.util.get_matches(regex=regex,string=string)
                 match = matches[0] if matches else None
-                self.file_name_start = match
+                self.datamodel_file_name_start = match
             else:
                 self.ready = False
                 self.logger.error('Unable to set_file_name_start. ' +
-                                  'self.file_name: {}'.format(self.file_name))
-            if not self.file_name_start:
+                                  'self.datamodel_file_name: {}'.format(self.datamodel_file_name))
+            if not self.datamodel_file_name_start:
                 self.ready = False
                 self.logger.error('Unable to set_file_name_start. ' +
-                                  'self.file_name_start: {}'.format(self.file_name_start))
+                                  'self.datamodel_file_name_start: {}'
+                                    .format(self.datamodel_file_name_start))
 
     def set_species_location(self):
-        '''Set species_location from self.directory_names and text substitution conventions'''
+        '''Set species_location from self.datamodel_directory_names and text
+            substitution conventions'''
         # Need to check if this way of finding the location agrees with the location
         # found in the species_path_example
         self.species_location = None
         if self.ready:
-            if self.directory_names:
+            if self.datamodel_directory_names:
                 if not self.dir_substitution: self.set_dir_substitution()
                 names = list()
-                for directory_name in self.directory_names:
+                for directory_name in self.datamodel_directory_names:
                     if directory_name in self.dir_substitution:
                         name = self.dir_substitution[directory_name]
                     else:
@@ -181,7 +215,8 @@ class Filespec:
             else:
                 self.ready = False
                 self.logger.error('Unable to set_species_location. ' +
-                                  'self.directory_names: {}'.format(self.directory_names))
+                                  'self.datamodel_directory_names: {}'
+                                    .format(self.datamodel_directory_names))
             if not self.species_location:
                 self.ready = False
                 self.logger.error('Unable to set_species_location. ' +
@@ -250,6 +285,64 @@ class Filespec:
                                 'fit.gz','fits.gz','sha1sum','ps','fits.bz2',
                                 'txt','html','model','rdzw.gz',
                                 ]
+
+    def split_path(self):
+        '''Split the path of the found path_example_file_row'''
+        self.example_name = None
+        self.example_location = None
+        if self.ready:
+            if self.path_example_file_row:
+                file_path = self.path_example_file_row.path
+                # split file_path
+                self.set_module()
+                if self.ready:
+                    arguments = join('tree','dr' + str(self.tree_id))
+                    self.module.set_command(command='load',arguments=arguments)
+                    self.module.execute_command()
+#                    print('arguments: %r'% arguments)
+#                    print('self.module.stdout: %r'% self.module.stdout)
+#                    print('self.module.stderr: %r'% self.module.stdout)
+#                    print('self.module.returncode: %r'% self.module.returncode)
+#                    input('pause')
+                    self.ready = (self.ready and self.module.ready and
+                                  self.module.returncode == 0 and self.module.stdout)
+                if self.ready:
+#                    self.set_datamodel_env_variable_dir() # DOESN'T WORK
+                    ########  Fragile ########
+                    regex = "environ\[\'" + self.datamodel_env_variable + "(.*?)\\n"
+                    matches = self.util.get_matches(regex=regex,string=self.module.stdout)
+                    environ_def = matches[0] if matches else None
+                    regex = "(?<=\/)(.*?)(?=\')"
+                    matches = (self.util.get_matches(regex=regex,string=environ_def)
+                               if environ_def else None)
+                    environ_path = matches[0] if matches else None
+                    ########  Fragile ########
+                    split = environ_path.split('/') if environ_path else None
+                    last_dir = split[-1] + '/' if split else None
+                    split = file_path.split(last_dir) if last_dir else None
+                    location_name = split[-1] if split else None
+                    split = location_name.split('/') if location_name else None
+                    self.example_location = '/'.join(split[:-1]) if split else None
+                    self.example_name = split[-1] if split else None
+
+#                    print('environ_def: %r' %  environ_def)
+#                    print('environ_path: %r' %  environ_path)
+#                    print('last_dir: %r' %  last_dir)
+#                    print('location_name: %r' %  location_name)
+#                    print('self.example_location: %r' %  self.example_location)
+#                    print('self.example_name: %r' %  self.example_name)
+#                    print('file_path: %r' %  file_path)
+#                    input('pause')
+            else:
+                self.ready = False
+                self.logger.error('Unable to split_path. ' +
+                                  'self.path_example_file_row: {}'
+                                    .format(self.path_example_file_row))
+            if not self.example_name: # self.example_location can be None
+                self.ready = False
+                self.logger.error('Unable to split_path. ' +
+                                  'self.path_example_file_row: {}'
+                                    .format(self.path_example_file_row))
 
     def set_species_ext(self):
         '''Set the file extension for self.species_path_example'''
