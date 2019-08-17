@@ -1,5 +1,5 @@
-from sdssdb.sqlalchemy.archive.sas import *
-from datamodel_parser.application import File as datamodel_File
+from datamodel_parser.application import Filespec
+from datamodel_parser.application import File
 from datamodel_parser.application import Database
 from datamodel_parser.application import Util
 from os import environ, walk
@@ -9,7 +9,6 @@ from datamodel_parser import app
 import logging
 from subprocess import Popen, PIPE
 import yaml
-from string import punctuation as string_punctuation
 from json import dumps
 
 class Store():
@@ -105,287 +104,85 @@ class Store():
             self.directory_names                    = None
             self.directory_depths                   = None
             self.svn_products                       = None
-            self.filespec_dict_yaml                 = None
-            self.file_path                          = None
-            self.dir_substitution                   = None
-            self.filespec_dict_location             = None
-            self.tree_id                            = None
-            self.filespec_dict_path_example         = None
-            self.filespec_dict_name                 = None
-            self.path_example_file_row              = None
+            self.path_info                          = None
 
     def populate_filespec_table_archive(self):
-        '''set self.filespec_dict for each datamodel path in self.file_paths'''
+        '''Set self.filespec_dict for each datamodel path in self.file_paths.'''
         if self.ready:
             if self.file_paths:
                 ### DEBUG ###
                 self.file_paths = ['MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/dapall.html'] ### DEBUG ###
                 self.loc = 'manga/spectro/analysis/v2_4_3/2.2.1' ## DEBUG ##
                 ### DEBUG ###
-                for self.file_path in self.file_paths:
-                    self.set_filespec_dict_archive()
-                    print('self.filespec_dict: %r' % self.filespec_dict)
-#                    self.populate_filespec_table()
+                filespec = Filespec(logger=self.logger,options=self.options)
+                if filespec and filespec.ready:
+                    for self.file_path in self.file_paths:
+                        if self.ready:
+                            self.set_path_info()
+                            self.initialize_filespec_dict()
+                            if self.ready:
+                                filespec.set_path_info(path_info=self.path_info)
+                                filespec.set_species(species=self.filespec_dict)
+                                filespec.set_species_values()
+                                self.filespec_dict = filespec.species
+                                self.ready = self.ready and filespec.ready
+                            if self.ready:
+                                self.populate_file_path_tables()
+                                self.populate_filespec_table()
             else:
                 self.ready = False
                 self.logger.error('Unable to populate_filespec_table_archive. ' +
                                   'self.file_paths: {}'.format(self.file_paths))
 
-    def set_filespec_dict_archive(self):
-        '''Set filespec_dict from self.file_path using the archive database.'''
-        if self.ready:
-            self.initialize_filespec_dict()
-            self.set_filespec_dict_values()
-
-    def initialize_filespec_dict(self):
-        '''Set filespec_dict from self.file_path using the archive database.'''
-        self.filespec_dict = dict()
+    def set_path_info(self):
+        '''Set information obtained from the datamodel file path.'''
+        self.path_info = None
         if self.ready:
             if self.file_path:
                 # set datamodel path, self.env_variable, self.file_name, and self.directory_names
                 path = self.file_path
                 self.set_path(path=path)
                 self.split_path()
-                self.populate_file_path_tables()
-                self.ready = bool(self.ready and path and self.env_variable)
-                
-                # initialize_filespec_dict
                 if self.ready:
-                    self.filespec_dict['path']          = path
-                    self.filespec_dict['tree_edition']  = 'undetermined'
-                    self.filespec_dict['env_label']     = self.env_variable
-                    self.filespec_dict['location']      = 'undetermined'
-                    self.filespec_dict['name']          = 'undetermined'
-                    self.filespec_dict['ext']           = 'undetermined'
-                    self.filespec_dict['path_example']  = 'undetermined'
-                    self.filespec_dict['note']          = str()
+                    self.path_info = {'file_path'        : self.file_path       ,
+                                      'env_variable'     : self.env_variable    ,
+                                      'file_name'        : self.file_name       ,
+                                      'location_path'    : self.location_path   ,
+                                      'directory_names'  : self.directory_names ,
+                                      'directory_depths' : self.directory_depths,
+                                      }
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_path_info. ' +
+                                  'self.file_path: {}'.format(self.file_path)
+                                  )
+            if not self.path_info:
+                self.ready = False
+                self.logger.error('Unable to set_path_info. ' +
+                                  'self.path_info: {}'.format(self.path_info))
+
+
+    def initialize_filespec_dict(self):
+        '''Set filespec_dict from self.file_path using the archive database.'''
+        self.filespec_dict = dict()
+        if self.ready:
+            if self.file_path:
+                self.filespec_dict['path']          = self.file_path
+                self.filespec_dict['tree_edition']  = 'undetermined'
+                self.filespec_dict['env_label']     = self.env_variable
+                self.filespec_dict['location']      = 'undetermined'
+                self.filespec_dict['name']          = 'undetermined'
+                self.filespec_dict['ext']           = 'undetermined'
+                self.filespec_dict['path_example']  = 'undetermined'
+                self.filespec_dict['note']          = str()
             else:
                 self.ready = False
                 self.logger.error('Unable to initialize_filespec_dict. ' +
                                   'self.file_path: {}'.format(self.file_path))
-        if not self.filespec_dict:
-            self.ready = False
-            self.logger.error('Unable to initialize_filespec_dict. ' +
-                              'self.filespec_dict: {}'.format(self.filespec_dict))
-
-    def set_filespec_dict_values(self):
-        '''Determine and populate self.filespec_dict values'''
-        if self.ready:
-            self.set_potential_path_example_file_rows() # this also sets self.tree_id
-            self.set_path_example_file_row()
-            self.set_filespec_dict_location()
-            self.set_filespec_dict_ext()
-            self.set_filespec_dict_name()
-            self.set_filespec_dict_note()
-            if self.ready:
-                self.filespec_dict['tree_edition']  = 'dr' + str(self.tree_id)
-                self.filespec_dict['location']      = self.filespec_dict_location
-                self.filespec_dict['name']          = self.filespec_dict_name
-                self.filespec_dict['ext']           = self.filespec_dict_ext
-                self.filespec_dict['path_example']  = self.path_example_file_row.path
-                self.filespec_dict['note']          = self.filespec_dict_note
-
-    def set_potential_path_example_file_rows(self):
-        '''Set the list self.potential_path_example_file_rows from self.file_name'''
-        self.tree_id = None
-        self.potential_path_example_file_rows = list()
-        if self.ready:
-            self.logger.info('Setting path_examples for {} from the archive database'
-                                .format(self.file_path))
-            self.set_session()
-            self.set_tree_id_range()
-            self.set_file_name_start()
-            self.ready = bool(self.ready and self.env_variable and self.session and
-                              self.tree_id_range and self.file_name_start)
-            if self.ready:
-                for self.tree_id in self.tree_id_range:
-                    env = (self.session.query(Env)
-                                       .filter(Env.tree_id == self.tree_id)
-                                       .filter(Env.label == self.env_variable)
-                                       .one())
-                    directories = (self.session.query(Directory)
-                                               .filter(Directory.env_id == env.id)
-                                               .filter(Directory.location == self.loc) ## DEBUG ##
-                                               .all())
-                    for directory in directories:
-                        files = (self.session.query(File)
-                                             .filter(File.directory_id == directory.id)
-                                             .filter(File.location.like('%' + self.file_name_start + '%'))
-                                             .all())
-                        if files:
-                            self.logger.debug('Files found with file.path like %{0}%: {1}'
-                                .format(self.file_name_start,files))
-                            self.potential_path_example_file_rows.extend(files)
-                    if self.potential_path_example_file_rows: break
-            if not self.potential_path_example_file_rows and self.tree_id:
+            if not self.filespec_dict:
                 self.ready = False
-                self.logger.error('Unable to populate_filespec_table_archive. ' +
-                                  'self.potential_path_example_file_rows: {}'
-                                    .format(self.potential_path_example_file_rows) +
-                                  'self.tree_id: {}'.format(self.tree_id)
-                                  )
-
-    def set_session(self):
-        '''Set sdssdb.sqlalchemy.archive.sas database session.'''
-        self.session = database.Session()
-        if not self.session:
-            self.ready = False
-            self.logger.error('Unable to set_session. ' +
-                              'self.session: {}'.format(self.session))
-
-    def set_tree_id_range(self):
-        '''Set tree_ids to search for path_example.'''
-        self.tree_id_range = list(range(15,6,-1))
-        if not self.tree_id_range:
-            self.ready = False
-            self.logger.error('Unable to set_tree_id_range. ' +
-                              'self.tree_id_range: {}'.format(self.tree_id_range))
-
-    def set_file_name_start(self):
-        '''Set the first part of the filename, up to the first punctuation character.'''
-        self.file_name_start = None
-        if self.ready:
-            if self.file_name:
-                punctuation = str(string_punctuation).replace('_',str())
-#                regex = "[\w']+|[.,!?;]"
-                regex = "[\w']+|[" + punctuation + "]"
-                string = self.file_name.strip()
-                matches = self.util.get_matches(regex=regex,string=string)
-                match = matches[0] if matches else None
-                self.file_name_start = match
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_file_name_start. ' +
-                                  'self.file_name: {}'.format(self.file_name))
-            if not self.file_name_start:
-                self.ready = False
-                self.logger.error('Unable to set_file_name_start. ' +
-                                  'self.file_name_start: {}'.format(self.file_name_start))
-
-    def set_filespec_dict_location(self):
-        '''Set filespec_dict_location from self.directory_names and text substitution conventions'''
-        # Need to check if this way of finding the location agrees with the location
-        # found in the filespec_dict_path_example
-        self.filespec_dict_location = None
-        if self.ready:
-            if self.directory_names:
-                if not self.dir_substitution: self.set_dir_substitution()
-                names = list()
-                for directory_name in self.directory_names:
-                    if directory_name in self.dir_substitution:
-                        name = self.dir_substitution[directory_name]
-                    else:
-                        name = directory_name
-                    names.append(name)
-                self.filespec_dict_location = join(*names)
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_filespec_dict_location. ' +
-                                  'self.directory_names: {}'.format(self.directory_names))
-            if not self.filespec_dict_location:
-                self.ready = False
-                self.logger.error('Unable to set_filespec_dict_location. ' +
-                                  'self.filespec_dict_location: {}'.format(self.filespec_dict_location))
-
-    def set_dir_substitution(self):
-        self.dir_substitution = {
-            # Done up to
-            # - path: "BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html"
-            # in filespec.yaml
-                                    'dr11_patchy_mocks' : '{dr}_multidark_patchy_mocks',
-                                    'DRPVER'            : '{drpver}',
-                                    'DAPVER'            : '{dapver}',
-                                    'ELG_COMPOSITE_VER' : '{ver}',
-                                    'GALAXY_VERSION'    : '{version}',
-                                    'MJD'               : '{mjd}',
-                                    'MJD5'              : '{mjd}',
-                                    'PLATE4'            : '{plate:0>4}',
-                                    'PLATE4-MJD'        : '{plate:0>4}-{mjd}',
-                                    'RUN1D'             : '{run1d}',
-                                    'RUN2D'             : '{run2d}',
-                                    'TARGET_RUN'        : '{target_run}',
-                                    
-                                }
-
-    def set_path_example_file_row(self):
-        '''Set path_example_file_row from self.potential_path_example_file_rows'''
-        ##### Under construction #####
-        self.path_example_file_row = list()
-        self.removed_potential_path_example_file_rows = list()
-        if self.ready:
-            if self.potential_path_example_file_rows:
-                self.set_file_extensions()
-                for file_row in self.potential_path_example_file_rows:
-                    file_path = file_row.path if file_row else None
-                    split = file_path.split('.') if file_path else None
-                    ext = split[-1] if split else None
-                    if ext in self.file_extensions:
-                        self.path_example_file_row.append(file_row)
-                    else:
-                        self.removed_potential_path_example_file_rows.append(file_path)
-                        self.logger.debug('Removing potential_path_example: {}'.format(file_path))
-                if len(self.path_example_file_row) == 1:
-                    self.path_example_file_row = self.path_example_file_row[0]
-                else:
-                    self.ready = False
-                    self.logger.error('Unable to set_path_example_file_row. ' +
-                                      'Multiple path_examples found. Need to restrict.' +
-                                      'self.path_example_file_row: {}'
-                                        .format(self.path_example_file_row))
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_path_example_file_row. ' +
-                                  'self.potential_path_example_file_rows: {}'
-                                    .format(self.potential_path_example_file_rows))
-            if not self.path_example_file_row:
-                self.ready = False
-                self.logger.error('Unable to set_path_example_file_row. ' +
-                                  'self.path_example_file_row: {}'
-                                    .format(self.path_example_file_row))
-
-    def set_file_extensions(self):
-        '''Set list of file extensions of interest for path_examples'''
-        self.file_extensions = ['dat.gz','fits','tar.gz','dat','log.html','log',
-                                'log.gz','png','ply','apz','par','hdr','o',
-                                'fit.gz','fits.gz','sha1sum','ps','fits.bz2',
-                                'txt','html','model','rdzw.gz',
-                                ]
-
-    def set_filespec_dict_ext(self):
-        '''Set the file extension for self.filespec_dict_path_example'''
-        self.filespec_dict_ext = None
-        if self.ready:
-            path = self.path_example_file_row.path if self.path_example_file_row else None
-            split = path.split('.') if path else None
-            self.filespec_dict_ext = split[-1] if split else None
-            if not self.filespec_dict_ext:
-                self.ready = False
-                self.logger.error('Unable to set_filespec_dict_ext. ' +
-                                  'self.filespec_dict_ext: {}'
-                                    .format(self.filespec_dict_ext))
-
-    def set_filespec_dict_name(self):
-        '''Set the {text substitution} name for self.filespec_dict_path_example'''
-        self.filespec_dict_name = None
-        if self.ready:
-            file_row = self.path_example_file_row if self.path_example_file_row else None
-            file_path = file_row.path if file_row else None
-            split = file_path.split('/') if file_path else None
-            self.filespec_dict_name  = split[-1] if split else None
-            # need to split the pre-{text sub} filespec_location off of file_row.location
-            # and use regex to fill in the file_path {text sub}
-            if not self.filespec_dict_name:
-                self.ready = False
-                self.logger.error('Unable to set_filespec_dict_name. ' +
-                                  'self.filespec_dict_name: {}'
-                                    .format(self.filespec_dict_name))
-
-    def set_filespec_dict_note(self):
-        '''Set a note of any warnings or errors that occurred while running
-            set_filespec_dict_values'''
-        #### UNDER CONSTRUCTION ####
-        self.filespec_dict_note = 'undetermined'
-
+                self.logger.error('Unable to initialize_filespec_dict. ' +
+                                  'self.filespec_dict: {}'.format(self.filespec_dict))
 
     def init_yaml(self,filename='filespec.yaml'):
         '''Write a yaml file containing datamodel file paths.'''
@@ -574,19 +371,19 @@ class Store():
                 self.ready = False
                 self.logger.error('Unable to split_path. ' +
                                   'path: {}'.format(path))
-        if not (
-            self.env_variable     and
-            self.file_name        
-            #self.location_path    # can be None
-            #self.directory_names  # can be None
-            #self.directory_depths # can be None
-            ):
-            self.ready = False
-            self.logger.error(
-                'Unable to split_path. '                              +
-                'self.env_variable: {}, ' .format(self.env_variable)  +
-                'self.file_name: {}, '    .format(self.file_name)
-                )
+            if not (
+                self.env_variable     and
+                self.file_name
+                #self.location_path    # can be None
+                #self.directory_names  # can be None
+                #self.directory_depths # can be None
+                ):
+                self.ready = False
+                self.logger.error(
+                    'Unable to split_path. '                              +
+                    'self.env_variable: {}, ' .format(self.env_variable)  +
+                    'self.file_name: {}, '    .format(self.file_name)
+                    )
 
     def set_file_paths(self):
         '''Set a list of all files for the current tree edition.'''
@@ -620,10 +417,10 @@ class Store():
                 self.ready = False
                 self.logger.error('Unable to set_file_paths. ' +
                                   'self.datamodel_dir: {}'.format(self.datamodel_dir))
-        if not self.file_paths:
-            self.ready = False
-            self.logger.error('Unable to set_file_paths. ' +
-                              'self.file_paths: {}'.format(self.file_paths))
+            if not self.file_paths:
+                self.ready = False
+                self.logger.error('Unable to set_file_paths. ' +
+                                  'self.file_paths: {}'.format(self.file_paths))
 
     def set_file_path_skip_list(self):
         '''Set a list of file paths that don't conform to the database schema.'''
@@ -942,7 +739,7 @@ class Store():
         ''' Set class File instance.'''
         self.file = None
         if self.ready:
-                self.file = (datamodel_File(logger=self.logger,options=self.options)
+                self.file = (File(logger=self.logger,options=self.options)
                              if self.logger and self.options else None)
 
     def render_template(self,template=None):
