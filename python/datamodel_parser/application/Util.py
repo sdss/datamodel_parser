@@ -25,19 +25,17 @@ class Util:
         if self.ready:
             self.options = options if options else None
             if not self.options:
-                self.ready = False
-                self.logger.error('Unable to set_options.')
+                #self.ready = False # allow not options for class testing
+                self.logger.warning('Unable to set_options.')
 
     def set_ready(self):
         '''Set error indicator.'''
-        self.ready = bool(self.logger       and
-                          self.options      
-                          )
+        self.ready = bool(self.logger)
 
     def set_attributes(self):
         '''Set class attributes.'''
         if self.ready:
-            self.verbose = self.options.verbose if self.options else None
+            self.verbose = self.options.verbose if self.options  else None
             self.heading_tag_names = {'h1','h2','h3','h4','h5','h6'}
             self.paragraph_tags = {'p'}
             self.bold_tags = {'b'}

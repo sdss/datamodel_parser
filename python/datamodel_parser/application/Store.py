@@ -93,7 +93,7 @@ class Store():
     def set_attributes(self):
         '''Set class attributes.'''
         if self.ready:
-            self.verbose = self.options.verbose if self.options else None
+            self.verbose = self.options.verbose if self.options  else None
             self.util = Util(logger=self.logger,options=self.options)
             self.datamodel_dir                      = None
             self.path                               = None
@@ -146,6 +146,7 @@ class Store():
                 path = self.file_path
                 self.set_path(path=path)
                 self.split_path()
+                self.populate_file_path_tables()
                 if self.ready:
                     self.path_info = {'file_path'        : self.file_path       ,
                                       'env_variable'     : self.env_variable    ,
@@ -750,8 +751,11 @@ class Store():
                     self.process_rendered_template(result   = result,
                                                    template = template)
                 else:
-                    print('Fail! \nTry running parse_html for the file: %r'
-                            % self.options.path)
+                    if self.options:
+                        print('Fail! \nFirst run parse_html for the file: {}'
+                                .format(self.options.path))
+                    else:
+                        print('Fail! \nFirst run parse_html for the file.')
             else:
                 self.ready = False
                 self.logger.error('Unable to render_template. ' +

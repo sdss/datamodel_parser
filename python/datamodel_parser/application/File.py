@@ -21,12 +21,17 @@ class File:
         self.set_ready()
         self.set_attributes()
 
-    def initialize(self,logger=None,options=None,tree_edition=None):
+    def initialize(self,logger=None,options=None):
+        '''Initialize utility class, logger, and command line options.'''
         self.util = Util(logger=logger,options=options)
-        self.logger  = self.util.logger  if self.util.logger  else None
-        self.options = self.util.options if self.util.options else None
-        self.ready   = self.util.ready   if self.util.ready   else None
-    
+        if self.util and self.util.ready:
+            self.logger  = self.util.logger  if self.util.logger  else None
+            self.options = self.util.options if self.util.options else None
+            self.ready   = bool(self.logger)
+        else:
+            self.ready = False
+            print('ERROR: Unable to initialize. self.util: {}'.format(self.util))
+
     def set_database(self):
         '''Set class Database instance.'''
         self.database = None
@@ -45,14 +50,13 @@ class File:
         self.ready = bool(self.ready        and
                           self.util         and
                           self.logger       and
-                          self.options      and
                           self.database
                           )
 
     def set_attributes(self):
         '''Set class attributes.'''
         if self.ready:
-            self.verbose = self.options.verbose if self.options else None
+            self.verbose = self.options.verbose if self.options  else None
             self.intro_type = None
             self.hdu_type = None
             

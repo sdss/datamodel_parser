@@ -20,9 +20,13 @@ class Hdu:
     def initialize(self,logger=None,options=None):
         '''Initialize utility class, logger, and command line options.'''
         self.util = Util(logger=logger,options=options)
-        self.logger  = self.util.logger  if self.util.logger  else None
-        self.options = self.util.options if self.util.options else None
-        self.ready   = self.util and self.util.ready if self.util else None
+        if self.util and self.util.ready:
+            self.logger  = self.util.logger  if self.util.logger  else None
+            self.options = self.util.options if self.util.options else None
+            self.ready   = bool(self.logger)
+        else:
+            self.ready = False
+            print('ERROR: Unable to initialize. self.util: {}'.format(self.util))
 
     def set_body(self, body=None):
         '''Set the body class attribute.'''
@@ -38,13 +42,13 @@ class Hdu:
         self.ready = bool(self.ready   and
                           self.util    and
                           self.logger  and
-                          self.options and
-                          self.body)
+                          self.body
+                          )
 
     def set_attributes(self):
         '''Set class attributes.'''
         if self.ready:
-            self.verbose = self.options.verbose if self.options else None
+            self.verbose = self.options.verbose if self.options  else None
             self.heading_tags        = self.util.heading_tag_names
             self.paragraph_tags      = self.util.paragraph_tags
             self.bold_tags           = self.util.bold_tags
