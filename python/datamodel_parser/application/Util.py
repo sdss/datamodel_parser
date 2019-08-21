@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
 from re import search, compile, match
 from subprocess import Popen, PIPE
+from os import environ, walk
+from os.path import basename, dirname, exists, isdir, join
 from string import punctuation
+import yaml
 from json import dumps
 
 
@@ -1647,3 +1650,53 @@ class Util:
             self.logger.error('Unable to execute_command. ' +
                               'command: {}'.format(command))
         return (out,err,proc_returncode)
+
+    def set_yaml_dir(self,yaml_dir=None):
+        '''Set DATAMODEL_PARSER_YAML_DIR'''
+        self.yaml_dir = None
+        if yaml_dir:
+            self.yaml_dir = yaml_dir
+        else:
+            try: self.yaml_dir = environ['DATAMODEL_PARSER_YAML_DIR']
+            except Exception as e:
+                self.ready = False
+                self.logger.error('Unable to set_yaml_dir. exception: {}'.format(e))
+        if not exists(self.yaml_dir):
+            self.ready = False
+            self.logger.error('Unable to set_yaml_dir. ' +
+                              'Directory does not exist: {}, '.format(self.yaml_dir))
+        if not self.yaml_dir:
+            self.ready = False
+            self.logger.error('Unable to set_yaml_dir. ' +
+                              'self.yaml_dir: {}, '.format(self.yaml_dir)
+                              )
+
+    def set_yaml_data(self,dir=None,filename=None):
+        '''Create a data structure from the given yaml file'''
+        self.yaml_data = None
+        if self.ready:
+            if dir and filename:
+                path = join(dir,filename)
+                if path and exists(path):
+                    with open(path,'r') as file:
+                        try: self.yaml_data = yaml.safe_load(file)
+                        except yaml.YAMLError as e:
+                            self.ready = False
+                            self.logger.error('Unable to set_yaml_data. ' +
+                                              'An error occurred diring yaml.safe_load(). ' +
+                                              'Exception: {}'.format(e))
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to set_yaml_data. ' +
+                                      'path: {}'.format(path))
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_yaml_data. ' +
+                                  'dir: {}'.format(dir) +
+                                  'filename: {}'.format(filename)
+                                  )
+            if not self.yaml_data:
+                self.ready = False
+                self.logger.error('Unable to set_yaml_data. ' +
+                                  'self.yaml_data: {}'.format(self.yaml_data))
+

@@ -37,9 +37,11 @@ def filespec_archive():
     parser.add_argument('-l', '--level', help='set logging level', metavar='LEVEL', choices=['debug','info','warning','error','critical'], default='info')
     parser.add_argument('-n', '--nolog', help='set nolog variable', action='store_true')
     parser.add_argument('-v', '--verbose', help='set verbose logging', action='store_true')
-    parser.add_argument('-m', '--modules-home', action='store', dest='modules_home',
-        metavar='DIR',help='Set or override the value of $MODULESHOME',
-        default=getenv('MODULESHOME'))
+    parser.add_argument('-t', '--test', action='store_true', dest='test',
+        help='Test mode.  Do not actually populate database.')
+    parser.add_argument('-p', '--path', help='datamodel file path', metavar='PATH')
+    parser.add_argument('-o', '--location', help='example location path', metavar='LOCATION')
+
     return parser.parse_args()
 
 def filespec_init():

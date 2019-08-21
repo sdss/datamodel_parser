@@ -1088,7 +1088,7 @@ datamodels:
    name: "mock_random_{dr}_{sample}_{ns}_{nrandoms}x{realization}.rdzw.gz"
    ext: "rdzw.gz"
    path_example: "$BOSS_LSS_REDUX/qpm_mocks/mock_random_DR12_CMASS_N_50x1.rdzw.gz"
-   note: "Why does the filename not match the datamodel Naming convention?"
+   note: "Why does the filename not match the datamodel Naming convention:  BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_xN.rdzw?"
 
  - path: "BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html"
    tree_edition: "dr11"
@@ -1097,7 +1097,7 @@ datamodels:
    name: "mock_galaxy_{dr}_{sample}_{ns}_{mtype}_{idnumber}.tar.gz"
    ext: "tar.gz"
    path_example: "$BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DR11_LOWZ_S_PTHALOS_allmocks.tar.gz"
-   note: "Why does the filename not match the datamodel Naming convention?"
+   note: "Why does the filename not match the datamodel Naming convention: BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_MTYPE_IDNUMBER.dat ?"
 
  - path: "BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html"
    tree_edition: "dr11"

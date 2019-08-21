@@ -18,6 +18,6 @@ else:
     store.set_datamodel_dir()
     store.set_tree_edition()
     store.set_file_paths()
-    store.init_yaml()
+    store.init_filespec_yaml()
     store.exit()
 

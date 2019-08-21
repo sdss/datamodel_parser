@@ -1,5 +1,4 @@
 from datamodel_parser.application import Util
-from datamodel_parser.models.datamodel import Directory as datamodel_Directory
 from string import punctuation as string_punctuation
 from sdssdb.sqlalchemy.archive.sas import *
 from os.path import basename, dirname, exists, isdir, join
@@ -38,20 +37,22 @@ class Filespec:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose if self.options else None
-            self.datamodel_file_path       = None
-            self.datamodel_env_variable    = None
-            self.datamodel_file_name       = None
-            self.datamodel_file_name_start = None
-            self.datamodel_directory_names = None
-            self.dir_substitution          = None
-            self.species_location          = None
-            self.tree_id                   = None
-            self.species_path_example      = None
-            self.species_name              = None
-            self.path_example_file_row     = None
-            self.session                   = None
-            self.env                       = None
-            self.path_example_file_row     = None
+            self.datamodel_file_path             = None
+            self.datamodel_env_variable          = None
+            self.datamodel_file_name             = None
+            self.datamodel_file_name_start       = None
+            self.datamodel_directory_names       = None
+            self.directory_substitution_dict     = None
+            self.species_location                = None
+            self.tree_id                         = None
+            self.species_path_example            = None
+            self.species_name                    = None
+            self.path_example_file_row           = None
+            self.session                         = None
+            self.env                             = None
+            self.path_example_file_row           = None
+            self.species_note                    = str()
+            self.location_example_datamodel_dict = None
 
     def set_datamodel_env_variable_dir(self):
         '''Set the directory path associated with the datamodel environmental variable.'''
@@ -72,9 +73,6 @@ class Filespec:
                     self.logger.error('Unable to set_datamodel_env_variable_dir. ' +
                                       'self.datamodel_env_variable: {}'
                                         .format(self.datamodel_env_variable))
-                # DEBUG #
-                print('self.datamodel_env_variable: %r' % self.datamodel_env_variable)
-                input('pause')
 
     def set_species(self,species=None):
         '''Set the species class attribute.'''
@@ -95,7 +93,7 @@ class Filespec:
                 self.ready = False
                 self.logger.error('Unable to set_path_info.')
             else:
-                self.datamodel_file_path        = path_info['file_path']
+                self.datamodel_file_path        = path_info['filepath']
                 self.datamodel_env_variable     = path_info['env_variable']
                 self.datamodel_file_name        = path_info['file_name']
                 self.datamodel_location_path    = path_info['location_path']
@@ -109,9 +107,9 @@ class Filespec:
             self.set_path_example_file_row()
             self.split_path()
             self.set_species_location()
+            self.set_location_example_datamodel_dict()
             self.set_species_ext()
             self.set_species_name()
-            self.set_species_note()
             if self.ready:
                 self.species['tree_edition']  = 'dr' + str(self.tree_id)
                 self.species['location']      = self.species_location
@@ -119,6 +117,8 @@ class Filespec:
                 self.species['ext']           = self.species_ext
                 self.species['path_example']  = self.path_example_file_row.path
                 self.species['note']          = self.species_note
+            print('self.species: \n' + dumps(self.species,indent=1))
+            input('pause')
 
     def set_potential_path_example_file_rows(self):
         '''Set the list self.potential_path_example_file_rows from self.datamodel_file_name'''
@@ -138,12 +138,16 @@ class Filespec:
                                  env_variable = self.datamodel_env_variable)
                     if self.ready:
                         env = self.env if self.env else None
-                        self.loc = 'manga/spectro/analysis/v2_4_3/2.2.1' ## DEBUG ##
-
-                        directories = (self.session.query(Directory)
-                                                   .filter(Directory.env_id == env.id)
-                                                   .filter(Directory.location == self.loc) ## DEBUG ##
-                                                   .all())
+                        if self.options and self.options.test:
+                            directories = (self.session
+                                               .query(Directory)
+                                               .filter(Directory.env_id == env.id)
+                                               .filter(Directory.location == self.options.location)
+                                               .all())
+                        else:
+                            directories = (self.session.query(Directory)
+                                                       .filter(Directory.env_id == env.id)
+                                                       .all())
                         for directory in directories:
                             files = (self.session.query(File)
                                                  .filter(File.directory_id == directory.id)
@@ -227,62 +231,22 @@ class Filespec:
     def set_species_location(self):
         '''Set species_location from self.datamodel_directory_names and text
             substitution conventions'''
-        # Need to check if this way of finding the location agrees with the location
-        # found in the species_path_example
         self.species_location = None
         if self.ready:
-        
-            try: directories = (datamodel_Directory.query.all())
-            except: directories = None
-            all_directories = set()
-            upper_directories = set()
-            lower_directories = set()
-            other_directories = set()
-            for directory in directories:
-                name = directory.name
-                all_directories.add(name)
-                if self.util.check_match(regex='[A-Z]',string=name):
-                    upper_directories.add(name)
-                elif self.util.check_match(regex='[a-z]',string=name):
-                    lower_directories.add(name)
-                else:
-                    other_directories.add(name)
-
-            print('\n\nupper_directories: %r' % upper_directories)
-            print('\n\nlower_directories: %r' % lower_directories)
-            print('\n\nother_directories: %r' % other_directories)
-            input('pause')
-
-            
-            try: directory = (Directory.query
-                              .filter(Directory.location_id==location_id)
-                              .filter(Directory.name==name)
-                              .filter(Directory.depth==depth)
-                              .one())
-            except: directory = None
-
-        
-        
-        
-        
-        
-        
             if self.datamodel_directory_names:
-                if not self.dir_substitution: self.set_dir_substitution()
+                if not self.directory_substitution_dict: self.set_directory_substitution_dict()
                 names = list()
                 for directory_name in self.datamodel_directory_names:
-                    if directory_name in self.dir_substitution:
-                        name = self.dir_substitution[directory_name]
-                    else:
-                        name = directory_name
-                    names.append(name)
+                    if self.ready:
+                        if directory_name in self.directory_substitution_dict:
+                            name = self.directory_substitution_dict[directory_name]
+                        else:
+                            self.ready = False
+                            self.logger.error('Unable to set_filespec_tree_id. ' +
+                                              'self.filespec_dict: {}, '.format(self.filespec_dict)
+                                              )
+                        names.append(name)
                 self.species_location = join(*names)
-                print(self.species_location)
-                
-                
-                ### 1) Validate that self.species_location has
-                ###     as many directories as self.example_location
-                ### 2) Create dictionary of {'actual directory' : 'text substitution string'}
             else:
                 self.ready = False
                 self.logger.error('Unable to set_species_location. ' +
@@ -293,25 +257,93 @@ class Filespec:
                 self.logger.error('Unable to set_species_location. ' +
                                   'self.species_location: {}'.format(self.species_location))
 
-    def set_dir_substitution(self):
-        self.dir_substitution = {
-            # Done up to
-            # - path: "BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html"
-            # in filespec.yaml
-                                    'dr11_patchy_mocks' : '{dr}_multidark_patchy_mocks',
-                                    'DRPVER'            : '{drpver}',
-                                    'DAPVER'            : '{dapver}',
-                                    'ELG_COMPOSITE_VER' : '{ver}',
-                                    'GALAXY_VERSION'    : '{version}',
-                                    'MJD'               : '{mjd}',
-                                    'MJD5'              : '{mjd}',
-                                    'PLATE4'            : '{plate:0>4}',
-                                    'PLATE4-MJD'        : '{plate:0>4}-{mjd}',
-                                    'RUN1D'             : '{run1d}',
-                                    'RUN2D'             : '{run2d}',
-                                    'TARGET_RUN'        : '{target_run}',
-                                    
-                                }
+    def set_location_example_datamodel_dict(self):
+        '''Validate that the example_location_path and the datamodel_location_path
+            follow the same naming convention. If so, create the dictionary
+            location_example_datamodel_dict which provides a mapping from the
+            example_location_path to datamodel_location_path. If not, add a
+            comment to the note attribute.'''
+        self.location_example_datamodel_dict = dict()
+        if self.ready:
+            if self.example_location_path and self.datamodel_directory_names:
+                split_example = self.example_location_path.split('/')
+                if len(split_example) == len(self.datamodel_directory_names):
+                    self.location_example_datamodel_dict = (
+                        dict(zip(split_example,self.datamodel_directory_names)))
+                else:
+                    note = ("ERROR: The example and datamodel location paths don't " +
+                            "have the same number of directories. " +
+                            "self.example_location_path: {}".format(self.example_location_path) +
+                            "self.datamodel_directory_names: {}".format(self.datamodel_directory_names)
+                            )
+                    self.species_note += note + '\n'
+                    self.logger.warning(note)
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_location_example_datamodel_dict. ' +
+                                  'self.example_location_path: {}'
+                                    .format(self.example_location_path) +
+                                  'self.datamodel_directory_names: {}'
+                                    .format(self.datamodel_directory_names)
+                                    )
+
+    def set_directory_substitution_dict(self,filename='directory_substitutions.yaml'):
+        '''Set directory_substitution_dict from directory_substitutions.yaml.'''
+        self.directory_substitution_dict = None
+        if self.ready:
+            self.set_yaml_dir()
+            self.ready = bool(self.yaml_dir and filename)
+            if self.ready:
+                self.set_yaml_data(dir=self.yaml_dir,filename=filename)
+                self.directory_substitution_dict = self.yaml_data if self.yaml_data else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_directory_substitution_dict. ' +
+                                  'filename: {}'.format(filename))
+            if not self.directory_substitution_dict:
+                self.ready = False
+                self.logger.error('Unable to set_directory_substitution_dict. ' +
+                                  'self.directory_substitution_dict: {}'
+                                    .format(self.directory_substitution_dict))
+
+#    def set_directory_substitution_dict(self):
+#        self.directory_substitution_dict = {
+#            # Done up to
+#            # - path: "BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html"
+#            # in filespec.yaml
+#                                    'dr11_patchy_mocks' : '{dr}_multidark_patchy_mocks',
+#                                    'DRPVER'            : '{drpver}',
+#                                    'DAPVER'            : '{dapver}',
+#                                    'ELG_COMPOSITE_VER' : '{ver}',
+#                                    'GALAXY_VERSION'    : '{version}',
+#                                    'MJD'               : '{mjd}',
+#                                    'MJD5'              : '{mjd}',
+#                                    'PLATE4'            : '{plate:0>4}',
+#                                    'PLATE4-MJD'        : '{plate:0>4}-{mjd}',
+#                                    'RUN1D'             : '{run1d}',
+#                                    'RUN2D'             : '{run2d}',
+#                                    'TARGET_RUN'        : '{target_run}',
+#
+#                                }
+
+    def set_yaml_dir(self,yaml_dir=None):
+        '''Set DATAMODEL_PARSER_YAML_DIR'''
+        self.yaml_dir = None
+        if self.ready:
+            self.util.set_yaml_dir(yaml_dir=yaml_dir)
+            self.yaml_dir = self.util.yaml_dir
+            self.ready = self.util.ready
+        else: pass # Let Util.set_yaml_dir do the error logging
+
+    def set_yaml_data(self,dir=None,filename=None):
+        '''Create a data structure from the given yaml file'''
+        self.yaml_data = None
+        if self.ready:
+            if dir and filename:
+                self.util.set_yaml_data(dir=dir,filename=filename)
+                self.yaml_data = self.util.yaml_data
+                self.ready = self.util.ready
+        else: pass # Let Util.set_yaml_data do the error logging
 
     def set_path_example_file_row(self):
         '''Set path_example_file_row from self.potential_path_example_file_rows'''
@@ -322,14 +354,14 @@ class Filespec:
             if self.potential_path_example_file_rows:
                 self.set_file_extensions()
                 for file_row in self.potential_path_example_file_rows:
-                    file_path = file_row.path if file_row else None
-                    split = file_path.split('.') if file_path else None
+                    filepath = file_row.path if file_row else None
+                    split = filepath.split('.') if filepath else None
                     ext = split[-1] if split else None
                     if ext in self.file_extensions:
                         self.path_example_file_row.append(file_row)
                     else:
-                        self.removed_potential_path_example_file_rows.append(file_path)
-                        self.logger.debug('Removing potential_path_example: {}'.format(file_path))
+                        self.removed_potential_path_example_file_rows.append(filepath)
+                        self.logger.debug('Removing potential_path_example: {}'.format(filepath))
                 if len(self.path_example_file_row) == 1:
                     self.path_example_file_row = self.path_example_file_row[0]
                 else:
@@ -360,30 +392,32 @@ class Filespec:
     def split_path(self):
         '''Split the path of the found path_example_file_row'''
         self.example_name = None
-        self.example_location = None
+        self.example_location_path = None
         if self.ready:
             if self.path_example_file_row:
                 # find location_name
-                file_path = (self.path_example_file_row.path
+                filepath = (self.path_example_file_row.path
                              if self.path_example_file_row else None)
                 self.set_env(tree_id      = self.tree_id,
                              env_variable = self.datamodel_env_variable)
                 env_location = self.env.location if self.env else None
-                split = (file_path.split(env_location)
-                         if file_path and env_location else None)
+                split = (filepath.split(env_location)
+                         if filepath and env_location else None)
                 location_name = split[1] if split else None
                 # separate location and name
                 split = location_name.split('/') if location_name else None
                 self.example_name = split[-1] if split else None
-                self.example_location = '/'.join(split[:-1]) if split else None
-                if self.example_location.startswith('/'):
-                    self.example_location = self.example_location[1:]
+                self.example_location_path = '/'.join(split[:-1]) if split else None
+                if self.example_location_path.startswith('/'):
+                    self.example_location_path = self.example_location_path[1:]
+                if self.example_location_path.endswith('/'):
+                    self.example_location_path = self.example_location_path[:-1]
             else:
                 self.ready = False
                 self.logger.error('Unable to split_path. ' +
                                   'self.path_example_file_row: {}'
                                     .format(self.path_example_file_row))
-            if not self.example_name: # self.example_location can be None
+            if not self.example_name: # self.example_location_path can be None
                 self.ready = False
                 self.logger.error('Unable to split_path. ' +
                                   'self.example_name: {}'.format(self.example_name))
@@ -408,12 +442,12 @@ class Filespec:
         '''Set the {text substitution} name for self.species_path_example'''
         self.species_name = None
         if self.ready:
-            if self.example_name:
+            if self.example_name and self.location_example_datamodel_dict:
                 self.species_name = self.example_name
-                ### Process
-                ### 1) use dictionary of {'actual directory' : 'text substitution string'}
-                ###     in set_species_location to insert the text substitution strings
-                ### 2) Validate that all the text substitution strings were accounted for.
+                dictionary = self.location_example_datamodel_dict
+                for key in dictionary.keys():
+                    value = self.directory_substitution_dict[dictionary[key]]
+                    self.species_name = self.species_name.replace(key,value)
             else:
                 self.ready = False
                 self.logger.error('Unable to set_species_name. ' +
@@ -423,11 +457,5 @@ class Filespec:
                 self.ready = False
                 self.logger.error('Unable to set_species_name. ' +
                                   'self.species_name: {}'.format(self.species_name))
-
-    def set_species_note(self):
-        '''Set a note of any warnings or errors that occurred while running
-            set_species_values'''
-        #### UNDER CONSTRUCTION ####
-        self.species_note = 'undetermined'
 
 

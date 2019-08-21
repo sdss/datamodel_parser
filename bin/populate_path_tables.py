@@ -22,7 +22,7 @@ else:
     store.set_database()
     store.set_file_paths() 
     file_list = list()
-    for path in store.file_paths:
+    for path in store.filepaths:
         if store.ready:
 #            if ('BOSS_SPECTRO_REDUX'     in path or
 #                'MANGA_SPECTRO_REDUX'    in path or
