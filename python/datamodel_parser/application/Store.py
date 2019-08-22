@@ -463,13 +463,14 @@ class Store():
 
     def set_file_path_skip_list(self):
         '''Set a list of file paths that don't conform to the database schema.'''
-        self.file_path_skip_list = [
-            'datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html',
-            'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
-            'datamodel/files/PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html',
-            'datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html',
-            'BOSS_PHOTOOBJ/photoz-weight/pofz.html',
-            ]
+        self.file_path_skip_list = []
+#        self.file_path_skip_list = [
+#            'datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html',
+#            'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
+#            'datamodel/files/PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html',
+#            'datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html',
+#            'BOSS_PHOTOOBJ/photoz-weight/pofz.html',
+#            ]
 
     def set_svn_products(self,root_dir=None):
         '''Set a list of directories containing the subdirectories:
