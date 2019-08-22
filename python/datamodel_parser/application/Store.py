@@ -195,7 +195,6 @@ class Store():
                 # create yaml file contents
                 yaml_str = 'datamodels:\n'
                 for path in self.filepaths:
-                    path = path.replace('datamodel/files/',str())
                     self.set_path(path=path)
                     self.split_path()
 
@@ -396,7 +395,6 @@ class Store():
         if self.ready:
             path = path if path else self.path
             if path:
-                path = path.replace('datamodel/files/',str())
                 split = path.split('/')
                 self.env_variable  = split[0]              if split else None
                 self.file_name     = split[-1]             if split else None
@@ -441,8 +439,7 @@ class Store():
                                 ):
                                 file = join(dirpath,filename)
                                 if exists(file):
-                                    filepath = file.replace(
-                                                    self.datamodel_dir + '/',str())
+                                    filepath = file.replace(root_dir,str())
                                     if (filepath and
                                         filepath not in self.file_path_skip_list
                                         ):
@@ -452,6 +449,7 @@ class Store():
                                     self.logger.error('File does not exist: '
                                                       'file: {}'.format(file))
                     else: pass # it's okay to have empty filenames
+                
             else:
                 self.ready = False
                 self.logger.error('Unable to set_file_paths. ' +
@@ -465,10 +463,10 @@ class Store():
         '''Set a list of file paths that don't conform to the database schema.'''
         self.file_path_skip_list = []
 #        self.file_path_skip_list = [
-#            'datamodel/files/MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html',
-#            'datamodel/files/MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
-#            'datamodel/files/PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html',
-#            'datamodel/files/PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html',
+#            'MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html',
+#            'MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html',
+#            'PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html',
+#            'PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html',
 #            'BOSS_PHOTOOBJ/photoz-weight/pofz.html',
 #            ]
 
@@ -744,7 +742,6 @@ class Store():
             if not self.datamodel_dir:
                 self.set_datamodel_dir()
             if self.path and not self.path.startswith('/'):
-#                file =  join(self.datamodel_dir,self.path)
                 file =  join(self.datamodel_dir,'datamodel/files',self.path)
                 if exists(file):
                     with open(file, 'r') as html_text:

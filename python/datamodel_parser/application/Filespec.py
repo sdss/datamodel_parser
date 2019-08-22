@@ -233,7 +233,7 @@ class Filespec:
     def set_species_location(self):
         '''Set species_location from self.datamodel_directory_names and text
             substitution conventions'''
-        self.species_location = None
+        self.species_location = str()
         if self.ready:
             if self.datamodel_directory_names:
                 if not self.directory_substitution_dict: self.set_directory_substitution_dict()
@@ -249,15 +249,16 @@ class Filespec:
                                               )
                         names.append(name)
                 self.species_location = join(*names)
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_species_location. ' +
-                                  'self.datamodel_directory_names: {}'
-                                    .format(self.datamodel_directory_names))
-            if not self.species_location:
-                self.ready = False
-                self.logger.error('Unable to set_species_location. ' +
-                                  'self.species_location: {}'.format(self.species_location))
+            # self.species_location can be empty
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to set_species_location. ' +
+#                                  'self.datamodel_directory_names: {}'
+#                                    .format(self.datamodel_directory_names))
+#            if not self.species_location:
+#                self.ready = False
+#                self.logger.error('Unable to set_species_location. ' +
+#                                  'self.species_location: {}'.format(self.species_location))
 
     def set_location_example_datamodel_dict(self):
         '''Validate that the example_location_path and the datamodel_location_path
@@ -280,14 +281,15 @@ class Filespec:
                             )
                     self.species_note += note + '\n'
                     self.logger.warning(note)
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_location_example_datamodel_dict. ' +
-                                  'self.example_location_path: {}'
-                                    .format(self.example_location_path) +
-                                  'self.datamodel_directory_names: {}'
-                                    .format(self.datamodel_directory_names)
-                                    )
+            # self.example_location_path and self.datamodel_directory_names can be empty
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to set_location_example_datamodel_dict. ' +
+#                                  'self.example_location_path: {}'
+#                                    .format(self.example_location_path) +
+#                                  'self.datamodel_directory_names: {}'
+#                                    .format(self.datamodel_directory_names)
+#                                    )
 
     def set_directory_substitution_dict(self,filename='directory_substitutions.yaml'):
         '''Set directory_substitution_dict from directory_substitutions.yaml.'''
@@ -334,24 +336,39 @@ class Filespec:
         self.removed_potential_path_example_file_rows = list()
         if self.ready:
             if self.potential_path_example_file_rows:
+                # restrict to expected file extensions
                 self.set_file_extensions()
+                path_example_file_rows = list()
                 for file_row in self.potential_path_example_file_rows:
                     filepath = file_row.path if file_row else None
                     split = filepath.split('.') if filepath else None
                     ext = split[-1] if split else None
                     if ext in self.file_extensions:
-                        self.path_example_file_row.append(file_row)
+                        path_example_file_rows.append(file_row)
                     else:
                         self.removed_potential_path_example_file_rows.append(filepath)
                         self.logger.debug('Removing potential_path_example: {}'.format(filepath))
-                if len(self.path_example_file_row) == 1:
-                    self.path_example_file_row = self.path_example_file_row[0]
+                if len(path_example_file_rows) == 1:
+                    self.path_example_file_row = path_example_file_rows[0]
                 else:
-                    self.ready = False
-                    self.logger.error('Unable to set_path_example_file_row. ' +
-                                      'Multiple path_examples found. Need to restrict.' +
-                                      'self.path_example_file_row: {}'
-                                        .format(self.path_example_file_row))
+                    # restrict to filenames that start with filename_start_hyphen
+                    rows = list()
+                    filename_start_hyphen = self.datamodel_filename_start + '-'
+                    for file_row in path_example_file_rows:
+                        filepath = file_row.path if file_row else None
+                        if filename_start_hyphen in filepath:
+                            rows.append(file_row)
+                        else:
+                            self.removed_potential_path_example_file_rows.append(filepath)
+                            self.logger.debug('Removing potential_path_example: {}'.format(filepath))
+                    if len(rows) == 1:
+                        self.path_example_file_row = rows[0]
+                    else:
+                        self.ready = False
+                        self.logger.error('Unable to set_path_example_file_row. ' +
+                                          'Multiple path_examples found. Need to restrict.' +
+                                          'self.path_example_file_row: {}'
+                                            .format(self.path_example_file_row))
             else:
                 self.ready = False
                 self.logger.error('Unable to set_path_example_file_row. ' +
@@ -448,8 +465,6 @@ class Filespec:
                 self.logger.error('Unable to set_filenames. ' +
                                   'self.filenames: {}'.format(self.filenames))
 
-
-
     def set_species_ext(self):
         '''Set the file extension for self.example_name'''
         self.species_ext = None
@@ -476,14 +491,16 @@ class Filespec:
                 for key in dictionary.keys():
                     value = self.directory_substitution_dict[dictionary[key]]
                     self.species_name = self.species_name.replace(key,value)
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_species_name. ' +
-                                  'self.example_name: {}'
-                                    .format(self.example_name))
-            if not self.species_name:
-                self.ready = False
-                self.logger.error('Unable to set_species_name. ' +
-                                  'self.species_name: {}'.format(self.species_name))
+            else: self.species_name = self.example_name
+            # self.location_example_datamodel_dict can be empty
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to set_species_name. ' +
+#                                  'self.example_name: {}'
+#                                    .format(self.example_name))
+#            if not self.species_name:
+#                self.ready = False
+#                self.logger.error('Unable to set_species_name. ' +
+#                                  'self.species_name: {}'.format(self.species_name))
 
 
