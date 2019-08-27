@@ -303,19 +303,19 @@ class Store():
                 self.set_yaml_dir()
                 yaml_file = join(self.yaml_dir,filename) if self.yaml_dir else None
 
-                # DEBUG #
-                with open(yaml_file,'w') as file:
-                    file.write(yaml_str)
-                # DEBUG #
+#                # DEBUG #
+#                with open(yaml_file,'w') as file:
+#                    file.write(yaml_str)
+#                # DEBUG #
 
-#                if not exists(yaml_file):
-#                    with open(yaml_file,'w') as file:
-#                        file.write(yaml_str)
-#                else:
-#                    self.ready = False
-#                    self.logger.error('Unable to init_name_substitutions_yaml. ' +
-#                                      'The file already exists: {}. '.format(yaml_file) +
-#                                      'If you wish to replace this file please first delete it.')
+                if not exists(yaml_file):
+                    with open(yaml_file,'w') as file:
+                        file.write(yaml_str)
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to init_name_substitutions_yaml. ' +
+                                      'The file already exists: {}. '.format(yaml_file) +
+                                      'If you wish to replace this file please first delete it.')
             else:
                 self.ready = False
                 self.logger.error('Unable to init_name_substitutions_yaml. ' +
