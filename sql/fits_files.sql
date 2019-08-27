@@ -10,13 +10,15 @@ join file
 on intro.file_id = file.id
 where
     (
-         lower(intro.heading_title) = lower('Naming convention')
+         intro.heading_title ilike 'Naming convention'
+         /*
          and
          (
             intro.description like '%.fits'
             or
             intro.description like '%.fits.gz'
          )
+         */
     )
 
 ),

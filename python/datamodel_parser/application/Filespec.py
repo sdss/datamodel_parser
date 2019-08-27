@@ -107,7 +107,7 @@ class Filespec:
             self.set_potential_path_example_file_rows() # this also sets self.tree_id
             self.set_path_example_file_row()
             self.split_path()
-            self.set_species_paths()
+            self.set_species_paths()  ##### INCORPORATE ME !!!!!!!!!
             self.set_species_location()
             self.set_location_example_datamodel_dict()
             self.set_species_ext()

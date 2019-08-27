@@ -3,6 +3,10 @@ from datamodel_parser.application import File
 from datamodel_parser.application import Database
 from datamodel_parser.application import Util
 from datamodel_parser.models.datamodel import Directory
+from datamodel_parser.models.datamodel import Intro
+from datamodel_parser.models.datamodel import File as datamodel_File
+from datamodel_parser.models.datamodel import Location
+from datamodel_parser.models.datamodel import Env
 from os import environ, walk
 from os.path import basename, dirname, exists, isdir, join
 from flask import render_template
@@ -266,6 +270,56 @@ class Store():
                 self.ready = False
                 self.logger.error('Unable to init_directory_substitutions_yaml. ' +
                                   'directories: {}'.format(directories))
+
+    def init_name_substitutions_yaml(self,filename='name_substitutions_init.yaml'):
+        if self.ready:
+            try:
+                intros = (Intro.query
+                               .filter(Intro.heading_title.ilike('%Naming Convention%'))
+                               .all()
+                          )
+            except: intros = None
+            if intros:
+                yaml_str = str()
+                for intro in intros:
+                    file = (datamodel_File.load(file_id = intro.file_id)
+                            if intro else None)
+                    location = (Location.load(location_id = file.location_id)
+                                if file else None)
+                    env = (Env.load(env_id = location.env_id)
+                           if location else None)
+                    intro_description = intro.description if intro else None
+                    file_name = file.name if file else None
+                    location_path = location.path if location else None
+                    env_variable = env.variable if env else None
+                    path = (join(env_variable,location_path,file_name)
+                            if location_path else
+                            join(env_variable,file_name)
+                            )
+                    yaml_str += ('{0}: "{1}"\n'
+                                 .format(path,intro_description.replace('\n',str())))
+
+                # write yaml file
+                self.set_yaml_dir()
+                yaml_file = join(self.yaml_dir,filename) if self.yaml_dir else None
+
+                # DEBUG #
+                with open(yaml_file,'w') as file:
+                    file.write(yaml_str)
+                # DEBUG #
+
+#                if not exists(yaml_file):
+#                    with open(yaml_file,'w') as file:
+#                        file.write(yaml_str)
+#                else:
+#                    self.ready = False
+#                    self.logger.error('Unable to init_name_substitutions_yaml. ' +
+#                                      'The file already exists: {}. '.format(yaml_file) +
+#                                      'If you wish to replace this file please first delete it.')
+            else:
+                self.ready = False
+                self.logger.error('Unable to init_name_substitutions_yaml. ' +
+                                  'intros: {}'.format(intros))
 
     def populate_filespec_table_yaml(self):
         '''Populate the filespec table row for each dict in filespec_dicts.'''
