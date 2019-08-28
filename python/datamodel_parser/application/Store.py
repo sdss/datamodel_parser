@@ -476,7 +476,7 @@ class Store():
                     'self.file_name: {}, '    .format(self.file_name)
                     )
 
-    def set_file_paths(self):
+    def set_filepaths(self):
         '''Set a list of all files for the current tree edition.'''
         self.filepaths = list()
         if self.ready:
@@ -506,11 +506,11 @@ class Store():
                 
             else:
                 self.ready = False
-                self.logger.error('Unable to set_file_paths. ' +
+                self.logger.error('Unable to set_filepaths. ' +
                                   'self.datamodel_dir: {}'.format(self.datamodel_dir))
             if not self.filepaths:
                 self.ready = False
-                self.logger.error('Unable to set_file_paths. ' +
+                self.logger.error('Unable to set_filepaths. ' +
                                   'self.filepaths: {}'.format(self.filepaths))
 
     def set_file_path_skip_list(self):

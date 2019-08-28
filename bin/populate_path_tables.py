@@ -20,7 +20,7 @@ else:
     store.set_datamodel_dir()
     store.set_tree_edition()
     store.set_database()
-    store.set_file_paths() 
+    store.set_filepaths() 
     file_list = list()
     for path in store.filepaths:
         if store.ready:
