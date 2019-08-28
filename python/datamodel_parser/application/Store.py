@@ -271,7 +271,7 @@ class Store():
                 self.logger.error('Unable to init_directory_substitutions_yaml. ' +
                                   'directories: {}'.format(directories))
 
-    def init_name_substitutions_yaml(self,filename='name_substitutions_init.yaml'):
+    def init_filename_substitutions_yaml(self,filename='filename_substitutions_init.yaml'):
         if self.ready:
             try:
                 intros = (Intro.query
@@ -313,12 +313,12 @@ class Store():
                         file.write(yaml_str)
                 else:
                     self.ready = False
-                    self.logger.error('Unable to init_name_substitutions_yaml. ' +
+                    self.logger.error('Unable to init_filename_substitutions_yaml. ' +
                                       'The file already exists: {}. '.format(yaml_file) +
                                       'If you wish to replace this file please first delete it.')
             else:
                 self.ready = False
-                self.logger.error('Unable to init_name_substitutions_yaml. ' +
+                self.logger.error('Unable to init_filename_substitutions_yaml. ' +
                                   'intros: {}'.format(intros))
 
     def populate_filespec_table_yaml(self):
