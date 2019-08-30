@@ -228,7 +228,8 @@ class Store():
                 self.logger.error('Unable to write_yaml. ' +
                                   'self.filepaths: {}'.format(self.filepaths))
 
-    def init_directory_substitutions_yaml(self,filename='directory_substitutions.yaml'):
+    def init_directory_substitutions_yaml(self,
+                                          filename='directory_substitutions_init.yaml'):
         if self.ready:
             try:
                 directories = Directory.query.all()
@@ -239,9 +240,9 @@ class Store():
                 distinct_directory_names_lower = set()
                 for directory in directories:
                     name = directory.name
-                    if self.util.check_match(regex='[A-Z]',string=name):
+                    if self.util.check_match(regex='^[A-Z]',string=name):
                         distinct_directory_names_upper.add(name)
-                    if self.util.check_match(regex='[a-z]',string=name):
+                    if self.util.check_match(regex='^[a-z]',string=name):
                         distinct_directory_names_lower.add(name)
                 yaml_str = str()
                 for name in distinct_directory_names_upper:

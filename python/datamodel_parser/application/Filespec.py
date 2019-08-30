@@ -291,7 +291,8 @@ class Filespec:
 #                                    .format(self.datamodel_directory_names)
 #                                    )
 
-    def set_directory_substitution_dict(self,filename='directory_substitutions.yaml'):
+    def set_directory_substitution_dict(self,
+                                        filename='directory_substitutions_init.yaml'):
         '''Set directory_substitution_dict from directory_substitutions.yaml.'''
         self.directory_substitution_dict = None
         if self.ready:
