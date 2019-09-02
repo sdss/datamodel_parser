@@ -350,7 +350,7 @@ class Util:
             self.ready = False
             self.logger.error('Unable to get_title_and_description_from_p. ' +
                               'p: {}'.format(p))
-        if not (title and description): pass # can be empty if no <b> tag
+        if not (title and description): pass ### can be empty if no <b> tag ###
         return (title,description)
 
     def get_titles_and_descriptions_1(self,node=None):

@@ -127,7 +127,7 @@ class Database:
                 hdus          = Hdu.load_all(file_id=self.file_id)
                 if hdus: hdu_info_dict = self.get_hdu_info_dict(hdus=hdus)
                                  
-                if not intros: # hdus and hdu_info_dict can be empty
+                if not intros: ### hdus and hdu_info_dict can be empty ###
                     self.ready = False
                     self.logger.error('Unable to get_intros_sections_hdus. ' +
                                       'intros: {}, '.format(intros)
@@ -148,7 +148,7 @@ class Database:
             headers = Header.load_all(hdus=hdus) if hdus else None
             datas   = Data.load_all(hdus=hdus)   if hdus else None
 
-            if hdus: # headers and datas can be empty
+            if hdus: ### headers and datas can be empty ###
                 hdu_info_dict = dict()
                 for hdu in hdus:
                     hdu_info_dict[hdu.number] = dict()
@@ -182,7 +182,7 @@ class Database:
                                     data.table_caption if data else None)
                     hdu_info_dict[hdu.number]['data_table']['columns'] = (
                                     columns if columns else None)
-            else: pass # hdus can be empty
+            else: pass ### hdus can be empty ###
         return hdu_info_dict
 
     def set_tree_id(self,tree_edition=None):

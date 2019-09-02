@@ -115,7 +115,7 @@ class Store():
         '''Set self.filespec_dict for each datamodel path in self.filepaths.'''
         if self.ready:
             if self.filepaths:
-                if self.options and self.options.test:
+                if self.options and self.options.path:
                     self.filepaths = [self.options.path]
                 filespec = Filespec(logger=self.logger,options=self.options)
                 if filespec and filespec.ready:
@@ -176,12 +176,12 @@ class Store():
         if self.ready:
             if self.filepath:
                 self.filespec_dict['path']          = self.filepath
-                self.filespec_dict['tree_edition']  = 'undetermined'
+                self.filespec_dict['tree_edition']  = 'None'
                 self.filespec_dict['env_label']     = self.env_variable
-                self.filespec_dict['location']      = 'undetermined'
-                self.filespec_dict['name']          = 'undetermined'
-                self.filespec_dict['ext']           = 'undetermined'
-                self.filespec_dict['path_example']  = 'undetermined'
+                self.filespec_dict['location']      = 'None'
+                self.filespec_dict['name']          = 'None'
+                self.filespec_dict['ext']           = 'None'
+                self.filespec_dict['path_example']  = 'None'
                 self.filespec_dict['note']          = str()
             else:
                 self.ready = False
