@@ -108,19 +108,19 @@ class Filespec:
             self.set_substitution_location()
             self.set_substitution_tree_paths()
             self.set_potential_path_example_file_rows() # this also sets self.tree_id
-            self.set_path_example_file_row()
+            self.set_example_filepaths()
             print('self.datamodel_filepath: %r' % self.datamodel_filepath)
             print('self.datamodel_filename: %r' % self.datamodel_filename)
             print('self.datamodel_filename_start: %r' % self.datamodel_filename_start)
             print('self.substitution_filename: %r' % self.substitution_filename)
             print('self.substitution_filename_start: %r' % self.substitution_filename_start)
+            print('self.filename_start: %r' % self.filename_start)
             print('self.substitution_location: %r' % self.substitution_location)
+            print('self.example_filepaths: %r' % self.example_filepaths)
             input('pause')
-            self.validate_species_path()
-            self.split_path()
             self.set_location_example_datamodel_dict()
-            self.set_species_ext()
             self.set_species_name()
+#            self.validate_species_path()
             if self.ready:
                 self.species['tree_edition']  = 'dr' + str(self.tree_id)
                 self.species['location']      = self.substitution_location
@@ -247,11 +247,11 @@ class Filespec:
         if self.ready:
             self.set_substitution_filename_start()
             self.set_datamodel_filename_start()
-            self.filename_start = (self.substitution_filename_start
-                             if    self.substitution_filename_start
-                             else  self.datamodel_filename_start
-                             if    self.datamodel_filename_start
-                             else  None)
+            sub_start = self.substitution_filename_start
+            data_start = self.datamodel_filename_start
+            self.filename_start = (sub_start if sub_start and sub_start != 'None'
+                              else data_start if data_start
+                              else None)
         if not self.filename_start:
             self.ready = False
             self.logger.error('Unable to set_filename_start. ' +
@@ -439,99 +439,88 @@ class Filespec:
                 self.ready = self.util.ready
         else: pass # Let Util.set_yaml_data do the error logging
 
-    def set_path_example_file_row(self):
-        '''Set path_example_file_row from self.potential_path_example_file_rows'''
-        ##### Under construction #####
-        self.path_example_file_row = list()
-        self.removed_potential_path_example_file_rows = list()
+    def set_example_filepaths(self):
+        '''Split the path of the found path_example_file_row'''
+        self.example_filepaths = list()
         if self.ready:
             if self.potential_path_example_file_rows:
-                # restrict to expected file extensions
-                self.set_file_extensions()
-                path_example_file_rows = list()
+                N = 10 # number of file table rows to examine
+                if len(self.potential_path_example_file_rows) > N:
+                    self.logger.info('Truncating the number of rows found to {}'.format(N))
+                    self.potential_path_example_file_rows = self.potential_path_example_file_rows[:N]
                 for file_row in self.potential_path_example_file_rows:
                     filepath = file_row.path if file_row else None
-                    print('filepath: %r' % filepath)
-                    input('pause')
-                    split = filepath.split('.') if filepath else None
-                    ext = split[-1] if split else None
-                    if ext in self.file_extensions:
-                        path_example_file_rows.append(file_row)
-                    else:
-                        self.removed_potential_path_example_file_rows.append(filepath)
-                        self.logger.debug('Removing potential_path_example: {}'.format(filepath))
-                if len(path_example_file_rows) == 1:
-                    self.path_example_file_row = path_example_file_rows[0]
-                else:
-                    # restrict to filenames that start with filename_start_hyphen
-                    rows = list()
-                    filename_start_hyphen = self.datamodel_filename_start + '-'
-                    for file_row in path_example_file_rows:
-                        filepath = file_row.path if file_row else None
-                        if filename_start_hyphen in filepath:
-                            rows.append(file_row)
-                        else:
-                            self.removed_potential_path_example_file_rows.append(filepath)
-                            self.logger.debug('Removing potential_path_example: {}'.format(filepath))
-                    if len(rows) == 1:
-                        self.path_example_file_row = rows[0]
-                    else:
-                        self.ready = False
-                        self.logger.error('Unable to set_path_example_file_row. ' +
-                                          'Multiple path_examples found. Need to restrict.' +
-                                          'self.path_example_file_row: {}'
-                                            .format(self.path_example_file_row))
+
+                    # get location_name
+                    self.set_env(tree_id      = self.tree_id,
+                                 env_variable = self.datamodel_env_variable)
+                    env_location = self.env.location if self.env else None
+                    split = (filepath.split(env_location)
+                             if filepath and env_location else None)
+                    location_name = split[1] if split else None
+
+                    # separate name, location, and extension
+                    split = location_name.split('/') if location_name else None
+                    example_name = split[-1] if split else None
+                    example_location_path = '/'.join(split[:-1]) if split else str()
+                    if example_name: # example_location_path can be empty
+                        self.set_example_ext(filename=example_name)
+                        if example_location_path.startswith('/'):
+                            example_location_path = example_location_path[1:]
+                        if example_location_path.endswith('/'):
+                            example_location_path = example_location_path[:-1]
+                        example_filepath = {'name'    : example_name,
+                                            'location': example_location_path,
+                                            'ext'     : self.example_ext,
+                                            }
+                        self.example_filepaths.append(example_filepath)
+        
+#                    print('filepath: %r' % filepath)
+#                    print('env_location: %r' % env_location)
+#                    print('self.tree_id: %r' % self.tree_id)
+#                    print('location_name: %r' % location_name)
+#                    print('split: %r' % split)
+#                    print('example_name: %r' % example_name)
+#                    print('example_location_path: %r' % example_location_path)
+#                    input('pause')
+
             else:
                 self.ready = False
-                self.logger.error('Unable to set_path_example_file_row. ' +
+                self.logger.error('Unable to set_example_filepaths. ' +
                                   'self.potential_path_example_file_rows: {}'
                                     .format(self.potential_path_example_file_rows))
-            if not self.path_example_file_row:
+            if not self.example_filepaths: # self.example_location_path can be None
                 self.ready = False
-                self.logger.error('Unable to set_path_example_file_row. ' +
-                                  'self.path_example_file_row: {}'
-                                    .format(self.path_example_file_row))
+                self.logger.error('Unable to set_example_filepaths. ' +
+                                  'self.example_filepaths: {}'.format(self.example_filepaths))
+
+    def set_example_ext(self,filename=None):
+        '''Set the file extension for the given filename'''
+        self.example_ext = None
+        if self.ready:
+            self.set_file_extensions()
+            if filename and self.file_extensions:
+                found_ext = False
+                for ext in self.file_extensions:
+                    if ext in filename:
+                        found_ext = True
+                        break
+                self.example_ext = ext if found_ext else None
+            if not self.example_ext:
+                self.ready = False
+                self.logger.error('Unable to set_example_ext. '
+                                  'Please manually add extension to Filespec.file_extensions. ' +
+                                  'filename: {}, '.format(filename) +
+                                  'self.file_extensions: {}, '.format(self.file_extensions))
 
     def set_file_extensions(self):
         '''Set list of file extensions of interest for path_examples'''
-        self.file_extensions = ['dat.gz','fits','tar.gz','dat','log.html','log',
-                                'log.gz','png','ply','apz','par','hdr','o',
-                                'fit.gz','fits.gz','sha1sum','ps','fits.bz2',
-                                'txt','html','model','rdzw.gz',
+        self.file_extensions = ['dat.gz','fits.gz','fits.bz2','fit.gz','tar.gz',
+                                'log.gz','log.html','rdzw.gz',
+                                'dat','fits','fit','tar','log'
+                                ,'rdzw','png','ply','apz','par','hdr','o',
+                                'sha1sum','ps','txt','html','model',
                                 ]
-
-    def split_path(self):
-        '''Split the path of the found path_example_file_row'''
-        self.example_name = None
-        self.example_location_path = None
-        if self.ready:
-            if self.path_example_file_row:
-                # find location_name
-                filepath = (self.path_example_file_row.path
-                             if self.path_example_file_row else None)
-                self.set_env(tree_id      = self.tree_id,
-                             env_variable = self.datamodel_env_variable)
-                env_location = self.env.location if self.env else None
-                split = (filepath.split(env_location)
-                         if filepath and env_location else None)
-                location_name = split[1] if split else None
-                # separate location and name
-                split = location_name.split('/') if location_name else None
-                self.example_name = split[-1] if split else None
-                self.example_location_path = '/'.join(split[:-1]) if split else None
-                if self.example_location_path.startswith('/'):
-                    self.example_location_path = self.example_location_path[1:]
-                if self.example_location_path.endswith('/'):
-                    self.example_location_path = self.example_location_path[:-1]
-            else:
-                self.ready = False
-                self.logger.error('Unable to split_path. ' +
-                                  'self.path_example_file_row: {}'
-                                    .format(self.path_example_file_row))
-            if not self.example_name: # self.example_location_path can be None
-                self.ready = False
-                self.logger.error('Unable to split_path. ' +
-                                  'self.example_name: {}'.format(self.example_name))
 
     def set_substitution_tree_paths(self):
         '''Set a list of substitution_tree_paths from the CFG files in
@@ -575,22 +564,6 @@ class Filespec:
                 self.ready = False
                 self.logger.error('Unable to set_filenames. ' +
                                   'self.filenames: {}'.format(self.filenames))
-
-    def set_species_ext(self):
-        '''Set the file extension for self.example_name'''
-        self.species_ext = None
-        if self.ready:
-            if self.example_name:
-                split = self.example_name.split('.')
-                self.species_ext = split[-1] if split else None
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_species_ext. ' +
-                                  'self.example_name: {}'.format(self.example_name))
-            if not self.species_ext:
-                self.ready = False
-                self.logger.error('Unable to set_species_ext. ' +
-                                  'self.species_ext: {}'.format(self.species_ext))
 
     def set_species_name(self):
         '''Set the {text substitution} name for self.species_path_example'''
