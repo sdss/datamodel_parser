@@ -129,10 +129,10 @@ class Store():
                             filespec.set_species_values()
                             self.filespec_dict = filespec.species
                             self.ready = self.ready and filespec.ready
-                            print('self.filespec_dict: \n' + dumps(self.filespec_dict,indent=1))
-                            print('self.ready: %r ' % self.ready)
-                            input('pause')
-                        if self.ready:
+#                            print('self.filespec_dict: \n' + dumps(self.filespec_dict,indent=1))
+#                            print('self.ready: %r ' % self.ready)
+#                            input('pause')
+                        if self.ready and self.filespec_dict:
                             if self.options and not self.options.test:
                                 self.populate_file_path_tables()
                                 self.populate_filespec_table()
