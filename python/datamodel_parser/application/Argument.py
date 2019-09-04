@@ -40,8 +40,9 @@ def filespec_archive():
     parser.add_argument('-t', '--test', action='store_true', dest='test',
         help='Test mode.  Do not actually populate database.')
     parser.add_argument('-p', '--path', help='datamodel file path', metavar='PATH')
+    parser.add_argument('-s', '--start', help='datamodel file path start', metavar='START')
     parser.add_argument('-o', '--location', help='example location path', metavar='LOCATION')
-
+    parser.add_argument('-m', '--limit', help='limit all SQL queries', metavar='limit')
     return parser.parse_args()
 
 def filespec_init():

@@ -115,8 +115,12 @@ class Store():
         '''Set self.filespec_dict for each datamodel path in self.filepaths.'''
         if self.ready:
             if self.filepaths:
-                if self.options and self.options.path:
-                    self.filepaths = [self.options.path]
+                if self.options:
+                    if self.options.path:
+                        self.filepaths = [self.options.path]
+                    if self.options.start:
+                        i = self.filepaths.index(self.options.start)
+                        self.filepaths = self.filepaths[i:]
                 filespec = Filespec(logger=self.logger,options=self.options)
                 if filespec and filespec.ready:
                     for self.filepath in self.filepaths:
@@ -129,13 +133,16 @@ class Store():
                             filespec.set_species_values()
                             self.filespec_dict = filespec.species
                             self.ready = self.ready and filespec.ready
-#                            print('self.filespec_dict: \n' + dumps(self.filespec_dict,indent=1))
-#                            print('self.ready: %r ' % self.ready)
-#                            input('pause')
                         if self.ready and self.filespec_dict:
                             if self.options and not self.options.test:
                                 self.populate_file_path_tables()
                                 self.populate_filespec_table()
+                    # report any failures
+                    self.logger.warning(
+                        'failed_datamodel_filepaths: \n' +
+                            dumps(filespec.failed_datamodel_filepaths,indent=1) + '\n'
+                        'number of failed_datamodel_filepaths: {}'
+                            .format(len(filespec.failed_datamodel_filepaths)))
             else:
                 self.ready = False
                 self.logger.error('Unable to populate_filespec_table_archive. ' +
@@ -176,12 +183,12 @@ class Store():
         if self.ready:
             if self.filepath:
                 self.filespec_dict['path']          = self.filepath
-                self.filespec_dict['tree_edition']  = 'None'
+                self.filespec_dict['tree_edition']  = None
                 self.filespec_dict['env_label']     = self.env_variable
-                self.filespec_dict['location']      = 'None'
-                self.filespec_dict['name']          = 'None'
-                self.filespec_dict['ext']           = 'None'
-                self.filespec_dict['path_example']  = 'None'
+                self.filespec_dict['location']      = None
+                self.filespec_dict['name']          = None
+                self.filespec_dict['ext']           = None
+                self.filespec_dict['path_example']  = None
                 self.filespec_dict['note']          = str()
             else:
                 self.ready = False
