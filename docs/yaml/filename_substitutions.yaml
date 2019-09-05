@@ -483,7 +483,7 @@ BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/wisconsin/pca/wisconsin_pca.
 BOSS_GALAXY_REDUX/GALAXY_VERSION/granada_fsps.html: "granada_fsps_{configuration}-{run2d}.fits"
 BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin.html: "portsmouth_emlinekin-{run2d}.fits"
 BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin_full.html: "portsmouth_emlinekin_full-{run2d}.fits"
-BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_stellarmass.html: "portsmouth_stellarmass_{configuration}-{run2d}.fits"
+BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_stellarmass.html: "portsmouth_stellarmass_{sspmodel}_{imf}-{run2d}.fits"
 BOSS_GALAXY_REDUX/GALAXY_VERSION/wisconsin_pca.html: "wisconsin_pca_{configuration}-{run2d}.fits"
 BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-specObj.html: "galaxies_{dr}_{sample}_{ns}-specObj.fits"
 BOSS_PHOTOOBJ/photoz-weight/pofz.html:

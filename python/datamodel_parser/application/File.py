@@ -234,6 +234,7 @@ class File:
                                 if node and self.file_type else (None,None))
                 self.intro.parse_file(node=intro)
                 self.ready = type.ready and self.util.ready and self.intro.ready
+#                print('self.body: %r' % self.body)
 #                print('intro: %r' % intro)
 #                print('hdus: %r' % hdus)
 #                print('type.ready: %r' % type.ready)
