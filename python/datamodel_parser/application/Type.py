@@ -43,7 +43,7 @@ class Type(object):
         if tag:
             child_names = self.util.get_child_names(node=tag)
             if ((not child_names) or
-                set(child_names).issubset({'a','b','code','i','em','sub','sup','tt'})
+                set(child_names).issubset({'a','b','code','i','em','sub','sup','tt','var'})
                 ):
                 tag_has_text_content = True
             else:

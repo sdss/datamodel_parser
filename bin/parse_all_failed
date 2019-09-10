@@ -3,64 +3,51 @@
 # $Id: parse_all 2019-03-14 n.benjamin.murphy $
 #
 
+ parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplantable.html
+ parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/RESULTS/results_platename.html
+ parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/MJD/reduction1/whirls/ft.whrl.html
+ parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/MJD/reduction1/processed_images/ft.fits.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/star1d_PLATENAME.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/starprof_PLATENAME.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/exposureinfo_PLATENAME.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/starrv_PLATENAME.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/tioprof_PLATENAME.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V003/RESULTS/PLATENAME/tio1d_PLATENAME.html
- parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/MJD/reduction1/processed_images/ft.fits.html
- parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/MJD/reduction1/whirls/ft.whrl.html
- parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/RESULTS/results_platename.html
- parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplantable.html
  parse_html -l error -v --path SPECTRO_MATCH/RUN2D/RESOLVE_RERUN/PLATE4/photoMatchPlate.html
- parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html
- parse_html -l error -v --path STAGING_DATA/gangs/MJD/gangs.list.html
- parse_html -l error -v --path GCAM_DATA/MJD/movie.html
- parse_html -l error -v --path GCAM_DATA/MJD/flat.html
- parse_html -l error -v --path GCAM_DATA/MJD/dark.html
- parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
- parse_html -l error -v --path BOSS_PHOTOOBJ/xdqso/xdcore/xdcore_RUN6.html
- parse_html -l error -v --path BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html
- parse_html -l error -v --path BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html
- parse_html -l error -v --path BOSS_PHOTOOBJ/plates/RESOLVE_RERUN/PLATE4/photoMatchPlate.html
- parse_html -l error -v --path BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html
- parse_html -l error -v --path RAWDATA_DIR/MJD/frames.list.html
- parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html
- parse_html -l error -v --path SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut.html
- parse_html -l error -v --path SPIDERS_ANALYSIS//catCluster-SPIDERS_RASS_CLUS.html
- parse_html -l error -v --path SPIDERS_ANALYSIS//VAC_spiders_2RXS.html
- parse_html -l error -v --path SPIDERS_ANALYSIS//spiders_quasar_bhmass.html
- parse_html -l error -v --path MANGA_MORPHOLOGY/galaxyzoo/MaNGA_gz.html
- parse_html -l error -v --path MARVELS_DATA/MJD/et1/MARVELS1.html
- parse_html -l error -v --path APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/aXXXcXXXnXXXvXXX.html
- parse_html -l error -v --path APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.hdr.html
- parse_html -l error -v --path APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.unf.html
- parse_html -l error -v --path APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.dat.html
- parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/allStarCannon.html
- parse_html -l error -v --path APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allVisit.html
- parse_html -l error -v --path SPECTRO_REDUX//photoMatchPlate.html
- parse_html -l error -v --path SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjSetAll.html
- parse_html -l error -v --path PHOTO_DATA/RUN/gangs/idGang.html
- parse_html -l error -v --path PHOTO_SWEEP/RERUN/calibObj.html
- parse_html -l error -v --path PLATELIST_DIR/runs/PLATERUN/plPlugMap.html
- parse_html -l error -v --path PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html
+ parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/granada/fsps/granada_fsps.html
+ parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/emlinekin/portsmouth_emlinekin.html
+ parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_masspdf.html
+ parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_stellarmass.html
+ parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/wisconsin/pca/wisconsin_pca.html
  parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/wisconsin_pca.html
  parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/granada_fsps.html
  parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_stellarmass.html
  parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin.html
  parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin_full.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/wisconsin/pca/wisconsin_pca.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_masspdf.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_stellarmass.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/emlinekin/portsmouth_emlinekin.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/granada/fsps/granada_fsps.html
  parse_html -l error -v --path BOSS_TARGET/TARGET_RUN/bosstarget.html
+ parse_html -l error -v --path BOSS_SPECTRO_REDUX/RUN2D/spectra/PLATE4/spec.html
+ parse_html -l error -v --path STAGING_DATA/gangs/MJD/gangs.list.html
+ parse_html -l error -v --path GCAM_DATA/MJD/movie.html
+ parse_html -l error -v --path GCAM_DATA/MJD/flat.html
+ parse_html -l error -v --path GCAM_DATA/MJD/dark.html
  parse_html -l error -v --path MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastarall-DRPVER-MPROCVER.html
  parse_html -l error -v --path MANGA_SPECTRO_MASTAR/DRPVER/MPROCVER/mastar-goodspec-DRPVER-MPROCVER.html
+ parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
+ parse_html -l error -v --path BOSS_PHOTOOBJ/photoz-weight/pofz.html
+ parse_html -l error -v --path BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html
+ parse_html -l error -v --path RAWDATA_DIR/MJD/frames.list.html
+ parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html
+ parse_html -l error -v --path SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut.html
  parse_html -l error -v --path PHOTO_CALIB/RERUN/RUN/nfcalib/calibPhotomGlobal.html
- parse_html -l error -v --path MANGA_FIREFLY/FIREFLY_VER/manga_firefly-INDICES.html
- parse_html -l error -v --path MANGA_FIREFLY/FIREFLY_VER/manga_firefly-STELLARPOP.html
- parse_html -l error -v --path MANGA_FIREFLY/FIREFLY_VER/manga_firefly-GLOBALPROP.html
- parse_html -l error -v --path MANGA_FIREFLY/FIREFLY_VER/manga_firefly.html
+ parse_html -l error -v --path SPIDERS_ANALYSIS/catCluster-SPIDERS_RASS_CLUS.html
+ parse_html -l error -v --path SPIDERS_ANALYSIS/VAC_spiders_2RXS.html
+ parse_html -l error -v --path SPIDERS_ANALYSIS/spiders_quasar_bhmass.html
+ parse_html -l error -v --path MANGA_MORPHOLOGY/galaxyzoo/MaNGA_gz.html
+ parse_html -l error -v --path MARVELS_DATA/MJD/et1/MARVELS1.html
+ parse_html -l error -v --path SPECTRO_REDUX/photoMatchPlate.html
+ parse_html -l error -v --path SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjSetAll.html
+ parse_html -l error -v --path PHOTO_DATA/RUN/gangs/idGang.html
+ parse_html -l error -v --path PHOTO_SWEEP/RERUN/calibObj.html
+ parse_html -l error -v --path PLATELIST_DIR/runs/PLATERUN/plPlugMap.html
+ parse_html -l error -v --path PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html
  parse_html -l error -v --path BOSS_SPECTRO_DATA/MJD/sdR.html

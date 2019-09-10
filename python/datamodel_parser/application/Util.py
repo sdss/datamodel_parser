@@ -60,7 +60,8 @@ class Util:
                  '(?i)required(.*?)column'              + '|'
                  '(?i)optional(.*?)column'              + '|'
                  '(?i)column(.*?)name'                  + '|'
-                 '(?i)example(.*?)contents'
+                 '(?i)example(.*?)contents'             + '|'
+                 '(?i)hdu\s*\d+(.*?)header'
 #                 + '|'
 #                 '(?i)example(.*?)file'
                  )
@@ -74,7 +75,8 @@ class Util:
                  '(?i)example\s*header'                 + '|'
                  '(?i)sample(.*?)header'                + '|'
                  '(?i)example(.*?)configuration file'   + '|'
-                 '(?i)example(.*?)contents'
+                 '(?i)example(.*?)contents'             + '|'
+                 '(?i)hdu\s*\d+(.*?)header'
 #                 + '|'
 #                 '(?i)example(.*?)file'
                  )
@@ -83,9 +85,11 @@ class Util:
     def get_table_title_regex_3(self):
         '''Get regex for table title with required/optional column and column name,
             typically found in <p> tags.'''
-        regex = ('(?i)required(.*?)column' + '|'
-                 '(?i)optional(.*?)column' + '|'
-                 '(?i)column(.*?)name'
+        regex = ('(?i)required(.*?)column'  + '|'
+                 '(?i)optional(.*?)column'  + '|'
+                 '(?i)column(.*?)name'      + '|'
+                 '(?i)hdu\s*\d+(.*?)binary'
+                 
                  )
         return regex
 
