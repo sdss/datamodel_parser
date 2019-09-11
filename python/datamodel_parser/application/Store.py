@@ -235,51 +235,111 @@ class Store():
                 self.logger.error('Unable to write_yaml. ' +
                                   'self.filepaths: {}'.format(self.filepaths))
 
-    def init_directory_substitutions_yaml(self,
-                                          filename='directory_substitutions_init.yaml'):
+    def init_location_substitutions_yaml(self,
+                                          filename='location_substitutions_init.yaml'):
+        '''Initialize a yaml file used to create a location path/text
+            substitution dictionary.'''
         if self.ready:
-            try:
-                directories = Directory.query.all()
-            except: directories = None
-            if directories:
-                # create set of distinct directory names with caps
-                distinct_directory_names_upper = set()
-                distinct_directory_names_lower = set()
-                for directory in directories:
-                    name = directory.name
-                    if self.util.check_match(regex='^[A-Z]',string=name):
-                        distinct_directory_names_upper.add(name)
-                    if self.util.check_match(regex='^[a-z]',string=name):
-                        distinct_directory_names_lower.add(name)
-                yaml_str = str()
-                for name in distinct_directory_names_upper:
-                    yaml_str += '{0}: "{{{1}}}"\n'.format(name,name.lower())
-                for name in distinct_directory_names_lower:
-                    yaml_str += '{0}: "{0}"\n'.format(name)
+            if self.filepaths:
+                filespec = Filespec(logger=self.logger,options=self.options)
+                if filespec and filespec.ready:
+                    yaml_str = str()
+                    for self.filepath in self.filepaths:
+                        print('self.filepath: %r' % self.filepath)
+                        if self.ready:
+                            self.set_path_info()
+                        if self.ready:
+                            filespec.set_path_info(path_info=self.path_info)
+                            filespec.set_substitution_location()
+                        if filespec.ready:
+                            yaml_str += ('{0}: "{1}"\n'
+                                .format(self.filepath,
+                                        filespec.substitution_location.replace('\n',str())))
+                    # write yaml file
+                    self.set_yaml_dir()
+                    yaml_file = (join(self.yaml_dir,filename)
+                                 if self.yaml_dir else None)
 
-                # write yaml file
-                self.set_yaml_dir()
-                yaml_file = join(self.yaml_dir,filename) if self.yaml_dir else None
-
-#                # DEBUG #
-#                with open(yaml_file,'w') as file:
-#                    file.write(yaml_str)
-#                # DEBUG #
-
-                if not exists(yaml_file):
+                    # DEBUG #
                     with open(yaml_file,'w') as file:
                         file.write(yaml_str)
+                    # DEBUG #
+
+#                    if not exists(yaml_file):
+#                        with open(yaml_file,'w') as file:
+#                            file.write(yaml_str)
+#                    else:
+#                        self.ready = False
+#                        self.logger.error(
+#                            'Unable to init_location_substitutions_yaml. ' +
+#                            'The file already exists: {}. '.format(yaml_file) +
+#                            'If you wish to replace this file please first delete it.')
+            else:
+                self.ready = False
+                self.logger.error('Unable to init_location_substitutions_yaml. ' +
+                                  'self.filepaths: {}'.format(self.filepaths))
+
+
+    def init_directory_substitutions_yaml(self,
+                                          filename='directory_substitutions_init.yaml'):
+        '''Initialize a yaml file used to create a directory name/text
+            substitution dictionary.'''
+        if self.ready:
+            if self.filepaths:
+                names = set()
+                for self.filepath in self.filepaths:
+                    if self.ready:
+                        self.set_path_info()
+                    if self.ready:
+                        directory_names = set(self.path_info['directory_names'])
+                        names = names.union(directory_names)
+                if names:
+                    # create set of distinct directory names with caps
+                    distinct_directory_names_upper = set()
+                    distinct_directory_names_lower = set()
+                    for name in names:
+                        if self.util.check_match(regex='^[A-Z]',string=name):
+                            distinct_directory_names_upper.add(name)
+                        else: # self.util.check_match(regex='^[a-z]',string=name):
+                            distinct_directory_names_lower.add(name)
+                
+                    yaml_str = str()
+                    for name in distinct_directory_names_upper:
+                        yaml_str += '{0}: "{{{1}}}"\n'.format(name,name.lower())
+                    for name in distinct_directory_names_lower:
+                        yaml_str += '{0}: "{0}"\n'.format(name)
+
+                    # write yaml file
+                    self.set_yaml_dir()
+                    yaml_file = (join(self.yaml_dir,filename)
+                                 if self.yaml_dir else None)
+
+                    # DEBUG #
+                    with open(yaml_file,'w') as file:
+                        file.write(yaml_str)
+                    # DEBUG #
+
+#                    if not exists(yaml_file):
+#                        with open(yaml_file,'w') as file:
+#                            file.write(yaml_str)
+#                    else:
+#                        self.ready = False
+#                        self.logger.error(
+#                            'Unable to init_directory_substitutions_yaml. ' +
+#                            'The file already exists: {}. '.format(yaml_file) +
+#                            'If you wish to replace this file please first delete it.')
                 else:
                     self.ready = False
                     self.logger.error('Unable to init_directory_substitutions_yaml. ' +
-                                      'The file already exists: {}. '.format(yaml_file) +
-                                      'If you wish to replace this file please first delete it.')
+                                      'names: {}'.format(names))
             else:
                 self.ready = False
                 self.logger.error('Unable to init_directory_substitutions_yaml. ' +
-                                  'directories: {}'.format(directories))
+                                  'self.filepaths: {}'.format(self.filepaths))
 
     def init_filename_substitutions_yaml(self,filename='filename_substitutions_init.yaml'):
+        '''Initialize a yaml file used to create a filename/text
+            substitution dictionary.'''
         if self.ready:
             try:
                 intros = (Intro.query
@@ -321,9 +381,10 @@ class Store():
                         file.write(yaml_str)
                 else:
                     self.ready = False
-                    self.logger.error('Unable to init_filename_substitutions_yaml. ' +
-                                      'The file already exists: {}. '.format(yaml_file) +
-                                      'If you wish to replace this file please first delete it.')
+                    self.logger.error(
+                        'Unable to init_filename_substitutions_yaml. ' +
+                        'The file already exists: {}. '.format(yaml_file) +
+                        'If you wish to replace this file please first delete it.')
             else:
                 self.ready = False
                 self.logger.error('Unable to init_filename_substitutions_yaml. ' +

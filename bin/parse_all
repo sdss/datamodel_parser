@@ -3,6 +3,7 @@
 # $Id: parse_all 2019-03-14 n.benjamin.murphy $
 #
 
+
 parse_html -l error -v --path APOGEE_TGAS/apogee_tgas.html
 parse_html -l error -v --path IRCAM_DATA/MJD/cR.html
 parse_html -l error -v --path IRCAM_DATA/MJD/irsc.html
@@ -143,6 +144,7 @@ parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFFrame.ht
 parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgSFrame.html
 parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFlat.html
 parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgArc.html
+parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
 parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgCFrame.html
 parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/mastar/mastar-LOG-PLATE-IFU.html
 parse_html -l error -v --path ECAM_DATA/MJD/all_files.html
@@ -294,6 +296,7 @@ parse_html -l error -v --path PHOTO_REDUX/runList.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpFieldStat.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psBB.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpAtlas.html
+parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psField.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpM.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpBIN.html
@@ -305,6 +308,7 @@ parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/ssc/scParam.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/ssc/scPlan.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/resolve/CAMCOL/reObjRun.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/astrom/asParam.html
+parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/astrom/asQA.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/astrom/asPlan.html
 parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/logs/opConfig.html
@@ -430,6 +434,7 @@ parse_html -l error -v --path SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPl
 parse_html -l error -v --path SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjSetAll.html
 parse_html -l error -v --path MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/manga.Pipe3D.html
 parse_html -l error -v --path MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/QC_MaNGA.html
+parse_html -l error -v --path MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html
 parse_html -l error -v --path APOGEE_TARGET/apogeeDesign.html
 parse_html -l error -v --path APOGEE_TARGET/apogeeField.html
 parse_html -l error -v --path APOGEE_TARGET/apogeePlate.html

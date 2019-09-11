@@ -200,8 +200,8 @@ class Filespec:
                                   )
 
     def set_substitution_location(self):
-        '''Set substitution_location from self.datamodel_directory_names and text
-            substitution conventions'''
+        '''Set substitution_location from self.datamodel_directory_names
+            and text substitution conventions'''
         self.substitution_location = str()
         if self.ready:
             if self.datamodel_directory_names:
@@ -213,7 +213,8 @@ class Filespec:
                             name = self.directory_substitution_dict[directory_name]
                         else:
                             self.ready = False
-                            self.logger.error('Unable to set_filespec_tree_id. ' +
+                            self.logger.error('Unable to set_substitution_location. ' +
+                                              'directory_name {} is not in '.format(directory_name) +
                                               'self.directory_substitution_dict: {}, '
                                                 .format(self.directory_substitution_dict)
                                               )

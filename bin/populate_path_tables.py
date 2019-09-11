@@ -21,6 +21,9 @@ else:
     store.set_tree_edition()
     store.set_database()
     store.set_filepaths() 
+#    print('store.filepaths: \n' + dumps(store.filepaths,indent=1))
+#    print('len(store.filepaths): \n' + dumps(len(store.filepaths),indent=1))
+#    input('pause')
     file_list = list()
     for path in store.filepaths:
         if store.ready:
@@ -35,6 +38,5 @@ else:
             store.set_path(path=path)
             store.split_path()
             store.populate_file_path_tables()
-    print('file_list: \n' + dumps(file_list,indent=1))
     store.exit()
 

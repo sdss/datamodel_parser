@@ -17,8 +17,9 @@ if not ready:
 else:
     store.set_tree_edition()
     store.set_filepaths()
-    store.init_directory_substitutions_yaml()
+    store.init_location_substitutions_yaml()
     store.exit()
+
 
 
 
