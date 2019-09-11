@@ -157,10 +157,6 @@ class Type(object):
                         # check HDU title in heading tag
                         if string:
                             regex = self.util.get_table_title_regex_4()
-#                            regex = ('(?i)hdu\s*\d+' + '|'
-#                                    '(?i)primary\s*header' + '|'
-#                                    '(?i)sample\s*header' + '|'
-#                                    '(?i)primary\s*hdu')
                             if self.util.check_match(regex=regex,string=string):
                                 found_hdu = True
                                 break
