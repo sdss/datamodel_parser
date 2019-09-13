@@ -39,25 +39,29 @@ class Filespec:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose
-            self.datamodel_filepath              = None
-            self.datamodel_env_variable          = None
-            self.datamodel_filename              = None
-            self.datamodel_filename_start        = None
-            self.datamodel_directory_names       = None
-            self.directory_substitution_dict     = None
-            self.substitution_location           = None
-            self.tree_id                         = None
-            self.species_path_example            = None
-            self.species_name                    = None
-            self.path_example_file_row           = None
-            self.session                         = None
-            self.env                             = None
-            self.path_example_file_row           = None
-            self.species_note                    = str()
-            self.location_example_datamodel_dict = None
-            self.failed_datamodel_filepaths      = list()
-            self.file_extensions                 = None
-
+            self.datamodel_filepath                = None
+            self.datamodel_env_variable            = None
+            self.datamodel_filename                = None
+            self.datamodel_filename_start          = None
+            self.datamodel_directory_names         = None
+            self.directory_substitution_dict       = None
+            self.substitution_location             = None
+            self.tree_id                           = None
+            self.species_path_example              = None
+            self.species_name                      = None
+            self.path_example_file_row             = None
+            self.session                           = None
+            self.env                               = None
+            self.path_example_file_row             = None
+            self.species_note                      = str()
+            self.location_example_datamodel_dict   = None
+            self.failed_datamodel_filepaths        = list()
+            self.file_extensions                   = None
+            self.substitution_filenames            = None
+            self.substitution_locations            = None
+            self.yaml_dir                          = None
+            self.found_consistent_example_filepath = None
+            
     def set_env_variable_dir(self,env_variable=None):
         '''Set the directory path associated with the datamodel environmental variable.'''
         self.env_variable_dir = None
@@ -172,23 +176,17 @@ class Filespec:
                                                   'ext'     : str(),
                                                   }
 
-    def set_substitution_filename(self,filename='filename_substitutions.yaml'):
+    def set_substitution_filename(self):
         '''Set the filename text substitution dictionary.'''
         self.substitution_filename = None
         if self.ready:
-            self.set_yaml_dir()
-            self.ready = bool(self.yaml_dir and filename and self.datamodel_filepath)
+            if not self.substitution_filenames: self.set_substitution_filenames()
+            self.ready = bool(self.substitution_filenames and self.datamodel_filepath)
             if self.ready:
-                self.set_yaml_data(dir=self.yaml_dir,filename=filename)
-                name = (self.yaml_data[self.datamodel_filepath]
-                        if self.datamodel_filepath else None)
+                name = self.substitution_filenames[self.datamodel_filepath]
                 self.substitution_filename = (name[0] if isinstance(name,list)
                                          else name    if isinstance(name,str)
                                          else None)
-#                print('name: %r' % name)
-#                print('self.substitution_filename: %r' % self.substitution_filename)
-#                input('pause')
-
             if not self.substitution_filename:
                 self.ready = False
                 self.logger.error('Unable to set_substitution_filename. ' +
@@ -199,30 +197,57 @@ class Filespec:
                                     .format(self.datamodel_filepath)
                                   )
 
-    def set_substitution_location(self):
-        '''Set substitution_location from self.datamodel_directory_names
-            and text substitution conventions'''
-        self.substitution_location = str()
+    def set_substitution_filenames(self,filename='filename_substitutions.yaml'):
+        '''Set the filename text substitution dictionary.'''
+        self.substitution_filenames = None
         if self.ready:
-            if self.datamodel_directory_names:
-                if not self.directory_substitution_dict: self.set_directory_substitution_dict()
-                names = list()
-                for directory_name in self.datamodel_directory_names:
-                    if self.ready:
-                        if directory_name in self.directory_substitution_dict:
-                            name = self.directory_substitution_dict[directory_name]
-                        else:
-                            self.ready = False
-                            self.logger.error('Unable to set_substitution_location. ' +
-                                              'directory_name {} is not in '.format(directory_name) +
-                                              'self.directory_substitution_dict: {}, '
-                                                .format(self.directory_substitution_dict)
-                                              )
-                        names.append(name)
-                self.substitution_location = join(*names)
-            ### self.substitution_location can be empty ###
-            else: pass
-            if not self.substitution_location: pass
+            if not self.yaml_dir: self.set_yaml_dir()
+            self.ready = bool(self.yaml_dir and filename)
+            if self.ready:
+                self.set_yaml_data(dir=self.yaml_dir,filename=filename)
+                self.substitution_filenames = self.yaml_data if self.yaml_data else None
+            if not self.substitution_filenames:
+                self.ready = False
+                self.logger.error('Unable to set_substitution_filenames. ' +
+                                  'self.substitution_filenames: {}, '
+                                    .format(self.substitution_filenames)
+                                  )
+
+    def set_substitution_location(self):
+        '''Set the location text substitution dictionary.'''
+        self.substitution_location = None
+        if self.ready:
+            if not self.substitution_locations: self.set_substitution_locations()
+            self.ready = bool(self.substitution_locations and self.datamodel_filepath)
+            if self.ready:
+                loc = self.substitution_locations[self.datamodel_filepath]
+                self.substitution_location = (loc[0] if isinstance(loc,list)
+                                         else loc    if isinstance(loc,str)
+                                         else None)
+            if not self.substitution_location:
+                self.ready = False
+                self.logger.error('Unable to set_substitution_location. ' +
+                                  'self.substitution_locations: {}, '
+                                    .format(self.substitution_locations) +
+                                  'self.datamodel_filepath: {}, '
+                                    .format(self.datamodel_filepath)
+                                  )
+
+    def set_substitution_locations(self,filename='location_substitutions.yaml'):
+        '''Set the location text substitution dictionary.'''
+        self.substitution_locations = None
+        if self.ready:
+            if not self.yaml_dir: self.set_yaml_dir()
+            self.ready = bool(self.yaml_dir and filename)
+            if self.ready:
+                self.set_yaml_data(dir=self.yaml_dir,filename=filename)
+                self.substitution_locations = self.yaml_data if self.yaml_data else None
+            if not self.substitution_locations:
+                self.ready = False
+                self.logger.error('Unable to set_substitution_locations. ' +
+                                  'self.substitution_locations: {}, '
+                                    .format(self.substitution_locations)
+                                  )
 
     def set_extension(self,filename=None):
         '''Set the file extension for the given filename'''
@@ -457,6 +482,8 @@ class Filespec:
                 s_loc = self.substitution_filepath['location']
                 s_ext = self.substitution_filepath['ext']
                 note = str()
+#                print('self.example_filepaths: %r' % self.example_filepaths)
+#                input('pause')
                 for example_filepath in self.example_filepaths:
                     if example_filepath:
                         e_name = example_filepath['name']
@@ -526,7 +553,7 @@ class Filespec:
         '''Set directory_substitution_dict from directory_substitutions.yaml.'''
         self.directory_substitution_dict = None
         if self.ready:
-            self.set_yaml_dir()
+            if not self.yaml_dir: self.set_yaml_dir()
             self.ready = bool(self.yaml_dir and filename)
             if self.ready:
                 self.set_yaml_data(dir=self.yaml_dir,filename=filename)
@@ -548,7 +575,7 @@ class Filespec:
             self.util.set_yaml_dir(yaml_dir=yaml_dir)
             self.yaml_dir = self.util.yaml_dir
             self.ready = self.util.ready
-        else: pass # Let Util.set_yaml_dir do the error logging
+            if not self.yaml_dir: pass # Let Util.set_yaml_dir do the error logging
 
     def set_yaml_data(self,dir=None,filename=None):
         '''Create a data structure from the given yaml file'''
@@ -558,7 +585,7 @@ class Filespec:
                 self.util.set_yaml_data(dir=dir,filename=filename)
                 self.yaml_data = self.util.yaml_data
                 self.ready = self.util.ready
-        else: pass # Let Util.set_yaml_data do the error logging
+            else: pass # Let Util.set_yaml_data do the error logging
 
     def set_example_filepaths(self):
         '''Split the path of the found path_example_file_row'''

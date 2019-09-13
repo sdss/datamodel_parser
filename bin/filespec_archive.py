@@ -27,5 +27,9 @@ else:
 '''
 Examples:
 
-filespec_archive.py -l debug -v -t -p MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/dapall.html -o manga/spectro/analysis/v2_4_3/2.2.1
+filespec_archive.py --level debug --verbose --test --limit 1000 --path MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/dapall.html --location manga/spectro/analysis/v2_4_3/2.2.1
+filespec_archive.py --level debug --verbose --test --limit 1000 --start MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/dapall.html
+filespec_archive.py --level debug --verbose --test --limit 1000 --path BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin.html
+filespec_archive.py --level debug --verbose --test --limit 1000
+filespec_archive.py
 '''

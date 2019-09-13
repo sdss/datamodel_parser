@@ -125,6 +125,7 @@ class Store():
                 if filespec and filespec.ready:
                     for self.filepath in self.filepaths:
                         if self.ready:
+                            filespec.found_consistent_example_filepath = False
                             self.set_path_info()
                             self.initialize_filespec_dict()
                         if self.ready:

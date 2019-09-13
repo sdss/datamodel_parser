@@ -230,6 +230,7 @@ SSPP_REDUX/RERUN/PLATE4/output/param/ssppOut_lineindex.html: "ssppOut-{plate}-{m
 SSPP_REDUX/duplicates/dup.html: "dup-{origname}.fits"
 MANGA_SPECZ/DRPVER/SPECZVER/speczall.html: "speczall-{drpver}.fits"
 MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-RSS.html: "specz-{plate}-{ifu}-{type}RSS.fits"
+MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html: specz-{plate}-{ifu}-{type}CUBE.fits
 SPIDERS_ANALYSIS/SpidersXclusterBCGs.html: "SpidersXclusterBCGs-v2.0.fits"
 PHOTO_RESOLVE/thingIndex.html: "thingIndex.fits"
 PHOTO_RESOLVE/window_unified.html: "window_unified.fits"
