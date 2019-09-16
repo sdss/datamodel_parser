@@ -1268,7 +1268,8 @@ class Hdu:
                 regex4 = '^([A-Z\d*]{1,}\_){0,20}([A-Z\d*]{1,})\s*'
                 regex5 = '^\s*<b>(.*?)</b>' # starts with bold tag
                 regex6 = '^([A-Za-z\d*]{1,}\_){0,20}([A-Za-z\d*]{1,})\s*'
-                regex7 = '^\s*\w' # starts with word character MUST BE LAST regex !!!!
+                regex7 = '^\s*<b class="omit"></b>'
+                regex8 = '^\s*\w' # starts with word character MUST BE LAST regex !!!!
                 match0 = self.util.check_match(regex=regex0,string=row)
                 match1 = self.util.check_match(regex=regex1,string=row.lstrip())
                 match2 = self.util.check_match(regex=regex2,string=row.lstrip())
@@ -1383,12 +1384,30 @@ class Hdu:
                         table_row = [col0,col1,None,col3]
                 elif match7:
                     row = row.strip()
+                    matches = self.util.get_matches(regex=regex7,string=row)
+                    match = matches[0] if matches else None
+                    col0 = match if row.startswith(match) else None
+                    if col0:
+                        col13 = row.split(col0)[1].strip() # = ['',row.replace(col0,'')]
+                        split = col13.split(':') if ':' in col13 else None
+#                        print('split: %r' % split)
+                        col0 = split[0] if split else None
+                        col3 = split[1] if split else col13
+                        table_row = [col0,None,None,col3]
+#                        print('row: %r' % row)
+#                        print('table_row: %r' % table_row)
+#                        input('pause')
+                        
+
+                elif match8:
+                    row = row.strip()
                     table_row = [None,None,None,row]
                 else:
                     self.ready = False
                     self.logger.error('Unable to get_table_row_1. ' +
                                       'no regex match. ' +
                                       'row: {}'.format(row))
+                    input('pause')
             else:
                 self.logger.debug('Unable to get_table_row_1. ' +
                                     'row: {}'.format(row)

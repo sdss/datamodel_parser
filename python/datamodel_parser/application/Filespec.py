@@ -45,7 +45,6 @@ class Filespec:
             self.datamodel_filename_start          = None
             self.datamodel_directory_names         = None
             self.directory_substitution_dict       = None
-            self.substitution_location             = None
             self.tree_id                           = None
             self.species_path_example              = None
             self.species_name                      = None
@@ -58,6 +57,7 @@ class Filespec:
             self.failed_datamodel_filepaths        = list()
             self.file_extensions                   = None
             self.substitution_filenames            = None
+            self.substitution_location             = None
             self.substitution_locations            = None
             self.yaml_dir                          = None
             self.found_consistent_example_filepath = None
