@@ -118,6 +118,7 @@ class Filespec:
             self.set_substitution_values()
             self.set_tree_id_range()
             for self.tree_id in self.tree_id_range:
+                print('self.tree_id: %r' % self.tree_id)
                 self.potential_path_example_file_rows = list()
                 self.set_env_location()
                 if self.env_location:
@@ -354,10 +355,10 @@ class Filespec:
                 if env_id and directories:
                     for directory in directories:
                         self.set_files(directory_id   = directory.id,
-                                       filename_search_string = self.filename_search_string)
+                                       search_string = self.filename_search_string,
+                                       limit=self.options.limit)
                         if self.files:
                             self.potential_path_example_file_rows.extend(self.files)
-                            break
             if not self.potential_path_example_file_rows and self.tree_id:
                 # self.potential_path_example_file_rows can be empty
                 self.logger.debug('Unable to set_potential_path_example_file_rows. ' +
@@ -505,28 +506,39 @@ class Filespec:
             ### self.directories can be None ###
             if not self.directories: pass
 
-    def set_files(self,directory_id=None,filename_search_string=None):
-        '''Set files table row from directory_id and filename_search_string.'''
+    def set_files(self,directory_id=None,search_string=None,limit=None):
+        '''Set files table row from directory_id and search_string.'''
         self.files = None
         if self.ready:
-            if self.session and directory_id and filename_search_string and self.env_location:
-                try:
-                    search_string = filename_search_string.replace('_','\_')
-                    search_string = '%' + self.env_location + '%' + search_string + '%'
-                    self.files = (self.session
-                                      .query(File)
-                                      .filter(File.directory_id == directory_id)
-                                      .filter(File.location.like(search_string))
-                                      .limit(1000)
-                                      .all())
-                except:
-                    self.files = None
+            if self.session and directory_id and search_string and self.env_location:
+                search_string = search_string.replace('_','\_')
+                search_string = '%' + self.env_location + '%' + search_string + '%'
+                if limit:
+                    try:
+                        self.files = (self.session
+                                          .query(File)
+                                          .filter(File.directory_id == directory_id)
+                                          .filter(File.location.like(search_string))
+                                          .limit(limit)
+                                          .all())
+                    except:
+                        self.files = None
+                else:
+                    try:
+                        self.files = (self.session
+                                          .query(File)
+                                          .filter(File.directory_id == directory_id)
+                                          .filter(File.location.like(search_string))
+                                          .all())
+                    except:
+                        self.files = None
+
             else:
                 self.ready = False
                 self.logger.error('Unable to set_files. ' +
                                   'self.session: {}, '.format(self.session) +
                                   'directory_id: {}, '.format(directory_id) +
-                                  'filename_search_string: {}, '.format(filename_search_string)
+                                  'search_string: {}, '.format(search_string)
                                   )
             ### self.files can be None ###
             if not self.files: pass
@@ -557,7 +569,7 @@ class Filespec:
                                      if x != y}
                         consistent_name = (zip_names == set()) or (min(zip_names) > 0)
                         if self.options and self.options.test and self.options.verbose:
-                            self.logger.error('e_name: {}\n'.format(e_name) +
+                            self.logger.debug('e_name: {}\n'.format(e_name) +
                                               's_name: {}\n'.format(s_name) +
                                               'consistent_name: {}\n'.format(consistent_name)
                                               )
@@ -567,7 +579,7 @@ class Filespec:
                         s_loc_split = s_loc.split('/')
                         consistent_loc = len(e_loc_split)==len(s_loc_split)
                         if self.options and self.options.test and self.options.verbose:
-                            self.logger.error('e_loc_split: {}\n'.format(e_loc_split) +
+                            self.logger.debug('e_loc_split: {}\n'.format(e_loc_split) +
                                               's_loc_split: {}\n'.format(s_loc_split) +
                                               'consistent_loc: {}\n'.format(consistent_loc)
                                               )
@@ -584,7 +596,7 @@ class Filespec:
                         else:
                             consistent_ext = (e_ext == s_ext)
                         if self.options and self.options.test and self.options.verbose:
-                            self.logger.error('e_ext: {}\n'.format(e_ext) +
+                            self.logger.debug('e_ext: {}\n'.format(e_ext) +
                                               's_ext: {}\n'.format(s_ext) +
                                               'consistent_ext: {}\n'.format(consistent_ext)
                                               )
@@ -686,7 +698,7 @@ class Filespec:
                         self.example_filepaths.append(example_filepath)
         
 #                    print('filepath: %r' % filepath)
-#                    print('env_location: %r' % env_location)
+#                    print('self.env_location: %r' % self.env_location)
 #                    print('self.tree_id: %r' % self.tree_id)
 #                    print('location_name: %r' % location_name)
 #                    print('split: %r' % split)
