@@ -354,7 +354,8 @@ class Store():
                 self.logger.error('Unable to init_directory_substitutions_yaml. ' +
                                   'self.filepaths: {}'.format(self.filepaths))
 
-    def init_filename_substitutions_yaml(self,filename='filename_substitutions_init.yaml'):
+    def init_filename_substitutions_yaml(self,
+                                         filename='filename_substitutions_datamodel_init.yaml'):
         '''Initialize a yaml file used to create a filename/text
             substitution dictionary.'''
         if self.ready:

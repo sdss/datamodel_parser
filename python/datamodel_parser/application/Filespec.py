@@ -118,7 +118,7 @@ class Filespec:
             self.set_substitution_values()
             self.set_tree_id_range()
             for self.tree_id in self.tree_id_range:
-                print('self.tree_id: %r' % self.tree_id)
+                self.logger.debug('self.tree_id: %r' % self.tree_id)
                 self.potential_path_example_file_rows = list()
                 self.set_env_location()
                 if self.env_location:
@@ -131,6 +131,7 @@ class Filespec:
                 #self.set_substitution_tree_paths()  ### Incorporate me ###
                 if self.ready:
                     if self.found_consistent_example_filepath:
+                        self.logger.info('Successfully found_consistent_example_filepath.')
                         path_example = join('$' + self.datamodel_env_variable,
                                             self.consistent_example_filepath['location'],
                                             self.consistent_example_filepath['name']
@@ -147,19 +148,19 @@ class Filespec:
                 # don't modify self.species from the initialization in set_species()
                 self.failed_datamodel_filepaths.append(self.datamodel_filepath)
                 self.logger.warning('Unable to set_species_values. ' +
-                                    'self.ready: {}'.format(self.ready) +
-                                    'self.substitution_filepath: {}'
+                                    'self.ready: {}, '.format(self.ready) +
+                                    'self.substitution_filepath: {}, '
                                         .format(self.substitution_filepath) +
-                                    'self.consistent_example_filepath: {}'
+                                    'self.consistent_example_filepath: {}, '
                                         .format(self.consistent_example_filepath)
                                   )
             self.logger.debug(
                 'self.substitution_filepath: \n' +
                 dumps(self.substitution_filepath,indent=1) + '\n'
                 'self.consistent_example_filepath: \n' +
-                dumps(self.consistent_example_filepath,indent=1) + '\n'
-                'self.species: \n' + dumps(self.species,indent=1)
+                dumps(self.consistent_example_filepath,indent=1)
                 )
+            self.logger.info('self.species: \n' + dumps(self.species,indent=1))
 #                print('self.datamodel_filename: %r' % self.datamodel_filename)
 #                print('self.filename_search_string: %r' % self.filename_search_string)
 #                print('self.substitution_filename: %r' % self.substitution_filename)
@@ -183,8 +184,17 @@ class Filespec:
                 self.set_env(tree_id      = self.tree_id,
                              env_variable = self.datamodel_env_variable)
                 self.env_location = self.env.location if self.env else None
-            else: pass # let set_env do the error logging
-            if not self.env_location: pass # self.env_location can be empty
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_env_location. '+
+                                  'self.tree_id: {}, '.format(self.tree_id) +
+                                  'self.datamodel_env_variable: {}, '
+                                    .format(self.datamodel_env_variable)
+                                  )
+            if not self.env_location:
+                # self.env_location can be empty
+                self.logger.debug('No env_location found for tree_id: {}.'
+                    .format(self.tree_id))
 
     def set_filename_search_string(self,datamodel_filepath=None):
         '''Set the filename text search_string dictionary.'''
@@ -313,7 +323,7 @@ class Filespec:
 
     def set_extension(self,filename=None):
         '''Set the file extension for the given filename'''
-        self.extension = str()
+        self.extension = None
         if self.ready:
             if not self.file_extensions: self.set_file_extensions()
 #            print('filename: %r' % filename)
@@ -321,12 +331,18 @@ class Filespec:
             if filename and self.file_extensions:
                 found_ext = False
                 for ext in self.file_extensions:
-                    if '.' + ext in filename:
+                    if '.' in filename:
+                        if '.' + ext in filename:
+                            found_ext = True
+                            break
+                    else:
                         found_ext = True
+                        ext = str()
                         break
                 self.extension = ext if found_ext else str()
-            if not self.extension:
+            if self.extension is None:
                 #self.ready = False
+                self.extension = str()
                 self.logger.warning('Unable to set_extension. '
                                     'Please manually add extension to Filespec.file_extensions. ' +
                                     'filename: {}, '.format(filename) +
@@ -337,8 +353,8 @@ class Filespec:
             from self.datamodel_filename'''
         self.potential_path_example_file_rows = list()
         if self.ready:
-            self.logger.debug('Setting path_examples for {} from the archive database'
-                                .format(self.datamodel_filepath))
+            self.logger.debug('Attempting to set path_examples from archive db ' +
+                              'for {} '.format(self.datamodel_filepath))
             self.ready = bool(self.ready and self.datamodel_env_variable and
                               self.session and self.tree_id and
                               self.filename_search_string)
@@ -359,13 +375,16 @@ class Filespec:
                                        limit=self.options.limit)
                         if self.files:
                             self.potential_path_example_file_rows.extend(self.files)
-            if not self.potential_path_example_file_rows and self.tree_id:
-                # self.potential_path_example_file_rows can be empty
-                self.logger.debug('Unable to set_potential_path_example_file_rows. ' +
-                                  'self.potential_path_example_file_rows: {}, '
-                                    .format(self.potential_path_example_file_rows) +
-                                  'self.tree_id: {}'.format(self.tree_id)
-                                  )
+        
+            if self.ready:
+                if self.potential_path_example_file_rows:
+                    self.logger.info('Found potential_path_example_file_rows for ' +
+                                      'self.tree_id: {}'.format(self.tree_id))
+                else:
+                    # self.potential_path_example_file_rows can be empty
+                    self.logger.debug('No potential_path_example_file_rows found for ' +
+                                      'self.tree_id: {}'.format(self.tree_id)
+                                      )
 
     def set_session(self):
         '''Set sdssdb.sqlalchemy.archive.sas database session.'''
@@ -556,71 +575,72 @@ class Filespec:
 #                print('self.example_filepaths: %r' % self.example_filepaths)
 #                input('pause')
                 for example_filepath in self.example_filepaths:
-                    if example_filepath:
-                        e_name = example_filepath['name']
-                        e_loc = example_filepath['location']
-                        e_ext = example_filepath['ext']
+                    e_name = example_filepath['name']
+                    e_loc = example_filepath['location']
+                    e_ext = example_filepath['ext']
 
-                        # compare filenames
-                        # filenames use -, _, and . so only the first few letters can be tested
-                        # this is redundant since this is being tested by the SQL query
-                        # using filename_search_string.yaml
-                        zip_names = {i for i, (x,y) in enumerate(zip(e_name,s_name))
-                                     if x != y}
-                        consistent_name = (zip_names == set()) or (min(zip_names) > 0)
-                        if self.options and self.options.test and self.options.verbose:
-                            self.logger.debug('e_name: {}\n'.format(e_name) +
-                                              's_name: {}\n'.format(s_name) +
-                                              'consistent_name: {}\n'.format(consistent_name)
-                                              )
+                    # compare filenames
+                    # filenames use -, _, and . so only the first few letters can be tested
+                    # this is redundant since this is being tested by the SQL query
+                    # using filename_search_string.yaml
+                    zip_names = {i for i, (x,y) in enumerate(zip(e_name,s_name))
+                                 if x != y}
+                    consistent_name = (zip_names == set()) or (min(zip_names) > 0)
+                    if self.options and self.options.test and self.options.verbose:
+                        self.logger.debug('e_name: {}\n'.format(e_name) +
+                                          's_name: {}\n'.format(s_name) +
+                                          'consistent_name: {}\n'.format(consistent_name)
+                                          )
 
-                        # compare location paths
-                        e_loc_split = e_loc.split('/')
-                        s_loc_split = s_loc.split('/')
-                        consistent_loc = len(e_loc_split)==len(s_loc_split)
-                        if self.options and self.options.test and self.options.verbose:
-                            self.logger.debug('e_loc_split: {}\n'.format(e_loc_split) +
-                                              's_loc_split: {}\n'.format(s_loc_split) +
-                                              'consistent_loc: {}\n'.format(consistent_loc)
-                                              )
+                    # compare location paths
+                    e_loc_split = e_loc.split('/')
+                    s_loc_split = s_loc.split('/')
+                    consistent_loc = len(e_loc_split)==len(s_loc_split)
+                    if self.options and self.options.test and self.options.verbose:
+                        self.logger.debug('e_loc_split: {}\n'.format(e_loc_split) +
+                                          's_loc_split: {}\n'.format(s_loc_split) +
+                                          'consistent_loc: {}\n'.format(consistent_loc)
+                                          )
 
-                        # compare filename extensions
-                        if '.' in e_ext and '.' in s_ext:
-                            consistent_ext = (e_ext == s_ext)
-                        elif '.' in e_ext or '.' in s_ext:
-                            e_ext_split = e_ext.split('.')
-                            s_ext_split = s_ext.split('.')
-                            e_ext_0 = e_ext_split[0] if e_ext_split else e_ext
-                            s_ext_0 = s_ext_split[0] if s_ext_split else s_ext
-                            consistent_ext = (e_ext_0 == s_ext_0)
-                        else:
-                            consistent_ext = (e_ext == s_ext)
-                        if self.options and self.options.test and self.options.verbose:
-                            self.logger.debug('e_ext: {}\n'.format(e_ext) +
-                                              's_ext: {}\n'.format(s_ext) +
-                                              'consistent_ext: {}\n'.format(consistent_ext)
-                                              )
+                    # compare filename extensions
+                    if '.' in e_ext and '.' in s_ext:
+                        consistent_ext = (e_ext == s_ext)
+                    elif '.' in e_ext or '.' in s_ext:
+                        e_ext_split = e_ext.split('.')
+                        s_ext_split = s_ext.split('.')
+                        e_ext_0 = e_ext_split[0] if e_ext_split else e_ext
+                        s_ext_0 = s_ext_split[0] if s_ext_split else s_ext
+                        consistent_ext = (e_ext_0 == s_ext_0)
+                    else:
+                        consistent_ext = (e_ext == s_ext)
+                    if self.options and self.options.test and self.options.verbose:
+                        self.logger.debug('e_ext: {}\n'.format(e_ext) +
+                                          's_ext: {}\n'.format(s_ext) +
+                                          'consistent_ext: {}\n'.format(consistent_ext)
+                                          )
 
-                        # add note to consistent_example_filepath
-                        if consistent_name and consistent_loc:
-                            self.found_consistent_example_filepath = True
-                            self.consistent_example_filepath = example_filepath
-                            if not consistent_loc:
-                                note += ('Inconsistent extensions. ' +
-                                         'substitution_ext: {}, '.format(s_ext) +
-                                         'example_ext: {},'.format(s_ext) )
-                            self.consistent_example_filepath['note'] = note
-                            break
+                    # add note to consistent_example_filepath
+                    if consistent_name and consistent_loc:
+                        self.found_consistent_example_filepath = True
+                        self.consistent_example_filepath = example_filepath
+                        if not consistent_ext:
+                            note += ('Inconsistent extensions. ' +
+                                     'substitution_ext: {}, '.format(s_ext) +
+                                     'example_ext: {0!r}'.format(e_ext) )
+                        self.consistent_example_filepath['note'] = note
+                        break
                 if not self.found_consistent_example_filepath:
-                    self.consistent_example_filepath = example_filepath
-                    self.logger.warning('Unable to set_consistent_example_filepath. ' +
+                    inconsistent_example_filepath = example_filepath
+                    self.logger.debug('Unable to set_consistent_example_filepath. ' +
                                       'self.found_consistent_example_filepath: {}, '
                                         .format(self.found_consistent_example_filepath) +
                                       'self.substitution_filepath: {}, '
                                         .format(self.substitution_filepath))
+                    self.logger.debug('inconsistent_example_filepath: \n' +
+                                      dumps(inconsistent_example_filepath,indent=1))
             else:
                 # self.example_filepaths can be empty
-                self.logger.warning('Unable to set_consistent_example_filepath. ' +
+                self.logger.debug('Unable to set_consistent_example_filepath. ' +
                                   'self.substitution_filepath: {}, '
                                     .format(self.substitution_filepath) +
                                   'self.example_filepaths: {}, '
@@ -724,7 +744,7 @@ class Filespec:
                                 'dat','fits','fit','tar','log','rdzw',
                                 'whrl','png','ply','apz','par','hdr','o','e',
                                 'sha1sum','ps','txt','html','model','csv','mp4',
-                                'pdf','list',
+                                'pdf','list'
                                 ]
 
     def set_substitution_tree_paths(self):

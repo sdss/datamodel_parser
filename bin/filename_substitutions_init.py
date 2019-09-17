@@ -16,13 +16,6 @@ if not ready:
     exit(1)
 else:
     store.init_filename_substitutions_yaml()
-
-#    store.set_yaml_dir()
-#    store.set_yaml_data(dir=store.yaml_dir,filename='filename_substitutions_init.yaml')
-#    dict_yaml = store.yaml_data
-#    print('dict_yaml: \n' + dumps(dict_yaml,indent=1))
-#    input('pause')
-
     store.exit()
 
 

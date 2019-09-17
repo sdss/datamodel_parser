@@ -480,7 +480,7 @@ BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/granada/fsps/granada_fsps.ht
 BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/emlinekin/portsmouth_emlinekin.html: "portsmouth_emlinekin-{plate:0>4}-{mjd}.fits"
 BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_masspdf.html: "portsmouth_masspdf_massloss_{configname}-{plate:0>4}-{mjd}.fits"
 BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_stellarmass.html: "portsmouth_stellarmass-{plate:0>4}-{mjd}.fits"
-BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/wisconsin/pca/wisconsin_pca.html: "wisconsin_pca-{plate:0>4}-{mjd}.fits"
+BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/wisconsin/pca/wisconsin_pca.html: "wisconsin_pca_{spmodel}-{plate:0>4}-{mjd}.fits"
 BOSS_GALAXY_REDUX/GALAXY_VERSION/granada_fsps.html: "granada_fsps_{configuration}-{run2d}.fits"
 BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin.html: "portsmouth_emlinekin-{run2d}.fits"
 BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin_full.html: "portsmouth_emlinekin_full-{run2d}.fits"
