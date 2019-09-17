@@ -1,0 +1,49 @@
+Unchecked
+ STAGING_DATA           82769      42 hours    nbmurphy    Fixing bad HTML etc
+
+Checked
+ SSPP_REDUX             82769      42 hours    nbmurphy    Fixing bad HTML etc
+ SPIDERS_ANALYSIS       82769      42 hours    nbmurphy    Fixing bad HTML etc
+ SPECTRO_REDUX          82769      42 hours    nbmurphy    Fixing bad HTML etc
+ SPECTRO_MATCH          82769      42 hours    nbmurphy    Fixing bad HTML etc
+ SEGUE2_TARGET          82769      42 hours    nbmurphy    Fixing bad HTML etc
+ RAWDATA_DIR            82769      42 hours    nbmurphy    Fixing bad HTML etc
+ PLATELIST_DIR          82769      42 hours    nbmurphy    Fixing bad HTML etc
+ PHOTO_CALIB            82769      42 hours    nbmurphy    Fixing bad HTML etc
+ MARVELS_REDUX          82769      42 hours    nbmurphy    Fixing bad HTML etc
+ MANGA_SPECTRO_MASTAR   82769      42 hours    nbmurphy    Fixing bad HTML etc
+ MANGA_MORPHOLOGY       82769      42 hours    nbmurphy    Fixing bad HTML etc
+ BOSS_SPECTRO_DATA      82769      42 hours    nbmurphy    Fixing bad HTML etc
+ MANGA_SPECTRO_REDUX    82767      3 days      nbmurphy    Fixing bad HTML etc
+ GCAM_DATA              82765      3 days      nbmurphy    Fixing bad HTML etc
+ BOSS_SPECTRO_REDUX     82765      3 days      nbmurphy    Fixing bad HTML etc
+ BOSS_GALAXY_REDUX      82765      3 days      nbmurphy    Fixing bad HTML etc
+ APOGEE_REDUX           82765      3 days      nbmurphy    Fixing bad HTML etc
+ MANGA_FIREFLY          82752      8 days      nbmurphy    Fixing bad HTML etc
+ BOSS_PHOTOOBJ          82651      5 weeks     nbmurphy    Fixing bad HTML etc
+ MANGACORE_DIR          82642      6 weeks     nbmurphy    Fixing bad HTML etc
+ PHOTO_SKY              82423      2 months    nbmurphy    Fixing bad HTML etc
+ PHOTO_REDUX            82423      2 months    nbmurphy    Fixing bad HTML etc
+ EBOSS_FIREFLY          82423      2 months    nbmurphy    Fixing bad HTML etc
+ MANGA_SPECTRO_ANALYSIS 82152      3 months    nbmurphy    Fixing bad HTML etc
+ BOSS_LSS_REDUX         82152      3 months    nbmurphy    Fixing bad HTML etc
+ SDSS_TARGET            81617      4 months    nbmurphy    Added/Removed? Missing/Extra? tags. Fixed bad html. Reformatted adhoc …
+ MANGAPREIM_DIR         81617      4 months    nbmurphy    Added/Removed? Missing/Extra? tags. Fixed bad html. Reformatted adhoc …
+ EBOSS_TARGET           81617      4 months    nbmurphy    Added/Removed? Missing/Extra? tags. Fixed bad html. Reformatted adhoc …
+ MANGA_PIPE3D           81614      5 months    nbmurphy    Fixed incorrect end tags and removed an unnecessary <dd></dd> around a …
+ BOSS_LYA               81610      5 months    nbmurphy    Fixed unbalanced tags. Changed a <pre> to <p> and a <h3> to <p><b> to …
+ MANGA_PHOTO            81605      5 months    nbmurphy    Added/Removed? missing/unneeded tags and added missing table column …
+ APOGEE_RC              81602      5 months    nbmurphy    Added missing table column headers
+ EBOSS_ELG              81601      5 months    nbmurphy    fixed incorrect comment end-tags, missing paragraph end-tag, and missing …
+ MANGA_TARGET           81471      5 months    nbmurphy    Fixed table row tag endings.
+
+
+https://trac.sdss.org/browser/repo/sdss/datamodel/branches/dr15_production/datamodel/files?order=date&desc=1
+
+
+Needs fixing
+
+Fixed
+STAGING_DATA/gangs/MJD/gangs.list.html
+BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/wisconsin/pca/wisconsin_pca.html
+RAWDATA_DIR/MJD/frames.list.html
