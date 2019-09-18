@@ -42,7 +42,6 @@ class Filespec:
             self.datamodel_filepath                = None
             self.datamodel_env_variable            = None
             self.datamodel_filename                = None
-            self.example_filename_search_string          = None
             self.datamodel_directory_names         = None
             self.directory_substitution_dict       = None
             self.tree_id                           = None
@@ -84,7 +83,7 @@ class Filespec:
                                   'self.env_variable_dir: {} '
                                     .format(self.env_variable_dir))
 
-    def set_species(self,species=None):
+    def initialize_species(self,species=None):
         '''Set the species class attribute.'''
         self.species = None
         if self.ready:
@@ -110,57 +109,37 @@ class Filespec:
                 self.datamodel_directory_names  = path_info['directory_names']
                 self.datamodel_directory_depths = path_info['directory_depths']
 
-    def set_species_values(self):
+    def set_species(self):
         '''Determine and populate self.species values'''
         if self.ready:
             self.logger.info('Setting species values for: %r' % self.datamodel_filepath)
-            if not self.session: self.set_session()
-            self.set_substitution_values()
-            self.set_tree_id_range()
-            for self.tree_id in self.tree_id_range:
-                self.logger.debug('self.tree_id: %r' % self.tree_id)
-                self.potential_path_example_file_rows = list()
-                self.set_env_location()
-                if self.env_location:
-                    self.set_potential_path_example_file_rows()
-                if self.potential_path_example_file_rows:
-                    self.split_example_filepaths()
-                    self.set_consistent_example_filepath()
-                else:
-                    self.found_consistent_example_filepath = False
-                #self.set_substitution_tree_paths()  ### Incorporate me ###
-                if self.ready:
-                    if self.found_consistent_example_filepath:
-                        self.logger.info('Successfully found_consistent_example_filepath.')
-                        path_example = join('$' + self.datamodel_env_variable,
-                                            self.consistent_example_filepath['location'],
-                                            self.consistent_example_filepath['name']
-                                           )
-                        #path_example = self.consistent_example_filepath['filepath']
-                        self.species['tree_edition']  = 'dr' + str(self.tree_id)
-                        self.species['location']      = self.substitution_filepath['location']
-                        self.species['name']          = self.substitution_filepath['name']
-                        self.species['ext']           = self.consistent_example_filepath['ext']
-                        self.species['path_example']  = path_example
-                        self.species['note']          = self.consistent_example_filepath['note']
-                        break
-            if not self.found_consistent_example_filepath:
-                # don't modify self.species from the initialization in set_species()
-                self.failed_datamodel_filepaths.append(self.datamodel_filepath)
-                self.logger.warning('Unable to set_species_values. ' +
-                                    'self.ready: {}, '.format(self.ready) +
-                                    'self.substitution_filepath: {}, '
-                                        .format(self.substitution_filepath) +
-                                    'self.consistent_example_filepath: {}, '
-                                        .format(self.consistent_example_filepath)
-                                  )
-            self.logger.debug(
-                'self.substitution_filepath: \n' +
-                dumps(self.substitution_filepath,indent=1) + '\n'
-                'self.consistent_example_filepath: \n' +
-                dumps(self.consistent_example_filepath,indent=1)
-                )
-            self.logger.info('self.species: \n' + dumps(self.species,indent=1))
+            self.set_filename_search_string()
+            if self.filename_search_string:
+                if not self.session: self.set_session()
+                self.set_substitution_values()
+                self.set_tree_id_range()
+                for self.tree_id in self.tree_id_range:
+                    if self.ready:
+                        self.find_species_values()
+                        if self.found_consistent_example_filepath:
+                            self.set_species_values()
+                            break
+                if not self.found_consistent_example_filepath:
+                    self.failed_datamodel_filepaths.append(self.datamodel_filepath)
+                    self.logger.warning('Unable to set_species_values. ' +
+                                        'self.ready: {}, '.format(self.ready) +
+                                        'self.substitution_filepath: {}, '
+                                            .format(self.substitution_filepath) +
+                                        'self.consistent_example_filepath: {}, '
+                                            .format(self.consistent_example_filepath)
+                                      )
+                self.logger.debug(
+                    'self.substitution_filepath: \n' +
+                    dumps(self.substitution_filepath,indent=1) + '\n'
+                    'self.consistent_example_filepath: \n' +
+                    dumps(self.consistent_example_filepath,indent=1)
+                    )
+                self.logger.info('self.species: \n' + dumps(self.species,indent=1))
 #                print('self.datamodel_filename: %r' % self.datamodel_filename)
 #                print('self.filename_search_string: %r' % self.filename_search_string)
 #                print('self.substitution_filename: %r' % self.substitution_filename)
@@ -169,13 +148,13 @@ class Filespec:
 #                print('self.substitution_filepath: %r' % self.substitution_filepath)
 #                print('self.consistent_example_filepath: %r' % self.consistent_example_filepath)
 #                input('pause')
+            else: pass # let set_filename_search_string() do error logging
 
     def set_substitution_values(self):
         if self.ready:
             self.set_substitution_filename()
             self.set_substitution_location()
             self.set_substitution_filepath()
-            self.set_filename_search_string()
 
     def set_env_location(self):
         self.env_location = None
@@ -194,6 +173,25 @@ class Filespec:
             if not self.env_location:
                 # self.env_location can be empty
                 self.logger.debug('No env_location found for tree_id: {}.'
+                    .format(self.tree_id))
+
+    def set_env_id(self):
+        self.env_id = None
+        if self.ready:
+            if self.tree_id and self.datamodel_env_variable:
+                self.set_env(tree_id      = self.tree_id,
+                             env_variable = self.datamodel_env_variable)
+                self.env_id = self.env.id if self.env else None
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_env_id. '+
+                                  'self.tree_id: {}, '.format(self.tree_id) +
+                                  'self.datamodel_env_variable: {}, '
+                                    .format(self.datamodel_env_variable)
+                                  )
+            if not self.env_id:
+                # self.env_id can be empty for certain tree_id's
+                self.logger.debug('No env_id found for tree_id: {}.'
                     .format(self.tree_id))
 
     def set_filename_search_string(self,datamodel_filepath=None):
@@ -217,6 +215,14 @@ class Filespec:
                                   'datamodel_filepath: {}, '
                                     .format(datamodel_filepath)
                                   )
+            else:
+                if self.filename_search_string == 'None':
+                    self.logger.warning('Need to assign self.filename_search_string ' +
+                                        'in filename_search_strings.yaml. '
+                                        'Skipping this file. ' +
+                                        'self.filename_search_string: {0!r}'
+                                            .format(self.filename_search_string))
+                    self.filename_search_string = None
 
     def set_filename_search_strings(self,filename='filename_search_strings.yaml'):
         '''Set the filename text search_string dictionary.'''
@@ -309,17 +315,12 @@ class Filespec:
         self.substitution_filepath = dict()
         if self.ready:
             if self.substitution_filename: # self.substitution_location can be empty
+                self.substitution_filepath = {'name'    : self.substitution_filename,
+                                              'location': self.substitution_location,
+                                              'ext'     : str()}
                 if self.substitution_filename != 'None':
                     self.set_extension(filename=self.substitution_filename)
-                    self.substitution_filepath = {'name'    : self.substitution_filename,
-                                                  'location': self.substitution_location,
-                                                  'ext'     : self.extension,
-                                                  }
-                else:
-                    self.substitution_filepath = {'name'    : self.substitution_filename,
-                                                  'location': str(),
-                                                  'ext'     : str(),
-                                                  }
+                    self.substitution_filepath['ext'] = self.extension
 
     def set_extension(self,filename=None):
         '''Set the file extension for the given filename'''
@@ -357,18 +358,14 @@ class Filespec:
                               'for {} '.format(self.datamodel_filepath))
             self.ready = bool(self.ready and self.datamodel_env_variable and
                               self.session and self.tree_id and
-                              self.filename_search_string)
+                              self.filename_search_string and self.env_id)
             if self.ready:
-                self.set_env(tree_id      = self.tree_id,
-                             env_variable = self.datamodel_env_variable)
-                env_id = self.env.id if self.env else None
-                if env_id:
-                    self.set_directories(env_id=env_id,
-                                         location=self.options.location,
-                                         limit=self.options.limit)
-                    directories = self.directories if self.directories else None
+                self.set_directories(env_id=self.env_id,
+                                     location=self.options.location,
+                                     limit=self.options.limit)
+                directories = self.directories if self.directories else None
 
-                if env_id and directories:
+                if directories:
                     for directory in directories:
                         self.set_files(directory_id   = directory.id,
                                        search_string = self.filename_search_string,
@@ -397,11 +394,30 @@ class Filespec:
 
     def set_tree_id_range(self):
         '''Set tree_ids to search for path_example.'''
-        self.tree_id_range = list(range(15,6,-1))
-        if not self.tree_id_range:
-            self.ready = False
-            self.logger.error('Unable to set_tree_id_range. ' +
-                              'self.tree_id_range: {}'.format(self.tree_id_range))
+        self.tree_id_range = list()
+        if self.ready:
+            self.tree_id_range = list(range(15,6,-1))
+            if not self.tree_id_range:
+                self.ready = False
+                self.logger.error('Unable to set_tree_id_range. ' +
+                                  'self.tree_id_range: {}'.format(self.tree_id_range))
+
+    def find_species_values(self):
+        '''Find values of the species database.'''
+        if self.ready:
+            self.logger.debug('self.tree_id: %r' % self.tree_id)
+            self.potential_path_example_file_rows = list()
+            self.set_env_location()
+            self.set_env_id()
+            if self.env_location and self.env_id:
+                self.set_potential_path_example_file_rows()
+            if self.potential_path_example_file_rows:
+                self.split_example_filepaths()
+                self.set_consistent_example_filepath()
+            else:
+                self.found_consistent_example_filepath = False
+            #self.set_substitution_tree_paths()  ### Incorporate me ###
+
 
     def set_filename_start(self):
         self.filename_start = None
@@ -487,10 +503,11 @@ class Filespec:
         '''Set directories table row from env_id and location.'''
         self.directories = None
         if self.ready:
-            if self.session and env_id: ### location and limit can be None
+            if self.session and self.tree_id and env_id: ### location and limit can be None
                 limit = int(limit) if limit else None
                 directory_query = (self.session
                                        .query(Directory)
+                                       .filter(Directory.tree_id == self.tree_id)
                                        .filter(Directory.env_id == env_id)
                                    )
                 if location and limit:
@@ -529,13 +546,16 @@ class Filespec:
         '''Set files table row from directory_id and search_string.'''
         self.files = None
         if self.ready:
-            if self.session and directory_id and search_string and self.env_location:
+            if (self.session and directory_id and search_string and
+                self.env_location and self.env_id
+                ):
                 search_string = search_string.replace('_','\_')
-                search_string = '%' + self.env_location + '%' + search_string + '%'
+                search_string = '%' + search_string + '%'
                 if limit:
                     try:
                         self.files = (self.session
                                           .query(File)
+                                          .filter(File.env_id == self.env_id)
                                           .filter(File.directory_id == directory_id)
                                           .filter(File.location.like(search_string))
                                           .limit(limit)
@@ -546,6 +566,7 @@ class Filespec:
                     try:
                         self.files = (self.session
                                           .query(File)
+                                          .filter(File.env_id == self.env_id)
                                           .filter(File.directory_id == directory_id)
                                           .filter(File.location.like(search_string))
                                           .all())
@@ -557,6 +578,7 @@ class Filespec:
                 self.logger.error('Unable to set_files. ' +
                                   'self.session: {}, '.format(self.session) +
                                   'directory_id: {}, '.format(directory_id) +
+                                  'env_id: {}, '.format(env_id) +
                                   'search_string: {}, '.format(search_string)
                                   )
             ### self.files can be None ###
@@ -646,6 +668,23 @@ class Filespec:
                                   'self.example_filepaths: {}, '
                                     .format(self.example_filepaths)
                                   )
+
+    def set_species_values(self):
+        '''Set values of the dictionary self.species.'''
+        if self.ready:
+            self.logger.info('Successfully found_consistent_example_filepath.')
+            path_example = join('$' + self.datamodel_env_variable,
+                                self.consistent_example_filepath['location'],
+                                self.consistent_example_filepath['name']
+                               )
+            #path_example = self.consistent_example_filepath['filepath']
+            self.species['tree_edition']  = 'dr' + str(self.tree_id)
+            self.species['location']      = self.substitution_filepath['location']
+            self.species['name']          = self.substitution_filepath['name']
+            self.species['ext']           = self.consistent_example_filepath['ext']
+            self.species['path_example']  = path_example
+            self.species['note']          = self.consistent_example_filepath['note']
+
 
     def set_directory_substitution_dict(self,
                                         filename='directory_substitutions.yaml'):
@@ -744,7 +783,7 @@ class Filespec:
                                 'dat','fits','fit','tar','log','rdzw',
                                 'whrl','png','ply','apz','par','hdr','o','e',
                                 'sha1sum','ps','txt','html','model','csv','mp4',
-                                'pdf','list'
+                                'pdf','list','batch','batch.wrap.sh','condor','gif'
                                 ]
 
     def set_substitution_tree_paths(self):

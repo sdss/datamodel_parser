@@ -32,4 +32,5 @@ filespec_archive.py --level debug --verbose --test --limit 1000 --start MANGA_SP
 filespec_archive.py --level debug --verbose --test --limit 1000 --path BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_emlinekin.html
 filespec_archive.py --level debug --verbose --test --limit 1000
 filespec_archive.py
+filespec_archive.py --level debug --test --failed
 '''

@@ -115,14 +115,22 @@ class Store():
         '''Set self.filespec_dict for each datamodel path in self.filepaths.'''
         if self.ready:
             if self.filepaths:
-                if self.options:
-                    if self.options.path:
-                        self.filepaths = [self.options.path]
-                    if self.options.start:
-                        i = self.filepaths.index(self.options.start)
-                        self.filepaths = self.filepaths[i:]
                 filespec = Filespec(logger=self.logger,options=self.options)
                 if filespec and filespec.ready:
+                    if self.options:
+                        # restrict filepaths used
+                        if self.options.path:
+                            self.filepaths = [self.options.path]
+                        elif self.options.start:
+                            i = self.filepaths.index(self.options.start)
+                            self.filepaths = self.filepaths[i:]
+                        elif self.options.failed:
+                            filespec.set_yaml_dir()
+                            filespec.set_yaml_data(dir=filespec.yaml_dir,
+                                               filename='all_failed_datamodels.yaml')
+                            self.filepaths = (filespec.yaml_data
+                                              if filespec.yaml_data else None)
+                        else: pass # use all filepaths
                     for self.filepath in self.filepaths:
                         if self.ready:
                             filespec.found_consistent_example_filepath = False
@@ -130,8 +138,8 @@ class Store():
                             self.initialize_filespec_dict()
                         if self.ready:
                             filespec.set_path_info(path_info=self.path_info)
-                            filespec.set_species(species=self.filespec_dict)
-                            filespec.set_species_values()
+                            filespec.initialize_species(species=self.filespec_dict)
+                            filespec.set_species()
                             self.filespec_dict = filespec.species
                             self.ready = self.ready and filespec.ready
                         if self.ready and self.filespec_dict:
@@ -139,7 +147,7 @@ class Store():
                                 self.populate_file_path_tables()
                                 self.populate_filespec_table()
                     # report any failures
-                    self.logger.warning(
+                    self.logger.info(
                         'failed_datamodel_filepaths: \n' +
                             dumps(filespec.failed_datamodel_filepaths,indent=1) + '\n'
                         'number of failed_datamodel_filepaths: {}'

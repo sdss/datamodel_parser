@@ -42,7 +42,9 @@ def filespec_archive():
     parser.add_argument('-p', '--path', help='datamodel file path', metavar='PATH')
     parser.add_argument('-s', '--start', help='datamodel file path start', metavar='START')
     parser.add_argument('-o', '--location', help='example location path', metavar='LOCATION')
-    parser.add_argument('-m', '--limit', help='limit all SQL queries', metavar='limit')
+    parser.add_argument('-m', '--limit', help='limit number of SQL queries', metavar='limit')
+    parser.add_argument('-f', '--failed', action='store_true', dest='failed',
+        help='run only files in all_failed_datamodels.yaml.')
     return parser.parse_args()
 
 def filespec_init():

@@ -597,7 +597,7 @@ datamodels:
    tree_edition: "dr11"
    env_label: "BOSS_SPECTRO_REDUX"
    location: "{run2d}/spectra"
-   name: "specfile-{subset}-{run2d}.txt"
+   name: "specfiles-{subset}-{run2d}.txt"
    ext: "txt"
    path_example: "$BOSS_SPECTRO_REDUX/v5_6_5/spectra/specfiles-lya-v5_6_5.txt"
    note: ""

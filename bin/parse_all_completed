@@ -3,6 +3,7 @@
 # $Id: parse_all 2019-03-14 n.benjamin.murphy $
 #
 
+ parse_html -l error -v --path MANGA_SPECTRO_REDUX/DRPVER/PLATE4/MJD5/mgFrame.html
  parse_html -l error -v --path APOGEE_TGAS/apogee_tgas.html
  parse_html -l error -v --path IRCAM_DATA/MJD/cR.html
  parse_html -l error -v --path IRCAM_DATA/MJD/irsc.html
@@ -19,7 +20,6 @@
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/TEMP/plPlugMapR.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/MJD/reduction1/processed_images/ft.fits.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/MJD/reduction1/whirls/ft.whrl.html
- parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/RESULTS/results_platename.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplanfile.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/PARAMS/fibretranslationtable.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/PARAMS/MARVELSplantable.html
