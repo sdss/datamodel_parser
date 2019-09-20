@@ -43,7 +43,7 @@ class Type(object):
         if tag:
             child_names = self.util.get_child_names(node=tag)
             if ((not child_names) or
-                set(child_names).issubset({'a','b','code','i','em','sub','sup','tt','var'})
+                set(child_names).issubset({'a','b','code','i','em','sub','sup','tt','var','br','span'})
                 ):
                 tag_has_text_content = True
             else:
@@ -281,26 +281,28 @@ class Type(object):
                     if not 'ul' in tag_names:
                         self.correct_type = False
                         self.logger.debug("not 'ul' in tag_names")
-                # check there's only one <ul> tag with only <li> tag children
+                # check all <ul> tags only have <li> tag children
                 if self.correct_type:
                     uls = node.find_all('ul') if node else None
-                    if not uls or len(list(uls)) > 1:
-                        self.correct_type = False
-                        self.logger.debug("not there's only one <ul> tag.")
-                    else:
-                        # check the one <ul> tag has only <li> tag children
-                        ul = list(uls)[0]
+                    # check the one <ul> tag has only <li> tag children
+                    for ul in uls:
                         lis = ul.find_all('li') if ul else list()
                         if not lis:
                             self.correct_type = False
                             self.logger.debug("not <ul> tag has only <li> tag children.")
-#                        else:
-#                            # check lis contain file names
-#                            for li in lis:
-#                                if self.correct_type:
-#                                    if not self.util.check_node_string_is_filename(node=li):
-#                                        self.correct_type = False
-#                                        self.logger.debug("not <li> string is filename.")
+#                # check there's only one <ul> tag with only <li> tag children
+#                if self.correct_type:
+#                    uls = node.find_all('ul') if node else None
+#                    if not uls or len(list(uls)) > 1:
+#                        self.correct_type = False
+#                        self.logger.debug("not there's only one <ul> tag.")
+#                    else:
+#                        # check the one <ul> tag has only <li> tag children
+#                        ul = list(uls)[0]
+#                        lis = ul.find_all('li') if ul else list()
+#                        if not lis:
+#                            self.correct_type = False
+#                            self.logger.debug("not <ul> tag has only <li> tag children.")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_ul_tag_assumptions_2. ' +
@@ -457,15 +459,10 @@ class Type(object):
                                 string = strings[0] if strings and len(strings) == 1 else None
                                 if string:
                                     regex = self.util.get_table_title_regex_1()
-#                                    regex = ('(?i)required(.*?)keywords' + '|'
-#                                             '(?i)optional(.*?)keywords' + '|'
-#                                             '(?i)required(.*?)column'   + '|'
-#                                             '(?i)optional(.*?)column'   + '|'
-#                                             '(?i)sample(.*?)header'
-#                                             )
                                     match = self.util.check_match(regex=regex,string=string)
                                     if match: found_table_title = True
-                    found_table_title = not found_table_title if toggle else found_table_title
+                    found_table_title = (not found_table_title
+                                         if toggle else found_table_title)
                     if not found_table_title:
                         self.correct_type = False
                         self.logger.debug("not there is a header table or data table " +
@@ -951,6 +948,12 @@ class Intro_type(Type):
                                               | {'p','ul'}
                             or
                             set_tag_names == (set_tag_names & self.heading_tag_names)
+                                              | {'p','ul','table'}
+                            or
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
+                                              | {'p','ul','table','hr'}
+                            or
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
                                                 | {'p'}
                         ):
                         self.correct_type = False
@@ -960,6 +963,9 @@ class Intro_type(Type):
                 if 'ul' in tag_names:
                     # check lis contain file names
                     self.check_ul_tag_assumptions_2(node=node)
+                if 'table' in tag_names:
+                    # check previous sibling of <table> is NOT heading with text 'file contents'
+                    self.check_table_tag_assumptions_3(node=node,toggle=True)
                 # check <p> tag has zero or one <b> tag child
                 self.check_p_tag_assumptions_5(node=node)
             else:
@@ -1010,7 +1016,7 @@ class Intro_type(Type):
                 # check all <p> tags before File Contents table have <b> tag children
                 self.check_p_tag_assumptions_4(node=node)
                 # check previous sibling of <table> is heading with text 'file contents'
-                self.check_table_tag_assumptions_3(node=node)
+                self.check_table_tag_assumptions_3(node=node,toggle=False)
             else:
                 self.ready = False
                 self.logger.error('Unable to check_intro_type_8. ' +
@@ -1105,10 +1111,10 @@ class Intro_type(Type):
                 self.logger.error('Unable to check_middle_tags_h_p_1. ' +
                                   'node: {}.'.format(node))
 
-    def check_table_tag_assumptions_3(self,node=None):
+    def check_table_tag_assumptions_3(self,node=None,toggle=None):
         '''Check table tag assumptions for the given BeautifulSoup node.'''
         if self.ready:
-            if node:
+            if node and isinstance(toggle,bool):
                 # check 'table' in tag_names
                 if self.correct_type:
                     tag_names = set(self.util.get_child_names(node=node))
@@ -1120,8 +1126,12 @@ class Intro_type(Type):
                     table = node.find('table')
                     previous_siblings = [s for s in table.previous_siblings if s.name]
                     previous_sibling = previous_siblings[0] if previous_siblings else None
+                    previous_sibling_is_heading = bool(previous_sibling and
+                        previous_sibling.name in self.heading_tag_names)
+                    previous_sibling_is_heading = (not previous_sibling_is_heading
+                                           if toggle else previous_sibling_is_heading)
                     # check previous sibling of <table> is heading
-                    if not (previous_sibling and previous_sibling.name in self.heading_tag_names):
+                    if not previous_sibling_is_heading:
                         self.correct_type = False
                         self.logger.debug(
                             "not previous sibling of <table> is heading")
@@ -1130,10 +1140,14 @@ class Intro_type(Type):
                         strings = list(previous_sibling.strings)
                         string = strings[0] if len(strings) == 1 else str()
                         regex = '(?i)file contents'
-                        if not (string and self.util.check_match(regex=regex,string=string)):
+                        found_file_contents = bool(string and
+                            self.util.check_match(regex=regex,string=string))
+                        found_file_contents = (not found_file_contents
+                                               if toggle else found_file_contents)
+                        if not found_file_contents:
                             self.correct_type = False
                             self.logger.debug(
-                                "not previous sibling of <table> is heading")
+                                "not previous sibling of <table> is file contents")
             else:
                 self.ready = False
                 self.logger.error('Unable to check_table_tag_assumptions_3. ' +
@@ -1604,9 +1618,15 @@ class File_type(Type):
                     set_tag_names = set(tag_names)
                     if not (set_tag_names == (set_tag_names & self.heading_tag_names)
                                               | {'p','ul'}
+                            or
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
+                                              | {'p','ul','table'}
+                            or
+                            set_tag_names == (set_tag_names & self.heading_tag_names)
+                                              | {'p','ul','table','hr'}
                             ):
                         self.correct_type = False
-                        self.logger.debug("not tag_names = {h,p,ul}")
+                        self.logger.debug("not tag_names = {h,p,ul} or {h,p,ul,table}")
                 # check node has zero or one heading tag
                 self.check_heading_tag_assumptions_3(node=node)
                 # check a <p> tag contains a table title

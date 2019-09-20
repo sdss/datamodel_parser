@@ -140,9 +140,9 @@ class Store():
                             filespec.set_path_info(path_info=self.path_info)
                             filespec.initialize_species(species=self.filespec_dict)
                             filespec.set_species()
-                            self.filespec_dict = filespec.species
                             self.ready = self.ready and filespec.ready
-                        if self.ready and self.filespec_dict:
+                        if self.ready and filespec.found_consistent_example_filepath:
+                            self.filespec_dict = filespec.species
                             if self.options and not self.options.test:
                                 self.populate_file_path_tables()
                                 self.populate_filespec_table()

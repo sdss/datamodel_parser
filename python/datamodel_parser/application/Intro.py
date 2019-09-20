@@ -294,7 +294,7 @@ class Intro:
                 # page intro
                 (titles,descriptions) = (
                     self.util.get_titles_and_descriptions_from_ps_2(node=node,
-                                                                    sibling_tag_names=['ul']))
+                                                                    sibling_tag_names=['ul','table','hr']))
                     
                 # check if errors have occurred
                 self.ready = self.ready and self.util.ready
