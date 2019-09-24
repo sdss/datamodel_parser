@@ -2602,6 +2602,15 @@ datamodels:
    path_example: "$PHOTO_REDUX/"
    note: ""
 
+ - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html"
+   tree_edition: "temp"
+   env_label: "PHOTO_REDUX"
+   location: ""
+   name: " "
+   ext: " "
+   path_example: "$PHOTO_REDUX/"
+   note: ""
+
  - path: "PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/psBB.html"
    tree_edition: "temp"
    env_label: "PHOTO_REDUX"

@@ -84,9 +84,9 @@ def template_html():
 def parse_stub():
     parser = ArgumentParser()
     parser.add_argument('-b', '--basename', help='file path basename', metavar='BASE')
-    parser.add_argument('-p', '--path', help='file path', metavar='PATH')
+    parser.add_argument('-p', '--path', help='datamodel file path', metavar='PATH')
+    parser.add_argument('-f', '--fits', help='fits file name', metavar='FITS')
     parser.add_argument('-l', '--level', help='set logging level', metavar='LEVEL', choices=['debug','info','warning','error','critical'], default='info')
-    parser.add_argument('-f', '--force', help='skip caveats', action='store_true')
     parser.add_argument('-n', '--nolog', help='set nolog variable', action='store_true')
     parser.add_argument('-v', '--verbose', help='set verbose logging', action='store_true')
     return parser.parse_args()

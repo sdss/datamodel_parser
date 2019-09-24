@@ -283,13 +283,13 @@ class File:
                                   'self.intro: {}, '.format(self.intro) +
                                   'self.hdu: {}, '.format(self.hdu))
 
-    def parse_fits(self,fits_dict=None):
+    def populate_html_table_datastructures(self,stub=None):
         '''From the given dictionary, creat data structures needed for the method
             populate_file_hdu_info_tables().
         '''
         if self.ready:
-            if fits_dict:
-                stub = Stub()
+            if stub:
+                fits_dict=stub.tempDict
                 self.hdu_count = len(fits_dict['hdus'])
                 # intro database table
                 self.intro_heading_titles = ['Data Model: ' + fits_dict['name'],
@@ -358,23 +358,24 @@ class File:
                         table_row  = list()
                         hdr = hdu.header
                         position = 0
-                        for row in hdu.columns:
-                            if stub.isKeyAColumn(key):
-                                table_row = [row.name.upper(),
-                                             stub.getType(row.format),
-                                             unit,
-                                             description
-                                             ]
-                                table_rows[position]  = table_row
-                                position += 1
-                        # put it all together
-                        hdu_table['is_header'] = False
-                        hdu_table['table_caption'] = (
-                            'Binary Table Caption for HDU' + str(hdu_number))
-                        hdu_table['table_column_names'] = (
-                                        ['Name','Type','Unit','Description'])
-                        hdu_table['table_rows'] = table_rows
-                        hdu_tables.append(hdu_table)
+                        if hasattr(hdu, 'columns'):
+                            for row in hdu.columns:
+                                if stub.isKeyAColumn(key):
+                                    table_row = [row.name.upper(),
+                                                 stub.getType(row.format),
+                                                 unit,
+                                                 description
+                                                 ]
+                                    table_rows[position]  = table_row
+                                    position += 1
+                            # put it all together
+                            hdu_table['is_header'] = False
+                            hdu_table['table_caption'] = (
+                                'Binary Table Caption for HDU' + str(hdu_number))
+                            hdu_table['table_column_names'] = (
+                                            ['Name','Type','Unit','Description'])
+                            hdu_table['table_rows'] = table_rows
+                            hdu_tables.append(hdu_table)
                     self.file_hdu_tables.append(hdu_tables)
 
     def populate_intro_table(self):

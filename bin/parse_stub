@@ -22,21 +22,24 @@ else:
     store.split_path()
     store.populate_file_path_tables()
     
-    file = join(options.basename,options.path)
-    #print('file: %r' % file)
-    #input('pause')
+    file = join(options.basename,store.env_variable,store.location_path,options.fits)
     stub = Stub(files=file)
     stub.getModelName()
     stub.readFile()
     stub.buildDict()
-    store.populate_fits_tables(fits_dict=stub.tempDict)
+    store.populate_fits_tables(stub=stub)
     store.exit()
 
 
 
 '''
 Examples:
-parse_stub -l error -v -b /data -p BOSS_SPECTRO_REDUX/RUN2D/PLATE4/RUN1D/spZbest-3606-55182.fits
+parse_stub -l error -v -b /data/stub -p BOSS_TARGET/TARGET_RUN/bosstarget.html -f bosstarget-qso-main016-collate-380.fits
+parse_stub -l error -v -b /data/stub -p MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html -f manga-8330-9102.Pipe3D.cube.fits.gz
+parse_stub -l error -v -b /data/stub -p PHOTO_DATA/RUN/gangs/idGang.html -f idGang-001003-r9-0114.fit
+parse_stub -l error -v -b /data/stub -p PHOTO_SWEEP/RERUN/calibObj.html -f calibObj-003557-3-stargal-primary.fits.gz
+parse_stub -l error -v -b /data/stub -p PLATELIST_DIR/runs/PLATERUN/plPlugMap.html -f plPlugMapP-5139.par
+parse_stub -l error -v -b /data/stub -p MARVELS_REDUX/RERUN_V001/RESULTS/results_platename.html -f results_R322D045v1.fits
 '''
 
 

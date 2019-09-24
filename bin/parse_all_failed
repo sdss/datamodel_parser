@@ -3,26 +3,14 @@
 # $Id: parse_all 2019-03-14 n.benjamin.murphy $
 #
 
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/portsmouth_stellarmass.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/granada_fsps.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/wisconsin_pca.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_stellarmass.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/portsmouth/stellarmass/portsmouth_masspdf.html
- parse_html -l error -v --path BOSS_GALAXY_REDUX/GALAXY_VERSION/RUN2D/PLATE4/RUN1D/granada/fsps/granada_fsps.html
- parse_html -l error -v --path BOSS_TARGET/TARGET_RUN/bosstarget.html
- parse_html -l error -v --path BOSS_PHOTOOBJ/photoz-weight/pofz.html
- parse_html -l error -v --path BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html
+ # Not Done stub parsing 
  parse_html -l error -v --path APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html
- parse_html -l error -v --path MARVELS_DATA/MJD/et1/MARVELS1.html
  parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html
+
+# Done stub parsing
+ parse_html -l error -v --path BOSS_TARGET/TARGET_RUN/bosstarget.html
  parse_html -l error -v --path MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/PLATE/manga.Pipe3D.cube.html
  parse_html -l error -v --path PHOTO_DATA/RUN/gangs/idGang.html
  parse_html -l error -v --path PHOTO_SWEEP/RERUN/calibObj.html
  parse_html -l error -v --path PLATELIST_DIR/runs/PLATERUN/plPlugMap.html
  parse_html -l error -v --path MARVELS_REDUX/RERUN_V001/RESULTS/results_platename.html
-
-
-
-
-
- parse_html -l error -v --path PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html

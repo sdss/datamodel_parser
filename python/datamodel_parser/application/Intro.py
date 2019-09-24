@@ -365,61 +365,62 @@ class Intro:
                             header_keywords_string = str(last_sibling.string)
                             if self.util.check_match(regex=regex,string=header_keywords_string):
                                 next_siblings.pop()
-                    soup = self.util.get_soup_from_iterator(iterator=next_siblings)
-
-                    # check for heading tag with Note or Notes
-                    heading_tag_names = self.util.get_heading_tag_child_names(node=soup)
-                    h = (soup.find(heading_tag_names[0])
-                         if heading_tag_names and len(heading_tag_names) == 1 else None)
-                    title = self.util.get_string(node=h) if h else str()
-                    if title:
-                        regex = '(?i)\s*Note\s*' + '|' '(?i)\s*Notes\s*'
-                        if self.util.check_match(regex=regex,string=title):
-                            ps = soup.find_all('p')
-                            if ps:
-                                descriptions = [self.util.get_string(node=p) for p in ps
-                                                if str(p) and not str(p).isspace()]
-                                description = '\n\n'.join(descriptions)
-                                self.intro_heading_titles.append(title)
-                                self.intro_descriptions.append(description)
-                            else:
-                                self.ready = False
-                                self.logger.error('Unable to parse_file_type_8. ' +
-                                                  'Anticipated <p> tags. ' +
-                                                  'ps: {}'.format(ps))
-                        else:
-                            self.ready = False
-                            self.logger.error('Unable to parse_file_type_8. ' +
-                                              'Anticipated Note or Notes in title. ' +
-                                              'title: {}'.format(title))
-                    # get Note or Notes from ps
-                    else:
-                        (titles,descriptions) = (
-                            self.util.get_titles_and_descriptions_from_ps_1(node=soup))
-                        if titles:
-                            if len(titles) > 1:
-                                regex = '(?i)\s*Note\s*' + '|' '(?i)\s*Notes\s*'
-                                if (self.util.check_match(regex=regex,string=titles[0])
-                                    and not [t for t in titles[1:] if t]
-                                    ):
-                                    title = titles[0]
+                        soup = (self.util.get_soup_from_iterator(iterator=next_siblings)
+                                if next_siblings else None)
+                        # check for heading tag with Note or Notes
+                        heading_tag_names = (self.util.get_heading_tag_child_names(node=soup)
+                                             if soup else None)
+                        h = (soup.find(heading_tag_names[0])
+                             if soup and heading_tag_names and len(heading_tag_names) == 1 else None)
+                        title = self.util.get_string(node=h) if h else str()
+                        if title:
+                            regex = '(?i)\s*Note\s*' + '|' '(?i)\s*Notes\s*'
+                            if self.util.check_match(regex=regex,string=title):
+                                ps = soup.find_all('p')
+                                if ps:
+                                    descriptions = [self.util.get_string(node=p) for p in ps
+                                                    if str(p) and not str(p).isspace()]
                                     description = '\n\n'.join(descriptions)
                                     self.intro_heading_titles.append(title)
                                     self.intro_descriptions.append(description)
                                 else:
                                     self.ready = False
                                     self.logger.error('Unable to parse_file_type_8. ' +
-                                                      'Anticipated one Note title ' +
-                                                      'and multiple <p> tags ' +
-                                                      'soup: {}'.format(soup))
+                                                      'Anticipated <p> tags. ' +
+                                                      'ps: {}'.format(ps))
                             else:
-                                title = titles[0]
-                                description = descriptions[0]
-                                self.intro_heading_titles.append(title)
-                                self.intro_descriptions.append(description)
-                    if header_keywords_string:
-                        self.intro_heading_titles.append(header_keywords_string.strip())
-                        self.intro_descriptions.append(str())
+                                self.ready = False
+                                self.logger.error('Unable to parse_file_type_8. ' +
+                                                  'Anticipated Note or Notes in title. ' +
+                                                  'title: {}'.format(title))
+                        # get Note or Notes from ps
+                        else:
+                            (titles,descriptions) = (
+                                self.util.get_titles_and_descriptions_from_ps_1(node=soup))
+                            if titles:
+                                if len(titles) > 1:
+                                    regex = '(?i)\s*Note\s*' + '|' '(?i)\s*Notes\s*'
+                                    if (self.util.check_match(regex=regex,string=titles[0])
+                                        and not [t for t in titles[1:] if t]
+                                        ):
+                                        title = titles[0]
+                                        description = '\n\n'.join(descriptions)
+                                        self.intro_heading_titles.append(title)
+                                        self.intro_descriptions.append(description)
+                                    else:
+                                        self.ready = False
+                                        self.logger.error('Unable to parse_file_type_8. ' +
+                                                          'Anticipated one Note title ' +
+                                                          'and multiple <p> tags ' +
+                                                          'soup: {}'.format(soup))
+                                else:
+                                    title = titles[0]
+                                    description = descriptions[0]
+                                    self.intro_heading_titles.append(title)
+                                    self.intro_descriptions.append(description)
+                        if header_keywords_string:
+                            self.intro_heading_titles.append(header_keywords_string.strip())
+                            self.intro_descriptions.append(str())
 
 
                 else:
@@ -431,7 +432,6 @@ class Intro:
 
                 # check if errors have occurred
                 self.ready = self.ready and self.util.ready
-                
                 # put it all together
                 if self.ready:
                     # Already done above

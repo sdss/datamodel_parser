@@ -893,21 +893,29 @@ class Store():
                             'self.html_text: {}, '.format(self.html_text) +
                             'self.file: {}.'.format(self.file) )
 
-    def populate_fits_tables(self,fits_dict=None):
+    def populate_fits_tables(self,stub=None):
         '''Populate tables comprised of fits file information.'''
         if self.ready:
             self.set_file_path_info()
             self.set_file()
-            if fits_dict and self.file_path_info and self.file:
+            if stub and self.file_path_info and self.file:
                 self.file.set_file_path_info(file_path_info=self.file_path_info)
-                self.file.parse_fits(fits_dict=fits_dict)
+                self.file.populate_html_table_datastructures(stub=stub)
                 self.file.populate_file_hdu_info_tables()
-                self.file.populate_file_hdu_info_tables()
+                self.ready = self.ready and self.database.ready and self.file.ready
+                if self.ready:
+                    # intro_type = 1 and file_type = 1 is generated from Brian's Stub.
+                    intro_type = 1
+                    file_type = 1
+                    self.database.update_file_table_status(ready=self.ready,
+                                                           intro_type=intro_type,
+                                                           file_type=file_type)
+
             else:
                 self.ready = False
                 self.logger.error(
                             'Unable to populate_file_html_tables. ' +
-                            'fits_dict: {}, '.format(fits_dict) +
+                            'stub: {}, '.format(stub) +
                             'self.file_path_info: {}, '.format(self.file_path_info) +
                             'self.file: {}.'.format(self.file) )
 

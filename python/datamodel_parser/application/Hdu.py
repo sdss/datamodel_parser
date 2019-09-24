@@ -438,7 +438,7 @@ class Hdu:
 
                 # is_image
                 is_image = None
-                
+
                 # check if an error has occurred
                 self.ready = self.util.ready
                 
