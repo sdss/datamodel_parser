@@ -549,7 +549,7 @@ class Filespec:
             if (self.session and directory_id and search_string and
                 self.env_location and self.env_id
                 ):
-                search_string = search_string.replace('_','\_')
+#                search_string = search_string.replace('_','\_')
                 search_string = '%' + search_string + '%'
                 if limit:
                     try:

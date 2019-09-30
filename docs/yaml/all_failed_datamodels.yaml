@@ -13,7 +13,7 @@
  - STAGING_DATA/oplogs/MJD/mdReport.html
  - STAGING_DATA/gangs/MJD/gangs.list.html
  - BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html
- - BOSS_LSS_REDUX/data_DR14_LRG_NS.html                             # ?
+ - BOSS_LSS_REDUX/data_DR14_LRG_NS.html                                 # found in elmo. not found in db
  - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html              # fixed
  - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html
  - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html
