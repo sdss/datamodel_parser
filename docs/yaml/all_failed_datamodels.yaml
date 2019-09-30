@@ -1,3 +1,4 @@
+ 
  - MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html
  - MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html
  - REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html
@@ -12,8 +13,8 @@
  - STAGING_DATA/oplogs/MJD/mdReport.html
  - STAGING_DATA/gangs/MJD/gangs.list.html
  - BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html
- - BOSS_LSS_REDUX/data_DR14_LRG_NS.html
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html
+ - BOSS_LSS_REDUX/data_DR14_LRG_NS.html                             # ?
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html              # fixed
  - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html
  - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html
  - BOSS_LSS_REDUX/random_DR14_LRG_NS.html
@@ -32,10 +33,10 @@
  - EBOSS_FIREFLY/FIREFLY_VER/RUN2D/eboss_firefly.html
  - EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFly.html
  - EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html
- - BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/CAMCOL/astromQA.html
- - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html
- - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html
- - BOSS_PHOTOOBJ/photoz-weight/pofz.html
+ - BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/CAMCOL/astromQA.html     # fixed
+ - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html # fixed
+ - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html         # fixed
+ - BOSS_PHOTOOBJ/photoz-weight/pofz.html                         # fixed
  - MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html
  - APOGEE_DATA/MJD5/MJD5.html
  - CAS_LOAD/phCSV/SKYVERSION/RUN/csv_ready.html
@@ -146,3 +147,4 @@
  - PLATELIST_DIR/runs/PLATERUN/plDrillPos.html
  - PLATELIST_DIR/runs/PLATERUN/plObs.html
  - PLATELIST_DIR/inputs/plateInput.html
+

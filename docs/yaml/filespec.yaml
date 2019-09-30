@@ -900,7 +900,7 @@ datamodels:
    note: ""
 
  - path: "BOSS_LSS_REDUX/data_DR14_LRG_NS.html"
-   tree_edition: "temp"
+   tree_edition: "dr15"
    env_label: "BOSS_LSS_REDUX"
    location: "catalogs"
    name: "data_{dr}_QSO_{ns}.fits"
@@ -909,12 +909,12 @@ datamodels:
    note: ""
 
  - path: "BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html"
-   tree_edition: "dr12"
+   tree_edition: "dr10"
    env_label: "BOSS_LSS_REDUX"
-   location: "inputfiles"
-   name: "bosstile-final-collated-boss2-bossN.fits.gz"
+   location: ""
+   name: "bosstile-final-collated-boss2-boss{num}.fits.gz"
    ext: "fits.gz"
-   path_example: "$BOSS_LSS_REDUX/inputfiles/bosstile-final-collated-boss2-boss38.fits.gz"
+   path_example: "$BOSS_LSS_REDUX/bosstile-final-collated-boss2-boss32.fits.gz"
    note: "Why is name/location in sdss_paths.ini missing </inputfiles/> ? bosstile-final-collated = $BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.fits.gz  https://github.com/sdss/tree/blob/e8c4a653a1e75ac8def1bd9ab0e662bd0b5c6674/data/sdss_paths.ini
 "
 
