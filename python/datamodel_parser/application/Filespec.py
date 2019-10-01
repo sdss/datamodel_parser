@@ -617,7 +617,11 @@ class Filespec:
                     # compare location paths
                     e_loc_split = e_loc.split('/')
                     s_loc_split = s_loc.split('/')
-                    consistent_loc = len(e_loc_split)==len(s_loc_split)
+                    if len(e_loc_split)==len(s_loc_split):
+                        if len(e_loc_split) > 1:
+                            consistent_loc = True
+                        else:
+                            consistent_loc = e_loc_split[0]==s_loc_split[0]
                     if self.options and self.options.test and self.options.verbose:
                         self.logger.debug('e_loc_split: {}\n'.format(e_loc_split) +
                                           's_loc_split: {}\n'.format(s_loc_split) +

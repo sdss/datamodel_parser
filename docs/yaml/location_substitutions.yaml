@@ -109,7 +109,7 @@ BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-photoObj.html: ""
 BOSS_LSS_REDUX/data_DR14_QSO_NS.html: ""
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html: ""
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html: ""
-BOSS_LSS_REDUX/random_DR14_QSO_NS.html: ""
+BOSS_LSS_REDUX/random_DR14_QSO_NS.html: "catalogs"  # datamodel inconsistent
 BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS.html: ""
 BOSS_LSS_REDUX/galaxies_DR9_CMASS_NS.html: ""
 BOSS_LSS_REDUX/randomN_DR10v8_SAMPLE_NS.html: ""
@@ -117,8 +117,10 @@ BOSS_LSS_REDUX/dr11_patchy_mocks/Patchy-Mocks-DRXSAMPLENS-VERSION-IDNUM.html: "d
 BOSS_LSS_REDUX/dr11_patchy_mocks/PATCHY-Mocks-Randoms-DRXSAMPLENS-VERSION-xN.html: "dr11_patchy_mocks"
 BOSS_LSS_REDUX/reject_mask/MASK.html: "reject_mask"
 BOSS_LSS_REDUX/mask/MASK.html: "mask"
-BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html: "dr11_qpm_mocks"
-BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html: "dr11_qpm_mocks"
+BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html: "qpm_mocks" # datamodel inconsistent
+BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html: # datamodel inconsistent
+ - "qpm_mocks"
+ - "dr11_pthalos_mocks"
 BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html: "dr11_pthalos_mocks"
 BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html: "dr11_pthalos_mocks"
 EBOSS_FIREFLY/FIREFLY_VER/sdss_eboss_firefly.html: "{firefly_ver}"

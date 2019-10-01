@@ -1064,12 +1064,12 @@ datamodels:
    note: "Why does the name/location not match that in sdss_paths.ini? MASK = $BOSS_LSS_REDUX/mask/{type}.{format} https://github.com/sdss/tree/blob/e8c4a653a1e75ac8def1bd9ab0e662bd0b5c6674/data/sdss_paths.ini"
 
  - path: "BOSS_LSS_REDUX/mask/MASK.html"
-   tree_edition: "dr15"
+   tree_edition: "dr10"
    env_label: "BOSS_LSS_REDUX"
    location: "catalogs"
-   name: "mask_{dr}_{sample}_{ns}.fits"
+   name: "mask_{dr}{version}_{sample}_{ns}.fits"
    ext: "fits"
-   path_example: "$BOSS_LSS_REDUX/catalogs/mask_DR14_LRG_N.fits"
+   path_example: "$BOSS_LSS_REDUX/mask/mask_DR10v8_CMASS_North.fits"
    note: "Why does the name/location not match that in sdss_paths.ini? MASK = $BOSS_LSS_REDUX/mask/{type}.{format} https://github.com/sdss/tree/blob/e8c4a653a1e75ac8def1bd9ab0e662bd0b5c6674/data/sdss_paths.ini"
 
  - path: "BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html"

@@ -66,20 +66,20 @@ BOSS_LSS_REDUX/randomN_DRX_SAMPLE_NS.html: "random{catalog}-{dr}{version}-{sampl
 BOSS_LSS_REDUX/galaxy_DR10v8_SAMPLE_NS.html: "galaxy_{dr}{version}_{sample}_{ns}.fits.gz"
 BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html: "trimmed-collate-{sample}-{dr}.fits.gz"
 BOSS_LSS_REDUX/mask_DRX_SAMPLE_NS.html: "mask_{dr}_QSO_{ns}.fits"
-BOSS_LSS_REDUX/data_DR14_LRG_NS.html: "data_{dr}_LRG_{ns}.fits.gz"
+BOSS_LSS_REDUX/data_DR14_LRG_NS.html: "data_{dr}_LRG_{ns}.fits.gz" # not found on archive db
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html: "bosstile-final-collated-boss2-boss{num}.fits.gz"
-BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html: "bosstile-final-collated-boss2-bossN-photoObj.fits.gz"
+BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html: "bosstile-final-collated-boss2-boss{num}-photoObj.fits.gz"
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html: "bosstile-final-collated-boss2-bossN-specObj.fits.gz"
 BOSS_LSS_REDUX/random_DR14_LRG_NS.html: "random_{dr}_{sample}_{ns}.fits"
 BOSS_LSS_REDUX/randoms_DR9_CMASS_NS.html: "randoms_{dr}_CMASS_{ns}.fits"
 BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-photoObj.html: "galaxies_{dr}_{sample}_{ns}-photoObj.fits.gz"
 BOSS_LSS_REDUX/data_DR14_QSO_NS.html: "data_{dr}_{sample}_{ns}.fits"
-BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html: "bosstile-final-collated-boss2-bossN-{param}.fits.gz"
+BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html: "bosstile-final-collated-boss2-boss{num}-{param}.fits.gz"
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html: "bosstile-final-collated-boss2-bossN-photoObj-specObj.fits.gz"
 BOSS_LSS_REDUX/random_DR14_QSO_NS.html: "random_{dr}_{sample}_{ns}.fits"
 BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS.html: "galaxy_{dr}{version}_{sample}_{ns}.fits.gz"
 BOSS_LSS_REDUX/galaxies_DR9_CMASS_NS.html: "galaxies_{dr}_{sample}_{ns}.fits"
-BOSS_LSS_REDUX/randomN_DR10v8_SAMPLE_NS.html: "randomN_{dr}{version}_{sample}_{ns}.fits.gz"
+BOSS_LSS_REDUX/randomN_DR10v8_SAMPLE_NS.html: "random{num}_{dr}{version}_{sample}_{ns}.fits.gz"
 BOSS_LSS_REDUX/dr11_patchy_mocks/Patchy-Mocks-DRXSAMPLENS-VERSION-IDNUM.html: "Patchy-Mocks-{dr}{sample}{ns}-{version}_{id}.tar.gz"
 BOSS_LSS_REDUX/dr11_patchy_mocks/PATCHY-Mocks-Randoms-DRXSAMPLENS-VERSION-xN.html: "Patchy-Mocks-Randoms-{dr}{sample}{ns}-{version}_{nrandoms}.tar.gz"
 BOSS_LSS_REDUX/reject_mask/MASK.html:
@@ -97,17 +97,17 @@ BOSS_LSS_REDUX/reject_mask/MASK.html:
  - "centerpost_mask_dr12.ply"
  - "collision_priority_mask_dr12.ply"
 BOSS_LSS_REDUX/mask/MASK.html:
+ - "mask_{dr}{version}_{sample}_{ns}.fits.gz"
+ - "mask_{dr}{version}_{sample}_{ns}.ply"
  - "boss_geometry_XXXX_XX_XX.fits"
  - "boss_geometry_XXXX_XX_XX.ply"
  - "boss_survey.fits"
  - "boss_survey.ply"
  - "current_boss_stpairs_2011_06_10.fits"
- - "mask_DRX_{sample}_{ns}.ply"
- - "mask_DRX_{sample}_{ns}.fits.gz"
-BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html: "mock_galaxy_DRX_{sample}_{ns}_QPM_IDNUM.rdzw"
-BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html: "mock_random_DRX_{sample}_{ns}_QPM_xN.rdzw"
-BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html: "mock_galaxy_DRX_{sample}_{ns}_MTYPE_IDNUMBER.dat"
-BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html: "mock_random_DRX_{sample}_{ns}_MTYPE_IDNUMBER.fits.gz"
+BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html: "mock_galaxy_{dr}_{sample}_{ns}_QPM_allmocks.rdzw" # datamodel inconsistent
+BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html: "mock_random_{dr}_{sample}_{ns}_{N}x{V}.rdzw" # datamodel inconsistent
+BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html: "mock_galaxy_{dr}_{sample}_{ns}_MTYPE_IDNUMBER.dat" # datamodel inconsistent
+BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html: "mock_random_{dr}_{sample}_{ns}_MTYPE_IDNUMBER.fits.gz" # datamodel inconsistent
 EBOSS_FIREFLY/FIREFLY_VER/sdss_eboss_firefly.html: "sdss_eboss_firefly-{dr}.fits"
 EBOSS_FIREFLY/FIREFLY_VER/RUN2D/sdss_firefly.html: "sdss_firefly-{run2d}.fits"
 EBOSS_FIREFLY/FIREFLY_VER/RUN2D/eboss_firefly.html: "eboss_firefly-{run2d}.fits"

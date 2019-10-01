@@ -12,31 +12,31 @@
  - STAGING_DATA/oplogs/MJD/idReport.html
  - STAGING_DATA/oplogs/MJD/mdReport.html
  - STAGING_DATA/gangs/MJD/gangs.list.html
- - BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html
- - BOSS_LSS_REDUX/data_DR14_LRG_NS.html                                 # found in elmo. not found in db
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html              # fixed
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html
- - BOSS_LSS_REDUX/random_DR14_LRG_NS.html
- - BOSS_LSS_REDUX/data_DR14_QSO_NS.html
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html
- - BOSS_LSS_REDUX/random_DR14_QSO_NS.html
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html # FIXED
+ - BOSS_LSS_REDUX/data_DR14_LRG_NS.html                    # found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/random_DR14_QSO_NS.html                  # found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/random_DR14_LRG_NS.html                  # found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/data_DR14_QSO_NS.html                    # found on the sas. not found on archive db
  - BOSS_LSS_REDUX/randomN_DR10v8_SAMPLE_NS.html
- - BOSS_LSS_REDUX/mask/MASK.html
- - BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html
- - BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html
- - BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html
- - BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html
+ - BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html                           # not found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html         # not found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html          # not found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html # not found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html                # FIXED
+ - BOSS_LSS_REDUX/mask/MASK.html                                                     # FIXED
+ - BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html         # FIXED
+ - BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html              # FIXED
+ - BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html # FIXED
+ - BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html # FIXED
  - EBOSS_FIREFLY/FIREFLY_VER/sdss_eboss_firefly.html
  - EBOSS_FIREFLY/FIREFLY_VER/RUN2D/sdss_firefly.html
  - EBOSS_FIREFLY/FIREFLY_VER/RUN2D/eboss_firefly.html
  - EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFly.html
  - EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html
- - BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/CAMCOL/astromQA.html     # fixed
- - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html # fixed
- - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html         # fixed
- - BOSS_PHOTOOBJ/photoz-weight/pofz.html                         # fixed
+ - BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/CAMCOL/astromQA.html     # FIXED
+ - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html # FIXED
+ - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html         # FIXED
+ - BOSS_PHOTOOBJ/photoz-weight/pofz.html                         # FIXED
  - MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html
  - APOGEE_DATA/MJD5/MJD5.html
  - CAS_LOAD/phCSV/SKYVERSION/RUN/csv_ready.html
