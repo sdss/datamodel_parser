@@ -131,7 +131,10 @@ class Store():
                             self.filepaths = (filespec.yaml_data
                                               if filespec.yaml_data else None)
                         else: pass # use all filepaths
-                    for self.filepath in self.filepaths:
+                    self.set_filespec_filepath_skip_list()
+                    filespec_filepaths = [f for f in self.filepaths
+                                         if f not in self.filespec_filepath_skip_list]
+                    for self.filepath in filespec_filepaths:
                         if self.ready:
                             filespec.found_consistent_example_filepath = False
                             self.set_path_info()
@@ -157,6 +160,11 @@ class Store():
                 self.logger.error('Unable to populate_filespec_table_archive. ' +
                                   'self.filepaths: {}'.format(self.filepaths))
 
+    def set_filespec_filepath_skip_list(self):
+        if self.ready:
+            self.filespec_filepath_skip_list = [
+                
+]
     def set_path_info(self):
         '''Set information obtained from the datamodel file path.'''
         self.path_info = None

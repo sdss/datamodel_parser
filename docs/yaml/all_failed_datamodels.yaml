@@ -2,10 +2,12 @@
  - MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html
  - MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html
  - REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html
+ ### Skip this ###
  - BOSS_LYA/mocks/rawlite_VERS.html
  - BOSS_LYA/mocks/VERS/rawlite/PLATE4/mock_lya.html
  - BOSS_LYA/mocks/VERS/rawlite/PLATE4/mockrawShort_lya.html
  - BOSS_LYA/cat/speclya.html
+ ### Skip this ###
  - APOGEE_DATA_1M/MJD5/MJD5.html
  - STAGING_DATA/oplogs/MJD/idCCDLog.html
  - STAGING_DATA/oplogs/MJD/sdReport.html
@@ -13,15 +15,15 @@
  - STAGING_DATA/oplogs/MJD/mdReport.html
  - STAGING_DATA/gangs/MJD/gangs.list.html
  - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html # FIXED
- - BOSS_LSS_REDUX/data_DR14_LRG_NS.html                    # found on the sas. not found on archive db
- - BOSS_LSS_REDUX/random_DR14_QSO_NS.html                  # found on the sas. not found on archive db
- - BOSS_LSS_REDUX/random_DR14_LRG_NS.html                  # found on the sas. not found on archive db
- - BOSS_LSS_REDUX/data_DR14_QSO_NS.html                    # found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/data_DR14_LRG_NS.html                    # found on the sas. not found on archive_20190507
+ - BOSS_LSS_REDUX/random_DR14_QSO_NS.html                  # found on the sas. not found on archive_20190507
+ - BOSS_LSS_REDUX/random_DR14_LRG_NS.html                  # found on the sas. not found on archive_20190507
+ - BOSS_LSS_REDUX/data_DR14_QSO_NS.html                    # found on the sas. not found on archive_20190507
  - BOSS_LSS_REDUX/randomN_DR10v8_SAMPLE_NS.html
- - BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html                           # not found on the sas. not found on archive db
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html         # not found on the sas. not found on archive db
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html          # not found on the sas. not found on archive db
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html # not found on the sas. not found on archive db
+ - BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html                           # not found on the sas. not found on archive_20190507
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html         # not found on the sas. not found on archive_20190507
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html          # not found on the sas. not found on archive_20190507
+ - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html # not found on the sas. not found on archive_20190507
  - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html                # FIXED
  - BOSS_LSS_REDUX/mask/MASK.html                                                     # FIXED
  - BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html         # FIXED
@@ -45,6 +47,7 @@
  - CAS_LOAD/phCSV/SKYVERSION/RUN/sqlFieldProfile.html
  - CAS_LOAD/phCSV/SKYVERSION/RUN/sqlRun.html
  - CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoObjAll.html
+ #### BOSSTILELIST_DIR does not exist on archive_20190507####
  - BOSSTILELIST_DIR/bosschunks.html
  - BOSSTILELIST_DIR/bosstiles.html
  - BOSSTILELIST_DIR/geometry/boss_sector2tile.html
@@ -62,6 +65,7 @@
  - BOSSTILELIST_DIR/inputs/bossN/targets-bossN.html
  - BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-targets.html
  - BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-bossN.html
+ #### need `module load bosstilelist` ####
  - PLATEDESIGN_DIR/defaults/plateDefault.html
  - RAWDATA_DIR/MJD/guider/gimg.html
  - APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html
@@ -77,11 +81,11 @@
  - PHOTO_REDUX/runList.html
  - PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html
  - MANGA_HI/HIPVER/spectra/HIPROP/mangaHI.html
- - APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apCframe.html
- - APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar.html
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar_DR10.html
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonTrainingSet.html
+ - APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apCframe.html # FIXED
+ - APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html # FIXED
+ - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar.html # FIXED
+ - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar_DR10.html # FIXED
+ - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonTrainingSet.html # FIXED
  - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.mdl.html
  - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.ipf.html
  - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.err.html

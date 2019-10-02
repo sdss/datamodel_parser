@@ -118,7 +118,10 @@ class Filespec:
                 if not self.session: self.set_session()
                 self.set_substitution_values()
                 self.set_tree_id_range()
-                for self.tree_id in self.tree_id_range:
+                tree_id_range = (self.options.tree_ids
+                                 if self.options and self.options.tree_ids
+                                 else self.tree_id_range)
+                for self.tree_id in tree_id_range:
                     if self.ready:
                         self.find_species_values()
                         if self.found_consistent_example_filepath:
@@ -550,6 +553,7 @@ class Filespec:
                 self.env_location and self.env_id
                 ):
 #                search_string = search_string.replace('_','\_')
+                search_string = '/' + search_string
                 search_string = '%' + search_string + '%'
                 if limit:
                     try:
@@ -621,7 +625,11 @@ class Filespec:
                         if len(e_loc_split) > 1:
                             consistent_loc = True
                         else:
-                            consistent_loc = e_loc_split[0]==s_loc_split[0]
+                            # True if both empty or both non-empty else False
+                            a = bool(e_loc_split[0])
+                            b = bool(s_loc_split[0])
+                            consistent_loc = not(a!=b)
+                    else: consistent_loc = False
                     if self.options and self.options.test and self.options.verbose:
                         self.logger.debug('e_loc_split: {}\n'.format(e_loc_split) +
                                           's_loc_split: {}\n'.format(s_loc_split) +

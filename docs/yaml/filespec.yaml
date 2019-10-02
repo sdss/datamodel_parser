@@ -1745,7 +1745,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/bosstiles.html"
    tree_edition: "temp"
@@ -1754,7 +1754,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/geometry/boss_sector2tile.html"
    tree_edition: "temp"
@@ -1763,7 +1763,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/geometry/boss_locations.html"
    tree_edition: "temp"
@@ -1772,7 +1772,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/geometry/boss_sectors.html"
    tree_edition: "temp"
@@ -1781,7 +1781,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/geometry/boss_geometry.html"
    tree_edition: "temp"
@@ -1790,7 +1790,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/final-bossN.html"
    tree_edition: "temp"
@@ -1799,7 +1799,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/platePlans-bossN.html"
    tree_edition: "temp"
@@ -1808,7 +1808,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/sector-bossN.html"
    tree_edition: "temp"
@@ -1817,7 +1817,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/tiles-bossN.html"
    tree_edition: "temp"
@@ -1826,7 +1826,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/stpair-bossN.html"
    tree_edition: "temp"
@@ -1835,7 +1835,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/geometry-bossN.html"
    tree_edition: "temp"
@@ -1844,7 +1844,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/outputs/bossN/plugtest-bossN.html"
    tree_edition: "temp"
@@ -1853,7 +1853,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html"
    tree_edition: "temp"
@@ -1862,7 +1862,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/inputs/bossN/targets-bossN.html"
    tree_edition: "temp"
@@ -1871,7 +1871,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-targets.html"
    tree_edition: "temp"
@@ -1880,7 +1880,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-bossN.html"
    tree_edition: "temp"
@@ -1889,7 +1889,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTILELIST_DIR/"
-   note: "Why does $BOSSTILELIST_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTILELIST_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "PLATEDESIGN_DIR/defaults/plateDefault.html"
    tree_edition: "temp"
@@ -2501,7 +2501,7 @@ datamodels:
    name: " "
    ext: " "
    path_example: "$BOSSTARGET_DIR/"
-   note: "Why does $BOSSTARGET_DIR not exist on elmo for dr[7-15] ?"
+   note: "Why does $BOSSTARGET_DIR not exist on the sas for dr[7-15] ?"
 
  - path: "APOGEE_RC/cat/apogee-rc-DR14.html"
    tree_edition: "dr15"

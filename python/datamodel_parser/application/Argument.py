@@ -45,6 +45,7 @@ def filespec_archive():
     parser.add_argument('-m', '--limit', help='limit number of SQL queries', metavar='limit')
     parser.add_argument('-f', '--failed', action='store_true', dest='failed',
         help='run only files in all_failed_datamodels.yaml.')
+    parser.add_argument('-e', '--tree_ids', nargs='+', help='space separated list of tree_id values', metavar='tree_ids')
     return parser.parse_args()
 
 def filespec_init():
