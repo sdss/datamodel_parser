@@ -132,9 +132,11 @@ class Store():
                                               if filespec.yaml_data else None)
                         else: pass # use all filepaths
                     self.set_filespec_filepath_skip_list()
-                    filespec_filepaths = [f for f in self.filepaths
-                                         if f not in self.filespec_filepath_skip_list]
-                    for self.filepath in filespec_filepaths:
+                    self.filepaths = [f for f in self.filepaths
+                                      if f not in self.filespec_filepath_skip_list]
+                    if not self.filepaths:
+                        self.logger.warning('Empty self.filepaths: {}'.format(self.filepaths))
+                    for self.filepath in self.filepaths:
                         if self.ready:
                             filespec.found_consistent_example_filepath = False
                             self.set_path_info()
@@ -163,7 +165,50 @@ class Store():
     def set_filespec_filepath_skip_list(self):
         if self.ready:
             self.filespec_filepath_skip_list = [
-                
+                # Joel said to skip when populating filespec.yaml
+                'BOSS_LYA/mocks/rawlite_VERS.html',
+                'BOSS_LYA/mocks/VERS/rawlite/PLATE4/mock_lya.html',
+                'BOSS_LYA/mocks/VERS/rawlite/PLATE4/mockrawShort_lya.html',
+                'BOSS_LYA/cat/speclya.html',
+           'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html',
+           #### BOSSTILELIST_DIR does not exist on archive_20190507####
+           #### need `module load bosstilelist` on sas ####
+               'BOSSTILELIST_DIR/bosschunks.html',
+               'BOSSTILELIST_DIR/bosstiles.html',
+               'BOSSTILELIST_DIR/geometry/boss_sector2tile.html',
+               'BOSSTILELIST_DIR/geometry/boss_locations.html',
+               'BOSSTILELIST_DIR/geometry/boss_sectors.html',
+               'BOSSTILELIST_DIR/geometry/boss_geometry.html',
+               'BOSSTILELIST_DIR/outputs/bossN/final-bossN.html',
+               'BOSSTILELIST_DIR/outputs/bossN/platePlans-bossN.html',
+               'BOSSTILELIST_DIR/outputs/bossN/sector-bossN.html',
+               'BOSSTILELIST_DIR/outputs/bossN/tiles-bossN.html',
+               'BOSSTILELIST_DIR/outputs/bossN/stpair-bossN.html',
+               'BOSSTILELIST_DIR/outputs/bossN/geometry-bossN.html',
+               'BOSSTILELIST_DIR/outputs/bossN/plugtest-bossN.html',
+               'BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html',
+               'BOSSTILELIST_DIR/inputs/bossN/targets-bossN.html',
+               'BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-targets.html',
+               'BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-bossN.html',
+               
+                # found on the sas. not found on archive_20190507
+               'BOSS_LSS_REDUX/data_DR14_LRG_NS.html',
+               'BOSS_LSS_REDUX/random_DR14_QSO_NS.html',
+               'BOSS_LSS_REDUX/random_DR14_LRG_NS.html',
+               'BOSS_LSS_REDUX/data_DR14_QSO_NS.html',
+               'APOGEE_RC/cat/apogee-rc-DR12.html',
+               'APOGEE_RC/cat/apogee-rc-DR11.html',
+
+               # not found on the sas. not found on archive_20190507
+               'BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html',
+               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html',
+               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html',
+               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html',
+               # env var doesn't exist on archive_20190507
+               'MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html',
+               'APOGEE_OCCAM/occam_member.html',
+               'APOGEE_OCCAM/occam_cluster.html',
+
 ]
     def set_path_info(self):
         '''Set information obtained from the datamodel file path.'''

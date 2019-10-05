@@ -143,15 +143,9 @@ class Filespec:
                     dumps(self.consistent_example_filepath,indent=1)
                     )
                 self.logger.info('self.species: \n' + dumps(self.species,indent=1))
-#                print('self.datamodel_filename: %r' % self.datamodel_filename)
-#                print('self.filename_search_string: %r' % self.filename_search_string)
-#                print('self.substitution_filename: %r' % self.substitution_filename)
-#                print('self.substitution_location: %r' % self.substitution_location)
-#                print('self.example_filepaths: %r' % self.example_filepaths)
-#                print('self.substitution_filepath: %r' % self.substitution_filepath)
-#                print('self.consistent_example_filepath: %r' % self.consistent_example_filepath)
-#                input('pause')
-            else: pass # let set_filename_search_string() do error logging
+            else:
+                self.failed_datamodel_filepaths.append(self.datamodel_filepath)
+                # let set_filename_search_string() do error logging
 
     def set_substitution_values(self):
         if self.ready:
@@ -611,7 +605,8 @@ class Filespec:
                     # using filename_search_string.yaml
                     zip_names = {i for i, (x,y) in enumerate(zip(e_name,s_name))
                                  if x != y}
-                    consistent_name = (zip_names == set()) or (min(zip_names) > 0)
+                    consistent_name = ((zip_names == set()) or (min(zip_names) > 0)
+                                        or s_name.startswith('{'))
                     if self.options and self.options.test and self.options.verbose:
                         self.logger.debug('e_name: {}\n'.format(e_name) +
                                           's_name: {}\n'.format(s_name) +
