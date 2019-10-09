@@ -109,13 +109,29 @@ class Filespec:
                 self.datamodel_directory_names  = path_info['directory_names']
                 self.datamodel_directory_depths = path_info['directory_depths']
 
+    def set_valid_env_variable(self):
+        '''Determine if the environmental variable exists in the archive db.'''
+        self.valid_env_variable = None
+        if self.ready:
+            self.logger.info('Checking in archive db for env_variable: {}'
+                .format(self.datamodel_env_variable))
+            if not self.session: self.set_session()
+            self.set_env(env_variable = self.datamodel_env_variable)
+            if self.env:
+                self.valid_env_variable = True
+                self.logger.info('Found env_variable: {}'
+                    .format(self.datamodel_env_variable))
+            else:
+                self.failed_datamodel_filepaths.append(self.datamodel_filepath)
+                self.logger.info('WARNING: env_variable {} '.format(self.datamodel_env_variable) +
+                                 'not found in archive db. Skipping')
+        
     def set_species(self):
         '''Determine and populate self.species values'''
         if self.ready:
             self.logger.info('Setting species values for: %r' % self.datamodel_filepath)
             self.set_filename_search_string()
             if self.filename_search_string:
-                if not self.session: self.set_session()
                 self.set_substitution_values()
                 self.set_tree_id_range()
                 tree_id_range = (self.options.tree_ids
@@ -478,14 +494,22 @@ class Filespec:
         '''Set env table row from tree_id and env_variable.'''
         self.env = None
         if self.ready:
-            if self.session and tree_id and env_variable:
-                try:
-                    self.env = (self.session.query(Env)
-                                            .filter(Env.tree_id == tree_id)
-                                            .filter(Env.label == env_variable)
-                                            .one())
-                except:
-                    self.env = None
+            if self.session and env_variable:
+                if tree_id:
+                    try:
+                        self.env = (self.session.query(Env)
+                                                .filter(Env.tree_id == tree_id)
+                                                .filter(Env.label == env_variable)
+                                                .one())
+                    except:
+                        self.env = None
+                else:
+                    try:
+                        self.env = (self.session.query(Env)
+                                                .filter(Env.label == env_variable)
+                                                .all())
+                    except:
+                        self.env = None
             else:
                 self.ready = False
                 self.logger.error('Unable to set_env. ' +
