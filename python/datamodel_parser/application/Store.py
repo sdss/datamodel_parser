@@ -110,165 +110,123 @@ class Store():
             self.directory_depths                   = None
             self.svn_products                       = None
             self.path_info                          = None
+            self.filespec                           = None
+
+    def set_filespec(self):
+        if self.ready:
+            self.filespec = Filespec(logger=self.logger,options=self.options)
 
     def populate_filespec_table_archive(self):
         '''Set self.filespec_dict for each datamodel path in self.filepaths.'''
         if self.ready:
-            if self.filepaths:
-                filespec = Filespec(logger=self.logger,options=self.options)
-                if filespec and filespec.ready:
-                    if self.options:
-                        # restrict filepaths used
-                        if self.options.path:
-                            self.filepaths = [self.options.path]
-                        elif self.options.start:
-                            i = self.filepaths.index(self.options.start)
-                            self.filepaths = self.filepaths[i:]
-                        elif self.options.failed:
-                            filespec.set_yaml_dir()
-                            filespec.set_yaml_data(dir=filespec.yaml_dir,
-                                               filename='all_failed_datamodels.yaml')
-                            self.filepaths = (filespec.yaml_data
-                                              if filespec.yaml_data else None)
-                        else: pass # use all filepaths
-                    self.set_filespec_filepath_skip_list()
-                    self.filepaths = [f for f in self.filepaths
-                                      if f not in self.filespec_filepath_skip_list]
-                    if not self.filepaths:
-                        self.logger.warning('Empty self.filepaths: {}'.format(self.filepaths))
+            if self.filepaths and self.filespec:
+                self.restrict_filespec_filepaths()
+                if self.filepaths:
                     for self.filepath in self.filepaths:
                         if self.ready:
-                            filespec.found_consistent_example_filepath = False
-                            self.set_path_info()
-                            self.initialize_filespec_dict()
+                            self.initialize_filespec()
+                            self.set_tree_id_range()
                         if self.ready:
-                            filespec.set_path_info(path_info=self.path_info)
-                            filespec.initialize_species(species=self.filespec_dict)
-                            filespec.set_valid_env_variable()
-                            if filespec.valid_env_variable:
-                                filespec.set_species()
-                                self.ready = self.ready and filespec.ready
-                        if self.ready and filespec.found_consistent_example_filepath:
-                            self.filespec_dict = filespec.species
-                            if self.options and not self.options.test:
-                                self.populate_file_path_tables()
-                                self.populate_filespec_table()
-                    # report any failures
+                            if self.filespec.valid_env_variable:
+                                self.find_consistent_example_filepaths()
+                    # report failures
                     self.logger.info(
                         'failed_datamodel_filepaths: \n' +
-                            dumps(filespec.failed_datamodel_filepaths,indent=1) + '\n'
+                            dumps(self.filespec.failed_datamodel_filepaths,indent=1) + '\n'
                         'number of failed_datamodel_filepaths: {}'
-                            .format(len(filespec.failed_datamodel_filepaths)))
+                            .format(len(self.filespec.failed_datamodel_filepaths)))
+                else:
+                    self.logger.warning('Empty self.filepaths: {}. '.format(self.filepaths) +
+                                        'All filepaths might be in self.filespec.filepath_skip_list.')
             else:
                 self.ready = False
                 self.logger.error('Unable to populate_filespec_table_archive. ' +
-                                  'self.filepaths: {}'.format(self.filepaths))
+                                  'self.filepaths: {}\n'.format(self.filepaths) +
+                                  'self.filespec: {}'.format(self.filespec)
+                                  )
 
-    def set_filespec_filepath_skip_list(self):
+    def restrict_filespec_filepaths(self):
         if self.ready:
-            self.filespec_filepath_skip_list = [
-                # Joel said to skip when populating filespec.yaml
-                'BOSS_LYA/mocks/rawlite_VERS.html',
-                'BOSS_LYA/mocks/VERS/rawlite/PLATE4/mock_lya.html',
-                'BOSS_LYA/mocks/VERS/rawlite/PLATE4/mockrawShort_lya.html',
-                'BOSS_LYA/cat/speclya.html',
-           'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html',
-           #### BOSSTILELIST_DIR does not exist on archive_20190507####
-           #### need `module load bosstilelist` on sas ####
-               'BOSSTILELIST_DIR/bosschunks.html',                                  # This is an SVN product
-               'BOSSTILELIST_DIR/bosstiles.html',                                   # This is an SVN product
-               'BOSSTILELIST_DIR/geometry/boss_sector2tile.html',                   # This is an SVN product
-               'BOSSTILELIST_DIR/geometry/boss_locations.html',                     # This is an SVN product
-               'BOSSTILELIST_DIR/geometry/boss_sectors.html',                       # This is an SVN product
-               'BOSSTILELIST_DIR/geometry/boss_geometry.html',                      # This is an SVN product
-               'BOSSTILELIST_DIR/outputs/bossN/final-bossN.html',                   # This is an SVN product
-               'BOSSTILELIST_DIR/outputs/bossN/platePlans-bossN.html',              # This is an SVN product
-               'BOSSTILELIST_DIR/outputs/bossN/sector-bossN.html',                  # This is an SVN product
-               'BOSSTILELIST_DIR/outputs/bossN/tiles-bossN.html',                   # This is an SVN product
-               'BOSSTILELIST_DIR/outputs/bossN/stpair-bossN.html',                  # This is an SVN product
-               'BOSSTILELIST_DIR/outputs/bossN/geometry-bossN.html',                # This is an SVN product
-               'BOSSTILELIST_DIR/outputs/bossN/plugtest-bossN.html',                # This is an SVN product
-               'BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html',                     # This is an SVN product
-               'BOSSTILELIST_DIR/inputs/bossN/targets-bossN.html',                  # This is an SVN product
-               'BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-targets.html',    # This is an SVN product
-               'BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-bossN.html',      # This is an SVN product
-               
-                # found on the sas. not found on archive_20190507
-               'BOSS_LSS_REDUX/data_DR14_LRG_NS.html',
-               'BOSS_LSS_REDUX/random_DR14_QSO_NS.html',
-               'BOSS_LSS_REDUX/random_DR14_LRG_NS.html',
-               'BOSS_LSS_REDUX/data_DR14_QSO_NS.html',
-               'APOGEE_RC/cat/apogee-rc-DR12.html',
-               'APOGEE_RC/cat/apogee-rc-DR11.html',
-               'MANGA_SPECTRO_DATA/MJD5/sdR.html',
+            if self.filespec and self.filepaths:
+                self.filespec.filepaths = self.filepaths
+                self.filespec.restrict_filepaths()
+                self.ready = self.ready and self.filespec.ready
+                if self.ready:
+                    self.filepaths = self.filespec.filepaths
+            else:
+                self.ready = False
+                self.logger.error('Unable to restrict_filespec_filepaths. ' +
+                                  'self.filespec: {}, '.format(self.filespec) +
+                                  'self.filepaths: {}, '.format(self.filepaths)
+                                  )
 
+    def find_consistent_example_filepaths(self):
+        '''For each filepath, find a consistent example filepath
+            and populate filespec table.'''
+        if self.ready:
+            if self.tree_id_range:
+                found_consistent_example_filepath = False
+                for self.filespec.tree_id in self.tree_id_range:
+                    if self.ready:
+                        self.filespec.found_consistent_example_filepath = False
+                        self.filespec.set_species()
+                        self.ready = self.ready and self.filespec.ready
+                    if self.ready:
+                        if self.filespec.found_consistent_example_filepath:
+                            found_consistent_example_filepath = True
+                            self.filespec_dict = self.filespec.species
+                            if self.options and not self.options.test:
+                                self.populate_file_path_tables()
+                                self.populate_filespec_table()
+                            # log results
+                            self.logger.debug(
+                                'self.filespec.substitution_filepath: \n' +
+                                dumps(self.filespec.substitution_filepath,indent=1) + '\n'
+                                'self.filespec.consistent_example_filepath: \n' +
+                                dumps(self.filespec.consistent_example_filepath,indent=1)
+                                )
+                            self.logger.info('self.filespec.species: \n' + dumps(self.filespec.species,indent=1))
+                            break # remove this to find examples in all dr's
+                if not found_consistent_example_filepath:
+                    self.filespec.failed_datamodel_filepaths.append(self.filepath)
+                    self.logger.warning('Unable to set_species_values. ' +
+                                        'self.filespec.substitution_filepath: {}, '
+                                            .format(self.filespec.substitution_filepath) +
+                                        'self.filespec.consistent_example_filepath: {}, '
+                                            .format(self.filespec.consistent_example_filepath)
+                                      )
+            else:
+                self.ready = False
+                self.logger.error('Unable to find_consistent_example_filepaths. ' +
+                                  'self.tree_id_range: {} '.format(self.tree_id_range))
 
-               # not found on the sas. not found on archive_20190507
-               'BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html',
-               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html',
-               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html',
-               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html',
-               'SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html',
+    def set_tree_id_range(self):
+        '''Set tree_ids to search for path_example.'''
+        self.tree_id_range = list()
+        if self.ready:
+            if self.filespec:
+                self.filespec.set_tree_id_range()
+                self.ready = self.ready and self.filespec.ready
+                if self.ready:
+                    self.tree_id_range = self.filespec.tree_id_range
+            else:
+                self.logger.error('Unable to set_tree_id_range. ' +
+                                  'self.filespec: {} '.format(self.filespec))
 
-               # env var doesn't exist on archive_20190507
-               'MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html',                # This is an SVN product
-               'APOGEE_OCCAM/occam_member.html',
-               'APOGEE_OCCAM/occam_cluster.html',
-               'MANGACORE_DIR/hdrfix/MJD/sdHdrFix.html',                                # This is an SVN product
-               'MANGACORE_DIR/drill/PLATEID6XX/plateCMM.html',                          # This is an SVN product
-               'MANGACORE_DIR/metrology/maXXX/ma.html',                                 # This is an SVN product
-               'MANGACORE_DIR/metrology/hexferrules/hexferrules.html',                  # This is an SVN product
-               'MANGACORE_DIR/mapper/PLATEID6XX/PLATE/plPlugMapM.html',                 # This is an SVN product
-               'MANGACORE_DIR/slitmaps/PLATEID6XX/PLATE/slitmap.html',                  # This is an SVN product
-               'MANGACORE_DIR/cartmaps/cartmap.html',                                   # This is an SVN product
-               'MANGACORE_DIR/ifuflat/cartXX/MJD/ifuflat.html',                         # This is an SVN product
-               'MANGACORE_DIR/platedesign/foregroundstars/foregroundstars.html',        # This is an SVN product
-               'MANGACORE_DIR/platedesign/platetargets/platetargets.html',              # This is an SVN product
-               'MANGACORE_DIR/platedesign/plateholes/PLATEID6XX/plateHolesSorted.html', # This is an SVN product
-               'MANGACORE_DIR/platedesign/platemags/DESIGNID6XX/platemags.html',        # This is an SVN product
-               'MANGACORE_DIR/platedesign/targetfix/PLATEID6XX/targetfix.html',         # This is an SVN product
-               'MANGACORE_DIR/apocomplete/bogey.html',                                  # This is an SVN product
-               'MANGACORE_DIR/apocomplete/PLATEID6XX/apocomp.html',                     # This is an SVN product
-               'PLATELIST_DIR/platePlans.html',                                         # This is an SVN product
-               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateStandard.html',        # This is an SVN product
-               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateGuide.html',           # This is an SVN product
-               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateTrap.html',            # This is an SVN product
-               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateDesign.html',          # This is an SVN product
-               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateInput-output.html',    # This is an SVN product
-               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html',              # This is an SVN product
-               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideAdjust.html',        # This is an SVN product
-               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideOffsets.html',       # This is an SVN product
-               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHoles.html',              # This is an SVN product
-               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plPlugMapP.html',              # This is an SVN product
-               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHolesSorted.html',        # This is an SVN product
-               'PLATELIST_DIR/definitions/DESIGNID6XX/plateDefinition.html',            # This is an SVN product
-               'PLATELIST_DIR/runs/PLATERUN/plParam.html',                              # This is an SVN product
-               'PLATELIST_DIR/runs/PLATERUN/plMeas.html',                               # This is an SVN product
-               'PLATELIST_DIR/runs/PLATERUN/plOverlay.html',                            # This is an SVN product
-               'PLATELIST_DIR/runs/PLATERUN/plPlan.html',                               # This is an SVN product
-               'PLATELIST_DIR/runs/PLATERUN/plFanuc.html',                              # This is an SVN product
-               'PLATELIST_DIR/runs/PLATERUN/plPlugMap.html',                            # This is an SVN product
-               'PLATELIST_DIR/runs/PLATERUN/plDrillPos.html',                           # This is an SVN product
-               'PLATELIST_DIR/runs/PLATERUN/plObs.html',                                # This is an SVN product
-               'PLATELIST_DIR/inputs/plateInput.html',                                  # This is an SVN product
-               'STAGING_DATA/oplogs/MJD/idCCDLog.html',                                 # not released to public
-               'STAGING_DATA/oplogs/MJD/sdReport.html',                                 # not released to public
-               'STAGING_DATA/oplogs/MJD/idReport.html',                                 # not released to public
-               'STAGING_DATA/oplogs/MJD/mdReport.html',                                 # not released to public
-               'STAGING_DATA/gangs/MJD/gangs.list.html',                                # not released to public
-               'CAS_LOAD/phCSV/SKYVERSION/RUN/csv_ready.html',
-               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlField.html',
-               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoProfile.html',
-               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlFieldProfile.html',
-               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlRun.html',
-               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoObjAll.html',
-               'SPECLOG_DIR/MJD/plPlugMapM.html',
-               'SPECLOG_DIR/MJD/sdhdrfix.html',
-#               'SPECLOG_DIR/MJD/guidermon.html',
+    def initialize_filespec(self):
+        '''Initialize filespec object.'''
+        if self.ready:
+            if self.filespec:
+                self.set_path_info()
+                self.initialize_filespec_dict()
+                if self.ready:
+                    self.filespec.set_path_info(path_info=self.path_info)
+                    self.filespec.initialize_species(species=self.filespec_dict)
+                    self.filespec.set_valid_env_variable()
+            else:
+                self.logger.error('Unable to initialize_filespec. ' +
+                                  'self.filespec: {} '.format(self.filespec))
 
-
-
-]
     def set_path_info(self):
         '''Set information obtained from the datamodel file path.'''
         self.path_info = None
@@ -298,7 +256,6 @@ class Store():
                 self.ready = False
                 self.logger.error('Unable to set_path_info. ' +
                                   'self.path_info: {}'.format(self.path_info))
-
 
     def initialize_filespec_dict(self):
         '''Set filespec_dict from self.filepath using the archive database.'''

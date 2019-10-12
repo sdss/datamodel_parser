@@ -221,7 +221,7 @@ APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapParam.html: "None"
 APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapCova.html: "None"
 APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/lib/aspcapSynth.html: "None"
 SSPP_REDUX/ssppOut.html: "ssppOut-{dr}.fits"
-SSPP_REDUX/ssppPlates.html: "sspp-plates-{dr}.fit"
+SSPP_REDUX/ssppPlates.html: "ssppPlates-{dr}.fit" # datamodel inconsistent
 SSPP_REDUX/ssppTargets.html: "ssppTargets-{dr}.fits"
 SSPP_REDUX/targets/PLATE4/segueTargetPlate.html: "segueTargetPlate-{plate:0>4}-{mjd}.fits"
 SSPP_REDUX/targets/all/plate2targetfile.html: "plate2targetfile.par"
@@ -232,7 +232,7 @@ MANGA_SPECZ/DRPVER/SPECZVER/speczall.html: "speczall-{drpver}.fits"
 MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-RSS.html: "specz-{plate}-{ifu}-{type}RSS.fits"
 MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html: specz-{plate}-{ifu}-{type}CUBE.fits
 SPIDERS_ANALYSIS/SpidersXclusterBCGs.html: "SpidersXclusterBCGs-v2.0.fits"
-PHOTO_RESOLVE/thingIndex.html: "thingIndex.fits"
+PHOTO_RESOLVE/thingIndex.html: "thingIndx.fits" # datamodel inconsistent
 PHOTO_RESOLVE/window_unified.html: "window_unified.fits"
 PHOTO_RESOLVE/window_blist_noindx.html: "window_blist_noindx.fits"
 PHOTO_RESOLVE/thingList.html: "thingList.fits"
@@ -326,7 +326,7 @@ APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apStar.html: "apStar-{
 APOGEE_REDUX/APRED_VERS/APSTAR_VERS/TELESCOPE/LOCATION_ID/apField.html: "apField-{field}.fits"
 SDSS_TARGET/sdss_target_geometry.html: "sdss_target_geometry.fits"
 SDSS_TARGET/sdss_target_paramlist.html: "sdss_target_paramlist.fits"
-SDSS_TARGET/sdss_target_params.html: "sdss_target_[target_version]_{type}_params.fits"
+SDSS_TARGET/sdss_target_params.html: "sdss_target_{target_version}_{type}_params.fits"
 SDSS_TARGET/data/tsObjTargets.html: "tsObjTargets-{stripe:0>2}-{muStart:0>8}-{run:0>5}-{skyVersion}-{rerun}-{camcol}-{fieldStart}-{fieldEnd}.fit"
 SDSS_TARGET/data/tsField.html: "tsField-{run:0>6}-{camcol}-{rerun}-{field:0>4}.fit"
 MANGACORE_DIR/apocomplete/bogey.html: "bogey.par"
@@ -350,7 +350,7 @@ SPECTRO_REDUX/RUN2D/PLATE4/spZall.html: "spZall-{plate}-{mjd} .fits"
 SPECTRO_REDUX/RUN2D/PLATE4/knownMissing.html: "knownMissing.txt"
 SPECTRO_REDUX/RUN2D/PLATE4/spPlan2d.html: "spPlan2d.par"
 SPINSPECT_DIR/data/NAME/spInspect.html: "spInspect-{plate:0>4}-{mjd}.par"
-SEGUE2_TARGET/seguetsObjSetAllDup.html: "seguetsObjSetAllDup-{plate:0>4}-{mjd}.fits"
+SEGUE2_TARGET/seguetsObjSetAllDup.html: "seguetsObjSetAllDup-{plate:0>4}-{mjd}.fits" # datamodel inconsistent, trac ticket made
 SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPlate.html: "seguetsObjPlate-{plateid:0>4}-{mjd}-{mapid}.fits"
 MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/manga.Pipe3D.html: "manga.Pipe3D-{mangadrp_ver}.fits"
 MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/QC_MaNGA.html: "QC_MaNGA_{mangadrp_ver}.fits"
@@ -433,8 +433,8 @@ STAGING_DATA/oplogs/MJD/idCCDLog.html: "idCCDLog-{camrow}{camcol}-{mjd}.par"
 STAGING_DATA/oplogs/MJD/sdReport.html: "sdReport-{mjd}.par"
 STAGING_DATA/oplogs/MJD/idReport.html: "idReport-{mjd}.par"
 APOGEE_DATA/MJD5/apR.html: "apR-{chip}-{num:0>8}.apz"
-SSPP_REDUX/RERUN/plate_mjds_done.html: "None" # datamodel inconsistent
-SSPP_REDUX/RERUN/plate_mjds_sspp.html: "None" # datamodel inconsistent
+SSPP_REDUX/RERUN/plate_mjds_done.html: "plate_mjds_done.list" # datamodel inconsistent
+SSPP_REDUX/RERUN/plate_mjds_sspp.html: "plate_mjds_sspp.list" # datamodel inconsistent
 APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apPlan.html: "apPlan-{plate:0>4}-{mjd}.fits"
 APOGEE_REDUX/APRED_VERS/cal/detector/apDetector.html: "apDetector-{chip}-{mjd}.fits"
 APOGEE_REDUX/APRED_VERS/cal/darkcorr/apDark.html: "{prefix}Dark-{chip}-{num:0>8}.fits"
@@ -552,7 +552,7 @@ PHOTO_DATA/RUN/gangs/idGang.html: "idGang-{run:0>6}-{rc}{ccd}-{frame:0>4}.fit"
 PHOTO_REDUX/RERUN/RUN/astrom/asTrans.html:
  - "asTrans-{run:0>6}.fit"
  - "scTrans-{run:0>6}-{camera_column}.fit"
-PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html: "fpC-{run:0>6}-{filter}{column}-{field}.fit"
+PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html: "fp{C}-{run:0>6}-{filter}{column}-{field}.fit"
 PHOTO_SWEEP/RERUN/calibObj.html:
  - "calibObj-{run:0>6}-{camcol}-{field:0>4}-{type}.fits"
  - "calibObj-{run:0>6}-{camcol}-sky.fits.gz"

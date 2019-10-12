@@ -20,6 +20,7 @@ if not ready:
     exit(1)
 else:
     store.set_tree_edition()
+    store.set_filespec()
     store.set_filepaths()
     store.populate_filespec_table_archive()
     store.exit()

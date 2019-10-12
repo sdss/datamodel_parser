@@ -39,29 +39,31 @@ class Filespec:
         '''Set class attributes.'''
         if self.ready:
             self.verbose = self.options.verbose
-            self.datamodel_filepath                = None
-            self.datamodel_env_variable            = None
-            self.datamodel_filename                = None
-            self.datamodel_directory_names         = None
-            self.directory_substitution_dict       = None
-            self.tree_id                           = None
-            self.species_path_example              = None
-            self.species_name                      = None
-            self.path_example_file_row             = None
-            self.session                           = None
-            self.env                               = None
-            self.path_example_file_row             = None
-            self.species_note                      = str()
-            self.location_example_datamodel_dict   = None
-            self.failed_datamodel_filepaths        = list()
-            self.file_extensions                   = None
-            self.yaml_dir                          = None
-            self.found_consistent_example_filepath = None
-            self.substitution_filenames            = None
-            self.substitution_location             = None
-            self.substitution_locations            = None
-            self.filename_search_strings           = None
-            self.consistent_example_filepath       = None
+            self.datamodel_filepath                 = None
+            self.datamodel_env_variable             = None
+            self.datamodel_filename                 = None
+            self.datamodel_directory_names          = None
+            self.directory_substitution_dict        = None
+            self.tree_id                            = None
+            self.species_path_example               = None
+            self.species_name                       = None
+            self.path_example_file_row              = None
+            self.session                            = None
+            self.env                                = None
+            self.path_example_file_row              = None
+            self.species_note                       = str()
+            self.location_example_datamodel_dict    = None
+            self.failed_datamodel_filepaths         = list()
+            self.file_extensions                    = None
+            self.yaml_dir                           = None
+            self.found_consistent_example_filepath  = None
+            self.substitution_filenames             = None
+            self.substitution_location              = None
+            self.substitution_locations             = None
+            self.filename_search_strings            = None
+            self.consistent_example_filepath        = None
+            self.filepaths                          = None
+            self.valid_env_variable                 = None
 
     def set_env_variable_dir(self,env_variable=None):
         '''Set the directory path associated with the datamodel environmental variable.'''
@@ -133,32 +135,10 @@ class Filespec:
             self.set_filename_search_string()
             if self.filename_search_string:
                 self.set_substitution_values()
-                self.set_tree_id_range()
-                tree_id_range = (self.options.tree_ids
-                                 if self.options and self.options.tree_ids
-                                 else self.tree_id_range)
-                for self.tree_id in tree_id_range:
-                    if self.ready:
-                        self.find_species_values()
-                        if self.found_consistent_example_filepath:
-                            self.set_species_values()
-                            break
-                if not self.found_consistent_example_filepath:
-                    self.failed_datamodel_filepaths.append(self.datamodel_filepath)
-                    self.logger.warning('Unable to set_species_values. ' +
-                                        'self.ready: {}, '.format(self.ready) +
-                                        'self.substitution_filepath: {}, '
-                                            .format(self.substitution_filepath) +
-                                        'self.consistent_example_filepath: {}, '
-                                            .format(self.consistent_example_filepath)
-                                      )
-                self.logger.debug(
-                    'self.substitution_filepath: \n' +
-                    dumps(self.substitution_filepath,indent=1) + '\n'
-                    'self.consistent_example_filepath: \n' +
-                    dumps(self.consistent_example_filepath,indent=1)
-                    )
-                self.logger.info('self.species: \n' + dumps(self.species,indent=1))
+                if self.ready:
+                    self.find_species_values()
+                    if self.found_consistent_example_filepath:
+                        self.set_species_values()
             else:
                 self.failed_datamodel_filepaths.append(self.datamodel_filepath)
                 # let set_filename_search_string() do error logging
@@ -409,7 +389,10 @@ class Filespec:
         '''Set tree_ids to search for path_example.'''
         self.tree_id_range = list()
         if self.ready:
-            self.tree_id_range = list(range(15,6,-1))
+            tree_id_range = list(range(15,6,-1))
+            self.tree_id_range = (self.options.tree_ids
+                                  if self.options and self.options.tree_ids
+                                  else tree_id_range)
             if not self.tree_id_range:
                 self.ready = False
                 self.logger.error('Unable to set_tree_id_range. ' +
@@ -840,7 +823,6 @@ class Filespec:
                 self.logger.error('Unable to set_substitution_tree_paths. ' +
                                   'self.substitution_tree_paths: {}'.format(self.substitution_tree_paths))
 
-
     def set_filenames(self,directory=None):
         '''Set a list of filenames in the directory given.'''
         self.filenames = list()
@@ -859,3 +841,161 @@ class Filespec:
                 self.logger.error('Unable to set_filenames. ' +
                                   'self.filenames: {}'.format(self.filenames))
 
+    def restrict_filepaths(self):
+        '''Restrict the filepaths used.'''
+        if self.ready:
+            self.restrict_filepaths_options()
+            self.restrict_filepaths_skip_list()
+
+    def restrict_filepaths_options(self):
+        '''Restrict filepaths using command line options, if necessary.'''
+        if self.ready:
+            if self.filepaths and self.options:
+                if self.options.path:
+                    self.filepaths = [self.options.path]
+                elif self.options.start:
+                    i = self.filepaths.index(self.options.start)
+                    self.filepaths = self.filepaths[i:]
+                elif self.options.failed:
+                    self.set_yaml_dir()
+                    self.set_yaml_data(dir=self.yaml_dir,
+                                       filename='all_failed_datamodels.yaml')
+                    self.filepaths = (self.yaml_data
+                                      if self.yaml_data else None)
+                else: pass # use all filepaths
+            else:
+                self.ready = False
+                self.logger.error('Unable to restrict_filepaths_options. ' +
+                                  'self.filepaths: {},\n'.format(self.filepaths) +
+                                  'self.options: {} '.format(self.options)
+                                  )
+
+    def restrict_filepaths_skip_list(self):
+        '''Remove filepaths in filepath_skip_list.'''
+        if self.ready:
+            self.set_filepath_skip_list()
+            if self.filepath_skip_list:
+                self.logger.info('Removing filepaths in filepath_skip_list')
+                self.filepaths = [f for f in self.filepaths
+                                  if f not in self.filepath_skip_list]
+            else:
+                self.ready = False
+                self.logger.error('Unable to restrict_filepaths_skip_list. ' +
+                                  'self.filepath_skip_list: {}'
+                                    .format(self.filepath_skip_list))
+
+    def set_filepath_skip_list(self):
+        if self.ready:
+            self.filepath_skip_list = [
+                # Joel said to skip when populating filespec.yaml
+                'BOSS_LYA/mocks/rawlite_VERS.html',
+                'BOSS_LYA/mocks/VERS/rawlite/PLATE4/mock_lya.html',
+                'BOSS_LYA/mocks/VERS/rawlite/PLATE4/mockrawShort_lya.html',
+                'BOSS_LYA/cat/speclya.html',
+                'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS_v_IDLn_FERREn.n.n_LIBn/plates/results/aspcapPlate-plateid-mjd.html',
+                'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFluxError.html',
+                'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFlux.html',
+                'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapParam.html',
+                'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapCova.html',
+                'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/lib/aspcapSynth.html',
+
+               #### BOSSTILELIST_DIR does not exist on archive_20190507####
+               #### need `module load bosstilelist` on sas ####
+               'BOSSTILELIST_DIR/bosschunks.html',                                  # This is an SVN product
+               'BOSSTILELIST_DIR/bosstiles.html',                                   # This is an SVN product
+               'BOSSTILELIST_DIR/geometry/boss_sector2tile.html',                   # This is an SVN product
+               'BOSSTILELIST_DIR/geometry/boss_locations.html',                     # This is an SVN product
+               'BOSSTILELIST_DIR/geometry/boss_sectors.html',                       # This is an SVN product
+               'BOSSTILELIST_DIR/geometry/boss_geometry.html',                      # This is an SVN product
+               'BOSSTILELIST_DIR/outputs/bossN/final-bossN.html',                   # This is an SVN product
+               'BOSSTILELIST_DIR/outputs/bossN/platePlans-bossN.html',              # This is an SVN product
+               'BOSSTILELIST_DIR/outputs/bossN/sector-bossN.html',                  # This is an SVN product
+               'BOSSTILELIST_DIR/outputs/bossN/tiles-bossN.html',                   # This is an SVN product
+               'BOSSTILELIST_DIR/outputs/bossN/stpair-bossN.html',                  # This is an SVN product
+               'BOSSTILELIST_DIR/outputs/bossN/geometry-bossN.html',                # This is an SVN product
+               'BOSSTILELIST_DIR/outputs/bossN/plugtest-bossN.html',                # This is an SVN product
+               'BOSSTILELIST_DIR/inputs/bossN/plan-bossN.html',                     # This is an SVN product
+               'BOSSTILELIST_DIR/inputs/bossN/targets-bossN.html',                  # This is an SVN product
+               'BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-targets.html',    # This is an SVN product
+               'BOSSTILELIST_DIR/inputs/ancillary/bossN/ancillary-bossN.html',      # This is an SVN product
+               
+                # found on the sas. not found on archive_20190507
+               'BOSS_LSS_REDUX/data_DR14_LRG_NS.html',
+               'BOSS_LSS_REDUX/random_DR14_QSO_NS.html',
+               'BOSS_LSS_REDUX/random_DR14_LRG_NS.html',
+               'BOSS_LSS_REDUX/data_DR14_QSO_NS.html',
+               'APOGEE_RC/cat/apogee-rc-DR12.html',
+               'APOGEE_RC/cat/apogee-rc-DR11.html',
+               'MANGA_SPECTRO_DATA/MJD5/sdR.html',
+               'PHOTO_REDUX/runList.html',
+               'PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html,' # deprecated in SDSS-IV
+
+
+
+
+               # not found on the sas. not found on archive_20190507
+               'BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html',
+               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html',
+               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html',
+               'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html',
+               'SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html',
+
+               # env var doesn't exist on archive_20190507
+               'MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html',                # This is an SVN product
+               'APOGEE_OCCAM/occam_member.html',
+               'APOGEE_OCCAM/occam_cluster.html',
+               'MANGACORE_DIR/hdrfix/MJD/sdHdrFix.html',                                # This is an SVN product
+               'MANGACORE_DIR/drill/PLATEID6XX/plateCMM.html',                          # This is an SVN product
+               'MANGACORE_DIR/metrology/maXXX/ma.html',                                 # This is an SVN product
+               'MANGACORE_DIR/metrology/hexferrules/hexferrules.html',                  # This is an SVN product
+               'MANGACORE_DIR/mapper/PLATEID6XX/PLATE/plPlugMapM.html',                 # This is an SVN product
+               'MANGACORE_DIR/slitmaps/PLATEID6XX/PLATE/slitmap.html',                  # This is an SVN product
+               'MANGACORE_DIR/cartmaps/cartmap.html',                                   # This is an SVN product
+               'MANGACORE_DIR/ifuflat/cartXX/MJD/ifuflat.html',                         # This is an SVN product
+               'MANGACORE_DIR/platedesign/foregroundstars/foregroundstars.html',        # This is an SVN product
+               'MANGACORE_DIR/platedesign/platetargets/platetargets.html',              # This is an SVN product
+               'MANGACORE_DIR/platedesign/plateholes/PLATEID6XX/plateHolesSorted.html', # This is an SVN product
+               'MANGACORE_DIR/platedesign/platemags/DESIGNID6XX/platemags.html',        # This is an SVN product
+               'MANGACORE_DIR/platedesign/targetfix/PLATEID6XX/targetfix.html',         # This is an SVN product
+               'MANGACORE_DIR/apocomplete/bogey.html',                                  # This is an SVN product
+               'MANGACORE_DIR/apocomplete/PLATEID6XX/apocomp.html',                     # This is an SVN product
+               'PLATELIST_DIR/platePlans.html',                                         # This is an SVN product
+               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateStandard.html',        # This is an SVN product
+               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateGuide.html',           # This is an SVN product
+               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateTrap.html',            # This is an SVN product
+               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateDesign.html',          # This is an SVN product
+               'PLATELIST_DIR/designs/DESIGNID6XX/DESIGNID6/plateInput-output.html',    # This is an SVN product
+               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateLines.html',              # This is an SVN product
+               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideAdjust.html',        # This is an SVN product
+               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateGuideOffsets.html',       # This is an SVN product
+               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHoles.html',              # This is an SVN product
+               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plPlugMapP.html',              # This is an SVN product
+               'PLATELIST_DIR/plates/PLATEID6XX/PLATEID6/plateHolesSorted.html',        # This is an SVN product
+               'PLATELIST_DIR/definitions/DESIGNID6XX/plateDefinition.html',            # This is an SVN product
+               'PLATELIST_DIR/runs/PLATERUN/plParam.html',                              # This is an SVN product
+               'PLATELIST_DIR/runs/PLATERUN/plMeas.html',                               # This is an SVN product
+               'PLATELIST_DIR/runs/PLATERUN/plOverlay.html',                            # This is an SVN product
+               'PLATELIST_DIR/runs/PLATERUN/plPlan.html',                               # This is an SVN product
+               'PLATELIST_DIR/runs/PLATERUN/plFanuc.html',                              # This is an SVN product
+               'PLATELIST_DIR/runs/PLATERUN/plPlugMap.html',                            # This is an SVN product
+               'PLATELIST_DIR/runs/PLATERUN/plDrillPos.html',                           # This is an SVN product
+               'PLATELIST_DIR/runs/PLATERUN/plObs.html',                                # This is an SVN product
+               'PLATELIST_DIR/inputs/plateInput.html',                                  # This is an SVN product
+               'STAGING_DATA/oplogs/MJD/idCCDLog.html',                                 # not released to public
+               'STAGING_DATA/oplogs/MJD/sdReport.html',                                 # not released to public
+               'STAGING_DATA/oplogs/MJD/idReport.html',                                 # not released to public
+               'STAGING_DATA/oplogs/MJD/mdReport.html',                                 # not released to public
+               'STAGING_DATA/gangs/MJD/gangs.list.html',                                # not released to public
+               'CAS_LOAD/phCSV/SKYVERSION/RUN/csv_ready.html',
+               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlField.html',
+               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoProfile.html',
+               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlFieldProfile.html',
+               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlRun.html',
+               'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoObjAll.html',
+               'SPECLOG_DIR/MJD/plPlugMapM.html',
+               'SPECLOG_DIR/MJD/sdhdrfix.html',
+               'SPECLOG_DIR/MJD/guidermon.html',
+               'BOSSTARGET_DIR/data/geometry/boss_survey.html',
+               'SPINSPECT_DIR/data/NAME/spInspect.html',
+
+]

@@ -964,11 +964,11 @@ class Database:
             if (tree_id   and
                 file_id   and
                 env_label and
-#                location is not None and
+                #location is not None and
                 name        and
-                ext         and
+                #ext         and
                 path_example
-#                note is not None and
+                #note is not None and
                 ):
                 self.filespec_columns = {
                     'tree_id'       : tree_id
@@ -995,11 +995,11 @@ class Database:
                     'tree_id: {}, '.format(tree_id) +
                     'file_id: {}, '.format(file_id) +
                     'env_label: {}, '.format(env_label) +
-#                    'location: {}, '.format(location) +
+                    #'location: {}, '.format(location) +
                     'name: {}, '.format(name) +
-                    'ext: {}.'.format(ext) +
+                    #'ext: {}.'.format(ext) +
                     'path_example: {}.'.format(path_example)
-#                    'note: {}, '.format(note) +
+                    #'note: {}, '.format(note) +
                     )
 
     def populate_filespec_table(self):
