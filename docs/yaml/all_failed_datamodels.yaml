@@ -13,7 +13,7 @@
  - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html                                                    # FIXED
  - BOSS_PHOTOOBJ/photoz-weight/pofz.html                                                                    # FIXED
  - APOGEE_DATA/MJD5/MJD5.html                                                                               # FIXED
- - PHOTO_RESOLVE/thingIndex.html                                                                            # FIXED
+ - PHOTO_RESOLVE/thingIndx.html                                                                            # FIXED
  - MANGA_HI/HIPVER/spectra/HIPROP/mangaHI.html                                                              # FIXED
  - APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apCframe.html                                            # FIXED
  - APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html                                                           # FIXED
@@ -41,22 +41,20 @@
  - SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPlate.html                                               # FIXED
  - MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/QC_MaNGA.html                                                       # FIXED
  - BOSS_QSO/DR12Q/DR12Q_superset.html                                                                       # FIXED
- - CALIBPLATE_DIR/calibPlateP.html
- - ECAM_DATA/MJD/all_files.html
+ - ECAM_DATA/MJD/all_files.html                                                                             ##
  - RAWDATA_DIR/MJD/MJD.md5sum.html
- - SPIDERS_ANALYSIS/spiders_quasar_bhmass.html
- - APOLOGS_DIR/LOG_NAME/apologs.html
+ - SPIDERS_ANALYSIS/spiders_quasar_bhmass.html                                                              ##
+ - APOLOGS_DIR/LOG_NAME/apologs.html                                                                        # FIXED
  - MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html
  - MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html
- - REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html
- - PLATEDESIGN_DIR/defaults/plateDefault.html
- - RAWDATA_DIR/MJD/guider/gimg.html
+ - REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html                                     ##
+ - RAWDATA_DIR/MJD/guider/gimg.html                                                                         # FIXED
  - SSPP_REDUX/ssppPlates.html                                                                               # FIXED
- - SSPP_REDUX/duplicates/dup.html
- - SSPP_REDUX/RERUN/plate_mjds_done.html
- - SSPP_REDUX/RERUN/plate_mjds_sspp.html
- - MARVELS_DATA/MJD/done.html
- - MARVELS_DATA/MJD/MJD.md5sum.html
+ - SSPP_REDUX/RERUN/plate_mjds_done.html                                                                    # FIXED
+ - SSPP_REDUX/RERUN/plate_mjds_sspp.html                                                                    # FIXED
+ - MARVELS_DATA/MJD/done.html                                                                               ##
+ - MARVELS_DATA/MJD/MJD.md5sum.html                                                                         # FIXED
+ - SEGUE2_TARGET/raw/oldtsdirs/PLATERUN/dDESIGNID4/seguetsObjPlate.html                                     # FIXED
 ## Begin. Joel needs to fix first
 - EBOSS_FIREFLY/FIREFLY_VER/sdss_eboss_firefly.html
 - EBOSS_FIREFLY/FIREFLY_VER/RUN2D/sdss_firefly.html

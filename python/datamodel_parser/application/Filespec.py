@@ -797,7 +797,8 @@ class Filespec:
                                 'dat','fits','fit','tar','log','rdzw',
                                 'whrl','png','ply','apz','par','hdr','o','e',
                                 'sha1sum','ps','txt','html','model','csv','mp4',
-                                'pdf','list','batch','batch.wrap.sh','condor','gif'
+                                'pdf','list','batch','batch.wrap.sh','condor','gif',
+                                'md5sum',
                                 ]
 
     def set_substitution_tree_paths(self):
@@ -939,6 +940,8 @@ class Filespec:
                'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html',
                'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html',
                'SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html',
+               'SSPP_REDUX/duplicates/dup.html',
+
 
                # env var doesn't exist on archive_20190507
                'MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html',                # This is an SVN product
@@ -997,5 +1000,9 @@ class Filespec:
                'SPECLOG_DIR/MJD/guidermon.html',
                'BOSSTARGET_DIR/data/geometry/boss_survey.html',
                'SPINSPECT_DIR/data/NAME/spInspect.html',
+               'PLATEDESIGN_DIR/defaults/plateDefault.html',
+               'CALIBPLATE_DIR/calibPlateP.html',
+
+
 
 ]

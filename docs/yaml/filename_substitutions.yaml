@@ -213,7 +213,7 @@ MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-DAPTYP
 MANGA_SPECTRO_ANALYSIS/DRPVER/DAPVER/DAPTYPE/PLATE/IFU/ref/manga-RDXQAKEY-BINKEY.html: "manga-{plate}-{ifu}-{rdxqakey}-{binkey}.fits.gz"
 RAWDATA_DIR/MJD/MJD.md5sum.html: "{mjd}.md5sum"
 RAWDATA_DIR/MJD/sdR.html: "sdR-{br}{id}-{frame}.fit"
-RAWDATA_DIR/MJD/guider/gimg.html: "gimg-{index:0>4}.fits.gz"
+RAWDATA_DIR/MJD/guider/gimg.html: "gimg{index:0>4}.fits.gz"
 MANGA_TARGET/MANGATARGET_VERSION/MaNGA_targets_extNSA_tiled_ancillary.html: "MaNGA_targets_extNSA_tiled_ancillary.fits"
 APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFluxError.html: "None"
 APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/spec/aspcapFlux.html: "None"
@@ -232,7 +232,7 @@ MANGA_SPECZ/DRPVER/SPECZVER/speczall.html: "speczall-{drpver}.fits"
 MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-RSS.html: "specz-{plate}-{ifu}-{type}RSS.fits"
 MANGA_SPECZ/DRPVER/SPECZVER/PLATE4/specz-CUBE.html: specz-{plate}-{ifu}-{type}CUBE.fits
 SPIDERS_ANALYSIS/SpidersXclusterBCGs.html: "SpidersXclusterBCGs-v2.0.fits"
-PHOTO_RESOLVE/thingIndex.html: "thingIndx.fits" # datamodel inconsistent
+PHOTO_RESOLVE/thingIndx.html: "thingIndx.fits" # datamodel inconsistent
 PHOTO_RESOLVE/window_unified.html: "window_unified.fits"
 PHOTO_RESOLVE/window_blist_noindx.html: "window_blist_noindx.fits"
 PHOTO_RESOLVE/thingList.html: "thingList.fits"
@@ -352,6 +352,7 @@ SPECTRO_REDUX/RUN2D/PLATE4/spPlan2d.html: "spPlan2d.par"
 SPINSPECT_DIR/data/NAME/spInspect.html: "spInspect-{plate:0>4}-{mjd}.par"
 SEGUE2_TARGET/seguetsObjSetAllDup.html: "seguetsObjSetAllDup-{plate:0>4}-{mjd}.fits" # datamodel inconsistent, trac ticket made
 SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPlate.html: "seguetsObjPlate-{plateid:0>4}-{mjd}-{mapid}.fits"
+SEGUE2_TARGET/raw/oldtsdirs/PLATERUN/dDESIGNID4/seguetsObjPlate.html: "seguetsObjPlate-{plateid:0>4}-{mjd}-{mapid}.fits"
 MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/manga.Pipe3D.html: "manga.Pipe3D-{mangadrp_ver}.fits"
 MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/QC_MaNGA.html: "QC_MaNGA_{mangadrp_ver}.fits"
 APOGEE_TARGET/apogeeDesign.html: "apogeeDesign_{dr}.fits"
