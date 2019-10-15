@@ -418,7 +418,7 @@ PHOTO_SKY/RERUN/RUN/sky/skyframes.html: "skyframes-{run:0>6}-{camcol}-{filter}.f
 EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html: "FIREFLY/RUN2D/stellarpop/PLATE/spFlyPlate-{plate}-{mjd}.fits"
 PHOTO_REDUX/RERUN/RUN/logs/opCamera.html: "opCamera-{mjd}.par"
 MANGACORE_DIR/platedesign/foregroundstars/foregroundstars.html: "foregroundstars.par"
-MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html: "PLATENAME_S_{spectral_number:0>3}_starname_BEAM {beam_number}.csv"
+MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html: "{platename}_{spectral_number:0>3}_starname_BEAM{beam_number}.csv"
 MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html: "R {plateRA} D {plateDec} {plate_design_version} {starname} _BEAM {beam_number} .csv"
 BOSS_SPECTRO_REDUX/RUN2D/PLATE4/spPlan.html:
  - "spPlan2d-{plate:0>4}-{mjd}.par"

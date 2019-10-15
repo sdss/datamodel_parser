@@ -899,6 +899,8 @@ class Filespec:
                 'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapParam.html',
                 'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/param/aspcapCova.html',
                 'APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/lib/aspcapSynth.html',
+                'MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html',
+                'RAWDATA_DIR/MJD/MJD.md5sum.html',
 
                #### BOSSTILELIST_DIR does not exist on archive_20190507####
                #### need `module load bosstilelist` on sas ####
@@ -929,10 +931,8 @@ class Filespec:
                'APOGEE_RC/cat/apogee-rc-DR11.html',
                'MANGA_SPECTRO_DATA/MJD5/sdR.html',
                'PHOTO_REDUX/runList.html',
-               'PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html,' # deprecated in SDSS-IV
-
-
-
+               'PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html', # deprecated in SDSS-IV
+               'SPIDERS_ANALYSIS/spiders_quasar_bhmass.html',
 
                # not found on the sas. not found on archive_20190507
                'BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html',
@@ -941,6 +941,8 @@ class Filespec:
                'BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html',
                'SPECTRO_REDUX/RUN2D/PLATE4/spDiag.html',
                'SSPP_REDUX/duplicates/dup.html',
+               'REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html',
+               'MARVELS_DATA/MJD/done.html',
 
 
                # env var doesn't exist on archive_20190507
@@ -984,11 +986,6 @@ class Filespec:
                'PLATELIST_DIR/runs/PLATERUN/plDrillPos.html',                           # This is an SVN product
                'PLATELIST_DIR/runs/PLATERUN/plObs.html',                                # This is an SVN product
                'PLATELIST_DIR/inputs/plateInput.html',                                  # This is an SVN product
-               'STAGING_DATA/oplogs/MJD/idCCDLog.html',                                 # not released to public
-               'STAGING_DATA/oplogs/MJD/sdReport.html',                                 # not released to public
-               'STAGING_DATA/oplogs/MJD/idReport.html',                                 # not released to public
-               'STAGING_DATA/oplogs/MJD/mdReport.html',                                 # not released to public
-               'STAGING_DATA/gangs/MJD/gangs.list.html',                                # not released to public
                'CAS_LOAD/phCSV/SKYVERSION/RUN/csv_ready.html',
                'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlField.html',
                'CAS_LOAD/phCSV/SKYVERSION/RUN/sqlPhotoProfile.html',
@@ -1001,8 +998,24 @@ class Filespec:
                'BOSSTARGET_DIR/data/geometry/boss_survey.html',
                'SPINSPECT_DIR/data/NAME/spInspect.html',
                'PLATEDESIGN_DIR/defaults/plateDefault.html',
-               'CALIBPLATE_DIR/calibPlateP.html',
+               'CALIBPLATE_DIR/calibPlateP.html',                                       # This is an SVN product
+                
+                # Joel needs to fix these on archive_20190507
+               'EBOSS_FIREFLY/FIREFLY_VER/sdss_eboss_firefly.html',
+               'EBOSS_FIREFLY/FIREFLY_VER/RUN2D/sdss_firefly.html',
+               'EBOSS_FIREFLY/FIREFLY_VER/RUN2D/eboss_firefly.html',
+               'EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFly.html',
+               'EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html',
+               
+               # Needs to be renamed and redone
+               'ECAM_DATA/MJD/all_files.html',
 
+                # Make trac tickets for these
+               'STAGING_DATA/oplogs/MJD/idCCDLog.html',                                 # not released to public
+               'STAGING_DATA/oplogs/MJD/sdReport.html',                                 # not released to public
+               'STAGING_DATA/oplogs/MJD/idReport.html',                                 # not released to public
+               'STAGING_DATA/oplogs/MJD/mdReport.html',                                 # not released to public
+               'STAGING_DATA/gangs/MJD/gangs.list.html',                                # not released to public
 
 
 ]

@@ -1,65 +1,6 @@
+
+ # Put in skip list 
  
- - APOGEE_DATA_1M/MJD5/MJD5.html                                                                            # FIXED
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html                                                  # FIXED
- - BOSS_LSS_REDUX/randomN_DR10v8_SAMPLE_NS.html                                                             # FIXED
- - BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html                                       # FIXED
- - BOSS_LSS_REDUX/mask/MASK.html                                                                            # FIXED
- - BOSS_LSS_REDUX/dr11_qpm_mocks/mock_galaxy_DRX_SAMPLE_NS_QPM_IDNUMBER.html                                # FIXED
- - BOSS_LSS_REDUX/dr11_qpm_mocks/mock_random_DRX_SAMPLE_NS_QPM_NxV.html                                     # FIXED
- - BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_galaxy_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html                        # FIXED
- - BOSS_LSS_REDUX/dr11_pthalos_mocks/mock_random_DRX_SAMPLE_NS_PTHALOS_IDNUMBER.html                        # FIXED
- - BOSS_PHOTOOBJ/astromqa/CAT/RERUN/RUN/CAMCOL/astromQA.html                                                # FIXED
- - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/primary-mask.html                                            # FIXED
- - BOSS_PHOTOOBJ/atlasOutline/RERUN/RUN/CAMCOL/mask.html                                                    # FIXED
- - BOSS_PHOTOOBJ/photoz-weight/pofz.html                                                                    # FIXED
- - APOGEE_DATA/MJD5/MJD5.html                                                                               # FIXED
- - PHOTO_RESOLVE/thingIndx.html                                                                            # FIXED
- - MANGA_HI/HIPVER/spectra/HIPROP/mangaHI.html                                                              # FIXED
- - APOGEE_REDUX/APRED_VERS/TELESCOPE/PLATE_ID/MJD5/apCframe.html                                            # FIXED
- - APOGEE_REDUX/APRED_VERS/cal/trace/apTrace.html                                                           # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar.html                                # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/allStar_DR10.html                           # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/RESULTS_VERS/CANNON_VERS/cannonTrainingSet.html          # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.mdl.html             # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.ipf.html             # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.err.html             # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.wav.html             # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.spm.html             # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.frd.html             # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.err.html          # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.wav.html          # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.ipf.html          # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.frd.html          # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.spm.html          # FIXED
- - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.mdl.html          # FIXED
- - APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.dat.html  # FIXED
- - APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.unf.html  # FIXED
- - APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/p_apsABC_LINELIST_LSF_w123.hdr.html  # FIXED
- - APOGEE_REDUX/speclib/SYNTHCODE/ATMOS/ISOTOPES/ABC_LINELIST_LSF_GRID/aXXXcXXXnXXXvXXX.html                # FIXED
- - SDSS_TARGET/sdss_target_params.html                                                                      # FIXED
- - SPECTRO_REDUX/RUN2D/PLATE4/spZbest.html                                                                  # FIXED
- - SEGUE2_TARGET/raw/PLATERUN/dDESIGNID4/seguetsObjPlate.html                                               # FIXED
- - MANGA_PIPE3D/MANGADRP_VER/PIPE3D_VER/QC_MaNGA.html                                                       # FIXED
- - BOSS_QSO/DR12Q/DR12Q_superset.html                                                                       # FIXED
- - ECAM_DATA/MJD/all_files.html                                                                             ##
- - RAWDATA_DIR/MJD/MJD.md5sum.html
- - SPIDERS_ANALYSIS/spiders_quasar_bhmass.html                                                              ##
- - APOLOGS_DIR/LOG_NAME/apologs.html                                                                        # FIXED
- - MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html
- - MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html
- - REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html                                     ##
- - RAWDATA_DIR/MJD/guider/gimg.html                                                                         # FIXED
- - SSPP_REDUX/ssppPlates.html                                                                               # FIXED
- - SSPP_REDUX/RERUN/plate_mjds_done.html                                                                    # FIXED
- - SSPP_REDUX/RERUN/plate_mjds_sspp.html                                                                    # FIXED
- - MARVELS_DATA/MJD/done.html                                                                               ##
- - MARVELS_DATA/MJD/MJD.md5sum.html                                                                         # FIXED
- - SEGUE2_TARGET/raw/oldtsdirs/PLATERUN/dDESIGNID4/seguetsObjPlate.html                                     # FIXED
-## Begin. Joel needs to fix first
-- EBOSS_FIREFLY/FIREFLY_VER/sdss_eboss_firefly.html
-- EBOSS_FIREFLY/FIREFLY_VER/RUN2D/sdss_firefly.html
-- EBOSS_FIREFLY/FIREFLY_VER/RUN2D/eboss_firefly.html
-- EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFly.html
-- EBOSS_FIREFLY/FIREFLY_VER/RUN2D/SPMODELS_VER/PLATE/spFlyPlate.html
-## End. Joel needs to fix first
+ - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.err.html
+ - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.wav.html
 

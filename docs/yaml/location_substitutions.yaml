@@ -107,7 +107,7 @@ BOSS_LSS_REDUX/randoms_DR9_CMASS_NS.html: ""
 BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-specObj.html: ""
 BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS-photoObj.html: ""
 BOSS_LSS_REDUX/data_DR14_QSO_NS.html: ""
-BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html: ""
+BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-galimaging.html: "inputfiles" # datamodel inconsistent
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj-specObj.html: ""
 BOSS_LSS_REDUX/random_DR14_QSO_NS.html: "catalogs"  # datamodel inconsistent
 BOSS_LSS_REDUX/galaxy_DRX_SAMPLE_NS.html: ""
