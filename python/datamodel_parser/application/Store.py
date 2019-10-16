@@ -623,8 +623,9 @@ class Store():
         if self.ready:
             if dir and filename:
                 self.util.set_yaml_data(dir=dir,filename=filename)
-                self.yaml_data = self.util.yaml_data
                 self.ready = self.util.ready
+                if self.ready:
+                    self.yaml_data = self.util.yaml_data
         else: pass # Let Util.set_yaml_data do the error logging
 
     def set_tree_edition(self):
