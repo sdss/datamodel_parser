@@ -18,9 +18,9 @@ if not ready:
 else:
     store.set_tree_edition()
     store.set_filepaths()
-    store.set_yaml_dir()
-    store.set_yaml_data(dir=store.yaml_dir,filename='filespec.yaml')
-    store.filespec_dict_yaml = store.yaml_data
+    store.util.set_yaml_attr(attr_obj=store,
+                            attr_name='filespec_dict_yaml',
+                            filename='filespec.yaml')
     store.populate_filespec_table_yaml()
     store.exit()
 

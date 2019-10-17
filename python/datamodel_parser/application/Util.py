@@ -1655,6 +1655,28 @@ class Util:
                               'command: {}'.format(command))
         return (out,err,proc_returncode)
 
+    def set_yaml_attr(self,attr_obj=None,attr_name=None,yaml_dir=None,filename=None):
+        '''Set filepath_skip_list from directory_substitutions.yaml.'''
+        setattr(attr_obj,attr_name,None)
+        if self.ready:
+            if not yaml_dir:
+                self.set_yaml_dir()
+                self.ready = self.ready
+                yaml_dir = self.yaml_dir if self.ready else None
+            if yaml_dir and filename:
+                self.set_yaml_data(dir=yaml_dir,filename=filename)
+                self.ready = self.ready
+                yaml_data = self.yaml_data if self.ready else None
+                if yaml_data:
+                    setattr(attr_obj,attr_name,yaml_data)
+                else: pass # Let Util.set_yaml_data do the error logging
+            else:
+                self.ready = False
+                self.logger.error('Unable to set_yaml_attr.' +
+                                  'yaml_dir: {}, '.format(yaml_dir) +
+                                  'filename: {}, '.format(filename)
+                                  )
+
     def set_yaml_dir(self,yaml_dir=None):
         '''Set DATAMODEL_PARSER_YAML_DIR'''
         self.yaml_dir = None

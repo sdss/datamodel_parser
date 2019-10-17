@@ -221,11 +221,9 @@ class Filespec:
         '''Set the filename text search_string dictionary.'''
         self.filename_search_strings = None
         if self.ready:
-            if not self.yaml_dir: self.set_yaml_dir()
-            self.ready = bool(self.yaml_dir and filename)
-            if self.ready:
-                self.set_yaml_data(dir=self.yaml_dir,filename=filename)
-                self.filename_search_strings = self.yaml_data if self.yaml_data else None
+            self.util.set_yaml_attr(attr_obj=self,
+                                    attr_name='filename_search_strings',
+                                    filename=filename)
             if not self.filename_search_strings:
                 self.ready = False
                 self.logger.error('Unable to set_filename_search_strings. ' +
@@ -261,11 +259,9 @@ class Filespec:
         '''Set the filename text substitution dictionary.'''
         self.substitution_filenames = None
         if self.ready:
-            if not self.yaml_dir: self.set_yaml_dir()
-            self.ready = bool(self.yaml_dir and filename)
-            if self.ready:
-                self.set_yaml_data(dir=self.yaml_dir,filename=filename)
-                self.substitution_filenames = self.yaml_data if self.yaml_data else None
+            self.util.set_yaml_attr(attr_obj=self,
+                                    attr_name='substitution_filenames',
+                                    filename=filename)
             if not self.substitution_filenames:
                 self.ready = False
                 self.logger.error('Unable to set_substitution_filenames. ' +
@@ -291,11 +287,9 @@ class Filespec:
         '''Set the location text substitution dictionary.'''
         self.substitution_locations = None
         if self.ready:
-            if not self.yaml_dir: self.set_yaml_dir()
-            self.ready = bool(self.yaml_dir and filename)
-            if self.ready:
-                self.set_yaml_data(dir=self.yaml_dir,filename=filename)
-                self.substitution_locations = self.yaml_data if self.yaml_data else None
+            self.util.set_yaml_attr(attr_obj=self,
+                                    attr_name='substitution_locations',
+                                    filename=filename)
             if not self.substitution_locations:
                 self.ready = False
                 self.logger.error('Unable to set_substitution_locations. ' +
@@ -705,39 +699,16 @@ class Filespec:
         '''Set directory_substitution_dict from directory_substitutions.yaml.'''
         self.directory_substitution_dict = None
         if self.ready:
-            if not self.yaml_dir: self.set_yaml_dir()
-            self.ready = bool(self.yaml_dir and filename)
-            if self.ready:
-                self.set_yaml_data(dir=self.yaml_dir,filename=filename)
-                self.directory_substitution_dict = self.yaml_data if self.yaml_data else None
-            else:
-                self.ready = False
-                self.logger.error('Unable to set_directory_substitution_dict. ' +
-                                  'filename: {}'.format(filename))
+            self.util.set_yaml_attr(attr_obj=self,
+                                    attr_name='directory_substitution_dict',
+                                    filename=filename)
+            print(self.directory_substitution_dict)
+            input('pause')
             if not self.directory_substitution_dict:
                 self.ready = False
                 self.logger.error('Unable to set_directory_substitution_dict. ' +
                                   'self.directory_substitution_dict: {}'
                                     .format(self.directory_substitution_dict))
-
-    def set_yaml_dir(self,yaml_dir=None):
-        '''Set DATAMODEL_PARSER_YAML_DIR'''
-        self.yaml_dir = None
-        if self.ready:
-            self.util.set_yaml_dir(yaml_dir=yaml_dir)
-            self.yaml_dir = self.util.yaml_dir
-            self.ready = self.util.ready
-            if not self.yaml_dir: pass # Let Util.set_yaml_dir do the error logging
-
-    def set_yaml_data(self,dir=None,filename=None):
-        '''Create a data structure from the given yaml file'''
-        self.yaml_data = None
-        if self.ready:
-            if dir and filename:
-                self.util.set_yaml_data(dir=dir,filename=filename)
-                self.yaml_data = self.util.yaml_data
-                self.ready = self.util.ready
-            else: pass # Let Util.set_yaml_data do the error logging
 
     def split_example_filepaths(self):
         '''Split the path of the found path_example_file_row'''
@@ -858,11 +829,10 @@ class Filespec:
                     i = self.filepaths.index(self.options.start)
                     self.filepaths = self.filepaths[i:]
                 elif self.options.failed:
-                    self.set_yaml_dir()
-                    self.set_yaml_data(dir=self.yaml_dir,
-                                       filename='all_failed_datamodels.yaml')
-                    self.filepaths = (self.yaml_data
-                                      if self.yaml_data else None)
+                    filename='all_failed_datamodels.yaml'
+                    self.util.set_yaml_attr(attr_obj=self,
+                                            attr_name='filepaths',
+                                            filename=filename)
                 else: pass # use all filepaths
             else:
                 self.ready = False
@@ -885,14 +855,16 @@ class Filespec:
                                   'self.filepath_skip_list: {}'
                                     .format(self.filepath_skip_list))
 
-    def set_filepath_skip_list(self):
+    def set_filepath_skip_list(self,filename='filespec_skip_list.yaml'):
+        '''Set filepath_skip_list from directory_substitutions.yaml.'''
         self.filepath_skip_list = None
         if self.ready:
-            self.set_yaml_dir()
-            self.set_yaml_data(dir=self.yaml_dir,filename='filespec_skip_list.yaml')
-            self.filepath_skip_list = self.yaml_data
+            self.util.set_yaml_attr(attr_obj=self,
+                                    attr_name='filepath_skip_list',
+                                    filename=filename)
             if not self.filepath_skip_list:
                 self.ready = False
                 self.logger.error('Unable to set_filepath_skip_list. ' +
-                                  'self.filepath_skip_list: {} '
+                                  'self.filepath_skip_list: {}'
                                     .format(self.filepath_skip_list))
+
