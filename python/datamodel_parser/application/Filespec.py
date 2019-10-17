@@ -64,6 +64,7 @@ class Filespec:
             self.consistent_example_filepath        = None
             self.filepaths                          = None
             self.valid_env_variable                 = None
+            self.symlink_filepath                   = None
 
     def set_env_variable_dir(self,env_variable=None):
         '''Set the directory path associated with the datamodel environmental variable.'''
@@ -92,7 +93,7 @@ class Filespec:
             self.species = species if species else None
             if not self.species:
                 self.ready = False
-                self.logger.error('Unable to set_species.'
+                self.logger.error('Unable to initialize_species.'
                                   'species: {} '.format(species))
 
     def set_path_info(self,path_info=None):
@@ -341,8 +342,10 @@ class Filespec:
             from self.datamodel_filename'''
         self.potential_path_example_file_rows = list()
         if self.ready:
-            self.logger.debug('Attempting to set path_examples from archive db ' +
-                              'for {} '.format(self.datamodel_filepath))
+            table = 'symlink_file' if self.symlink_filepath else 'file'
+            self.logger.debug('Attempting to set path_examples ' +
+                              'from the {} table of archive db '.format(table) +
+                              'for the DataModel {} '.format(self.datamodel_filepath))
             self.ready = bool(self.ready and self.datamodel_env_variable and
                               self.session and self.tree_id and
                               self.filename_search_string and self.env_id)
@@ -550,27 +553,19 @@ class Filespec:
 #                search_string = search_string.replace('_','\_')
                 search_string = '/' + search_string
                 search_string = '%' + search_string + '%'
+                Table = SymlinkFile if self.symlink_filepath else File
+                file_query = (self.session
+                                  .query(Table)
+                                  .filter(Table.env_id == self.env_id)
+                                  .filter(Table.directory_id == directory_id)
+                                  .filter(Table.location.like(search_string))
+                              )
                 if limit:
-                    try:
-                        self.files = (self.session
-                                          .query(File)
-                                          .filter(File.env_id == self.env_id)
-                                          .filter(File.directory_id == directory_id)
-                                          .filter(File.location.like(search_string))
-                                          .limit(limit)
-                                          .all())
-                    except:
-                        self.files = None
+                    try:    self.files = file_query.limit(limit).all()
+                    except: self.files = None
                 else:
-                    try:
-                        self.files = (self.session
-                                          .query(File)
-                                          .filter(File.env_id == self.env_id)
-                                          .filter(File.directory_id == directory_id)
-                                          .filter(File.location.like(search_string))
-                                          .all())
-                    except:
-                        self.files = None
+                    try:    self.files = file_query.all()
+                    except: self.files = None
 
             else:
                 self.ready = False

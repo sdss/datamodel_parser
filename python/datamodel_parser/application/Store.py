@@ -111,6 +111,8 @@ class Store():
             self.svn_products                       = None
             self.path_info                          = None
             self.filespec                           = None
+            self.tree_id_range                      = None
+            self.filepaths                          = None
 
     def set_filespec(self):
         if self.ready:
@@ -119,16 +121,21 @@ class Store():
     def populate_filespec_table_archive(self):
         '''Set self.filespec_dict for each datamodel path in self.filepaths.'''
         if self.ready:
-            if self.filepaths and self.filespec:
-                self.restrict_filespec_filepaths()
+            self.restrict_filespec_filepaths() # tests for self.filespec and self.filepaths
+            if self.ready:
+                self.set_tree_id_range()
+                self.set_symlink_filepath_list()
+                self.ready = self.ready and self.filespec.ready
+            if self.ready:
                 if self.filepaths:
                     for self.filepath in self.filepaths:
                         if self.ready:
                             self.initialize_filespec()
-                            self.set_tree_id_range()
                         if self.ready:
-                            if self.filespec.valid_env_variable:
-                                self.find_consistent_example_filepaths()
+                            self.filespec.set_valid_env_variable()
+                            self.ready = self.filespec.ready
+                        if self.ready and self.filespec.valid_env_variable:
+                            self.find_consistent_example_filepaths()
                     # report failures
                     self.logger.info(
                         'failed_datamodel_filepaths: \n' +
@@ -138,12 +145,6 @@ class Store():
                 else:
                     self.logger.warning('Empty self.filepaths: {}. '.format(self.filepaths) +
                                         'All filepaths might be in self.filespec.filepath_skip_list.')
-            else:
-                self.ready = False
-                self.logger.error('Unable to populate_filespec_table_archive. ' +
-                                  'self.filepaths: {}\n'.format(self.filepaths) +
-                                  'self.filespec: {}'.format(self.filespec)
-                                  )
 
     def restrict_filespec_filepaths(self):
         if self.ready:
@@ -160,45 +161,124 @@ class Store():
                                   'self.filepaths: {}, '.format(self.filepaths)
                                   )
 
+    def set_symlink_filepath_list(self,filename='filespec_symlink_list.yaml'):
+        '''Set symlink_filepath_list from directory_substitutions.yaml.'''
+        self.symlink_filepath_list = None
+        if self.ready:
+            self.util.set_yaml_attr(attr_obj=self,
+                                    attr_name='symlink_filepath_list',
+                                    filename=filename)
+            if not self.symlink_filepath_list:
+                self.ready = False
+                self.logger.error('Unable to set_symlink_filepath_list. ' +
+                                  'self.symlink_filepath_list: {}'
+                                    .format(self.symlink_filepath_list))
+
     def find_consistent_example_filepaths(self):
         '''For each filepath, find a consistent example filepath
             and populate filespec table.'''
         if self.ready:
+                self.filespec.symlink_filepath = (
+                    True if self.filepath in self.symlink_filepath_list else False)
+                self.found_consistent_example_filepath = False
+                self.find_species_and_populate_filespec_tables()
+                if not self.found_consistent_example_filepath:
+                    # if not found in the file table then look in the symlink_file table
+                    if not self.filespec.symlink_filepath:
+                        self.filespec.symlink_filepath = True
+                        self.find_species_and_populate_filespec_tables()
+                        if not self.found_consistent_example_filepath:
+                            self.append_failed_datamodel_filepaths()
+                    else:
+                        self.append_failed_datamodel_filepaths()
+
+    def find_species_and_populate_filespec_tables(self):
+        if self.ready:
             if self.tree_id_range:
-                found_consistent_example_filepath = False
                 for self.filespec.tree_id in self.tree_id_range:
-                    if self.ready:
-                        self.filespec.found_consistent_example_filepath = False
-                        self.filespec.set_species()
-                        self.ready = self.ready and self.filespec.ready
-                    if self.ready:
-                        if self.filespec.found_consistent_example_filepath:
-                            found_consistent_example_filepath = True
-                            self.filespec_dict = self.filespec.species
-                            if self.options and not self.options.test:
-                                self.populate_file_path_tables()
-                                self.populate_filespec_table()
-                            # log results
-                            self.logger.debug(
-                                'self.filespec.substitution_filepath: \n' +
-                                dumps(self.filespec.substitution_filepath,indent=1) + '\n'
-                                'self.filespec.consistent_example_filepath: \n' +
-                                dumps(self.filespec.consistent_example_filepath,indent=1)
-                                )
-                            self.logger.info('self.filespec.species: \n' + dumps(self.filespec.species,indent=1))
-                            break # remove this to find examples in all dr's
-                if not found_consistent_example_filepath:
-                    self.filespec.failed_datamodel_filepaths.append(self.filepath)
-                    self.logger.warning('Unable to set_species_values. ' +
-                                        'self.filespec.substitution_filepath: {}, '
-                                            .format(self.filespec.substitution_filepath) +
-                                        'self.filespec.consistent_example_filepath: {}, '
-                                            .format(self.filespec.consistent_example_filepath)
-                                      )
+                    self.set_species()
+                    if self.found_consistent_example_filepath:
+                        self.populate_filespec_tables()
+                        break # remove this to find examples in all dr's
             else:
                 self.ready = False
-                self.logger.error('Unable to find_consistent_example_filepaths. ' +
+                self.logger.error('Unable to find_species_and_populate_filespec_tables. ' +
                                   'self.tree_id_range: {} '.format(self.tree_id_range))
+
+    def set_species(self):
+        if self.ready:
+            self.filespec.found_consistent_example_filepath = False
+            self.filespec.set_species()
+            self.ready = self.ready and self.filespec.ready
+        if self.ready:
+            self.found_consistent_example_filepath = self.filespec.found_consistent_example_filepath
+
+    def populate_filespec_tables(self):
+        if self.ready:
+            self.filespec_dict = self.filespec.species
+            if self.options and not self.options.test:
+                self.populate_file_path_tables()
+                self.populate_filespec_table()
+            # log results
+            self.logger.debug(
+                'self.filespec.substitution_filepath: \n' +
+                dumps(self.filespec.substitution_filepath,indent=1) + '\n'
+                'self.filespec.consistent_example_filepath: \n' +
+                dumps(self.filespec.consistent_example_filepath,indent=1)
+                )
+            self.logger.info('self.filespec.species: \n' + dumps(self.filespec.species,indent=1))
+
+    def append_failed_datamodel_filepaths(self):
+        if self.ready:
+            self.filespec.failed_datamodel_filepaths.append(self.filepath)
+            self.logger.warning('Unable to set_species_values. ' +
+                                'self.filespec.substitution_filepath: {}, '
+                                    .format(self.filespec.substitution_filepath) +
+                                'self.filespec.consistent_example_filepath: {}, '
+                                    .format(self.filespec.consistent_example_filepath)
+                              )
+
+
+#    def find_consistent_example_filepaths(self):
+#        '''For each filepath, find a consistent example filepath
+#            and populate filespec table.'''
+#        if self.ready:
+#            if self.tree_id_range:
+#                self.found_consistent_example_filepath = False
+#                for self.filespec.tree_id in self.tree_id_range:
+#                    if self.ready:
+#                        self.filespec.found_consistent_example_filepath = False
+#                        self.filespec.set_species()
+#                        self.ready = self.ready and self.filespec.ready
+#                    if self.ready:
+#                        if self.filespec.found_consistent_example_filepath:
+#                            self.found_consistent_example_filepath = True
+#                            self.filespec_dict = self.filespec.species
+#                            if self.options and not self.options.test:
+#                                self.populate_file_path_tables()
+#                                self.populate_filespec_table()
+#                            # log results
+#                            self.logger.debug(
+#                                'self.filespec.substitution_filepath: \n' +
+#                                dumps(self.filespec.substitution_filepath,indent=1) + '\n'
+#                                'self.filespec.consistent_example_filepath: \n' +
+#                                dumps(self.filespec.consistent_example_filepath,indent=1)
+#                                )
+#                            self.logger.info('self.filespec.species: \n' + dumps(self.filespec.species,indent=1))
+#                            break # remove this to find examples in all dr's
+#                if not self.found_consistent_example_filepath:
+#                    self.filespec.failed_datamodel_filepaths.append(self.filepath)
+#                    self.logger.warning('Unable to set_species_values. ' +
+#                                        'self.filespec.substitution_filepath: {}, '
+#                                            .format(self.filespec.substitution_filepath) +
+#                                        'self.filespec.consistent_example_filepath: {}, '
+#                                            .format(self.filespec.consistent_example_filepath)
+#                                      )
+#            else:
+#                self.ready = False
+#                self.logger.error('Unable to find_consistent_example_filepaths. ' +
+#                                  'self.tree_id_range: {} '.format(self.tree_id_range))
+
 
     def set_tree_id_range(self):
         '''Set tree_ids to search for path_example.'''
@@ -222,7 +302,6 @@ class Store():
                 if self.ready:
                     self.filespec.set_path_info(path_info=self.path_info)
                     self.filespec.initialize_species(species=self.filespec_dict)
-                    self.filespec.set_valid_env_variable()
             else:
                 self.logger.error('Unable to initialize_filespec. ' +
                                   'self.filespec: {} '.format(self.filespec))
