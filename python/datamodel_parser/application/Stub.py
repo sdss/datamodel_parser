@@ -7,7 +7,7 @@ Licensed under a 3-clause BSD license.
 
 Revision History:
     Initial Version: 2016-03-07 17:35:14 by Brian Cherinka
-    Last Modified On: 2016-03-07 17:35:14 by Brian
+    Last Modified On: 2019-07-17 15:11 by N Benjamin Murphy
 
 '''
 from __future__ import division, print_function

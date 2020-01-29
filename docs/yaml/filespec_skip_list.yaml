@@ -12,6 +12,7 @@
  - APOGEE_OBSOLETE/APOGEE_ASPCAP/VERS4.2/lib/aspcapSynth.html
  - MARVELS_REDUX/RERUN_V001/ASCII/RXXXDXXX/RXXXDXXX.html
  - RAWDATA_DIR/MJD/MJD.md5sum.html
+ - MARVELS_REDUX/RERUN_V003/ASCII/PLATENAME/PLATENAME.html
 
 #### BOSSTILELIST_DIR does not exist on archive_20190507####
 #### need `module load bosstilelist` on sas ####
@@ -44,6 +45,7 @@
  - PHOTO_REDUX/runList.html
  - PHOTO_REDUX/RERUN/RUN/objcs/CAMCOL/fpC.html # deprecated in SDSS-IV
  - SPIDERS_ANALYSIS/spiders_quasar_bhmass.html
+ - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.err.html
 
 # not found on the sas. not found on archive_20190507
  - BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html
@@ -54,7 +56,7 @@
  - SSPP_REDUX/duplicates/dup.html
  - REDMONSTER_SPECTRO_REDUX/RUN2D/REDMONSTER_VER/PLATE4/redmonster.html
  - MARVELS_DATA/MJD/done.html
-
+ - APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.wav.html
 
 # env var doesn - t exist on archive_20190507
  - MANGAPREIM_DIR/data/DESIGNID6XX/DESIGNID/preimage.html                # This is an SVN product X

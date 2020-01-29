@@ -1635,25 +1635,30 @@ class Util:
                                   )
         return tables
 
-    def execute_command(self, command=None):
+    def execute_command(self, command=None, argument=None):
         '''Execute the passed terminal command.'''
         (out,err,proc_returncode) = (None,None,None)
-        if command:
-            proc = Popen(command, stdout=PIPE, stderr=PIPE)
-            if proc:
-                (out, err) = proc.communicate() if proc else (None,None)
-                out = out.decode("utf-8") if isinstance(out,bytes) else out
-                err = err.decode("utf-8") if isinstance(err,bytes) else err
-                proc_returncode = proc.returncode if proc else None
+        if self.ready:
+            if command:
+                proc = Popen(command, stdout=PIPE, stderr=PIPE)
+                if proc:
+                    (out, err) = proc.communicate() if proc else (None,None)
+                    proc_returncode = proc.returncode if proc else None
+                    if argument:
+                        out = out.decode("utf-8",argument) if isinstance(out,bytes) else out
+                        err = err.decode("utf-8",argument) if isinstance(err,bytes) else err
+                    else:
+                        out = out.decode("utf-8") if isinstance(out,bytes) else out
+                        err = err.decode("utf-8") if isinstance(err,bytes) else err
+                else:
+                    self.ready = False
+                    self.logger.error('Unable to execute_command. ' +
+                                      'proc: {}'.format(proc))
             else:
                 self.ready = False
                 self.logger.error('Unable to execute_command. ' +
-                                  'proc: {}'.format(proc))
-        else:
-            self.ready = False
-            self.logger.error('Unable to execute_command. ' +
-                              'command: {}'.format(command))
-        return (out,err,proc_returncode)
+                                  'command: {}'.format(command))
+            return (out,err,proc_returncode)
 
     def set_yaml_attr(self,attr_obj=None,attr_name=None,yaml_dir=None,filename=None):
         '''Set filepath_skip_list from directory_substitutions.yaml.'''

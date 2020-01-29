@@ -238,48 +238,6 @@ class Store():
                                     .format(self.filespec.consistent_example_filepath)
                               )
 
-
-#    def find_consistent_example_filepaths(self):
-#        '''For each filepath, find a consistent example filepath
-#            and populate filespec table.'''
-#        if self.ready:
-#            if self.tree_id_range:
-#                self.found_consistent_example_filepath = False
-#                for self.filespec.tree_id in self.tree_id_range:
-#                    if self.ready:
-#                        self.filespec.found_consistent_example_filepath = False
-#                        self.filespec.set_species()
-#                        self.ready = self.ready and self.filespec.ready
-#                    if self.ready:
-#                        if self.filespec.found_consistent_example_filepath:
-#                            self.found_consistent_example_filepath = True
-#                            self.filespec_dict = self.filespec.species
-#                            if self.options and not self.options.test:
-#                                self.populate_file_path_tables()
-#                                self.populate_filespec_table()
-#                            # log results
-#                            self.logger.debug(
-#                                'self.filespec.substitution_filepath: \n' +
-#                                dumps(self.filespec.substitution_filepath,indent=1) + '\n'
-#                                'self.filespec.consistent_example_filepath: \n' +
-#                                dumps(self.filespec.consistent_example_filepath,indent=1)
-#                                )
-#                            self.logger.info('self.filespec.species: \n' + dumps(self.filespec.species,indent=1))
-#                            break # remove this to find examples in all dr's
-#                if not self.found_consistent_example_filepath:
-#                    self.filespec.failed_datamodel_filepaths.append(self.filepath)
-#                    self.logger.warning('Unable to set_species_values. ' +
-#                                        'self.filespec.substitution_filepath: {}, '
-#                                            .format(self.filespec.substitution_filepath) +
-#                                        'self.filespec.consistent_example_filepath: {}, '
-#                                            .format(self.filespec.consistent_example_filepath)
-#                                      )
-#            else:
-#                self.ready = False
-#                self.logger.error('Unable to find_consistent_example_filepaths. ' +
-#                                  'self.tree_id_range: {} '.format(self.tree_id_range))
-
-
     def set_tree_id_range(self):
         '''Set tree_ids to search for path_example.'''
         self.tree_id_range = list()

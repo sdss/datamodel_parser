@@ -315,8 +315,6 @@ class Filespec:
         self.extension = None
         if self.ready:
             if not self.file_extensions: self.set_file_extensions()
-#            print('filename: %r' % filename)
-#            input('pause')
             if filename and self.file_extensions:
                 found_ext = False
                 for ext in self.file_extensions:
@@ -330,7 +328,7 @@ class Filespec:
                         break
                 self.extension = ext if found_ext else str()
             if self.extension is None:
-                #self.ready = False
+                #self.ready = False # this is not a fatal error
                 self.extension = str()
                 self.logger.warning('Unable to set_extension. '
                                     'Please manually add extension to Filespec.file_extensions. ' +
@@ -761,10 +759,10 @@ class Filespec:
         self.file_extensions = ['dat.gz','fits.gz','fits.bz2','fit.gz','tar.gz',
                                 'log.gz','log.html','rdzw.gz',
                                 'dat','fits','fit','tar','log','rdzw',
+                                'md5sum','err','frd','ipf','mdl','spm','wav',
                                 'whrl','png','ply','apz','par','hdr','o','e',
                                 'sha1sum','ps','txt','html','model','csv','mp4',
                                 'pdf','list','batch','batch.wrap.sh','condor','gif',
-                                'md5sum',
                                 ]
 
     def set_substitution_tree_paths(self):

@@ -66,7 +66,7 @@ BOSS_LSS_REDUX/randomN_DRX_SAMPLE_NS.html: "random{catalog}-{dr}{version}-{sampl
 BOSS_LSS_REDUX/galaxy_DR10v8_SAMPLE_NS.html: "galaxy_{dr}{version}_{sample}_{ns}.fits.gz"
 BOSS_LSS_REDUX/trimmed-collate-SAMPLE-DRX.html: "trimmed-collate-{sample}-{dr}.fits.gz"
 BOSS_LSS_REDUX/mask_DRX_SAMPLE_NS.html: "mask_{dr}_QSO_{ns}.fits"
-BOSS_LSS_REDUX/data_DR14_LRG_NS.html: "data_{dr}_LRG_{ns}.fits.gz" # not found on archive_20190507
+BOSS_LSS_REDUX/data_DR14_LRG_NS.html: "data_{dr}_LRG_{ns}.fits.gz"
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN.html: "bosstile-final-collated-boss2-boss{num}.fits.gz"
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-photoObj.html: "bosstile-final-collated-boss2-boss{num}-photoObj.fits.gz"
 BOSS_LSS_REDUX/bosstile-final-collated-boss2-bossN-specObj.html: "bosstile-final-collated-boss2-bossN-specObj.fits.gz"

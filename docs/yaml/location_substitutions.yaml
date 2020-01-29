@@ -364,7 +364,7 @@ APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FI
 APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.wav.html: "{apred}/{apstar}/{aspcap}/{location}/class_{class}"
 APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.spm.html: "{apred}/{apstar}/{aspcap}/{location}/class_{class}"
 APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/class_CLASS/CLASS-FIELD.frd.html: "{apred}/{apstar}/{aspcap}/{location}/class_{class}"
-APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.err.html: "{apred}/{apstar}/{aspcap}/{location}/elem_{elem}/spectra" # symlink_file
+APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.err.html: "{apred}/{apstar}/{aspcap}/{location}/elem_{elem}"
 APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.wav.html: "{apred}/{apstar}/{aspcap}/{location}/elem_{elem}"
 APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.ipf.html: "{apred}/{apstar}/{aspcap}/{location}/elem_{elem}"
 APOGEE_REDUX/APRED_VERS/APSTAR_VERS/ASPCAP_VERS/LOCATION_ID/elem_ELEM/ELEM-CLASS-FIELD.frd.html: "{apred}/{apstar}/{aspcap}/{location}/elem_{elem}"
