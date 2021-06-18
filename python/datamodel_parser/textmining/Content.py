@@ -23,6 +23,15 @@ class Content:
         else: 
             print('Cannot find %r' % self.yaml_file)
             self.yaml_file = None
+            
+    def set_cache_from_yaml_file(self):
+        if self.yaml_file:
+            with open(self.yaml_file, 'r') as file:
+                try:
+                    self.cache = yaml.safe_load(file)
+                except yaml.YAMLError as e:
+                    print(e)
+                    self.cache = None
 
     def set_file_id(self):
         #select id from file where name ilike 'manga-rss%';
