@@ -14,7 +14,7 @@ class Content:
         self.set_data()
 
     def set_yaml_dir(self):
-        try: self.yaml_dir = join(environ['DATAMODEL_DIR'], 'products', 'yaml')
+        try: self.yaml_dir = join(environ['DATAMODEL_DIR'], 'datamodel', 'products', 'yaml')
         except: self.yaml_dir = None
 
     def set_yaml_file(self):
