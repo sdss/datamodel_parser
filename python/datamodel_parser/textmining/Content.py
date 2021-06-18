@@ -1,6 +1,7 @@
 from datamodel_parser.models.datamodel import Intro, File
 from os.path import join, exists
 from os import environ
+import yaml
 
 
 class Content:
