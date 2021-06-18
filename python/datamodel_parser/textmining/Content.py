@@ -6,11 +6,8 @@ class Content:
     def __init__(self, name = None, htmlname = None):
         self.name = name
         self.htmlname = htmlname
-        self.data = {}
         self.set_file_id()
-        self.set_description_from_intro()
-        self.set_generated_by_from_intro()
-        self.set_naming_convention_from_intro()
+        self.set_data()
 
     def set_file_id(self):
         #select id from file where name ilike 'manga-rss%';
@@ -21,6 +18,12 @@ class Content:
     def set_intro_for_heading_title(self, heading_title = None):
         try: self.intro = Intro.query.filter(Intro.file_id==self.file_id).filter(Intro.heading_title == heading_title).one() if self.file_id and heading_title else None
         except: self.intro = None
+
+    def set_data(self):
+        self.data = {}
+        self.set_description_from_intro()
+        self.set_generated_by_from_intro()
+        self.set_naming_convention_from_intro()
 
     def set_description_from_intro(self):
         self.set_intro_for_heading_title(heading_title = 'General Description')
