@@ -8,7 +8,7 @@ class Content:
         self.htmlname = htmlname
         self.set_file_id()
         self.set_intro()
-        self.set_description_from_intro()
+        #self.set_description_from_intro()
 
     def set_file_id(self):
         #select id from file where name ilike 'manga-rss%';
