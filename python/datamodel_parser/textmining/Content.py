@@ -62,6 +62,16 @@ class Content:
     def set_header_from_hdu(self):
         self.header = Header.query.filter(Header.hdu_id==self.hdu.id).one() if self.hdu else None
 
+    def set_keywords_from_header(self):
+        self.keywords = Keyword.query.filter(Keyword.header_id==self.header.id).order_by(Keyword.position).all() if self.header else None
+
+    def test(self): #I create a loop instead of test
+        self.hdu = self.hdu_list[1]
+        self.set_header_from_hdu()
+        self.set_keywords_from_header()
+        for keyword in self.keywords:
+            print('keyword=%r' % keyword.comment)
+
     def set_data(self):
         self.data = {}
         self.set_description_from_intro()
