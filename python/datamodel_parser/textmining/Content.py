@@ -11,8 +11,10 @@ class Content:
         self.htmlname = htmlname
         self.set_yaml_dir()
         self.set_yaml_file()
+        self.set_cache_from_yaml_file()
         self.set_file_id()
         self.set_data()
+
 
     def set_yaml_dir(self):
         try: self.yaml_dir = join(environ['DATAMODEL_DIR'], 'datamodel', 'products', 'yaml')
@@ -24,6 +26,18 @@ class Content:
         else: 
             print('Cannot find %r' % self.yaml_file)
             self.yaml_file = None
+            
+    def save_yaml_file(self):
+        temp_file = '%s.temp' % self.yaml_file #We will eventually remove once we have this save working right
+        if self.yaml_file and exists(self.yaml_file):
+            with open('data.yml', 'w') as file:
+                yaml.dump(self.cache, self.temp_file, default_flow_style=False)
+            print('Found %s' % self.yaml_file)
+        else: 
+            print('Cannot find %r' % self.yaml_file)
+            self.yaml_file = None
+            
+
             
     def set_cache_from_yaml_file(self):
         if self.yaml_file:
