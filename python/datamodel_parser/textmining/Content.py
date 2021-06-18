@@ -1,4 +1,6 @@
 from datamodel_parser.models.datamodel import Intro, File
+from os.path import join, exists
+from os import environ
 
 
 class Content:
@@ -6,8 +8,21 @@ class Content:
     def __init__(self, name = None, htmlname = None):
         self.name = name
         self.htmlname = htmlname
+        self.set_yaml_dir()
+        self.set_yaml_file()
         self.set_file_id()
         self.set_data()
+
+    def set_yaml_dir(self):
+        try: self.yaml_dir = join(environ['DATAMODEL_DIR'], 'products', 'yaml')
+        except: self.yaml_dir = None
+
+    def set_yaml_file(self):
+        self.yaml_file = join(self.yaml_dir, '%s.yaml' % self.name) if self.name and self.yaml_dir else None
+        if self.yaml_file and exists(self.yaml_file): print('Found %s' % self.yaml_file)
+        else: 
+            print('Cannot find %r' % self.yaml_file)
+            self.yaml_file = None
 
     def set_file_id(self):
         #select id from file where name ilike 'manga-rss%';
@@ -36,4 +51,5 @@ class Content:
     def set_naming_convention_from_intro(self):
         self.set_intro_for_heading_title(heading_title = 'Naming Convention')
         self.data['naming_convention'] = self.intro.description
+        
         
