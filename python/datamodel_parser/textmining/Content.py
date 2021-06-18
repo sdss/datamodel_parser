@@ -1,4 +1,4 @@
-from datamodel_parser.models.datamodel import Intro, File, Hdu, Header
+from datamodel_parser.models.datamodel import Intro, File, Hdu, Header, Keyword
 from os.path import join, exists
 from os import environ
 import yaml
