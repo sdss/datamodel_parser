@@ -55,9 +55,9 @@ class Content:
         try: self.intro = Intro.query.filter(Intro.file_id==self.file_id).filter(Intro.heading_title == heading_title).one() if self.file_id and heading_title else None
         except: self.intro = None
 
-    def set_hdu(self):
-        try: self.hdu = Hdu.query.filter(Hdu.file_id==self.file_id).one() if self.file_id else None
-        except: self.hdu = None
+    def set_hdu_list(self):
+        try: self.hdu_list = Hdu.query.filter(Hdu.file_id==self.file_id).order_by(Hdu.number).all() if self.file_id else None
+        except: self.hdu_list = None
 
     def set_data(self):
         self.data = {}
