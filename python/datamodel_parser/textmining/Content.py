@@ -1,4 +1,4 @@
-from datamodel_parser.models.datamodel import Intro, File
+from datamodel_parser.models.datamodel import Intro, File, Hdu, Header
 from os.path import join, exists
 from os import environ
 import yaml
@@ -13,8 +13,7 @@ class Content:
         self.set_yaml_file()
         self.set_cache_from_yaml_file()
         self.set_file_id()
-        self.set_data()
-
+        self.set_data()        
 
     def set_yaml_dir(self):
         try: self.yaml_dir = join(environ['DATAMODEL_DIR'], 'datamodel', 'products', 'yaml')
@@ -32,12 +31,10 @@ class Content:
         if self.yaml_file and exists(self.yaml_file):
             with open(temp_file, 'w') as file:
                 yaml.dump(self.cache, file, default_flow_style=False)
-            print('Found %s' % self.yaml_file)
+            print('Updated %s' % self.yaml_file)
         else: 
-            print('Cannot find %r' % self.yaml_file)
+            print('Failed to update %r' % self.yaml_file)
             self.yaml_file = None
-            
-
             
     def set_cache_from_yaml_file(self):
         if self.yaml_file:
@@ -57,6 +54,10 @@ class Content:
     def set_intro_for_heading_title(self, heading_title = None):
         try: self.intro = Intro.query.filter(Intro.file_id==self.file_id).filter(Intro.heading_title == heading_title).one() if self.file_id and heading_title else None
         except: self.intro = None
+
+    def set_hdu(self):
+        try: self.hdu = Hdu.query.filter(Hdu.file_id==self.file_id).one() if self.file_id else None
+        except: self.hdu = None
 
     def set_data(self):
         self.data = {}
