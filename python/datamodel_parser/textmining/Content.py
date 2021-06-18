@@ -13,7 +13,8 @@ class Content:
         self.set_yaml_file()
         self.set_cache_from_yaml_file()
         self.set_file_id()
-        self.set_data()        
+        self.set_data()
+        self.set_hdu_list()        
 
     def set_yaml_dir(self):
         try: self.yaml_dir = join(environ['DATAMODEL_DIR'], 'datamodel', 'products', 'yaml')
@@ -56,8 +57,10 @@ class Content:
         except: self.intro = None
 
     def set_hdu_list(self):
-        try: self.hdu_list = Hdu.query.filter(Hdu.file_id==self.file_id).order_by(Hdu.number).all() if self.file_id else None
-        except: self.hdu_list = None
+        self.hdu_list = Hdu.query.filter(Hdu.file_id==self.file_id).order_by(Hdu.number).all() if self.file_id else None
+        
+    def set_header_from_hdu(self):
+        self.header = Header.query.filter(Header.hdu_id==self.hdu.id).one() if self.hdu else None
 
     def set_data(self):
         self.data = {}
