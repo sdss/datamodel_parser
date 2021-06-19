@@ -30,8 +30,10 @@ class Content:
     def write_cache_to_yaml_file(self):
         temp_file = '%s.temp' % self.yaml_file #We will eventually remove once we have this save working right
         if self.yaml_file and exists(self.yaml_file):
-            with open(temp_file, 'w') as file:
-                yaml.dump(self.cache, file, default_flow_style=False)
+            '''with open(temp_file, 'w') as file:
+                yaml.dump(self.cache, file, default_flow_style=False)'''
+            with open(temp_file, 'w') as f:
+                f.write(yaml.dump(cache, sort_keys=False)
             print('Updated %s' % self.yaml_file)
         else: 
             print('Failed to update %r' % self.yaml_file)
