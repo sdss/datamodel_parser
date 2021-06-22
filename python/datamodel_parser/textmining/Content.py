@@ -14,6 +14,7 @@ class Content:
         self.set_cache_from_yaml_file()
         self.set_file_id()
         self.set_data()
+        self.set_yaml_description()
         self.set_hdu_list()        
 
     def set_yaml_dir(self):
@@ -91,4 +92,6 @@ class Content:
         self.set_intro_for_heading_title(heading_title = 'Naming Convention')
         self.data['naming_convention'] = self.intro.description
         
+    def set_yaml_description(self):
+		self.cache['general']['description'] = self.data['description']        
         
