@@ -80,18 +80,19 @@ class Content:
     def set_header_from_hdu(self):
         self.header = Header.query.filter(Header.hdu_id==self.hdu.id).one() if self.hdu else None
 
+    def set_data_from_hdu(self):
+        self.data = Data.query.filter(Data.hdu_id==self.hdu.id).one() if self.hdu else None
+
     def set_keywords_from_header(self):
         self.keywords = Keyword.query.filter(Keyword.header_id==self.header.id).order_by(Keyword.position).all() if self.header else None
+        self.database_data['hdu_keywords'][self.hdu.title.split(': ')[-1]] = {keyword:self.keywords[keyword].comment for keyword in self.keywords}
 
-    def test(self): #I create a loop instead of test
-        self.hdu = self.hdu_list[1]
-        self.set_header_from_hdu()
-        self.set_keywords_from_header()
-        for keyword in self.keywords:
-            print('keyword=%r' % keyword.comment)
+    def set_columns_from_header(self):
+        self.columns = Columns.query.filter(Columns.header_id==self.header.id).order_by(Columns.position).all() if self.header else None
+        self.database_data['hdu_columns'][self.hdu.title.split(': ')[-1]] = {column:self.columns[column].description for column in self.columns}
 
     def set_database_descriptions(self):
-        self.database_data = {'general':{}, 'hdus':{}}
+        self.database_data = {'general':{}, 'hdus':{}, 'hdu_keywords':{}}
         self.set_description_from_intro()
         self.set_generated_by_from_intro()
         self.set_naming_convention_from_intro()
@@ -118,12 +119,40 @@ class Content:
     def set_yaml_generated_by(self):
         self.cache['general']['generated_by'] = self.database_data['general']['generated_by']
 
+    def set_hdu_description(self):
+        self.database_data['hdus'][self.hdu.title.split(': ')[-1]] = self.hdu.description
+
     def set_hdu_descriptions_from_hdu(self):
-	for self.hdu in self.hdu_list: self.database_data['hdus'][self.hdu.title.split(': ')[-1]] = self.hdu.description
+	for self.hdu in self.hdu_list:
+            self.set_hdu_description()
+            self.set_header_from_hdu()
+            self.set_keywords_from_header()
+            self.set_data_from_hdu()
+            self.set_columns_from_header()
 
     def set_yaml_hdu_descriptions(self):
-        for hdu in self.database_data['hdus'].keys():
-            for release in self.cache['releases'].keys():
-                if hdu in self.cache['release
+        for self.yaml_release in self.cache['releases'].keys():
+            for self.yaml_hdu in self.cache['releases'][self.yaml_release]['hdus'].keys():
+                self.set_yaml_hdu_description()
+                if 'header' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]: self.set_yaml_hdu_keywords()
+                if 'columns' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]: self.set_yaml_hdu_columns()
+
+
+    def set_yaml_hdu_description(self):
+        if self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name'] in self.database_data['hdus']: self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['description'] = self.database_data['hdus'][self.yaml_hdu]
+        else: print('Did not find', self.yaml_hdu, self.yaml_release, 'in cache to match with database')
+
+    def set_yaml_hdu_keywords(self):
+        for header_index, keyword in enumerate(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header']):
+            if keyword['name'] in self.database_data['hdu_keywords'][self.yaml_hdu]: self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header'][header_index]['comment'] = self.database_data['hdu_keywords'][self.yaml_hdu][keyword['name']]
+
+    def set_yaml_hdu_columns(self):
+        for header_index, column in enumerate(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns']):
+            if column['name'] in self.database_data['hdu_keywords'][self.yaml_hdu]: self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header'][header_index]['description'] = self.database_data['hdu_keywords'][self.yaml_hdu][column['name']]
+                
+                
+                    
+
+
         
         
