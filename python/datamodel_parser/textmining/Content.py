@@ -1,4 +1,4 @@
-from datamodel_parser.models.datamodel import Intro, File, Hdu, Header, Keyword, Data, Column
+from datamodel_parser.models.datamodel import Intro, File, Hdu, Header, Keyword, Data, Column, Location, Env
 from os.path import join, exists
 from os import environ
 import yaml
@@ -19,8 +19,9 @@ class Content:
             self.set_file_id()
             self.set_hdu_list()
             self.set_database_descriptions()
-            self.check_database_loaded()
-            if self.database_entries_loaded:
+            #self.check_database_loaded()
+            #if self.database_entries_loaded:
+            if True:
                 self.set_yaml_description()
                 self.set_yaml_generated_by()
                 self.set_yaml_naming_convention()
@@ -65,17 +66,65 @@ class Content:
 
     def set_file_id(self):
         """Set datamodel file identifier from database"""
-        #select id from file where name ilike 'manga-rss%';
-        try: self.file = File.query.filter(File.name.ilike('%s%%' % self.htmlname)).one() if self.htmlname else None
-        except Exception as e:
-            self.file = None
-            self.append_to_log('Failed to load File: %s' %e, 'failed')
+        if self.htmlname is None: self.append_to_log('Failed to load File: HTMLNAME is None', 'failed')
+        else:
+            file = File.query.filter(File.name.like('%s'% (self.htmlname+r'%')))
+            if file.count() == 1: self.file = file.one()
+            elif file.count() > 1:
+                for index, f in enumerate(file.all()):
+                    loc = Location.query.get(f.location_id)
+                    env = Env.query.get(loc.env_id)
+                    print('FILE>', index, 'Name', f.name, 'Location', loc.path, 'Env', env.variable)
+                select = int(input('Select 0,1,etc for correct file:'))
+                self.file = file.all()[select]
+            else:
+                self.file = None
+                self.append_to_log('Failed to load File: %s' %e, 'failed')
         self.file_id = self.file.id if self.file else None
 
     def set_hdu_list(self):
         """Set HDU list related to datamodel"""
         self.hdu_list = Hdu.query.filter(Hdu.file_id==self.file_id).order_by(Hdu.number).all() if self.file_id else None
-        if self.hdu_list is None: self.append_to_log('HDUs not in database', 'failed')
+        if self.hdu_list is None:
+            self.append_to_log('HDUs not in database', 'failed')
+            self.weights = []
+        else: self.weight_hdu_list()
+
+    def weight_hdu_list(self):
+        "Weight the likelyness that each cache hdu is a certain hdu recorded in the database"""
+        self.hdu_weight = {}
+        for cache_release in self.cache['releases'].keys():
+            for cache_hdu in self.cache['releases'][cache_release]['hdus'].keys():
+                for hdu in self.hdu_list:
+                    if cache_release not in self.hdu_weight: self.hdu_weight[cache_release] = {cache_hdu:{hdu.title.split(': ')[-1]:0}}
+                    if hdu.title.split(': ')[-1] == self.cache['releases'][cache_release]['hdus'][cache_hdu]['name']:
+                        self.hdu_weight[cache_release][cache_hdu][hdu.title.split(': ')[-1]] = 9999
+                        break
+                    if int(cache_hdu.replace('hdu','')) == hdu.number: self.hdu_weight[cache_release][cache_hdu][hdu.title.split(': ')[-1]]+=1
+                    score = 0
+                    for cache_header in self.cache['releases'][cache_release]['hdus'][cache_hdu]['header']:
+                        header = Header.query.filter(Header.hdu_id == hdu.id)
+                        if header.count() == 0: break
+                        for keyword in Keyword.query.filter(Keyword.header_id == header.id).all():
+                            if keyword.strip() == cache_header['key']: self.hdu_weight[cache_release][cache_hdu][hdu.title.split(': ')[-1]]+=1
+                    for cache_column in self.cache['releases'][cache_release]['hdus'][cache_hdu]['column']:
+                        data = Data.query.filter(Data.hdu_id == hdu.id)
+                        if data.count() == 0: break
+                        for column in Column.query.filter(Column.data_id == data.id).all():
+                            if column.strip() == cache_column['name']: self.hdu_weight[cache_release][cache_hdu][hdu.title.split(': ')[-1]]+=1
+       self.set_highest_scored_hdu_converter(self):
+
+    def set_highest_scored_hdu_converter(self):                    
+        """Set a key that converts database->cache hdu from database-recorded hdu of highest score to cache hdu"""
+        for release in self.hdu_weight.keys():
+            for hdu in self.hdu_weight[release].keys():
+                hdu_winner = ''
+                score = 0
+                for candidate_hdu in self.hdu_weight[release][hdu].keys():
+                    if self.hdu_weight[release][hdu][candidate_hdu] > score:
+                        score = self.hdu_weight[release][hdu][candidate_hdu]
+                        hdu_winner = candidate_hdu
+                self.winner_hdu[release][hdu] = hdu_winner
 
     def set_database_descriptions(self):
         """Set overall, HDU, keyword, and column descriptions"""
@@ -88,6 +137,7 @@ class Content:
     def set_description_from_intro(self):
         """Set general description from database"""
         self.set_intro_for_heading_title(heading_title = 'General Description')
+        if self.intro is None: self.set_intro_for_heading_title(heading_title = 'General description')
         self.database_data['general']['description'] = self.intro.description if self.intro else None
 
     def set_intro_for_heading_title(self, heading_title = None):
@@ -100,12 +150,14 @@ class Content:
     def set_generated_by_from_intro(self):
         """Set generated by description from database"""
         self.set_intro_for_heading_title(heading_title = 'Generated by Product')
-        self.database_data['general']['generated_by'] = self.intro.description if self.intro else None
+        if self.intro is None: self.set_intro_for_heading_title(heading_title = 'Written by products')
+        self.database_data['general']['generated_by'] = (self.intro.description if self.intro.description else '') if self.intro else None
         
     def set_naming_convention_from_intro(self):
         """Set naming convention description from database"""
         self.set_intro_for_heading_title(heading_title = 'Naming Convention')
-        self.database_data['general']['naming_convention'] = self.intro.description if self.intro else None
+        if self.intro is None: self.set_intro_for_heading_title(heading_title = 'Naming convention')
+        self.database_data['general']['naming_convention'] = (self.intro.description if self.intro.description else '') if self.intro else None
 
     def set_descriptions_from_hdu(self):
         """Loop to retrieve all HDU, keyword, and column descriptions from database"""
@@ -118,7 +170,7 @@ class Content:
 
     def set_hdu_description(self):
         """Retrieve HDU description from database"""
-        self.database_data['hdus'][self.hdu.title.split(': ')[-1]] = self.hdu.description
+        self.database_data['hdus'][self.hdu.title.split(': ')[-1]] = self.hdu.description if self.hdu.description is not None else ''
 
     def set_header_from_hdu(self):
         """Retrieve header in database"""
@@ -128,7 +180,7 @@ class Content:
     def set_keywords_from_header(self):
         """Retrieve list of keywords and their descriptions from database"""
         self.keywords = Keyword.query.filter(Keyword.header_id==self.header.id).order_by(Keyword.position).all() if self.header else None
-        self.database_data['hdu_keywords'][self.hdu.title.split(': ')[-1]] = {keyword.keyword:{'comment':keyword.comment if keyword.comment else ''} for keyword in self.keywords}
+        self.database_data['hdu_keywords'][self.hdu.title.split(': ')[-1]] = {keyword.keyword.strip():{'comment':keyword.comment if keyword.comment else ''} for keyword in self.keywords}
 
     def set_data_from_hdu(self):
         """Retrieve data related to columns from database"""
@@ -147,8 +199,8 @@ class Content:
                 if unit != '':
                     user_input = input('Hit enter if "' + unit + '" correct for name: "' + column.name + '" and description: "' + column.description + '". Otherwise, type "n" to enter new unit from list or any other key to set unit as "".')
                     unit = unit if user_input == '' else self.get_custom_key() if user_input == 'n' else ''"""
-            self.database_data['hdu_columns'][self.hdu.title.split(': ')[-1]][column.name] = {'description':column.description if column.description else '', 'unit':unit}
-        #self.database_data['hdu_columns'][self.hdu.title.split(': ')[-1]] = {column.name:{'description':column.description if column.description else '', 'unit':column.units if column.units else self.get_buest_guess(column.description)} for column in self.columns}
+            try: self.database_data['hdu_columns'][self.hdu.title.split(': ')[-1]][column.name.strip()] = {'description':column.description if column.description else '', 'unit':unit}
+            except Exception as e: print('FAILED!!!!!!!!!!!!!!', e, column)
 
     def get_buest_guess(self, description):
         des = description.lower()
@@ -162,68 +214,71 @@ class Content:
         
     def check_database_loaded(self):
         """Check overal and HDU related descriptions exists in database"""
-        self.database_entries_loaded = self.database_data['general']['description'] is not None and self.database_data['general']['generated_by'] is not None and self.database_data['general']['naming_convention'] is not None and self.hdu_list is not None
-        if self.database_data['general']['description'] is None or self.database_data['general']['generated_by'] is None or self.database_data['general']['naming_convention'] is None: self.append_to_log('FAIL> Database entry does not exist', 'failed')
+        self.database_entries_loaded = self.database_data['general']['description'] is not None
+        if self.database_data['general']['description'] is None: self.append_to_log('FAIL> Database entry does not exist', 'failed')
         elif self.hdu_list is None: self.append_to_log('No HDU list retrieved by database', 'failed')
 
     def append_to_log(self, message, process):
         """Append a message to the log file and state if proccess is a success or failure"""
+        if isinstance(message, list): message = ' '.join([str(m) for m in message])
         self.log[process].append(message + r'\n')
         if self.verbose: print(message)
 
     def set_yaml_description(self):
         """Set Yaml general description from database"""
-        self.append_to_log("General desciption| " + self.cache['general']['description'] + ' > ' + self.database_data['general']['description'], 'success')
+        self.append_to_log(["General desciption|", self.cache['general']['description'], '>', self.database_data['general']['description']], 'success')
         self.cache['general']['description'] = self.database_data['general']['description']
         self.cache['general']['short'] = 'migrated from old datamodel - needs update'
 
     def set_yaml_generated_by(self):
         """Set Yaml generated by description from database"""
-        self.append_to_log("Generated by| " + self.cache['general']['generated_by'] + ' > ' + self.database_data['general']['generated_by'], 'success')
+        self.append_to_log(["Generated by|", self.cache['general']['generated_by'], '>', self.database_data['general']['generated_by']], 'success')
         self.cache['general']['generated_by'] = self.database_data['general']['generated_by']
 
     def set_yaml_naming_convention(self):
         """Set Yaml naming convention description from database"""
-        self.append_to_log("naming convention| " + self.cache['general']['naming_convention'] + ' > ' + self.database_data['general']['naming_convention'], 'success')
+        self.append_to_log(["naming convention|", self.cache['general']['naming_convention'], '>', self.database_data['general']['naming_convention']], 'success')
         self.cache['general']['naming_convention'] = self.database_data['general']['naming_convention']
 
     def set_yaml_hdu_descriptions(self):
         """Set Yaml HDU, keyword, and columns descriptions from database"""
         for self.yaml_release in self.cache['releases'].keys():
-            print('YAML_release', self.yaml_release)
+            #if len(self.cache['releases'][self.yaml_release]['hdus'].keys()) <= 2 and self.database_data['hdus'] <= 2:
             for self.yaml_hdu in self.cache['releases'][self.yaml_release]['hdus'].keys():
                 self.hdu_title = self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name']
+                if self.hdu_title not in self.database_data['hdu_keywords'] and self.hdu_title == 'PRIMARY' and 'HDU 0' in self.database_data['hdu_keywords']: self.hdu_title = 'HDU 0'
                 if self.hdu_title in self.database_data['hdu_keywords']:
                     self.set_yaml_hdu_description()
                     if 'header' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu].keys(): self.set_yaml_hdu_keywords()
                     if 'columns' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu].keys(): self.set_yaml_hdu_columns()
                 else:
-                    self.append_to_log('HDU: ' + self.hdu_title + ' not present in database', 'failed')
+                    self.append_to_log(['HDU:', self.hdu_title, ' not present in database'], 'failed')
 
     def set_yaml_hdu_description(self):
         """Set Yaml HDU description from database"""
+        print('>>>>>>>', self.yaml_hdu, self.hdu_title)
         if self.hdu_title in self.database_data['hdus']:
-            self.append_to_log('HDU: ' + self.hdu_title + '| ' + self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['description'] + ' > ' + self.database_data['hdus'][self.hdu_title], 'success')
+            self.append_to_log(['HDU:', self.hdu_title, '|', self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['description'], '>', self.database_data['hdus'][self.hdu_title]], 'success')
             self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['description'] = self.database_data['hdus'][self.hdu_title]
-        else: self.append_to_log('HDU: ' + self.hdu_title + ' not present in database', 'failed')
+        else: self.append_to_log(['HDU:', self.hdu_title, 'not present in database'], 'failed')
 
     def set_yaml_hdu_keywords(self):
         """Set Yaml HDU keywords from database"""
         for header_index, keyword in enumerate(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header']):
             if keyword['key'] in self.database_data['hdu_keywords'][self.hdu_title]:
-                self.append_to_log('HDU: ' + self.hdu_title + ', keyword: ' + keyword['key'] + '| ' + str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header'][header_index]['comment']) + ' > ' + self.database_data['hdu_keywords'][self.hdu_title][keyword['key']]['comment'], 'success')
+                self.append_to_log(['HDU:', self.hdu_title, ', keyword:', keyword['key'], '|', str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header'][header_index]['comment']), '>', self.database_data['hdu_keywords'][self.hdu_title][keyword['key']]['comment']], 'success')
                 self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header'][header_index]['comment'] = self.database_data['hdu_keywords'][self.hdu_title][keyword['key']]['comment']
-            else: self.append_to_log('HDU: ' + self.hdu_title + ', keyword: ' + keyword['key'] + ' not present in database', 'failed')
+            else: self.append_to_log(['HDU:', self.hdu_title, ', keyword:', keyword['key'], ' not present in database'], 'failed')
 
     def set_yaml_hdu_columns(self):
         """Set Yaml HDU columns from database"""
         hdu_title = self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name']
         for column in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'].keys():
             if column in self.database_data['hdu_columns'][hdu_title]:
-                self.append_to_log('HDU: ' + self.hdu_title + ', column: ' + column + '| ' + str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['description']) + ' > ' + self.database_data['hdu_columns'][hdu_title][column]['description'] + '| and unit: ' + str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['unit']) + ' > ' + self.database_data['hdu_columns'][hdu_title][column]['unit'], 'success')
+                self.append_to_log(['HDU:', self.hdu_title, ', column:', column, '|', str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['description']), '>', self.database_data['hdu_columns'][hdu_title][column]['description'], '| and unit:', str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['unit']), '>', self.database_data['hdu_columns'][hdu_title][column]['unit']], 'success')
                 self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['description'] = self.database_data['hdu_columns'][hdu_title][column]['description']
                 self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['unit'] = self.database_data['hdu_columns'][hdu_title][column]['unit']
-            else: self.append_to_log('HDU: ' + self.hdu_title + ', column: ' + column + ' not present in database', 'failed')
+            else: self.append_to_log(['HDU:', self.hdu_title, ', column:', column, 'not present in database'], 'failed')
 
     def write_cache_to_yaml_file(self):
         """Overwrite old Yaml file"""
