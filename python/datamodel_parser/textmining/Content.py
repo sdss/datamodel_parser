@@ -26,7 +26,8 @@ class Content:
                 self.set_yaml_generated_by()
                 self.set_yaml_naming_convention()
                 self.set_yaml_hdu_descriptions()
-                self.write_cache_to_yaml_file()
+                #self.write_cache_to_yaml_file()
+                print('Uncomment write cache to yaml file when testing over')
                 self.write_yaml_database_success_or_fail_specifics()
             else: self.append_to_log('Skipped since data not correctly loaded', 'failed')
         else: self.append_to_log('Skipped due to no cache loaded', 'failed')
@@ -90,42 +91,6 @@ class Content:
             self.weights = []
         else: self.weight_hdu_list()
 
-    def weight_hdu_list(self):
-        "Weight the likelyness that each cache hdu is a certain hdu recorded in the database"""
-        self.hdu_weight = {}
-        for cache_release in self.cache['releases'].keys():
-            for cache_hdu in self.cache['releases'][cache_release]['hdus'].keys():
-                for hdu in self.hdu_list:
-                    if cache_release not in self.hdu_weight: self.hdu_weight[cache_release] = {cache_hdu:{hdu.title.split(': ')[-1]:0}}
-                    if hdu.title.split(': ')[-1] == self.cache['releases'][cache_release]['hdus'][cache_hdu]['name']:
-                        self.hdu_weight[cache_release][cache_hdu][hdu.title.split(': ')[-1]] = 9999
-                        break
-                    if int(cache_hdu.replace('hdu','')) == hdu.number: self.hdu_weight[cache_release][cache_hdu][hdu.title.split(': ')[-1]]+=1
-                    score = 0
-                    for cache_header in self.cache['releases'][cache_release]['hdus'][cache_hdu]['header']:
-                        header = Header.query.filter(Header.hdu_id == hdu.id)
-                        if header.count() == 0: break
-                        for keyword in Keyword.query.filter(Keyword.header_id == header.id).all():
-                            if keyword.strip() == cache_header['key']: self.hdu_weight[cache_release][cache_hdu][hdu.title.split(': ')[-1]]+=1
-                    for cache_column in self.cache['releases'][cache_release]['hdus'][cache_hdu]['column']:
-                        data = Data.query.filter(Data.hdu_id == hdu.id)
-                        if data.count() == 0: break
-                        for column in Column.query.filter(Column.data_id == data.id).all():
-                            if column.strip() == cache_column['name']: self.hdu_weight[cache_release][cache_hdu][hdu.title.split(': ')[-1]]+=1
-       self.set_highest_scored_hdu_converter(self):
-
-    def set_highest_scored_hdu_converter(self):                    
-        """Set a key that converts database->cache hdu from database-recorded hdu of highest score to cache hdu"""
-        for release in self.hdu_weight.keys():
-            for hdu in self.hdu_weight[release].keys():
-                hdu_winner = ''
-                score = 0
-                for candidate_hdu in self.hdu_weight[release][hdu].keys():
-                    if self.hdu_weight[release][hdu][candidate_hdu] > score:
-                        score = self.hdu_weight[release][hdu][candidate_hdu]
-                        hdu_winner = candidate_hdu
-                self.winner_hdu[release][hdu] = hdu_winner
-
     def set_database_descriptions(self):
         """Set overall, HDU, keyword, and column descriptions"""
         self.database_data = {'general':{}, 'hdus':{}, 'hdu_keywords':{}, 'hdu_columns':{}}
@@ -162,6 +127,7 @@ class Content:
     def set_descriptions_from_hdu(self):
         """Loop to retrieve all HDU, keyword, and column descriptions from database"""
         for self.hdu in self.hdu_list:
+            self.hdu_title = self.hdu.title.split(': ')[-1] if self.hdu.title.split(': ')[-1] is not '' else 'HDU %s'%self.hdu.number
             self.set_hdu_description()
             self.set_header_from_hdu()
             if self.header: self.set_keywords_from_header()
@@ -170,7 +136,7 @@ class Content:
 
     def set_hdu_description(self):
         """Retrieve HDU description from database"""
-        self.database_data['hdus'][self.hdu.title.split(': ')[-1]] = self.hdu.description if self.hdu.description is not None else ''
+        self.database_data['hdus'][self.hdu_title] = self.hdu.description if self.hdu.description is not None else ''
 
     def set_header_from_hdu(self):
         """Retrieve header in database"""
@@ -180,7 +146,7 @@ class Content:
     def set_keywords_from_header(self):
         """Retrieve list of keywords and their descriptions from database"""
         self.keywords = Keyword.query.filter(Keyword.header_id==self.header.id).order_by(Keyword.position).all() if self.header else None
-        self.database_data['hdu_keywords'][self.hdu.title.split(': ')[-1]] = {keyword.keyword.strip():{'comment':keyword.comment if keyword.comment else ''} for keyword in self.keywords}
+        self.database_data['hdu_keywords'][self.hdu_title] = {keyword.keyword.strip():{'comment':keyword.comment if keyword.comment is not None else self.get_buest_guess(keyword.comment)} for keyword in self.keywords}
 
     def set_data_from_hdu(self):
         """Retrieve data related to columns from database"""
@@ -190,26 +156,25 @@ class Content:
     def set_columns_from_header(self):
         """Retrieve column descriptions"""
         self.columns = Column.query.filter(Column.data_id==self.data.id).order_by(Column.position).all() if self.data else None
-        self.database_data['hdu_columns'][self.hdu.title.split(': ')[-1]] = {}
+        self.database_data['hdu_columns'][self.hdu_title] = {}
         for column in self.columns:
             if column.units is not None: unit = str(column.units)
             else:
                 unit = ''
-                """unit = self.get_buest_guess(column.description)
+                unit = self.get_buest_guess(column.description)
                 if unit != '':
                     user_input = input('Hit enter if "' + unit + '" correct for name: "' + column.name + '" and description: "' + column.description + '". Otherwise, type "n" to enter new unit from list or any other key to set unit as "".')
-                    unit = unit if user_input == '' else self.get_custom_key() if user_input == 'n' else ''"""
-            try: self.database_data['hdu_columns'][self.hdu.title.split(': ')[-1]][column.name.strip()] = {'description':column.description if column.description else '', 'unit':unit}
-            except Exception as e: print('FAILED!!!!!!!!!!!!!!', e, column)
+                    unit = unit if user_input == '' else self.get_custom_key() if user_input == 'n' else 'migration: keyword/column not found. Needs update'
+            self.database_data['hdu_columns'][self.hdu_title][column.name.strip()] = {'description':column.description if column.description else '', 'unit':unit}
 
     def get_buest_guess(self, description):
         des = description.lower()
         return 'Arcsecond' if 'arcsec' in des else 'Arcminute' if 'arcmin' in des else 'Degrees (J2000)' if 'ascention' in des or 'declination' in des or 'j2000' in des else 'Degrees' if 'degree' in des else 'HH:MM:SS' if 'hh:mm:ss' in des else 'H:M:S' if 'h:m:s' in des else '10^-17 erg/s/cm^2/Ang' if 'flux' in des or 'uncert' in des or ('-17' in des and 'erg' in des) else 'mm' if '(mm)' in des else 'Angstroms' if '(ang)' in des or 'angstrom' in des or 'wave' in des else '1/(10^-17 erg/s/cm^2/Ang)^2' if 'inverse' in des or 'ivar' in des else 'Celsius' if 'celsius' in des or 'temp' in des else 'Hg' if 'hg ' in des or 'pressure' in des else 'radians' if 'angle' in des else ''
 
     def get_custom_key(self):
-        units = {1:'Degrees (J2000)', 2:'Degrees', 3:'Arcsecond', 4:'Arcminute', 5:'HH:MM:SS', 6:'H:M:S', 7:'10^-17 erg/s/cm^2/Ang', 8:'1/(10^-17 erg/s/cm^2/Ang)^2', 9:'Celsius', 10:'Hg', 11:'radians', 12:'Angstroms', 13: 'Other (specify)', 14:''}
+        units = {0:'migration: keyword/column cannot be validated. Needs update.', 1:'Degrees (J2000)', 2:'Degrees', 3:'Arcsecond', 4:'Arcminute', 5:'HH:MM:SS', 6:'H:M:S', 7:'10^-17 erg/s/cm^2/Ang', 8:'1/(10^-17 erg/s/cm^2/Ang)^2', 9:'Celsius', 10:'Hg', 11:'radians', 12:'Angstroms', 13: 'Other (specify)', 14:''}
         choice = units[int(input('Choose integer id from: ' + str(units)))]
-        if 'Other' in choice: choice = input('What is unit? ')
+        if 'Other' in choice: choice = input('What is unit? (type only "?" for not validated")')
         return choice
         
     def check_database_loaded(self):
@@ -243,16 +208,47 @@ class Content:
     def set_yaml_hdu_descriptions(self):
         """Set Yaml HDU, keyword, and columns descriptions from database"""
         for self.yaml_release in self.cache['releases'].keys():
-            #if len(self.cache['releases'][self.yaml_release]['hdus'].keys()) <= 2 and self.database_data['hdus'] <= 2:
             for self.yaml_hdu in self.cache['releases'][self.yaml_release]['hdus'].keys():
                 self.hdu_title = self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name']
                 if self.hdu_title not in self.database_data['hdu_keywords'] and self.hdu_title == 'PRIMARY' and 'HDU 0' in self.database_data['hdu_keywords']: self.hdu_title = 'HDU 0'
+                if self.hdu_title not in self.database_data['hdu_keywords']: self.set_hdu_via_inspection()
                 if self.hdu_title in self.database_data['hdu_keywords']:
                     self.set_yaml_hdu_description()
                     if 'header' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu].keys(): self.set_yaml_hdu_keywords()
                     if 'columns' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu].keys(): self.set_yaml_hdu_columns()
-                else:
-                    self.append_to_log(['HDU:', self.hdu_title, ' not present in database'], 'failed')
+                else: self.append_to_log(['HDU identifier:', self.hdu_title, ' does not relate to any HDU of file in database'], 'failed')
+
+    def set_hdu_via_inspection(self):
+        "Identify the yaml hdu that is most like a database hdu and use inspection if fail to verify via hdu header title"""
+        previous_score = 0
+        most_likely_hdu = ''
+        for hdu in self.hdu_list:
+            score = 0
+            if hdu.title.split(': ')[-1] == self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name']: score = 9999
+            if int(self.yaml_hdu.replace('hdu','')) == hdu.number: score = 0
+            header = Header.query.filter(Header.hdu_id == hdu.id)
+            if header.count() > 0:
+                keywords = [k.strip() for k in Keyword.query.filter(Keyword.header_id == header.id).with_entities(Keyword.keyword).all()]
+                for yaml_header in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header']:
+                    if yaml_header['key'].strip() in keywords: score += 1
+            data = Data.query.filter(Data.hdu_id == hdu.id)
+            if data.count() > 0:
+                columns = [c.strip() for c in Column.query.filter(Column.data_id == data.id).with_entities(Column.name).all()]
+                for yaml_column in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns']:
+                    if yaml_column['name'].strip() in columns: score += 1
+            if score > previous_score:
+                previous_score = score*1
+                most_likely_hdu = [hdu][0] #Extra precaution on array to avoid python pointer issue
+                if score > 9999: break
+        if score < 9999:
+            print('HDU yaml index and name:', self.yaml_hdu, self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name'], '\nMost likely HDU from database', most_likely_hdu, 'with score:', score)
+            approve = input('Hit enter if Yaml vs Database Hdu match. Else, enter "n" if change or unsure:')
+            if approve == 'n':
+                print('HDUs in Database', ', \n'.join(['index %s HDU (Number, title, description): %s, %s, %s'%(index, h.number, h.title, h.description) for index, h in enumerate(self.hdu_list)])
+                choice = int(input('Choose index number from above list or -1 for no match'))
+                if choice != -1: self.hdu_title = self.hdu_list[choice].title.split(': ')[-1] if self.hdu_list[choice].title.split(': ')[-1] is not '' else 'HDU %s'%self.hdu_list[choice].number
+                else: self.hdu_title = None
+        else: self.hdu_title = most_likely_hdu.title.split(': ')[-1] if most_likely_hdu.title.split(': ')[-1] is not '' else 'HDU %s'%most_likely_hdu.number
 
     def set_yaml_hdu_description(self):
         """Set Yaml HDU description from database"""
@@ -274,10 +270,10 @@ class Content:
         """Set Yaml HDU columns from database"""
         hdu_title = self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name']
         for column in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'].keys():
-            if column in self.database_data['hdu_columns'][hdu_title]:
-                self.append_to_log(['HDU:', self.hdu_title, ', column:', column, '|', str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['description']), '>', self.database_data['hdu_columns'][hdu_title][column]['description'], '| and unit:', str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['unit']), '>', self.database_data['hdu_columns'][hdu_title][column]['unit']], 'success')
-                self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['description'] = self.database_data['hdu_columns'][hdu_title][column]['description']
-                self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['unit'] = self.database_data['hdu_columns'][hdu_title][column]['unit']
+            if column in self.database_data['hdu_columns'][self.hdu_title]:
+                self.append_to_log(['HDU:', hdu_title, ', column:', column, '|', str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['description']), '>', self.database_data['hdu_columns'][self.hdu_title][column]['description'], '| and unit:', str(self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['unit']), '>', self.database_data['hdu_columns'][self.hdu_title][column]['unit']], 'success')
+                self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['description'] = self.database_data['hdu_columns'][self.hdu_title][column]['description']
+                self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns'][column]['unit'] = self.database_data['hdu_columns'][self.hdu_title][column]['unit']
             else: self.append_to_log(['HDU:', self.hdu_title, ', column:', column, 'not present in database'], 'failed')
 
     def write_cache_to_yaml_file(self):
