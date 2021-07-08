@@ -11,7 +11,7 @@ class Content:
         self.htmlname = htmlname
         self.env = env
         self.verbose = verbose
-        self.general_keywords = ['SIMPLE', 'BITPIX', 'NAXIS', 'NAXIS1', 'NAXIS2', 'EXTEND']
+        self.general_keywords = {'XTENSION':'binary table extension', 'SIMPLE':'conforms to FITS standard', 'BITPIX':'array data type', 'NAXIS':'number of array dimensions', 'NAXIS1':'length of dimension 1', 'NAXIS2':'length of dimension 2', 'EXTEND':'', 'PCOUNT':'number of group parameters', 'GCOUNT':'number of groups', 'EXTNAME':'extension name', 'TFIELDS':'number of table fields'}
         self.log = {'success':[], 'failed':[]}
         self.set_yaml_dir()
         self.set_yaml_file()
@@ -29,7 +29,6 @@ class Content:
                 self.set_yaml_naming_convention()
                 if len(self.hdu_list) > 0: self.set_yaml_hdu_descriptions()
                 self.write_cache_to_yaml_file()
-                print('Uncomment write cache to yaml file when testing over')
                 self.write_yaml_database_success_or_fail_specifics()
             else: self.append_to_log('Skipped since data not correctly loaded', 'failed')
         else: self.append_to_log('Skipped due to no cache loaded', 'failed')
@@ -132,66 +131,14 @@ class Content:
         """Loop to retrieve all HDU, keyword, and column descriptions from database"""
         self.set_external_keywords()
         for self.hdu in self.hdu_list:
-            self.hdu_title = self.hdu.title.split(': ')[-1] if self.hdu.title is not None and self.hdu.title.split(': ')[-1] != '' else 'HDU %s'%self.hdu.number
+            self.hdu_title = self.hdu.title.split(': ')[-1].strip() if self.hdu.title is not None and self.hdu.title.split(': ')[-1].strip() != '' else 'HDU %s'%self.hdu.number
             self.set_hdu_description()
+            self.database_data['hdu_keywords'][self.hdu_title] = {}
             self.set_header_from_hdu()
             if self.header: self.set_keywords_from_header()
             self.set_data_from_hdu()
             if self.data: self.set_columns_from_header()
             self.append_externals_and_generals()
-
-    def append_externals_and_generals(self):
-        if self.hdu_title not in self.database_data['hdu_keywords']: self.database_data['hdu_keywords'][self.hdu_title] = {}
-        for external_keyword in self.external_keywords.keys():
-            if external_keyword not in self.database_data['hdu_keywords'][self.hdu_title]: self.database_data['hdu_keywords'][self.hdu_title][external_keyword] = self.external_keywords[external_keyword]
-        for general_keyword in self.general_keywords:
-            if general_keyword not in self.database_data['hdu_keywords'][self.hdu_title] or self.database_data['hdu_keywords'][self.hdu_title][general_keyword]['description'] is None or 'migration' in self.database_data['hdu_keywords'][self.hdu_title][general_keyword]['description']: self.database_data['hdu_keywords'][self.hdu_title][general_keyword] = {'description':'', 'unit':''}
-
-    def set_hdu_description(self):
-        """Retrieve HDU description from database"""
-        self.database_data['hdus'][self.hdu_title] = self.hdu.description if self.hdu.description is not None else ''
-
-    def set_header_from_hdu(self):
-        """Retrieve header in database"""
-        self.header = Header.query.filter(Header.hdu_id==self.hdu.id) if self.hdu else None
-        self.header = self.header.one() if self.header is not None and self.header.count() else None
-
-    def set_keywords_from_header(self):
-        """Retrieve list of keywords and their descriptions from database"""
-        self.keywords = Keyword.query.filter(Keyword.header_id==self.header.id).order_by(Keyword.position).all() if self.header else None
-        self.database_data['hdu_keywords'][self.hdu_title] = {keyword.keyword.strip().split('[')[0]:{'description':keyword.comment} for keyword in self.keywords if keyword.keyword not in [None, '']}
-        for keyword in self.keywords:
-            if keyword.keyword not in [None, ''] and keyword.keyword.strip().split('[')[0].upper() not in self.database_data['hdu_keywords'][self.hdu_title]: self.database_data['hdu_keywords'][self.hdu_title][keyword.keyword.strip().split('[')[0].upper()] = {'description':keyword.comment}
-
-    def set_data_from_hdu(self):
-        """Retrieve data related to columns from database"""
-        self.data = Data.query.filter(Data.hdu_id==self.hdu.id) if self.hdu else None
-        self.data = self.data.one() if self.data is not None and self.data.count() else None
-
-    def set_columns_from_header(self):
-        """Retrieve column descriptions"""
-        self.columns = Column.query.filter(Column.data_id==self.data.id).order_by(Column.position).all() if self.data else None
-        self.database_data['hdu_keywords'][self.hdu_title] = {}
-        for column in self.columns:
-            if column.name in [None, '']:
-                self.append_to_log(['Column', column.name, 'with description', column.description, 'in database is None for HDU ID:', self.hdu.id, ', number', self.hdu.number, ', title', self.hdu.title], 'failed')
-                continue
-            if column.units is not None: unit = str(column.units)
-            else:
-                unit = self.get_buest_guess(column.description)
-                if unit != '':
-                    user_input = input('Hit enter if "' + unit + '" correct for name: "' + column.name + '" and description: "' + column.description + '". Otherwise, type "n" to enter new unit from list or any other key to set unit as "".')
-                    unit = unit if user_input == '' else self.get_custom_key() if user_input == 'n' else 'migration: unit of keyword/column not found. Needs update'
-            if column.name.strip().split('[')[0] not in self.database_data['hdu_keywords'][self.hdu_title]: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0]] = {'description':column.description if column.description else '', 'unit':unit}
-            else: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0]]['unit'] = unit
-            if column.description not in [None, ''] and self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0]]['description'] in [None, '']: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0]]['description'] = column.description
-
-            if column.name.strip().split('[')[0].upper() not in self.database_data['hdu_keywords'][self.hdu_title]: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0].upper()] = {'description':column.description if column.description else '', 'unit':unit}
-            else: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0].upper()]['unit'] = unit
-            if column.description not in [None, ''] and self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0].upper()]['description'] in [None, '']: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0].upper()]['description'] = column.description
-
-        for keyword in self.database_data['hdu_keywords'][self.hdu_title].keys():
-            if self.database_data['hdu_keywords'][self.hdu_title][keyword]['description'] in [None, '']: self.database_data['hdu_keywords'][self.hdu_title][keyword]['description'] = 'migration: description of keyword/column not found. Needs update' if keyword not in self.general_keywords else ''
 
     def set_external_keywords(self):
         """Lots of files can link to keywords/columns in another HTML. Thus this section retrieves external keywords"""
@@ -229,10 +176,11 @@ class Content:
                         if column.name in [None, '']: continue
                         if column.units is not None: unit = str(column.units)
                         else:
-                            unit = self.get_buest_guess(column.description)
+                            unit = 'migration: unit of keyword/column not found. Needs update'
+                            """unit = self.get_buest_guess(column.description)
                             if unit != '':
                                 user_input = input('Hit enter if "' + unit + '" correct for name: "' + column.name + '" and description: "' + column.description + '". Otherwise, type "n" to enter new unit from list or any other key to set unit as "".')
-                                unit = unit if user_input == '' else self.get_custom_key() if user_input == 'n' else 'migration: unit of keyword/column not found. Needs update'
+                                unit = unit if user_input == '' else self.get_custom_key() if user_input == 'n' else 'migration: unit of keyword/column not found. Needs update'"""
                         if column.name.strip().split('[')[0] not in self.external_keywords: self.external_keywords[column.name.strip().split('[')[0]] = {'description':column.description if column.description else '', 'unit':unit}
                         else: self.external_keywords[column.name.strip().split('[')[0]]['unit'] = unit
                         if column.description not in [None, ''] and self.external_keywords[column.name.strip().split('[')[0]]['description'] in [None, '']: self.external_keywords[column.name.strip().split('[')[0]]['description'] = column.description
@@ -241,6 +189,58 @@ class Content:
                         if column.description not in [None, ''] and self.external_keywords[column.name.strip().split('[')[0].upper()]['description'] in [None, '']: self.external_keywords[column.name.strip().split('[')[0].upper()]['description'] = column.description
             for keyword in self.external_keywords:
                 if self.external_keywords[keyword]['description'] in [None, '']: self.external_keywords[keyword]['description'] = 'migration: description of keyword/column not found. Needs update' if keyword not in self.general_keywords else ''
+
+    def set_hdu_description(self):
+        """Retrieve HDU description from database"""
+        self.database_data['hdus'][self.hdu_title] = self.hdu.description if self.hdu.description is not None else ''
+
+    def set_header_from_hdu(self):
+        """Retrieve header in database"""
+        self.header = Header.query.filter(Header.hdu_id==self.hdu.id) if self.hdu else None
+        self.header = self.header.one() if self.header is not None and self.header.count() else None
+
+    def set_keywords_from_header(self):
+        """Retrieve list of keywords and their descriptions from database"""
+        self.keywords = Keyword.query.filter(Keyword.header_id==self.header.id).order_by(Keyword.position).all() if self.header else None
+        self.database_data['hdu_keywords'][self.hdu_title] = {keyword.keyword.strip().split('[')[0]:{'description':keyword.comment} for keyword in self.keywords if keyword.keyword not in [None, '']}
+        for keyword in self.keywords:
+            if keyword.keyword not in [None, ''] and keyword.keyword.strip().split('[')[0].upper() not in self.database_data['hdu_keywords'][self.hdu_title]: self.database_data['hdu_keywords'][self.hdu_title][keyword.keyword.strip().split('[')[0].upper()] = {'description':keyword.comment}
+
+    def set_data_from_hdu(self):
+        """Retrieve data related to columns from database"""
+        self.data = Data.query.filter(Data.hdu_id==self.hdu.id) if self.hdu else None
+        self.data = self.data.one() if self.data is not None and self.data.count() else None
+
+    def set_columns_from_header(self):
+        """Retrieve column descriptions"""
+        self.columns = Column.query.filter(Column.data_id==self.data.id).order_by(Column.position).all() if self.data else None
+        for column in self.columns:
+            if column.name in [None, '']:
+                self.append_to_log(['Column', column.name, 'with description', column.description, 'in database is None for HDU ID:', self.hdu.id, ', number', self.hdu.number, ', title', self.hdu.title], 'failed')
+                continue
+            if column.units is not None: unit = str(column.units)
+            else:
+                unit = 'migration: unit of keyword/column not found. Needs update'
+                """unit = self.get_buest_guess(column.description)
+                if unit != '':
+                    user_input = input('Hit enter if "' + unit + '" correct for name: "' + column.name + '" and description: "' + column.description + '". Otherwise, type "n" to enter new unit from list or any other key to set unit as "".')
+                    unit = unit if user_input == '' else self.get_custom_key() if user_input == 'n' else 'migration: unit of keyword/column not found. Needs update'"""
+            if column.name.strip().split('[')[0] not in self.database_data['hdu_keywords'][self.hdu_title]: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0]] = {'description':column.description if column.description else '', 'unit':unit}
+            else: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0]]['unit'] = unit
+            if column.description not in [None, ''] and self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0]]['description'] in [None, '']: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0]]['description'] = column.description
+
+            if column.name.strip().split('[')[0].upper() not in self.database_data['hdu_keywords'][self.hdu_title]: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0].upper()] = {'description':column.description if column.description else '', 'unit':unit}
+            else: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0].upper()]['unit'] = unit
+            if column.description not in [None, ''] and self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0].upper()]['description'] in [None, '']: self.database_data['hdu_keywords'][self.hdu_title][column.name.strip().split('[')[0].upper()]['description'] = column.description
+
+        for keyword in self.database_data['hdu_keywords'][self.hdu_title].keys():
+            if self.database_data['hdu_keywords'][self.hdu_title][keyword]['description'] in [None, '']: self.database_data['hdu_keywords'][self.hdu_title][keyword]['description'] = 'migration: description of keyword/column not found. Needs update' if keyword not in self.general_keywords else ''
+
+    def append_externals_and_generals(self):
+        for external_keyword in self.external_keywords.keys():
+            if external_keyword not in self.database_data['hdu_keywords'][self.hdu_title]: self.database_data['hdu_keywords'][self.hdu_title][external_keyword] = self.external_keywords[external_keyword]
+        for general_keyword in self.general_keywords.keys():
+            if general_keyword not in self.database_data['hdu_keywords'][self.hdu_title] or self.database_data['hdu_keywords'][self.hdu_title][general_keyword]['description'] in [None,''] or 'migration' in self.database_data['hdu_keywords'][self.hdu_title][general_keyword]['description']: self.database_data['hdu_keywords'][self.hdu_title][general_keyword] = {'description':self.general_keywords[general_keyword], 'unit':''}
 
     def get_buest_guess(self, description):
         if description is None: return ''
@@ -303,8 +303,8 @@ class Content:
         keywords = {}
         for hdu in self.hdu_list:
             score = 0
-            if hdu.title.split(': ')[-1] == self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name']: score = 9999
-            if self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name'] is not None and hdu.title is not None and 'primary' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name'].lower() and 'primary' in hdu.title.split(': ')[-1].lower(): score += 9999
+            if hdu.title.split(': ')[-1].strip() == self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name']: score = 9999
+            if self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name'] is not None and hdu.title is not None and 'primary' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name'].lower() and 'primary' in hdu.title.split(': ')[-1].strip().lower(): score += 9999
             if int(self.yaml_hdu.replace('hdu','')) == hdu.number: score += 1
             header = Header.query.filter(Header.hdu_id == hdu.id)
             if header.count() > 0: keywords = [k.keyword.strip().split('[')[0] for k in Keyword.query.filter(Keyword.header_id == header.one().id).all()]
@@ -328,7 +328,8 @@ class Content:
                 if score > 9999: break
         if most_likely_hdu == '': self.hdu_title = None
         elif previous_score < 9999:
-            print('\n>Keywords in Yaml', [y['key'] for y in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header']] if 'header' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu] else '', [y for y in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns']] if 'columns' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu] else '')
+            print('\nRelease:', self.yaml_release)
+            print('>Keywords in Yaml', [y['key'] for y in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header']] if 'header' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu] else '', [y for y in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['columns']] if 'columns' in self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu] else '')
             print('>AUTO GUESS:', self.yaml_hdu, '"%s"'%self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['name'], '=', 'hdu%s'%most_likely_hdu.number, '"%s"'%most_likely_hdu.title, '\nScore:', previous_score, '\nDatabase Description:', most_likely_hdu.description.split('<b>')[0] if most_likely_hdu.description is not None else 'migration: Intro info not in database. Needs update', 'Keywords:', previous_keywords)
             approve = input('Hit enter if Yaml vs Database Hdu match. Else, enter "n" if change or unsure:')
             if approve == 'n':
@@ -348,8 +349,10 @@ class Content:
                                 self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['header'][header_index]['comment'] = ''###########
                         self.cache['releases'][self.yaml_release]['hdus'][self.yaml_hdu]['description'] = ''
                     
-            else: self.hdu_title = most_likely_hdu.title.split(': ')[-1] if most_likely_hdu.title is not None and most_likely_hdu.title.split(': ')[-1] != '' else 'HDU %s'%most_likely_hdu.number
-        else: self.hdu_title = most_likely_hdu.title.split(': ')[-1] if most_likely_hdu.title is not None and most_likely_hdu.title.split(': ')[-1] != '' else 'HDU %s'%most_likely_hdu.number
+            else: self.hdu_title = most_likely_hdu.title.split(': ')[-1].strip() if most_likely_hdu.title is not None and most_likely_hdu.title.split(': ')[-1].strip() != '' else 'HDU %s'%most_likely_hdu.number
+        else:
+            self.hdu_title = most_likely_hdu.title.split(': ')[-1].strip() if most_likely_hdu.title is not None and most_likely_hdu.title.split(': ')[-1].strip() != '' else 'HDU %s'%most_likely_hdu.number
+            print('AUTO CONFIRMED YAML to DATABASE HDU:', self.yaml_hdu, '>', most_likely_hdu.title)
 
     def set_yaml_hdu_description(self):
         """Set Yaml HDU description from database"""
