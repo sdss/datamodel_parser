@@ -1,0 +1,3 @@
+from datamodel_parser.textmining import Summary
+
+summary = Summary(name = 'apVisit', verbose = True)
