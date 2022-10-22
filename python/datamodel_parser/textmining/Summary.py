@@ -18,7 +18,22 @@ class Summary:
         self.data = {'general':{}, 'hdus':{}, 'hdu_keywords':{}}
         self.set_description_from_intro()
         self.set_generated_by_from_intro()
-        if len(self.hdu_list) > 0: self.set_descriptions_from_hdu()
+        if len(self.hdu_list) > 0:
+            self.set_descriptions_from_hdu()
+            self.set_header_from_hdu()
+        
+    def set_descriptions_from_hdu(self):
+        for self.hdu in self.hdu_list:
+            self.hdu_title = self.hdu.title.split(': ')[-1].strip() if self.hdu.title is not None and self.hdu.title.split(': ')[-1].strip() != '' else 'HDU %s'%self.hdu.number
+            self.set_hdu_description()
+            self.data['hdu_keywords'][self.hdu_title] = {}
+
+    def set_hdu_description(self):
+        self.data['hdus'][self.hdu_title] = self.hdu.description if self.hdu.description is not None else ''
+
+    def set_header_from_hdu(self):
+        self.header = Header.query.filter(Header.hdu_id==self.hdu.id) if self.hdu else None
+        self.header = self.header.one() if self.header is not None and self.header.count() else None
         
     def set_intro(self, heading_title = None):
         try: self.intro = Intro.query.filter(Intro.file_id==self.file_id).filter(Intro.heading_title == heading_title).one() if self.file_id and heading_title else None
