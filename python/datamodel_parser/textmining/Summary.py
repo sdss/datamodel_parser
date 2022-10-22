@@ -15,7 +15,7 @@ class Summary:
     def set_keyword(self):
         if self.header:
             self.keyword = Keyword.query.filter(Keyword.header_id.in_([header.id for header in self.header]))
-            self.keyword = self.header.all()
+            self.keyword = self.keyword.all()
             if self.verbose: print("Summary> Found %r Headers" % len(self.header))
 
     def set_header(self):
