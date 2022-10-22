@@ -1,5 +1,4 @@
 from datamodel_parser.models.datamodel import Intro, File, Hdu, Header, Keyword, Data, Column, Location, Env
-from sqlalchemy import or_, in_
 from os.path import join, exists
 from os import environ
 
