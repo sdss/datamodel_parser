@@ -1,7 +1,8 @@
 from datamodel_parser.models.datamodel import Intro, File, Hdu, Header, Keyword, Data, Column, Location, Env
 from os.path import join, exists
 from os import environ
-class Content:
+
+class Summary:
 
     def __init__(self, name = None, verbose = None):
         self.name = name
